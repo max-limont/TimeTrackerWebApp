@@ -1,0 +1,6 @@
+
+
+password:AdminServer123
+login:mainAdmin
+
+connectionString: Server=tcp:databaselm.database.windows.net,1433;Initial Catalog=TimeTrackerDB;Persist Security Info=False;User ID=mainAdmin;Password=AdminServer123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
