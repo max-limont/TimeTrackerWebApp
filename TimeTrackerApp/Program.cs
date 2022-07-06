@@ -76,10 +76,6 @@ app.UseSpa(spa =>
     {
         spa.UseReactDevelopmentServer(npmScript: "start");
     }
-    
-   
-
-   
 });
 
 app.Run();
