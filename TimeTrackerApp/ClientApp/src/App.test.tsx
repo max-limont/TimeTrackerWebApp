@@ -1,22 +1,15 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
+import { store } from './app/store';
 import App from './App';
 
-it('renders without crashing', () => {
-    const storeFake = (state: any) => ({
-        default: () => {},
-        subscribe: () => {},
-        dispatch: () => {},
-        getState: () => ({ ...state })
-    });
-    const store = storeFake({}) as any;
+test('renders learn react link', () => {
+  const { getByText } = render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
 
-    ReactDOM.render(
-        <Provider store={store}>
-            <MemoryRouter>
-                <App/>
-            </MemoryRouter>
-        </Provider>, document.createElement('div'));
+  expect(getByText(/learn/i)).toBeInTheDocument();
 });
