@@ -2,7 +2,7 @@
 {
 	public class Record
 	{
-		private readonly static int defaultWorkingTime = 8 * 60; // 8 hours * 60 minutes
+		private static readonly int defaultWorkingTime = 8 * 60; // 8 hours * 60 minutes
 
 		public int Id { get; set; }
 		public int WorkingTime { get; set; } = defaultWorkingTime;

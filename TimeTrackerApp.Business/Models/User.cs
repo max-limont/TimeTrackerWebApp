@@ -2,8 +2,8 @@
 {
 	public class User
 	{
-		private readonly static int defaultWeeklyWorkingTime = 8 * 60 * 5; // 8 hours * 60 minutes * 5 days
-		private readonly static int defaultRemainingVacationDays = 30; // 30 days
+		private static readonly int defaultWeeklyWorkingTime = 8 * 60 * 5; // 8 hours * 60 minutes * 5 days
+		private static readonly int defaultRemainingVacationDays = 30; // 30 days
 			
 		public int Id { get; set; }
 		public string Email { get; set; } = string.Empty;
