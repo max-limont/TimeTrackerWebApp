@@ -1,7 +1,6 @@
 create database TimeTrackerDB
 use TimeTrackerDB
 
-
 create table [Users] 
 (
 	[Id] int primary key identity(1, 1),
@@ -19,28 +18,23 @@ create table [Records]
 	[Id] int primary key identity(1, 1),
 	[WorkingTime] int default 480,
 	[Comment] text,
-	[EditorId] int foreign key references [Users]([Id]) on delete no action on update cascade,
+	[CreatorId] int foreign key references [Users]([Id]) on delete no action,
+	[EditorId] int foreign key references [Users]([Id]) on delete no action,
 	[CreatedAt] datetime default getdate(),
 )
 
 create table [VacationRequests]
 (
 	[Id] int primary key identity(1, 1),
+	[UserId] int foreign key references [Users]([Id]) on delete no action,
 	[StartingTime] date not null,
 	[EndingTime] date not null,
 	[Comment] text
 )
 
-create table [UsersRecords] 
-(
-	[Id] int primary key identity(1, 1),
-	[UserId] int not null foreign key references [Users]([Id]) on delete cascade on update cascade,
-	[RecordId] int not null foreign key references [Records]([Id]) on delete no action on update no action,
-)
-
 create table [AuthentificationTokens] 
 (
 	[Id] int primary key identity(1, 1),
-	[UserId] int not null foreign key references [Users]([Id]) on delete cascade on update cascade,
+	[UserId] int not null foreign key references [Users]([Id]) on delete cascade,
 	[Token] nvarchar not null
 )
