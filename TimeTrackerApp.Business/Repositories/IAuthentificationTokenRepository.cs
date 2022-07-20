@@ -6,7 +6,7 @@ namespace TimeTrackerApp.Business.Repositories
 	{
 		Task<IEnumerable<AuthentificationToken>> FetchAllAsync();
 		Task<AuthentificationToken> GetByIdAsync(int id);
-		Task<AuthentificationToken> Createasync(AuthentificationToken authentificationToken);
+		Task<AuthentificationToken> CreateAsync(AuthentificationToken authentificationToken);
 		Task<AuthentificationToken> EditAsync(AuthentificationToken authentificationToken);
 		Task<AuthentificationToken> RemoveAsync(int id);
 	}
