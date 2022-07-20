@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Repositories;
+using TimeTrackerApp.Business.Helpers;
 using Dapper;
 
 namespace TimeTrackerApp.MsSql.Repositories
@@ -12,7 +13,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public AuthentificationTokenRepository(IConfiguration configuration)
 		{
-			connectionString = configuration.GetConnectionString("MsSqlConnectionString");
+			connectionString = configuration.GetConnectionString(ConnectionStrings.MsSqlConnectionString);
 		}
 
 		public async Task<AuthentificationToken> CreateAsync(AuthentificationToken authentificationToken)
