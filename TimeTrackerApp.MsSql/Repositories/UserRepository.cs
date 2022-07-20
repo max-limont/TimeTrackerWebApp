@@ -16,12 +16,33 @@ namespace TimeTrackerApp.MsSql.Repositories
 			connectionString = configuration.GetConnectionString(ConnectionStrings.MsSqlConnectionString);
 		}
 
+		public async Task<User> ChangePassword(int id, string passwordToChange, string newPassword)
+		{
+			string query = @"SELECT * FROM Users WHERE Id = @Id";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				var user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Id = id });
+				if (user is not null)
+				{
+					if (PasswordHandler.CompareWithHash(user.Password, passwordToChange))
+					{
+						user.Password = newPassword;
+						return await EditAsync(user);
+					}
+					throw new Exception("Changing password error: wrong password to change!");
+				}
+				throw new Exception("User was not found!");
+			}
+		}
+
 		public async Task<User> CreateAsync(User user)
 		{
 			string query = @"INSERT INTO Users (Email, Password, FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue) VALUES (@Email, @Password, @FirstName, @LastName, @WeeklyWorkingTime, @RemainingVacationDays, @PrivilegesValue)";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
+				user.Password = PasswordHandler.Encrypt(user.Password);
 				int affectedRows = await connection.ExecuteAsync(query, user);
 				if (affectedRows > 0)
 				{
@@ -37,6 +58,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 			using (var connection = new SqlConnection(connectionString))
 			{
+				user.Password = PasswordHandler.Encrypt(user.Password);
 				int affectedRows = await connection.ExecuteAsync(query, user);
 				if (affectedRows > 0)
 				{
@@ -48,7 +70,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<User>> FetchAllAsync()
 		{
-			string query = @"SELECT * FROM Users";
+			string query = @"SELECT Id, Email, FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue FROM Users";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -58,7 +80,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> GetByIdAsync(int id)
 		{
-			string query = @"SELECT * FROM Users WHERE Id = @Id";
+			string query = @"SELECT Id, Email, FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue FROM Users WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
