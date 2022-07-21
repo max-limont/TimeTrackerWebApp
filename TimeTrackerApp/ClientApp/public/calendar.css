@@ -8,17 +8,24 @@
     width: fit-content;
 }
 
-.days{
+.day-yacheyka {
+    display: flex;
+    flex-direction: row;
+}
+
+.days {
     display: grid;
     background-color: rgb(100, 100, 100);
     color: white;
     grid-gap: 2px;
     grid-template-columns: repeat(7, 1fr);
 }
-.days>div{
+
+.days>div {
     border-bottom: 2px solid rgb(71, 71, 71);
     background-color: rgb(34, 34, 34);
 }
+
 .calendar-header {
     height: 20px;
     background-color: rgb(71, 71, 71);
@@ -35,7 +42,7 @@
 .day {
     display: flex;
     flex-wrap: wrap;
-    justify-content: end;
+    flex-direction: column;
     padding: 0;
     margin: 0;
     height: min-content;
@@ -43,10 +50,12 @@
     height: 80px;
     background-color: rgb(34, 34, 34);
 }
-div.weekend{
+
+div.weekend {
     background-color: rgb(53, 52, 52);
 }
-div.unselected-month{
+
+div.unselected-month {
     color: gray;
 }
 
@@ -55,12 +64,16 @@ div.unselected-month{
     border-radius: 50%;
 
 }
-
-.day-number {
-
-    padding: 5px;
-    height: min-content;
+.day-number{
     text-align: end;
+    margin-left: 80%;
+    margin-top: 1px;
+}
+.day-number > p {
+    width: min-content;
+    margin: 0;
+    padding: 5px;
+
 }
 
 

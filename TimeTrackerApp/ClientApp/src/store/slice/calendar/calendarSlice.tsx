@@ -1,18 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
+import { EventType } from "../../../type/EventType";
 
 interface calendarState {
     totalDays: number,
     currentDaysArray: moment.Moment[],
     currentDate: string,
-    events: []
+    events: EventType[]
     currentCalendar: moment.Moment
     startDay: moment.Moment,
     currentDateMoment: moment.Moment
 }
 
 const initialState: calendarState = {
-    events: [],
+    events: [{
+        id:1,
+        title: "title",
+        desription: "desc",
+        dateCreate:  "2022-07-21"
+    },{  id:2,
+        title: "title",
+        desription: "desc",
+        dateCreate:  "2022-06-21"}],
     totalDays: 42,
     currentDaysArray: [],
     currentDate: '',
