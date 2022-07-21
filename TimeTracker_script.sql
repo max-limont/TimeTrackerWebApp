@@ -32,7 +32,7 @@ create table [VacationRequests]
 	[Comment] text
 )
 
-create table [AuthentificationTokens] 
+create table [AuthenticationTokens] 
 (
 	[Id] int primary key identity(1, 1),
 	[UserId] int not null foreign key references [Users]([Id]) on delete cascade,
