@@ -1,6 +1,6 @@
 ﻿namespace TimeTrackerApp.Business.Models
 {
-	public class AuthentificationToken
+	public class AuthenticationToken
 	{
 		public int Id { get; set; }
 		public int UserId { get; set; }
