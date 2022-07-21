@@ -43,6 +43,12 @@
     height: 80px;
     background-color: rgb(34, 34, 34);
 }
+div.weekend{
+    background-color: rgb(53, 52, 52);
+}
+div.unselected-month{
+    color: gray;
+}
 
 .current-day {
     background-color: red;

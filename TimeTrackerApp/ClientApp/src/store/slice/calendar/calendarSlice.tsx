@@ -5,19 +5,20 @@ interface calendarState {
     totalDays: number,
     currentDaysArray: moment.Moment[],
     currentDate: string,
-    
+    events: []
     currentCalendar: moment.Moment
     startDay: moment.Moment,
     currentDateMoment: moment.Moment
 }
 
 const initialState: calendarState = {
+    events: [],
     totalDays: 42,
     currentDaysArray: [],
     currentDate: '',
     currentCalendar: moment(),
     startDay:  moment().clone().startOf("month").startOf("week"),
-    currentDateMoment: moment().clone()
+    currentDateMoment: moment()
 }
 const calendarSlice = createSlice({
     name: "calendarSlice",
@@ -33,8 +34,6 @@ const calendarSlice = createSlice({
                 currentCalendar: moment(),
                 startDay: day.clone(),
                 currentDaysArray:  [...Array(state.totalDays)].map(()=>day.add(1, "day").clone()),
-                currentDateMoment: moment().clone(),
-                
             }
         },
         prevMonth: (state)=>{

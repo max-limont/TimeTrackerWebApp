@@ -10,6 +10,7 @@ export function CalendarGrid() {
     const daysArray = useAppSelector((s) => s.rootReducer.calendar.currentDaysArray)
     const days = ["Monday", "Thursday", 'Wednesday', 'Tuedsday', 'Friday', 'Saturday', 'Sunday'];
     const currentDate = useAppSelector((s) => s.rootReducer.calendar.currentDate);
+    const currentCalendar = useAppSelector((s) => s.rootReducer.calendar.currentCalendar);
     let currentDay = " current-day";
 
     return (
@@ -23,10 +24,13 @@ export function CalendarGrid() {
             </div>
             <div className="calendar-grid">
                 {daysArray.map((dayItem, value) => {
-                  const className = dayItem.format("yyyy-MM-DD")==currentDate?currentDay:"";
+                    const className = dayItem.format("yyyy-MM-DD") == currentDate ? currentDay : "";
+                    const classNameMonth = !(dayItem.format("MM") == currentCalendar.format("MM")) ? "unselected-month" : "";
+                    const classNameWeekend = dayItem.format("dd") == "Sa" || dayItem.format("dd") == "Su" ? "weekend" : "";
+                
                     return (
-                        <div key={value} className="day" >
-                            <div className={"day-number " + className}>{dayItem.format('DD')}</div>
+                        <div key={value} className={"day " + classNameWeekend} >
+                            <div className={"day-number " + className + classNameMonth}>{dayItem.format('DD')}</div>
                         </div>
                     );
                 })}

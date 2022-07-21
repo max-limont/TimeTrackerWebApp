@@ -11,7 +11,8 @@ import { initCalendar } from "../store/slice/calendar/calendarSlice";
 
 function Calendar() {
   
-    
+    const dispatch = useAppDispatch();
+    dispatch(initCalendar());
     return (
         <div className="calendar-container">
             <Header />
