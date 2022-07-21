@@ -1,10 +1,19 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import userSlice from '../store/slice/user/userSlice';
+import { configureStore, combineReducers} from '@reduxjs/toolkit';
+import calendarSlice from '../store/slice/calendar/calendarSlice';
+
+const rootReducer = combineReducers({
+  calendar: calendarSlice.reducer,
+})
+
 
 export const store = configureStore({
   reducer: {
-    counter: userSlice.reducer,
+    rootReducer
   },
+  middleware: getDefaultMiddleware =>
+  getDefaultMiddleware({
+    serializableCheck: false,
+  })
 });
 
 export type AppDispatch = typeof store.dispatch;

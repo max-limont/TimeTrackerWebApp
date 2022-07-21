@@ -1,26 +1,23 @@
-import { useState } from "react";
-
-type DateObj={
-
-    todayMonth: string,
-    todayYear: string,
-}
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { initCalendar, nextMonth, prevMonth } from "../../../store/slice/calendar/calendarSlice";
 
 
-export function Controls(value:DateObj) {
-    
-    const [date, setDate] = useState(value)
+export function Controls() {
+    const dispatch = useAppDispatch();
+    const month= useAppSelector((s)=>s.rootReducer.calendar.currentCalendar).format("MMMM")
+    const year = useAppSelector((s)=>s.rootReducer.calendar.currentCalendar).format("yyyy")
 
     return (
-    <div className="calendar-controls">
-        <div>
-            <span style={{fontSize: "25px"}}>{date.todayMonth} </span>
-            <span>{date.todayYear}</span>
-        </div>
-        <div>
-            <button>-</button>
-            <button>Todday</button>
-            <button>+</button>
-        </div>
-    </div>);
+        <div className="calendar-controls">
+            <div>
+                <span style={{ fontSize: "25px" }}>{month} </span>
+                <span>{year}</span>
+            </div>
+            <div>
+                <button onClick={()=>dispatch(prevMonth())}>-</button>
+                <button  onClick={()=>dispatch(initCalendar())}>Todday</button>
+                <button onClick={()=>dispatch(nextMonth())}>+</button>
+            </div>
+        </div>);
 }

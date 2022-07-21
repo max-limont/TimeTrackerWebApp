@@ -1,26 +1,37 @@
 import moment from "moment";
-import { Day } from "./Day/Day";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "../../../app/hooks";
 
-interface Obj{
-    startDay:moment.Moment
+type Obj = {
+    array: moment.Moment[]
 }
 
+export function CalendarGrid() {
+    const daysArray = useAppSelector((s) => s.rootReducer.calendar.currentDaysArray)
+    const days = ["Monday", "Thursday", 'Wednesday', 'Tuedsday', 'Friday', 'Saturday', 'Sunday'];
+    const currentDate = useAppSelector((s) => s.rootReducer.calendar.currentDate);
+    let currentDay = " current-day";
 
-export function CalendarGrid(DayParam:Obj){
-    const totalDays= 42;
-    const day = DayParam.startDay.clone().subtract(1, "day");
-    const daysArray = [...Array(totalDays)].map(()=>day.add(1, "day").clone())
-    console.log(moment().date())
-    return(
-        <div className="calendar-grid">
-            {
-                daysArray.map((dayItem,value)=>{
-                    return(
-                        <Day key={value} date={dayItem.format("yyyy-MM-DD")} isWeekend={false} isCurrentDay={dayItem.date()===moment().date()?true:false} event={[]}/>
-                        );
-                })
-            }
-        </div>
- 
+    return (
+        <>
+            <div className="days" >
+                {days.map((dayItem, value) => {
+                    return (
+                        <div key={value}>{dayItem}</div>
+                    );
+                })}
+            </div>
+            <div className="calendar-grid">
+                {daysArray.map((dayItem, value) => {
+                  const className = dayItem.format("yyyy-MM-DD")==currentDate?currentDay:"";
+                    return (
+                        <div key={value} className="day" >
+                            <div className={"day-number " + className}>{dayItem.format('DD')}</div>
+                        </div>
+                    );
+                })}
+            </div>
+        </>
+
     );
 }
