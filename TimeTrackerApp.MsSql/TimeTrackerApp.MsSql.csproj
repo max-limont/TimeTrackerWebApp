@@ -15,5 +15,4 @@
   <ItemGroup>
     <ProjectReference Include="..\TimeTrackerApp.Business\TimeTrackerApp.Business.csproj" />
   </ItemGroup>
-
 </Project>
