@@ -1,9 +1,9 @@
 ﻿using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using ToDoList_task.GraphQL.GraphQLQueries;
+using TimeTrackerApp.GraphQL.GraphQLQueries;
 
-namespace ToDoList_task.GraphQL.GraphQLSchema
+namespace TimeTrackerApp.GraphQL.GraphQLSchema
 {
     public class AppSchema : Schema
     {

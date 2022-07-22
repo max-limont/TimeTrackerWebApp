@@ -1,7 +1,7 @@
 ﻿using GraphQL.Types;
 using TimeTrackerApp.Business.Models;
 
-namespace ToDoList_task.GraphQL.GraphQLTypes
+namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
     public class VacationRequestType : ObjectGraphType<VacationRequest>
     {

@@ -1,6 +1,6 @@
 ﻿using GraphQL.Types;
 
-namespace ToDoList_task.GraphQL.GraphQLTypes
+namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
     public class UserInputType : InputObjectGraphType
     {
