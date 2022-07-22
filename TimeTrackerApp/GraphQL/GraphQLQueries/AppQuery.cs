@@ -63,17 +63,17 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 
 
 
-            Field<ListGraphType<AuthTokenType>>(
-               "user_FetchAll",
-               resolve: context => userRep.FetchAllAsync()
+            Field<ListGraphType<VacationRequestType>>(
+               "vacationRequest_FetchAll",
+               resolve: context => vacationRequestRep.FetchAllAsync()
            );
-            Field<AuthTokenType>(
-                "user_GetById",
+            Field<VacationRequestType>(
+                "vacationRequest_GetById",
                 arguments: new QueryArguments(new QueryArgument<IdGraphType> { Name = "id" }),
                 resolve: context =>
                 {
                     int id = Convert.ToInt32(context.Arguments["id"]);
-                    return userRep.GetByIdAsync(id);
+                    return vacationRequestRep.GetByIdAsync(id);
                 }
             );
         }
