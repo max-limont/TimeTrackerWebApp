@@ -44,6 +44,15 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return recordRep.GetByIdAsync(id);
                 }
             );
+            Field<RecordType>(
+                "record_FetchAllByUser",
+                arguments: new QueryArguments(new QueryArgument<IdGraphType> { Name = "id" }),
+                resolve: context =>
+                {
+                    int id = Convert.ToInt32(context.Arguments["id"]);
+                    return recordRep.FetchAllUserRecordsAsync(id);
+                }
+            );
 
 
 
@@ -74,6 +83,15 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 {
                     int id = Convert.ToInt32(context.Arguments["id"]);
                     return vacationRequestRep.GetByIdAsync(id);
+                }
+            );
+            Field<VacationRequestType>(
+                "vacationRequest_FetchAllByUser",
+                arguments: new QueryArguments(new QueryArgument<IdGraphType> { Name = "id" }),
+                resolve: context =>
+                {
+                    int id = Convert.ToInt32(context.Arguments["id"]);
+                    return vacationRequestRep.FetchAllUserVacationRequestsAsync(id);
                 }
             );
         }
