@@ -1,4 +1,5 @@
 ﻿using GraphQL.Types;
+using TimeTrackerApp.Business.Models;
 
 namespace ToDoList_task.GraphQL.GraphQLTypes
 {

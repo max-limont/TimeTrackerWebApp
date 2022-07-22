@@ -1,4 +1,5 @@
 ﻿using GraphQL.Types;
+using TimeTrackerApp.Business.Models;
 
 namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
