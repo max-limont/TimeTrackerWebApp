@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import moment from "moment";
-import { EventType } from "../../../type/EventType";
+import { CreateEventType } from "../../../type/Events/CreateEventType";
+import { EventType } from "../../../type/Events/EventType";
 
 interface calendarState {
     totalDays: number,
@@ -14,19 +15,36 @@ interface calendarState {
 
 const initialState: calendarState = {
     events: [{
-        id:1,
+        id: 1,
         title: "title",
         desription: "desc",
-        dateCreate:  "2022-07-21"
-    },{  id:2,
+        dateCreate: "2022-07-21"
+    }, {
+        id: 2,
         title: "title",
         desription: "desc",
-        dateCreate:  "2022-06-21"}],
+        dateCreate: "2022-07-21"
+    }, {
+        id: 3,
+        title: "title",
+        desription: "desc",
+        dateCreate: "2022-07-21"
+    }, {
+        id: 4,
+        title: "title",
+        desription: "desc",
+        dateCreate: "2022-07-21"
+    }, {
+        id: 5,
+        title: "title",
+        desription: "desc",
+        dateCreate: "2022-06-21"
+    }],
     totalDays: 42,
     currentDaysArray: [],
     currentDate: '',
     currentCalendar: moment(),
-    startDay:  moment().clone().startOf("month").startOf("week"),
+    startDay: moment().clone().startOf("month").startOf("week"),
     currentDateMoment: moment()
 }
 const calendarSlice = createSlice({
@@ -35,42 +53,52 @@ const calendarSlice = createSlice({
     reducers: {
         initCalendar: (state) => {
             moment.updateLocale("en", { week: { dow: 0 } });
-            const day =moment().clone().startOf("month").startOf("week")
-            
+            const day = moment().clone().startOf("month").startOf("week")
+
             return {
                 ...state,
                 currentDate: moment().format("yyyy-MM-DD"),
                 currentCalendar: moment(),
                 startDay: day.clone(),
-                currentDaysArray:  [...Array(state.totalDays)].map(()=>day.add(1, "day").clone()),
+                currentDaysArray: [...Array(state.totalDays)].map(() => day.add(1, "day").clone()),
             }
         },
-        prevMonth: (state)=>{
+        prevMonth: (state) => {
 
-            const day =state.currentCalendar.subtract(1,"month").clone()
-            
-            return{
+            const day = state.currentCalendar.subtract(1, "month").clone()
+
+            return {
                 ...state,
                 currentCalendar: day.clone(),
                 startDay: day.startOf("month").startOf("week").clone(),
-                currentDaysArray:   [...Array(state.totalDays)].map(()=>day.add(1, "day").clone()),
+                currentDaysArray: [...Array(state.totalDays)].map(() => day.add(1, "day").clone()),
 
             }
         },
-        nextMonth: (state)=>{
+        nextMonth: (state) => {
 
-            const day =state.currentCalendar.add(1,"month").clone()
-            
-            return{
+            const day = state.currentCalendar.add(1, "month").clone()
+
+            return {
                 ...state,
                 currentCalendar: day.clone(),
                 startDay: day.startOf("month").startOf("week").clone(),
-                currentDaysArray:   [...Array(state.totalDays)].map(()=>day.add(1, "day").clone()),
+                currentDaysArray: [...Array(state.totalDays)].map(() => day.add(1, "day").clone()),
 
+            }
+        },
+        addEvent: (state, action: PayloadAction<CreateEventType>) => {
+
+            return {
+                ...state,
+                events: state.events.concat({
+                    ...action.payload,
+                    id: state.events[state.events.length - 1].id + 1
+                })
             }
         }
     }
 })
 
 export default calendarSlice;
-export const { initCalendar,prevMonth,nextMonth } = calendarSlice.actions;
+export const { initCalendar, prevMonth, nextMonth } = calendarSlice.actions;

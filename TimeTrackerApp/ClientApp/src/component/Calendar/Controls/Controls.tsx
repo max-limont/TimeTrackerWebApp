@@ -14,10 +14,10 @@ export function Controls() {
                 <span style={{ fontSize: "25px" }}>{month} </span>
                 <span>{year}</span>
             </div>
-            <div>
-                <button onClick={()=>dispatch(prevMonth())}>-</button>
+            <div className="control-panel">
+                <button onClick={()=>dispatch(prevMonth())}>{"<"}</button>
                 <button  onClick={()=>dispatch(initCalendar())}>Todday</button>
-                <button onClick={()=>dispatch(nextMonth())}>+</button>
+                <button onClick={()=>dispatch(nextMonth())}>{">"}</button>
             </div>
         </div>);
 }

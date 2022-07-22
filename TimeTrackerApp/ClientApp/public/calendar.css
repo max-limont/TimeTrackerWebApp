@@ -6,12 +6,17 @@
     grid-gap: 2px;
     color: white;
     width: fit-content;
+    
 }
 
-.day-yacheyka {
-    display: flex;
-    flex-direction: row;
+.control-panel>button {
+    border: none;
+    background-color: rgb(100, 100, 100);
+    border-radius: 2px;
+    margin-right: 2px;
+    color: white;
 }
+
 
 .days {
     display: grid;
@@ -31,6 +36,8 @@
     background-color: rgb(71, 71, 71);
     color: white;
 }
+
+.day-number p {}
 
 .calendar-controls {
     display: flex;
@@ -55,32 +62,75 @@ div.weekend {
     background-color: rgb(53, 52, 52);
 }
 
+div.weekend>.day-number>p {
+    background-color: rgb(41, 35, 35);
+}
+
+.day-number:hover {
+    cursor: pointer;
+}
+
+.event {
+    background-color: rgb(9, 156, 95);
+    width: fit-content;
+    padding: 2px;
+    border-radius: 2px;
+}
+
+.event:hover {
+    cursor: pointer;
+}
+
 div.unselected-month {
     color: gray;
 }
 
-.current-day {
+
+.day-number>p.current-day {
     background-color: red;
-    border-radius: 50%;
+
 
 }
-.day-number{
+
+.day-number {
     text-align: end;
     margin-left: 80%;
     margin-top: 1px;
 }
-.day-number > p {
+
+.day-number>p {
     width: min-content;
     margin: 0;
     padding: 5px;
+    border-radius: 50%;
+    background-color: rgb(49, 49, 49);
 
 }
-
-
 
 .calendar-container {
     border-radius: 8px;
     width: fit-content;
     border: 1px solid black;
     overflow: hidden;
+    position: relative;
+}
+
+.form-event{
+    color: white;
+    position: absolute;
+    background-color: rgb(34, 34, 34);
+    border: 1px solid white;
+    width: 200px;
+    top: 45%;
+    left: 45%;
+    padding: 10px;
+}
+
+.events{
+    display: flex;
+    flex-wrap: wrap;
+}
+.list-events{
+    position: absolute;
+    background-color: rgb(34, 34, 34);
 }
