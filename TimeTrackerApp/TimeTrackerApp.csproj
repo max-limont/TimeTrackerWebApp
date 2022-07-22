@@ -34,6 +34,11 @@
     <Folder Include="GraphQL\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TimeTrackerApp.Business\TimeTrackerApp.Business.csproj" />
+    <ProjectReference Include="..\TimeTrackerApp.MsSql\TimeTrackerApp.MsSql.csproj" />
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

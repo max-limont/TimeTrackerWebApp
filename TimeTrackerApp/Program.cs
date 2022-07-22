@@ -4,11 +4,18 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using TimeTrackerApp.Business.Repositories;
+using TimeTrackerApp.MsSql.Repositories;
+using TimeTrackerApp.GraphQL.GraphQLSchema;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string conn = builder.Configuration.GetConnectionString("ConnectSQL");
+string conn = builder.Configuration.GetConnectionString("MsSqlConnection");
+
+//builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => AuthenticationTokenRepository(conn));
+//builder.Services.AddSingleton<IRecordRepository>(provider => RecordRepository(conn));
+//builder.Services.AddSingleton<IUserRepository>(provider => UserRepository(conn));
+//builder.Services.AddSingleton<IVacationRequestRepository>(provider => VacationRequestRepository(conn));
 
 // Add services to the container.
 
@@ -32,13 +39,18 @@ builder.Services.AddCors(
     }
 );
 
+builder.Services.AddScoped<AppSchema>();
+
 builder.Services
     .AddGraphQL(options =>
     {
         options.EnableMetrics = true;
     })
     .AddSystemTextJson()
-    .AddGraphTypes(/*typeof(ñõåìà)*/);
+    .AddGraphTypes(typeof(AppSchema), ServiceLifetime.Scoped);
+
+//builder.Services.AddControllers()
+//    .AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -68,9 +80,9 @@ app.UseCors(x => x
 
 app.MapControllers();
 
-/*
- app.UseGraphQL<Ñõåìà>();
- */
+
+app.UseGraphQL<AppSchema>();
+
 app.UseGraphQLAltair();
 
 app.UseSpa(spa =>
