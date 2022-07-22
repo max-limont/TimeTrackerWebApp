@@ -82,7 +82,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return $"The Record with the id: {id} has been successfully deleted from db.";
                 }
             );
-
             Field<RecordType>(
                 "record_edit",
                 arguments: new QueryArguments(
@@ -106,7 +105,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return user;
                 }
             );
-
             Field<StringGraphType>(
                 "user_delete",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }),
@@ -123,16 +121,31 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return $"The User with the id: {id} has been successfully deleted from db.";
                 }
             );
-
             Field<UserType>(
                 "user_edit",
                 arguments: new QueryArguments(
-                new QueryArgument<NonNullGraphType<UserInputType>> { Name = "user" }),
+                    new QueryArgument<NonNullGraphType<UserInputType>> { Name = "user" }
+                ),
                 resolve: context =>
                 {
                     User user = context.GetArgument<User>("user");
                     userRep.EditAsync(user);
                     return user;
+                }
+            );
+            Field<UserType>(
+                "user_changePassword",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "password" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "newPassword" }
+                ),
+                resolve: context =>
+                {
+                    int id = Convert.ToInt32(context.Arguments["id"]);
+                    string pass = Convert.ToString(context.Arguments["password"]);
+                    string newPass = Convert.ToString(context.Arguments["newPassword"]);
+                    return userRep.ChangePassword(id, pass, newPass);
                 }
             );
 
