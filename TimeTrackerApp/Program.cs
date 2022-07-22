@@ -1,10 +1,14 @@
 ﻿using GraphQL.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+string conn = builder.Configuration.GetConnectionString("ConnectSQL");
 
 // Add services to the container.
 
