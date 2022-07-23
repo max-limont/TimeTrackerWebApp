@@ -4,42 +4,27 @@ import { CreateEvent } from "../FormsCalendar/CreateEvent";
 
 
 export function ListEvents() {
-    const [isSelectedForm, setForm] = useState(false);
-    const dayEvents = useAppSelector(s => s.rootReducer.calendar.events).filter(s => s.dateCreate == useAppSelector(s => s.rootReducer.calendar.currentDateList));
-
-    const Form = () => {
-        if (isSelectedForm)
-            return (
-                <div>
-                    <button onClick={() => setForm(false)}>X</button>
-                    <CreateEvent />
-                </div>
-            );
-    }
+    const dayEvent = useAppSelector(s => s.rootReducer.calendar.currentDateList)
+    const dayEvents = useAppSelector(s => s.rootReducer.calendar.events).filter(s => s.dateCreate == dayEvent);
 
     return (
         <>
-            <div>
-               
-                <div>{Form()}</div>
-                <table>
+            <div>{dayEvent}</div>
+            <table>
+                <tbody>
                     <tr>
                         <td>Name Event</td>
-                        <td>Date</td>
                         <td>Description</td>
                     </tr>
                     {dayEvents.map(s =>
-                        <>
-                            <tr>
-                                <td>{s.title}</td>
-                                <td>{s.dateCreate}</td>
-                                <td>{s.desription}</td>
-                            </tr>
-                        </>
+                        <tr key={s.id}>
+                            <td>{s.title}</td>
+
+                            <td>{s.description}</td>
+                        </tr>
                     )}
-                </table>
-                <button onClick={() => setForm(true)}>Create Event</button>
-            </div>
+                </tbody>
+            </table>
         </>
     );
 }

@@ -1,6 +1,6 @@
 export type EventType={
     id:number,
     title:string,
-    desription:string,
+    description:string,
     dateCreate: string
 }

@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import moment from "moment";
 import { idText } from "typescript";
@@ -8,15 +6,19 @@ import { Controls } from "./Calendar/Controls/Controls";
 import { CalendarGrid } from "./Calendar/CalendarGrid/CalendarGrid";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { initCalendar } from "../store/slice/calendar/calendarSlice";
+import { CreateEvent } from "./Calendar/FormsCalendar/CreateEvent";
+
+
 
 function Calendar() {
     const dispatch = useAppDispatch();
     dispatch(initCalendar());
     return (
-        <div className="calendar-container">
+        <div  className="calendar-container">
             <Header />
             <Controls />
             <CalendarGrid/>
+            <CreateEvent />
         </div>
     )
 }

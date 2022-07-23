@@ -76,7 +76,7 @@ div.weekend>.day-number>p {
     cursor: pointer;
 }
 
-table{
+table {
     text-align: center;
 }
 
@@ -97,7 +97,7 @@ div.unselected-month {
 }
 
 
-.day-number>p.current-day {
+div.day-number>p.current-day {
     background-color: red;
 
 

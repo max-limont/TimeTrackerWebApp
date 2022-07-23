@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { setCurrentDateList } from "../../../store/slice/calendar/calendarSlice";
 import { ListEvents } from "../Events/ListEvents";
-import { ShortListEvents } from "../Events/ShortListEvents";
 import { CreateEvent } from "../FormsCalendar/CreateEvent";
 
 
@@ -14,14 +13,12 @@ export function CalendarGrid() {
     const currentDate = useAppSelector((s) => s.rootReducer.calendar.currentDate);
     const currentCalendar = useAppSelector((s) => s.rootReducer.calendar.currentCalendar);
 
-    const [events, setEvents] = useState(useAppSelector((s) => s.rootReducer.calendar.events));
+    const events = useAppSelector((s) => s.rootReducer.calendar.events);
     const [isSelectedFullList, setIsSelected] = useState(false);
 
     const days = ["Monday", "Thursday", 'Wednesday', 'Tuedsday', 'Friday', 'Saturday', 'Sunday'];
-
-    
     let currentDay = " current-day";
-   
+
     const fullList = () => {
         if (isSelectedFullList) {
             return (
@@ -31,7 +28,6 @@ export function CalendarGrid() {
                 </div>
             );
         }
-
     }
 
     return (
@@ -39,8 +35,7 @@ export function CalendarGrid() {
             <div>
                 {fullList()}
             </div>
-            <div className="days" >
-
+            <div className="days">
                 {days.map((dayItem, value) => {
                     return (
                         <div key={value}>{dayItem}</div>
@@ -55,25 +50,24 @@ export function CalendarGrid() {
                     const classNameWeekend = dayItem.format("dd") == "Sa" || dayItem.format("dd") == "Su" ? "weekend" : "";
 
                     return (
-                        <>
-                            <div key={value} className={"day " + classNameWeekend}>
-                                <div className={"day-number " + classNameMonth}>
-                                    <p className={classNameCurrentDay}>{dayItem.format('DD')}
-                                    </p>
-                                </div>
-                                <div>
-                                    {/* <ShortListEvents date={dayItem.format("yyyy-MM-DD")} /> */}
-                                    <div onClick={() => {
-                                        setIsSelected(true);
-                                        dispatch(setCurrentDateList(formatDayItem));
-                                    }} className="events">
-                                        {events.filter(s => s.dateCreate == formatDayItem)
-                                            .map(s =>
-                                                <div className="event" key={s.id}>{s.title}</div>)}
-                                    </div>
+
+                        <div key={value} className={"day " + classNameWeekend}>
+                            <div className={"day-number " + classNameMonth}>
+                                <p className={classNameCurrentDay}>{dayItem.format('DD')}
+                                </p>
+                            </div>
+                            <div>
+                                <div onClick={() => {
+                                    setIsSelected(true);
+                                    dispatch(setCurrentDateList(formatDayItem));
+                                }} className="events">
+                                    {events.filter(s => s.dateCreate == formatDayItem)
+                                        .map(s =>
+                                            <div className="event" key={s.id}>{s.title}</div>)}
                                 </div>
                             </div>
-                        </>
+                        </div>
+
                     );
                 })}
             </div>

@@ -18,27 +18,27 @@ const initialState: calendarState = {
     events: [{
         id: 1,
         title: "title",
-        desription: "desc",
+        description: "desc",
         dateCreate: "2022-07-21"
     }, {
         id: 2,
         title: "title",
-        desription: "desc",
+        description: "desc",
         dateCreate: "2022-07-21"
     }, {
         id: 3,
         title: "title",
-        desription: "desc",
+        description: "desc",
         dateCreate: "2022-07-21"
     }, {
         id: 4,
         title: "title",
-        desription: "desc",
+        description: "desc",
         dateCreate: "2022-07-21"
     }, {
         id: 5,
         title: "title",
-        desription: "desc",
+        description: "desc",
         dateCreate: "2022-07-25"
     }],
     totalDays: 42,
@@ -89,14 +89,11 @@ const calendarSlice = createSlice({
 
             }
         },
-        addEvent: (state, action: PayloadAction<CreateEventType>) => {
+        addEvent: (state, action: PayloadAction<EventType>) => {
 
             return {
                 ...state,
-                events: state.events.concat({
-                    ...action.payload,
-                    id: state.events[state.events.length - 1].id + 1
-                })
+                events: state.events.concat(action.payload)
             }
         },
         setCurrentDateList: (state, action:PayloadAction<string>)=>{
@@ -110,4 +107,4 @@ const calendarSlice = createSlice({
 })
 
 export default calendarSlice;
-export const { initCalendar, prevMonth, nextMonth ,setCurrentDateList} = calendarSlice.actions;
+export const { initCalendar, prevMonth, nextMonth ,addEvent,setCurrentDateList} = calendarSlice.actions;

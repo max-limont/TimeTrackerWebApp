@@ -5,8 +5,8 @@ import { initCalendar, nextMonth, prevMonth } from "../../../store/slice/calenda
 
 export function Controls() {
     const dispatch = useAppDispatch();
-    const month= useAppSelector((s)=>s.rootReducer.calendar.currentCalendar).format("MMMM")
-    const year = useAppSelector((s)=>s.rootReducer.calendar.currentCalendar).format("yyyy")
+    const month= useAppSelector((s)=>s.rootReducer.calendar.currentCalendar).format("MMMM");
+    const year = useAppSelector((s)=>s.rootReducer.calendar.currentCalendar).format("yyyy");
 
     return (
         <div className="calendar-controls">
@@ -15,6 +15,7 @@ export function Controls() {
                 <span>{year}</span>
             </div>
             <div className="control-panel">
+                <button onClick={()=>null}>Add Event</button>
                 <button onClick={()=>dispatch(prevMonth())}>{"<"}</button>
                 <button  onClick={()=>dispatch(initCalendar())}>Todday</button>
                 <button onClick={()=>dispatch(nextMonth())}>{">"}</button>
