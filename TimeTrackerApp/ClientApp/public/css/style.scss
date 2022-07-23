@@ -1,0 +1,334 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&family=Oswald:wght@100;200;300;400;500;600;700;800;900&family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
+// ------------------------------ Reset css -------------------------------------
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+// ----------------------------------
+
+
+
+$color-dark: #222831;
+$color-light-dark: #393E46;
+$color-cyan: #00ADB5;
+$color-light: #EEEEEE;
+$color-silver: #D6D6D6;
+
+$font-size-default: 18px;
+$font-size-header: 26px;
+
+body {
+  font-family: 'Nunito', serif;
+  background: $color-light;
+}
+
+@mixin link-mixin {
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.flex-container {
+  display: flex;
+  box-sizing: border-box;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.menu-container {
+  max-width: 320px;
+  transition: 0.3s all;
+  .menu {
+    transition: 0.3s all;
+    top: 0px;
+    position: sticky;
+    background: $color-dark;
+    width: 100%;
+    height: 100vh;
+
+    .logo {
+      color: $color-light;
+      font-size: $font-size-header;
+      height: 60px;
+      background: $color-cyan;
+      align-items: center;
+      padding: 17px 15px 17px 0;
+      font-weight: bold;
+      .icon {
+        margin-inline: 20px;
+      }
+    }
+
+    .navigation-links {
+      height: 100%;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+      background: $color-dark;
+    }
+
+    a {
+      @include link-mixin;
+      color: $color-light;
+      font-size: $font-size-default;
+      padding: 20px 15px 20px 0;
+      transition: 0.2s all;
+      width: 100%;
+      .icon {
+        margin-inline: 15px;
+        width: 32px;
+      }
+    }
+
+    a:hover {
+      background: $color-light-dark;
+      color: $color-cyan;
+    }
+
+    li {
+      display: flex;
+      width: 100%;
+      align-items: stretch;
+      position: relative;
+    }
+
+    li:hover::after {
+      content: '';
+      display: inline-flex;
+      position: absolute;
+      background: $color-cyan;
+      width: 3px;
+      top: 0;
+      bottom: 0;
+      right: 0;
+    }
+
+    &:hover {
+      .collapse-menu-button {
+        right: -15px;
+      }
+    }
+
+    .collapse-menu-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      color: $color-light;
+      background: $color-dark;
+      width: 40px;
+      height: 60px;
+      border-radius: 5px;
+      right: 0;
+      top: calc(50% - 30px);
+      z-index: 1;
+      cursor: pointer;
+      .icon {
+        margin-left: 23px;
+      }
+      &:hover {
+        background: $color-light-dark;
+        z-index: 1;
+      }
+    }
+  }
+
+  &.collapsed {
+    max-width: 54px;
+    a {
+      justify-content: center;
+      padding: 15px 0 15px 0;
+      .icon {
+        margin: 0;
+      }
+    }
+    span {
+      display: none;
+    }
+
+    .logo {
+      .icon {
+        margin: 0;
+        padding: 15px;
+      }
+      h2 {
+        display: none;
+      }
+    }
+  }
+}
+
+.header {
+  background: $color-dark;
+  color: $color-light;
+  padding: 15px 15px 15px 15px;
+  height: 60px;
+  align-items: center;
+  justify-content: space-between;
+
+  .breadcrumbs {
+    height: 100%;
+    align-items: center;
+    a {
+      @include link-mixin;
+      font-size: 16px;
+      color: $color-light;
+    }
+
+    a:hover {
+      color: $color-cyan;
+    }
+
+    a:not(:last-child)::after {
+      content: '|';
+      margin-inline: 10px;
+      color: $color-light !important;
+    }
+  }
+
+  .user-info {
+    align-items: center;
+    p {
+      font-size: 16px;
+    }
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 100%;
+      margin-inline: 10px;
+    }
+  }
+}
+
+section {
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid $color-silver;
+    padding: 10px 15px 10px 15px;
+    h2 {
+      font-size: $font-size-header;
+      font-weight: bold;
+      color: $color-dark;
+    }
+  }
+}
+
+.button {
+  padding: 7px 20px 7px 20px;
+  border-radius: 2px;
+  font-weight: 600;
+  font-size: $font-size-default;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.cyan-button {
+  padding: 10px 50px 10px 50px;
+  font-size: 20px;
+  background: $color-cyan;
+  color: $color-light;
+  &:hover {
+    background: transparent;
+    color: $color-cyan;
+    border: 1px solid $color-cyan;
+  }
+}
+
+.timer {
+  border: 1px solid $color-silver;
+  border-radius: 5px;
+  padding: 20px 15px 20px 15px;
+  margin: 15px auto;
+  max-width: 1024px;
+
+  div {
+    display: inline-flex;
+    width: calc(100% / 3);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    h3 {
+      text-transform: uppercase;
+      color: #AAAAAA;
+      font-weight: 600;
+    }
+
+    span {
+      font-size: 100px;
+      font-weight: 100;
+      padding: 30px 0 30px 0;
+      position: relative;
+    }
+
+    &:not(:last-child)::after {
+      content: ':';
+      display: flex;
+      width: 40px;
+      height: 100px;
+      justify-content: center;
+      align-items: center;
+      color: $color-silver;
+      font-weight: bold;
+      font-size: 100px;
+      right: -20px;
+      top: calc(50% - 60px);
+      position: absolute;
+    }
+  }
+}
