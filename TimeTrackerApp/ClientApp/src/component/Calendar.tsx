@@ -18,7 +18,6 @@ function Calendar() {
             <Header />
             <Controls />
             <CalendarGrid/>
-            <CreateEvent />
         </div>
     )
 }

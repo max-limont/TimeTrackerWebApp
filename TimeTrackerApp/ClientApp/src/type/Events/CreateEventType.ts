@@ -7,5 +7,5 @@ export type CreateEventType = {
 export const CreateEventObject = {
     title: '',
     description: '',
-    dateCreate: ''
+    date: ''
 }

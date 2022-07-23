@@ -5,7 +5,7 @@ import { CreateEvent } from "../FormsCalendar/CreateEvent";
 
 export function ListEvents() {
     const dayEvent = useAppSelector(s => s.rootReducer.calendar.currentDateList)
-    const dayEvents = useAppSelector(s => s.rootReducer.calendar.events).filter(s => s.dateCreate == dayEvent);
+    const dayEvents = useAppSelector(s => s.rootReducer.calendar.events).filter(s => s.date == dayEvent);
 
     return (
         <>
@@ -19,7 +19,6 @@ export function ListEvents() {
                     {dayEvents.map(s =>
                         <tr key={s.id}>
                             <td>{s.title}</td>
-
                             <td>{s.description}</td>
                         </tr>
                     )}

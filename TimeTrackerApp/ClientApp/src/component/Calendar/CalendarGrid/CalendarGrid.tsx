@@ -61,13 +61,12 @@ export function CalendarGrid() {
                                     setIsSelected(true);
                                     dispatch(setCurrentDateList(formatDayItem));
                                 }} className="events">
-                                    {events.filter(s => s.dateCreate == formatDayItem)
+                                    {events.filter(s => s.date == formatDayItem)
                                         .map(s =>
                                             <div className="event" key={s.id}>{s.title}</div>)}
                                 </div>
                             </div>
                         </div>
-
                     );
                 })}
             </div>

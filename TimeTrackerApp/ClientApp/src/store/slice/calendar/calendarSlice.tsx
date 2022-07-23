@@ -19,27 +19,27 @@ const initialState: calendarState = {
         id: 1,
         title: "title",
         description: "desc",
-        dateCreate: "2022-07-21"
+        date: "2022-07-21"
     }, {
         id: 2,
         title: "title",
         description: "desc",
-        dateCreate: "2022-07-21"
+        date: "2022-07-21"
     }, {
         id: 3,
         title: "title",
         description: "desc",
-        dateCreate: "2022-07-21"
+        date: "2022-07-21"
     }, {
         id: 4,
         title: "title",
         description: "desc",
-        dateCreate: "2022-07-21"
+        date: "2022-07-21"
     }, {
         id: 5,
         title: "title",
         description: "desc",
-        dateCreate: "2022-07-25"
+        date: "2022-07-25"
     }],
     totalDays: 42,
     currentDaysArray: [],
