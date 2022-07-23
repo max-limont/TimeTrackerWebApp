@@ -1,12 +1,9 @@
 import React, { useState } from "react";
+import { useAppSelector } from "../../../app/hooks";
 import { CreateEventObject, CreateEventType } from "../../../type/Events/CreateEventType";
 
-type Obj = {
-    date: string
-}
-
-export function CreateEvent(value: Obj) {
-    const [event, setEvent] = useState({ ...CreateEventObject, dateCreate: value.date });
+export function CreateEvent() {
+    const [event, setEvent] = useState({ ...CreateEventObject, dateCreate: useAppSelector(s=>s.rootReducer.calendar.currentDateList) });
     const onFinish = (e: React.FormEvent) => {
         e.preventDefault();
     }
@@ -25,5 +22,5 @@ export function CreateEvent(value: Obj) {
                 <button type="submit">Add</button>
                 <button type="reset">Reset</button>
             </div>
-        </form>)
+        </form>);
 }

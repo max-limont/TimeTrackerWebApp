@@ -10,7 +10,8 @@ interface calendarState {
     events: EventType[]
     currentCalendar: moment.Moment
     startDay: moment.Moment,
-    currentDateMoment: moment.Moment
+    currentDateMoment: moment.Moment,
+    currentDateList: string
 }
 
 const initialState: calendarState = {
@@ -38,11 +39,12 @@ const initialState: calendarState = {
         id: 5,
         title: "title",
         desription: "desc",
-        dateCreate: "2022-06-21"
+        dateCreate: "2022-07-25"
     }],
     totalDays: 42,
     currentDaysArray: [],
     currentDate: '',
+    currentDateList: '',
     currentCalendar: moment(),
     startDay: moment().clone().startOf("month").startOf("week"),
     currentDateMoment: moment()
@@ -96,9 +98,16 @@ const calendarSlice = createSlice({
                     id: state.events[state.events.length - 1].id + 1
                 })
             }
+        },
+        setCurrentDateList: (state, action:PayloadAction<string>)=>{
+            return{
+                ...state,
+                currentDateList: action.payload
+            }
+
         }
     }
 })
 
 export default calendarSlice;
-export const { initCalendar, prevMonth, nextMonth } = calendarSlice.actions;
+export const { initCalendar, prevMonth, nextMonth ,setCurrentDateList} = calendarSlice.actions;
