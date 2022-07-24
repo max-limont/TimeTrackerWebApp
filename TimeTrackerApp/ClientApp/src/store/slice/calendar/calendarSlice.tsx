@@ -101,10 +101,22 @@ const calendarSlice = createSlice({
                 ...state,
                 currentDateList: action.payload
             }
+        },
+        editEventAction: (state, action:PayloadAction<EventType>)=>{
+            const i = state.events.findIndex(item => item.id == action.payload.id);
+            var events = state.events.slice();
+            events[i] = action.payload;
+            return { ...state, events: events }
+        },
+        setEvents: (state,action:PayloadAction<EventType[]>)=>{
 
+            return{
+                ...state,
+                events: action.payload
+            }
         }
     }
 })
 
 export default calendarSlice;
-export const { initCalendar, prevMonth, nextMonth ,addEvent,setCurrentDateList} = calendarSlice.actions;
+export const { initCalendar, prevMonth, nextMonth ,addEvent,setCurrentDateList,editEventAction} = calendarSlice.actions;

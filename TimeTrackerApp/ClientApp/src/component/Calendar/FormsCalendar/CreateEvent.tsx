@@ -6,13 +6,14 @@ import { CreateEventObject, CreateEventType } from "../../../type/Events/CreateE
 
 export function CreateEvent() {
     const dispatch = useAppDispatch();
-    const [event, setEvent] = useState({...CreateEventObject,date: moment().format("yyyy-MM-DD")});
+    const events = useAppSelector(s => s.rootReducer.calendar.events);
+    const id = events[events.length - 1].id + 1;
+    const [event, setEvent] = useState({ ...CreateEventObject, date: moment().format("yyyy-MM-DD") });
     const onFinish = (e: React.FormEvent) => {
-
         e.preventDefault();
         dispatch(addEvent({
             ...event,
-            id: 123
+            id: id
         }));
     }
     const { title, description, date } = event;
@@ -27,7 +28,7 @@ export function CreateEvent() {
                     </tr>
                     <tr>
                         <td><label>Description</label></td>
-                        <td><input value={description} onChange={(e) => setEvent({ ...event, description: e.target.value })} /></td>
+                        <td><textarea value={description} onChange={(e) => setEvent({ ...event, description: e.target.value })}></textarea></td>
                     </tr>
                     <tr>
                         <td><label>Date</label></td>

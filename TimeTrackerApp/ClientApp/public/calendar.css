@@ -122,7 +122,6 @@ div.day-number>p.current-day {
     border-radius: 8px;
     width: fit-content;
     border: 1px solid black;
-    overflow: hidden;
     position: relative;
 }
 
@@ -134,6 +133,21 @@ div.day-number>p.current-day {
     border: 1px solid white;
     top: 40%;
     left: 40%;
+    padding: 20px;
+}
+.form-event textarea{
+    width: 168px;
+    height: 78px;
+    resize: none;
+}
+.edit-event-form{
+    color: white;
+    position: absolute;
+    border-radius: 10px;
+    background-color: rgb(34, 34, 34);
+    border: 1px solid white;
+    top: 0;
+    left: 100%;
     padding: 20px;
 }
 
