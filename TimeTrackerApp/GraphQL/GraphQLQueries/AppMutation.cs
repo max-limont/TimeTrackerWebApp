@@ -137,15 +137,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 "user_changePassword",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "password" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "newPassword" }
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "password" }
                 ),
                 resolve: context =>
                 {
                     int id = Convert.ToInt32(context.Arguments["id"]);
-                    string pass = Convert.ToString(context.Arguments["password"]);
-                    string newPass = Convert.ToString(context.Arguments["newPassword"]);
-                    return userRep.ChangePassword(id, pass, newPass);
+                    string password = Convert.ToString(context.Arguments["password"]);
+                    return userRep.ChangePassword(id, password);
                 }
             );
 
