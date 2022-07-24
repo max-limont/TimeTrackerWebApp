@@ -9,6 +9,6 @@ namespace TimeTrackerApp.Business.Repositories
 		Task<User> CreateAsync(User user);
 		Task<User> EditAsync(User user);
 		Task<User> RemoveAsync(int id);
-		Task<User> ChangePassword(int id, string passwordToChange, string newPassword);
+		Task<User> ChangePassword(int id, string password);
 	}
 }

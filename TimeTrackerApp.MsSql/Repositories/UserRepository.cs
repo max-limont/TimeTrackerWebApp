@@ -16,23 +16,24 @@ namespace TimeTrackerApp.MsSql.Repositories
 			connectionString = conn;
 		}
 
-		public async Task<User> ChangePassword(int id, string passwordToChange, string newPassword)
+		public async Task<User> ChangePassword(int id, string password)
 		{
-			string query = @"SELECT * FROM Users WHERE Id = @Id";
-
-			using (var connection = new SqlConnection(connectionString))
+			string query = "UPDATE Users SET Password = @Password WHERE Id = @Id";
+			try
 			{
-				var user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Id = id });
-				if (user is not null)
+				using (var connection = new SqlConnection(connectionString))
 				{
-					if (PasswordHandler.CompareWithHash(user.Password, passwordToChange))
+					int affectedRows = await connection.ExecuteAsync(query, new { Id = id, Password = PasswordHandler.Encrypt(password) });
+					if (affectedRows > 0)
 					{
-						user.Password = newPassword;
-						return await EditAsync(user);
+						return await GetByIdAsync(id);
 					}
-					throw new Exception("Changing password error: wrong password to change!");
+					throw new Exception("Password changing error!");
 				}
-				throw new Exception("User was not found!");
+			} 
+			catch (Exception exception)
+			{
+				throw new Exception(exception.Message);
 			}
 		}
 
@@ -54,11 +55,10 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> EditAsync(User user)
 		{
-			string query = @"UPDATE Users SET Email = @Email, Password = @Password, FirstName = @FirstName, LastName = @LastName, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue WHERE Id = @Id";
+			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				user.Password = PasswordHandler.Encrypt(user.Password);
 				int affectedRows = await connection.ExecuteAsync(query, user);
 				if (affectedRows > 0)
 				{
@@ -70,7 +70,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<User>> FetchAllAsync()
 		{
-			string query = @"SELECT Id, Email, FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue FROM Users";
+			string query = @"SELECT * FROM Users";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -80,7 +80,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> GetByIdAsync(int id)
 		{
-			string query = @"SELECT Id, Email, FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue FROM Users WHERE Id = @Id";
+			string query = @"SELECT * FROM Users WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
