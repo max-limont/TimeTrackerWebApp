@@ -11,9 +11,9 @@ namespace TimeTrackerApp.MsSql.Repositories
 	{
 		private readonly string connectionString;
 
-		public VacationRequestRepository(IConfiguration configuration)
+		public VacationRequestRepository(string conn)
 		{
-			connectionString = configuration.GetConnectionString(ConnectionStrings.MsSqlConnectionString);
+			connectionString = conn;
 		}
 
 		public async Task<VacationRequest> CreateAsync(VacationRequest vacationRequest)

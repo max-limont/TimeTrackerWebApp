@@ -65,7 +65,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 arguments: new QueryArguments(new QueryArgument<IdGraphType> { Name = "id" }),
                 resolve: context =>
                 {
-                    int id = Convert.ToInt32(context.Arguments["id"]);
+                    int id = context.GetArgument<int>("id");
                     return userRep.GetByIdAsync(id);
                 }
             );

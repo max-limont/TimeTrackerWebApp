@@ -11,9 +11,9 @@ namespace TimeTrackerApp.MsSql.Repositories
 	{
 		private readonly string connectionString;
 
-		public UserRepository(IConfiguration configuration)
+		public UserRepository(string conn)
 		{
-			connectionString = configuration.GetConnectionString(ConnectionStrings.MsSqlConnectionString);
+			connectionString = conn;
 		}
 
 		public async Task<User> ChangePassword(int id, string passwordToChange, string newPassword)

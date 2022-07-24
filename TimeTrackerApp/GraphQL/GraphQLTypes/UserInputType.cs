@@ -9,13 +9,12 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
             Name = "UserInput";
             Field<IdGraphType>("id");
             Field<NonNullGraphType<StringGraphType>>("email");
-            Field<NonNullGraphType<StringGraphType>>("password");
+            Field<StringGraphType>("password");
             Field<StringGraphType>("firstName");
             Field<StringGraphType>("lastName");
-            Field<NonNullGraphType<IntGraphType>>("weeklyWorkingTime");
-            Field<NonNullGraphType<IntGraphType>>("remainingVacationDays");
-            Field<NonNullGraphType<IntGraphType>>("privilegesValue");
-            Field<BooleanGraphType>("isComplete");
+            Field<IntGraphType>("weeklyWorkingTime");
+            Field<IntGraphType>("remainingVacationDays");
+            Field<IntGraphType>("privilegesValue");
         }
     }
 }

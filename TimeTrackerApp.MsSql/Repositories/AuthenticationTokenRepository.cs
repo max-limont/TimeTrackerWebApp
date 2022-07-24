@@ -11,9 +11,9 @@ namespace TimeTrackerApp.MsSql.Repositories
 	{
 		private readonly string connectionString;
 
-		public AuthenticationTokenRepository(IConfiguration configuration)
+		public AuthenticationTokenRepository(string conn)
 		{
-			connectionString = configuration.GetConnectionString(ConnectionStrings.MsSqlConnectionString);
+			connectionString = conn;
 		}
 
 		public async Task<AuthenticationToken> CreateAsync(AuthenticationToken authenticationToken)

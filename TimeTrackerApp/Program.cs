@@ -12,10 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 string conn = builder.Configuration.GetConnectionString("MsSqlConnection");
 
-//builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => AuthenticationTokenRepository(conn));
-//builder.Services.AddSingleton<IRecordRepository>(provider => RecordRepository(conn));
-//builder.Services.AddSingleton<IUserRepository>(provider => UserRepository(conn));
-//builder.Services.AddSingleton<IVacationRequestRepository>(provider => VacationRequestRepository(conn));
+builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new AuthenticationTokenRepository(conn));
+builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(conn));
+builder.Services.AddTransient<IUserRepository>(provider => new UserRepository(conn));
+builder.Services.AddSingleton<IVacationRequestRepository>(provider => new VacationRequestRepository(conn));
 
 // Add services to the container.
 

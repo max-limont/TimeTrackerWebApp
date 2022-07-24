@@ -1,11 +1,12 @@
 create database TimeTrackerDB
 use TimeTrackerDB
+drop database TimeTrackerDB
 
 create table [Users] 
 (
 	[Id] int primary key identity(1, 1),
 	[Email] nvarchar(100) not null,
-	[Password] nvarchar not null,
+	[Password] nvarchar(100) not null,
 	[LastName] nvarchar(50),
 	[FirstName] nvarchar(50),
 	[WeeklyWorkingTime] int default 2400,
@@ -38,3 +39,8 @@ create table [AuthenticationTokens]
 	[UserId] int not null foreign key references [Users]([Id]) on delete cascade,
 	[Token] nvarchar not null
 )
+
+INSERT INTO Users (Email, [Password], FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue) 
+VALUES ('test@test.com', 'password', 'Test', 'TestOvich', 2400, 30, 0)
+
+select * from [Users]

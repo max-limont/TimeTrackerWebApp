@@ -11,9 +11,9 @@ namespace TimeTrackerApp.MsSql.Repositories
 	{
 		private readonly string connectionString;
 
-		public RecordRepository(IConfiguration configuration)
+		public RecordRepository(string conn)
 		{
-			connectionString = configuration.GetConnectionString(ConnectionStrings.MsSqlConnectionString);
+			connectionString = conn;
 		}
 
 		public async Task<Record> CreateAsync(Record record)
