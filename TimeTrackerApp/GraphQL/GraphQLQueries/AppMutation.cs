@@ -31,7 +31,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }),
                 resolve: context =>
                 {
-                    int id = Convert.ToInt32(context.Arguments["id"]);
+                    int id = context.GetArgument<int>("id");
                     if (authTokenRep.GetByIdAsync(id) == null)
                     {
                         context.Errors.Add(new ExecutionError("Couldn't find in db."));
@@ -71,7 +71,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }),
                 resolve: context =>
                 {
-                    int id = Convert.ToInt32(context.Arguments["id"]);
+                    int id = context.GetArgument<int>("id");
                     if (recordRep.GetByIdAsync(id) == null)
                     {
                         context.Errors.Add(new ExecutionError("Couldn't find in db."));
@@ -141,8 +141,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 ),
                 resolve: context =>
                 {
-                    int id = Convert.ToInt32(context.Arguments["id"]);
-                    string password = Convert.ToString(context.Arguments["password"]);
+                    int id = context.GetArgument<int>("id");
+                    string password = context.GetArgument<string>("password");
                     return userRep.ChangePassword(id, password);
                 }
             );
@@ -164,7 +164,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }),
                 resolve: context =>
                 {
-                    int id = Convert.ToInt32(context.Arguments["id"]);
+                    int id = context.GetArgument<int>("id");
                     if (vacationRequestRep.GetByIdAsync(id) == null)
                     {
                         context.Errors.Add(new ExecutionError("Couldn't find in db."));

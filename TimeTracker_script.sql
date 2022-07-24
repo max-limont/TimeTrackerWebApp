@@ -37,10 +37,15 @@ create table [AuthenticationTokens]
 (
 	[Id] int primary key identity(1, 1),
 	[UserId] int not null foreign key references [Users]([Id]) on delete cascade,
-	[Token] nvarchar not null
+	[Token] nvarchar(100) not null
 )
+
+drop table [AuthenticationTokens]
 
 INSERT INTO Users (Email, [Password], FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue) 
 VALUES ('test@test.com', 'password', 'Test', 'TestOvich', 2400, 30, 0)
 
+INSERT INTO [AuthenticationTokens] (UserId, Token) VALUES (2, '1474f6f6fecf7d84883dd5f1b7c806096520a407dcd6e14b4179d2fcd67ca31f')
+
 select * from [Users]
+select * from [AuthenticationTokens]
