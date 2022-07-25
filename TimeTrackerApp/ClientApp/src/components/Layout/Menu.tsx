@@ -10,6 +10,7 @@ import {
     faAngleLeft,
     faAngleRight
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 type MenuState = {
     collapsed: boolean
@@ -43,16 +44,16 @@ export const Menu: FC = () => {
                     <nav className={"top-links"}>
                         <ul>
                             <li>
-                                <a href="#" className={"flex-container"}>
+                                <Link to={"/"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faHouse} className={"icon"} />
                                     <span>Home</span>
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className={"flex-container"}>
+                                <Link to={"/calendar"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faCalendarDays} className={"icon"} />
                                     <span>Calendar</span>
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 <a href="#" className={"flex-container"}>

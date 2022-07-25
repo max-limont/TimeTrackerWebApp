@@ -1,21 +1,10 @@
 import { Index } from "./components/Layout/Index";
-import React from 'react';
-import logo from './logo.svg';
-import { Layout } from './component/Layout';
-import { Route, Routes } from 'react-router-dom';
-import { initCalendar } from './store/slice/calendar/calendarSlice';
-import { useAppDispatch } from './app/hooks';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 const App = () => {
     return (
-        <>
-            <div>
-                <Routes>
-                    <Route path="/" element={<Layout />}>
-                     
-                    </Route>
-                </Routes>
-            </div>
-        </>
+        <BrowserRouter>
+            <Index />
+        </BrowserRouter>
     );
 }
 
