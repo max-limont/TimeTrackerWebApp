@@ -17,27 +17,27 @@ interface calendarState {
 const initialState: calendarState = {
     events: [{
         id: 1,
-        title: "title",
+        title: "My event",
         description: "desc",
         date: "2022-07-21"
     }, {
         id: 2,
-        title: "title",
+        title: "Create Time Tracker",
         description: "desc",
         date: "2022-07-21"
     }, {
         id: 3,
-        title: "title",
+        title: "Make an authorization in our app",
         description: "desc",
         date: "2022-07-21"
     }, {
         id: 4,
-        title: "title",
+        title: "Create GraphQL API",
         description: "desc",
         date: "2022-07-21"
     }, {
         id: 5,
-        title: "title",
+        title: "User interface",
         description: "desc",
         date: "2022-07-25"
     }],
@@ -108,6 +108,9 @@ const calendarSlice = createSlice({
             events[i] = action.payload;
             return { ...state, events: events }
         },
+        removeEvent: (state, action:PayloadAction<number>) => {
+            return { ...state, events: state.events.filter(item => item.id !== action.payload) }
+        },
         setEvents: (state,action:PayloadAction<EventType[]>)=>{
 
             return{
@@ -119,4 +122,4 @@ const calendarSlice = createSlice({
 })
 
 export default calendarSlice;
-export const { initCalendar, prevMonth, nextMonth ,addEvent,setCurrentDateList,editEventAction} = calendarSlice.actions;
+export const { initCalendar, prevMonth, nextMonth ,addEvent,setCurrentDateList,editEventAction, removeEvent} = calendarSlice.actions;

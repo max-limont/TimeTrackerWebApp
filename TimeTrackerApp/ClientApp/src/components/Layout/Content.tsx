@@ -1,6 +1,6 @@
 import {FC} from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Calendar from "../../component/Calendar";
+import { Route, Routes } from "react-router-dom";
+import Calendar from "../Calendar/Calendar";
 import {Home} from "./Home";
 
 export const Content: FC = () => {
