@@ -17,6 +17,10 @@
     <PackageReference Include="GraphQL.Server.Transports.AspNetCore.SystemTextJson" Version="5.2.0" />
     <PackageReference Include="GraphQL.Server.Ui.Altair" Version="5.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.14" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.7.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GraphQL\" />
+    <None Remove="ClientApp\src\components\Layout\Index.tsx" />
   </ItemGroup>
 
   <ItemGroup>
