@@ -1,10 +1,14 @@
-import { Index } from "./components/Layout/Index";
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {AuthenticationIndex, FormVariant} from "./components/login/AuthenticationIndex";
+import {Index} from "./components/Layout/Index";
 
 const App = () => {
     return (
         <BrowserRouter>
-            <Index />
+            <Routes>
+                <Route path={"/*"} element={<Index />} />
+                <Route path={"/welcome/"} element={<AuthenticationIndex variant={FormVariant.outlined} />} />
+            </Routes>
         </BrowserRouter>
     );
 }
