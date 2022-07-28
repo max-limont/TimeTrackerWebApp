@@ -92,12 +92,20 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				int affectedRows = await connection.ExecuteAsync(query, new { Id = id });
-				if (affectedRows > 0)
+				try
 				{
-					return await GetByIdAsync(id);
+					var authenticationToken = await GetByIdAsync(id);
+					int affectedRows = await connection.ExecuteAsync(query, new { Id = id });
+					if (affectedRows > 0)
+					{
+						return authenticationToken;
+					}
+					throw new Exception("Authentication token removal error!");
 				}
-				throw new Exception("Authentication token removal error!");
+				catch (Exception exception)
+				{
+					throw new Exception(exception.Message);
+				}
 			}
 		}
 
@@ -107,13 +115,20 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				var authenticationToken = await GetByUserIdAsync(userId);
-				int affectedRows = await connection.ExecuteAsync(query, new { UserId = userId });
-				if (affectedRows > 0)
+				try
 				{
-					return authenticationToken;
+					var authenticationToken = await GetByUserIdAsync(userId);
+					int affectedRows = await connection.ExecuteAsync(query, new { UserId = userId });
+					if (affectedRows > 0)
+					{
+						return authenticationToken;
+					}
+					throw new Exception("Authentication token with this user id was not found!");
 				}
-				throw new Exception("Authentication token with this user id was not found!");
+				catch (Exception exception)
+				{
+					throw new Exception(exception.Message);
+				}
 			}
 		}
 	}

@@ -87,12 +87,20 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				int affectedRows = await connection.ExecuteAsync(query, new { Id = id });
-				if (affectedRows > 0)
+				try
 				{
-					return await GetByIdAsync(id);
+					var record = await GetByIdAsync(id);
+					int affectedRows = await connection.ExecuteAsync(query, new { Id = id });
+					if (affectedRows > 0)
+					{
+						return record;
+					}
+					throw new Exception("Record removal error!");
 				}
-				throw new Exception("Record removal error!");
+				catch (Exception exception)
+				{
+					throw new Exception(exception.Message);
+				}
 			}
 		}
 	}
