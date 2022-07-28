@@ -6,8 +6,10 @@ namespace TimeTrackerApp.Business.Repositories
 	{
 		Task<IEnumerable<AuthenticationToken>> FetchAllAsync();
 		Task<AuthenticationToken> GetByIdAsync(int id);
+		Task<AuthenticationToken> GetByUserIdAsync(int userId);
 		Task<AuthenticationToken> CreateAsync(AuthenticationToken authenticationToken);
 		Task<AuthenticationToken> EditAsync(AuthenticationToken authenticationToken);
 		Task<AuthenticationToken> RemoveAsync(int id);
+		Task<AuthenticationToken> RemoveByUserIdAsync(int userId);
 	}
 }

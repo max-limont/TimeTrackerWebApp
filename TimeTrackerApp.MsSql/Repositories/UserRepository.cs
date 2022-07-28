@@ -1,8 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Repositories;
-using TimeTrackerApp.Business.Helpers;
+using TimeTrackerApp.Business.Services;
 using Dapper;
 
 namespace TimeTrackerApp.MsSql.Repositories
@@ -11,9 +10,9 @@ namespace TimeTrackerApp.MsSql.Repositories
 	{
 		private readonly string connectionString;
 
-		public UserRepository(string conn)
+		public UserRepository(string connectionString)
 		{
-			connectionString = conn;
+			this.connectionString = connectionString;
 		}
 
 		public async Task<User> ChangePassword(int id, string password)
@@ -23,7 +22,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 			{
 				using (var connection = new SqlConnection(connectionString))
 				{
-					int affectedRows = await connection.ExecuteAsync(query, new { Id = id, Password = PasswordHandler.Encrypt(password) });
+					int affectedRows = await connection.ExecuteAsync(query, new { Id = id, Password = PasswordService.Encrypt(password) });
 					if (affectedRows > 0)
 					{
 						return await GetByIdAsync(id);
@@ -43,7 +42,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				user.Password = PasswordHandler.Encrypt(user.Password);
+				user.Password = PasswordService.Encrypt(user.Password);
 				int affectedRows = await connection.ExecuteAsync(query, user);
 				if (affectedRows > 0)
 				{
@@ -90,6 +89,21 @@ namespace TimeTrackerApp.MsSql.Repositories
 					return user;
 				}
 				throw new Exception("This user was not found!");
+			}
+		}
+
+		public async Task<User> GetByEmailAsync(string email)
+		{
+			string query = @"SELECT * FROM Users WHERE Email = @Email";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				var user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Email = email });
+				if (user is not null)
+				{
+					return user;
+				}
+				throw new Exception("User with this email was not found!");
 			}
 		}
 

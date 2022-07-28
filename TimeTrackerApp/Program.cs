@@ -7,15 +7,19 @@ using Microsoft.Extensions.Hosting;
 using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.MsSql.Repositories;
 using TimeTrackerApp.GraphQL.GraphQLSchema;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string conn = builder.Configuration.GetConnectionString("MsSqlConnection");
+string connectionString = builder.Configuration.GetConnectionString("MsSqlConnection");
 
-builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new AuthenticationTokenRepository(conn));
-builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(conn));
-builder.Services.AddTransient<IUserRepository>(provider => new UserRepository(conn));
-builder.Services.AddSingleton<IVacationRequestRepository>(provider => new VacationRequestRepository(conn));
+builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new AuthenticationTokenRepository(connectionString));
+builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
+builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
+builder.Services.AddSingleton<IVacationRequestRepository>(provider => new VacationRequestRepository(connectionString));
 
 // Add services to the container.
 
@@ -27,6 +31,22 @@ builder.Services.AddSpaStaticFiles(configuration =>
     configuration.RootPath = "ClientApp/build";
 });
 
+builder.Services.AddAuthentication(options => {
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = Environment.GetEnvironmentVariable("JWT_TOKEN_ISSUER"),
+        ValidAudience = Environment.GetEnvironmentVariable("JWT_TOKEN_AUDIENCE"),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET_KEY")))
+    };
+});
 
 builder.Services.AddCors(
     builder => {
@@ -71,8 +91,8 @@ app.UseSpaStaticFiles();
 
 app.UseRouting();
 
-
 app.UseAuthorization();
+app.UseAuthentication();
 app.UseCors(x => x
          .AllowAnyOrigin()
          .AllowAnyMethod()

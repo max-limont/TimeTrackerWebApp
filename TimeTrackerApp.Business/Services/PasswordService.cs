@@ -1,9 +1,9 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace TimeTrackerApp.Business.Helpers
+namespace TimeTrackerApp.Business.Services
 {
-	public static class PasswordHandler
+	public static class PasswordService
 	{
 		private static class Salt
 		{

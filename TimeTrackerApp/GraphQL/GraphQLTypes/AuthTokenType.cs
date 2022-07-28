@@ -9,7 +9,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
         {
             Field(x => x.Id, type: typeof(IdGraphType));
             Field(x => x.UserId);
-            Field(x => x.TokenId);
+            Field(x => x.Token);
         }
     }
 }

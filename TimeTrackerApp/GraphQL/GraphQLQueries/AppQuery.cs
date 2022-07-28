@@ -72,7 +72,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 
 
 
-            Field<ListGraphType<VacationRequestType>>(
+           Field<ListGraphType<VacationRequestType>>(
                "vacationRequest_FetchAll",
                resolve: context => vacationRequestRep.FetchAllAsync()
            );
@@ -94,6 +94,21 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return vacationRequestRep.FetchAllUserVacationRequestsAsync(id);
                 }
             );
+            Field<UserType>()
+                .Name("user_getByEmail")
+                .Argument<NonNullGraphType<StringGraphType>, string>("Email", "User email")
+                .ResolveAsync(async context =>
+                {
+                    string email = context.GetArgument<string>("Email");
+                    try
+					{
+                        return await userRep.GetByEmailAsync(email);
+					}
+                    catch (Exception exception)
+					{
+                        return null;
+					}
+                });
         }
     }
 }

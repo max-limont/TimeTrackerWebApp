@@ -4,16 +4,17 @@ using TimeTrackerApp.GraphQL.GraphQLTypes;
 using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using System;
+using TimeTrackerApp.Business.Services;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
         public AppMutation(
-            IAuthenticationTokenRepository authTokenRep,
-            IRecordRepository recordRep,
-            IUserRepository userRep,
-            IVacationRequestRepository vacationRequestRep
+            IAuthenticationTokenRepository authenticationTokenRepository,
+            IRecordRepository recordRepository,
+            IUserRepository userRepository,
+            IVacationRequestRepository vacationRequestRepository
         )
         {
             Field<AuthTokenType>(
@@ -22,7 +23,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     AuthenticationToken token = context.GetArgument<AuthenticationToken>("authToken");
-                    authTokenRep.CreateAsync(token);
+                    authenticationTokenRepository.CreateAsync(token);
                     return token;
                 }
             );
@@ -32,13 +33,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     int id = context.GetArgument<int>("id");
-                    if (authTokenRep.GetByIdAsync(id) == null)
+                    if (authenticationTokenRepository.GetByIdAsync(id) == null)
                     {
                         context.Errors.Add(new ExecutionError("Couldn't find in db."));
                         return null;
 
                     }
-                    authTokenRep.RemoveAsync(id);
+                    authenticationTokenRepository.RemoveAsync(id);
                     return $"The AuthToken with the id: {id} has been successfully deleted from db.";
                 }
             );
@@ -49,7 +50,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     AuthenticationToken token = context.GetArgument<AuthenticationToken>("authToken");
-                    authTokenRep.EditAsync(token);
+                    authenticationTokenRepository.EditAsync(token);
                     return token;
                 }
             );
@@ -61,7 +62,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     Record record = context.GetArgument<Record>("record");
-                    recordRep.CreateAsync(record);
+                    recordRepository.CreateAsync(record);
                     return record;
                 }
             );
@@ -72,13 +73,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     int id = context.GetArgument<int>("id");
-                    if (recordRep.GetByIdAsync(id) == null)
+                    if (recordRepository.GetByIdAsync(id) == null)
                     {
                         context.Errors.Add(new ExecutionError("Couldn't find in db."));
                         return null;
 
                     }
-                    authTokenRep.RemoveAsync(id);
+                    authenticationTokenRepository.RemoveAsync(id);
                     return $"The Record with the id: {id} has been successfully deleted from db.";
                 }
             );
@@ -89,7 +90,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     Record record = context.GetArgument<Record>("record");
-                    recordRep.EditAsync(record);
+                    recordRepository.EditAsync(record);
                     return record;
                 }
             );
@@ -101,7 +102,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     User user = context.GetArgument<User>("user");
-                    userRep.CreateAsync(user);
+                    userRepository.CreateAsync(user);
                     return user;
                 }
             );
@@ -111,13 +112,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     int id = context.GetArgument<int>("id");
-                    if (userRep.GetByIdAsync(id) == null)
+                    if (userRepository.GetByIdAsync(id) == null)
                     {
                         context.Errors.Add(new ExecutionError("Couldn't find in db."));
                         return null;
 
                     }
-                    userRep.RemoveAsync(id);
+                    userRepository.RemoveAsync(id);
                     return $"The User with the id: {id} has been successfully deleted from db.";
                 }
             );
@@ -129,7 +130,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     User user = context.GetArgument<User>("user");
-                    userRep.EditAsync(user);
+                    userRepository.EditAsync(user);
                     return user;
                 }
             );
@@ -143,7 +144,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 {
                     int id = context.GetArgument<int>("id");
                     string password = context.GetArgument<string>("password");
-                    return userRep.ChangePassword(id, password);
+                    return userRepository.ChangePassword(id, password);
                 }
             );
 
@@ -154,7 +155,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     VacationRequest vacationRequest = context.GetArgument<VacationRequest>("vacationRequest");
-                    vacationRequestRep.CreateAsync(vacationRequest);
+                    vacationRequestRepository.CreateAsync(vacationRequest);
                     return vacationRequest;
                 }
             );
@@ -165,13 +166,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     int id = context.GetArgument<int>("id");
-                    if (vacationRequestRep.GetByIdAsync(id) == null)
+                    if (vacationRequestRepository.GetByIdAsync(id) == null)
                     {
                         context.Errors.Add(new ExecutionError("Couldn't find in db."));
                         return null;
 
                     }
-                    vacationRequestRep.RemoveAsync(id);
+                    vacationRequestRepository.RemoveAsync(id);
                     return $"The VacationRequest with the id: {id} has been successfully deleted from db.";
                 }
             );
@@ -183,12 +184,85 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 resolve: context =>
                 {
                     VacationRequest vacationRequest = context.GetArgument<VacationRequest>("vacationRequest");
-                    vacationRequestRep.EditAsync(vacationRequest);
+                    vacationRequestRepository.EditAsync(vacationRequest);
                     return vacationRequest;
                 }
             );
 
+            Field<AuthResponseType, AuthResponse>()
+                .Name("auth_login")
+                .Argument<NonNullGraphType<StringGraphType>, string>("Email", "User email")
+                .Argument<NonNullGraphType<StringGraphType>, string>("Password", "User password")
+                .ResolveAsync(async context =>
+                {
+                    string email = context.GetArgument<string>("Email");
+                    string password = context.GetArgument<string>("Password");
+                    try
+					{
+                        var user = await userRepository.GetByEmailAsync(email);
+                        if (!PasswordService.CompareWithHash(user.Password, password))
+                        {
+                            return new AuthResponse()
+                            {
+                                Message = "Wrong password!"
+                            };
+                        }
+                        try
+						{
+                            var accessToken = JwtTokenService.GenerateAccessToken(user);
+                            var refreshToken = JwtTokenService.GenerateRefreshToken(user);
+                            var refreshTokenDb = new AuthenticationToken()
+                            {
+                                UserId = user.Id,
+                                Token = refreshToken
+                            };
+                            await authenticationTokenRepository.CreateAsync(refreshTokenDb);
+                            return new AuthResponse()
+                            {
+                                AccessToken = accessToken,
+                                RefreshToken = refreshToken,
+                                Message = "Jwt tokens have been successfully received!"
+                            };
+                        }
+                        catch (Exception exception)
+						{
+                            return new AuthResponse()
+							{
+                                Message = exception.Message
+							};
+						}
+                    } 
+                    catch (Exception exception)
+					{
+                        return new AuthResponse()
+                        {
+                            Message = exception.Message
+                        };
+					}
+                });
 
+            Field<AuthResponseType, AuthResponse>()
+                .Name("auth_logout")
+                .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
+                .ResolveAsync(async context =>
+                {
+                    var userId = context.GetArgument<int>("UserId");
+                    try
+					{
+                        await authenticationTokenRepository.RemoveByUserIdAsync(userId);
+                        return new AuthResponse()
+                        {
+                            Message = "User has successfully been logged out!"
+                        };
+					}
+					catch (Exception exception)
+					{
+                        return new AuthResponse()
+						{
+                            Message = exception.Message
+						};
+					}
+                });
         }
     }
 }

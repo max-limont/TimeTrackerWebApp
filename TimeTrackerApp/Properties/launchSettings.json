@@ -12,7 +12,10 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Developlment"
+        "ASPNETCORE_ENVIRONMENT": "Developlment",
+        "JWT_SECRET_KEY": "6db97ab9d070769730fc45fcc8e9b6c56f5e8743def2559fc187e4287e1ccb21",
+        "JWT_TOKEN_ISSUER": "http://localhost:44322",
+        "JWT_TOKEN_AUDIENCE": "http://localhost:3003"
       }
     },
     "TimeTrackerApp": {
