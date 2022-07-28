@@ -3,20 +3,16 @@ using GraphQL;
 using TimeTrackerApp.GraphQL.GraphQLTypes;
 using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
-using System;
 using TimeTrackerApp.Business.Services;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(
-            IAuthenticationTokenRepository authenticationTokenRepository,
-            IRecordRepository recordRepository,
-            IUserRepository userRepository,
-            IVacationRequestRepository vacationRequestRepository
-        )
+        public AppMutation(IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
         {
+            var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
+
             Field<AuthTokenType>(
                 "authToken_create",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<AuthTokenInputType>> { Name = "authToken" }),
@@ -197,48 +193,14 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 {
                     string email = context.GetArgument<string>("Email");
                     string password = context.GetArgument<string>("Password");
-                    try
-					{
-                        var user = await userRepository.GetByEmailAsync(email);
-                        if (!PasswordService.CompareWithHash(user.Password, password))
-                        {
-                            return new AuthResponse()
-                            {
-                                Message = "Wrong password!"
-                            };
-                        }
-                        try
-						{
-                            var accessToken = JwtTokenService.GenerateAccessToken(user);
-                            var refreshToken = JwtTokenService.GenerateRefreshToken(user);
-                            var refreshTokenDb = new AuthenticationToken()
-                            {
-                                UserId = user.Id,
-                                Token = refreshToken
-                            };
-                            await authenticationTokenRepository.CreateAsync(refreshTokenDb);
-                            return new AuthResponse()
-                            {
-                                AccessToken = accessToken,
-                                RefreshToken = refreshToken,
-                                Message = "Jwt tokens have been successfully received!"
-                            };
-                        }
-                        catch (Exception exception)
-						{
-                            return new AuthResponse()
-							{
-                                Message = exception.Message
-							};
-						}
-                    } 
-                    catch (Exception exception)
-					{
-                        return new AuthResponse()
-                        {
-                            Message = exception.Message
-                        };
-					}
+                    var authenticationServiceResponse = await authenticationService.Login(email, password);
+                    var authenticationServiceApiResponse = new AuthResponse()
+                    {
+                        AccessToken = authenticationServiceResponse.AccessToken,
+                        RefreshToken = authenticationServiceResponse.RefreshToken,
+                        Message = authenticationServiceResponse.Message,
+                    };
+                    return authenticationServiceApiResponse;
                 });
 
             Field<AuthResponseType, AuthResponse>()
@@ -247,21 +209,32 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .ResolveAsync(async context =>
                 {
                     var userId = context.GetArgument<int>("UserId");
-                    try
-					{
-                        await authenticationTokenRepository.RemoveByUserIdAsync(userId);
-                        return new AuthResponse()
-                        {
-                            Message = "User has successfully been logged out!"
-                        };
-					}
-					catch (Exception exception)
-					{
-                        return new AuthResponse()
-						{
-                            Message = exception.Message
-						};
-					}
+                    var authenticationServiceResponse = await authenticationService.Logout(userId);
+                    var authenticationServiceApiResponse = new AuthResponse()
+                    {
+                        AccessToken = authenticationServiceResponse.AccessToken,
+                        RefreshToken = authenticationServiceResponse.RefreshToken,
+                        Message = authenticationServiceResponse.Message,
+                    };
+                    return authenticationServiceApiResponse;
+                });
+
+            Field<AuthResponseType, AuthResponse>()
+                .Name("auth_refresh")
+                .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
+                .Argument<NonNullGraphType<StringGraphType>, string>("RefreshToken", "Refresh token")
+                .ResolveAsync(async context =>
+                {
+                    var userId = context.GetArgument<int>("UserId");
+                    var refreshToken = context.GetArgument<string>("RefreshToken");
+                    var authenticationServiceResponse = await authenticationService.Refresh(userId, refreshToken);
+                    var authenticationServiceApiResponse = new AuthResponse()
+                    {
+                        AccessToken = authenticationServiceResponse.AccessToken,
+                        RefreshToken = authenticationServiceResponse.RefreshToken,
+                        Message = authenticationServiceResponse.Message,
+                    };
+                    return authenticationServiceApiResponse;
                 });
         }
     }

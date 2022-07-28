@@ -7,7 +7,7 @@ using TimeTrackerApp.Business.Models;
 
 namespace TimeTrackerApp.Business.Services
 {
-	public class JwtTokenService
+	public static class JwtTokenService
 	{
 		private static readonly string jwtSecretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")!;
 		
