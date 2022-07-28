@@ -9,7 +9,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
             Name = "authTokenInput";
             Field<IdGraphType>("id");
             Field<NonNullGraphType<IntGraphType>>("userId");
-            Field<NonNullGraphType<StringGraphType>>("tokenId");
+            Field<NonNullGraphType<StringGraphType>>("token");
         }
     }
 }

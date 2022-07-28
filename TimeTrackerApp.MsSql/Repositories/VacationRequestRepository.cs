@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Repositories;
-using TimeTrackerApp.Business.Helpers;
+using TimeTrackerApp.Business.Services;
 using Dapper;
 
 namespace TimeTrackerApp.MsSql.Repositories
@@ -11,9 +11,9 @@ namespace TimeTrackerApp.MsSql.Repositories
 	{
 		private readonly string connectionString;
 
-		public VacationRequestRepository(string conn)
+		public VacationRequestRepository(string connectionString)
 		{
-			connectionString = conn;
+			this.connectionString = connectionString;
 		}
 
 		public async Task<VacationRequest> CreateAsync(VacationRequest vacationRequest)

@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Repositories;
-using TimeTrackerApp.Business.Helpers;
+using TimeTrackerApp.Business.Services;
 using Dapper;
 
 namespace TimeTrackerApp.MsSql.Repositories
@@ -11,9 +11,9 @@ namespace TimeTrackerApp.MsSql.Repositories
 	{
 		private readonly string connectionString;
 
-		public AuthenticationTokenRepository(string conn)
+		public AuthenticationTokenRepository(string connectionString)
 		{
-			connectionString = conn;
+			this.connectionString = connectionString;
 		}
 
 		public async Task<AuthenticationToken> CreateAsync(AuthenticationToken authenticationToken)
@@ -71,6 +71,21 @@ namespace TimeTrackerApp.MsSql.Repositories
 			} 
 		}
 
+		public async Task<AuthenticationToken> GetByUserIdAsync(int userId)
+		{
+			string query = @"SELECT * FROM AuthenticationTokens WHERE UserId = @UserId";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				var authenticationToken = await connection.QuerySingleOrDefaultAsync<AuthenticationToken>(query, new { UserId = userId });
+				if (authenticationToken is not null)
+				{
+					return authenticationToken;
+				}
+				throw new Exception("Authentication token with this user id was not found!");
+			}
+		}
+
 		public async Task<AuthenticationToken> RemoveAsync(int id)
 		{
 			string query = @"DELETE FROM AuthenticationTokens WHERE Id = @Id";
@@ -83,6 +98,22 @@ namespace TimeTrackerApp.MsSql.Repositories
 					return await GetByIdAsync(id);
 				}
 				throw new Exception("Authentication token removal error!");
+			}
+		}
+
+		public async Task<AuthenticationToken> RemoveByUserIdAsync(int userId)
+		{
+			string query = @"DELETE FROM AuthenticationTokens WHERE UserId = @UserId";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				var authenticationToken = await GetByUserIdAsync(userId);
+				int affectedRows = await connection.ExecuteAsync(query, new { UserId = userId });
+				if (affectedRows > 0)
+				{
+					return authenticationToken;
+				}
+				throw new Exception("Authentication token with this user id was not found!");
 			}
 		}
 	}
