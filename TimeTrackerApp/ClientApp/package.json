@@ -50,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "node-sass": "^7.0.1",
     "watch": "^1.0.2"
   }
 }

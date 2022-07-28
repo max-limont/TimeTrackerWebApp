@@ -1,0 +1,235 @@
+
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+    font-family: Ubuntu-Regular;
+    src: url('./fonts/ubuntu/Ubuntu-Regular.ttf');
+}
+
+@font-face {
+    font-family: Ubuntu-Bold;
+    src: url('./fonts/ubuntu/Ubuntu-Bold.ttf');
+}
+
+
+
+
+/*//////////////////////////////////////////////////////////////////
+[ RESTYLE TAG ]*/
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: Ubuntu-Regular, sans-serif;
+}
+
+
+
+/*---------------------------------------------*/
+h1,h2,h3,h4,h5,h6 {
+    margin: 0px;
+}
+
+p {
+    font-family: Ubuntu-Regular;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #666666;
+    margin: 0px;
+}
+
+ul, li {
+    margin: 0px;
+    list-style-type: none;
+}
+.limiter {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/*---------------------------------------------*/
+.inputs {
+    font-family: Ubuntu-Regular;
+    font-size: 20px;
+    color: #b7c0c5;
+    line-height: 1.2;
+    border-radius: 9px;
+    display: block;
+    width: 100%;
+    height: 50px;
+    background: #eee;
+    padding-left: 10px;
+    border: 0 solid red;
+    outline: none;
+
+}
+.wrapInput{
+    width: 100%;
+    position: relative;
+    padding: 29px 0;
+}
+textarea {
+    outline: none;
+    border: none;
+}
+
+textarea:focus, input:focus {
+    border-color: transparent !important;
+}
+
+input:focus::-webkit-input-placeholder { color:transparent; }
+input:focus:-moz-placeholder { color:transparent; }
+input:focus::-moz-placeholder { color:transparent; }
+input:focus:-ms-input-placeholder { color:transparent; }
+
+textarea:focus::-webkit-input-placeholder { color:transparent; }
+textarea:focus:-moz-placeholder { color:transparent; }
+textarea:focus::-moz-placeholder { color:transparent; }
+textarea:focus:-ms-input-placeholder { color:transparent; }
+
+input::-webkit-input-placeholder { color: #202930;}
+input:-moz-placeholder { color: #202930;}
+input::-moz-placeholder { color: #202930;}
+input:-ms-input-placeholder { color: #202930;}
+
+textarea::-webkit-input-placeholder { color: #202930;}
+textarea:-moz-placeholder { color: #202930;}
+textarea::-moz-placeholder { color: #202930;}
+textarea:-ms-input-placeholder { color: #202930;}
+
+label {
+    margin: 0;
+    display: block;
+}
+
+/*---------------------------------------------*/
+.buttonsubmit {
+    outline: none !important;
+    border: none;
+    background: transparent;
+    font-family: Ubuntu-Bold;
+    font-size: 18px;
+    color: #fff;
+    line-height: 1.2;
+    text-transform: uppercase;
+
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    min-width: 160px;
+    height: 42px;
+    border-radius: 21px;
+
+    background: #13adb4;
+    position: relative;
+    z-index: 1;
+
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}
+.formBtn{
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+.buttonsubmit:hover {
+    cursor: pointer;
+}
+
+
+.container{
+    width: 100%;
+    min-height: 100vh;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    z-index: 1;
+}
+.container:before{
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.65);
+}
+
+.wrapContainer
+{
+    width: 390px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: transparent;
+}
+
+.loginForm{
+    width: 100%;
+    border-radius: 10px;
+    background-color: rgba(34,40,49,0);
+}
+.loginFormLogo
+{
+    font-size: 60px;
+    color: #333333;
+
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #fff;
+    margin: 0 auto;
+}
+.title{
+    font-family: Ubuntu-Bold;
+    font-size: 28px;
+    color: #fff;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+    display: block;
+}
+
+
+
