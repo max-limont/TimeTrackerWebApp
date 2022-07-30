@@ -23,11 +23,9 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         /*на этом этапе ничего не продумано */
-        setCredentials: (state, action: PayloadAction<any>) => {
-            const { user, accessToken } = action.payload;
-            const newToken = { ...state.token, accessToken: accessToken, refreshToken: "" }
-
-            return { ...state, authUser: user, token: newToken };
+        setUserDataFromToken: (state, action: PayloadAction<any>) => {
+        
+            return { ...state, };
         },
         /*вообше наверное для access токена так как рефреш запишем в куки */
         setToken: (state, action: PayloadAction<any>) => {
@@ -43,6 +41,6 @@ export const authSlice = createSlice({
     }
 });
 
-export const { setCredentials, logOut, setToken } = authSlice.actions;
+export const {logOut, setToken } = authSlice.actions;
 
 
