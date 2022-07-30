@@ -1,9 +1,9 @@
 export type AuthUser = {
     email: string,
-    password: string,
+    id: number
 }
 
-export const EmptyAuthUser:AuthUser = {
+export const EmptyAuthUser: AuthUser = {
     email: '',
-    password: '',
+    id: 0
 }

@@ -1,5 +1,5 @@
-export function parseJwt(jwt:string){
+import jwt_decode from "jwt-decode";
 
-
-    return jwt;
+export function parseJwt(jwtToken:string){
+    return jwt_decode(jwtToken);
 }

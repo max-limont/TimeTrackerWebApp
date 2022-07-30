@@ -7,8 +7,8 @@ interface calendarState {
     totalDays: number,
     currentDaysArray: moment.Moment[],
     currentDate: string,
-    events: EventType[]
-    currentCalendar: moment.Moment
+    events: EventType[],
+    currentCalendar: moment.Moment,
     startDay: moment.Moment,
     currentDateMoment: moment.Moment,
     currentDateList: string
