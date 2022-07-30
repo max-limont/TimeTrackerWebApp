@@ -4,15 +4,18 @@ import { store } from './app/store';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 import { useNavigate } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
 
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
 root.render(
-    <Provider store={store}>
-        <App />
-    </Provider>
+    <CookiesProvider>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </CookiesProvider>
 );
 
 reportWebVitals();

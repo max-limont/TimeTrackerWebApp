@@ -1,14 +1,12 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
 import { from, map, mergeMap } from "rxjs";
-import { defaultRequest, graphqlRequest } from "../../../../app/api/api";
+import { defaultRequest } from "../../../../app/api/api";
 import { authUserActionType } from "../../../actions/auth/authActions";
-import { authUserQuery } from "../graphql/auth/authQuery";
-import { setCredentials } from "../../authentication/authSlice";
-import { AuthUser } from "../../../../type/User/AuthUser";
+import { authUserQuery } from "../graphqlQuery/auth/authQuery";
+import { setCredentials, setToken } from "../../authentication/authSlice";
 
 
 const authUser = (action$: any) =>{
-    console.log(123);
  return action$.pipe(
         ofType(authUserActionType),
         mergeMap((action: any) => from(defaultRequest(authUserQuery, {
@@ -16,8 +14,9 @@ const authUser = (action$: any) =>{
         }))
             .pipe(
                 map(response => {
-                    console.log(123);
-                    return setCredentials(response);
+                    console.log(response);
+                    
+                    return setToken(response.data.auth_login);
                 }))));}
 
 export const authEpics = combineEpics(authUser);

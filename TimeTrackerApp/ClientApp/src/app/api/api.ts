@@ -1,8 +1,9 @@
 import { access } from "fs";
-import { setCredentials } from "../../store/slice/authentication/authSlice";
+import { logOut, setCredentials, setToken } from "../../store/slice/authentication/authSlice";
+import { refreshToken } from "../../store/slice/epics/graphqlQuery/auth/authQuery";
 import { useAppDispatch, useAppSelector } from "../hooks";
 
-const apiUrl = "https://localhost:5000/graphql";
+const apiUrl = "https://localhost:5001/graphql";
 
 function GetTokenState() {
     const accessToken = useAppSelector(s => s.rootReducer.auth.token?.accessToken);
@@ -24,17 +25,27 @@ export const Request = async (query: string, variables?: unknown) => {
     return await request.json();
 }
 
-/* основной который выполянет запросы
-*/
-export const graphqlRequest = async (query: string, variables?: unknown) => {
+/* основной который выполянет запросы и запросит access токен если уже вышел срок*/
+export const baseQueryWithReauth = async (query: string, variables?: unknown) => {
     const result = await Request(query, variables);
+
+    const dispatch = useAppDispatch();
     /*тут наверное нужно проверить ошибку на access token*/
     if (result == false) {
-        /*сделать запрос на обновления access токена*/
-        /*потробовать с помощь рефреша*/
-        const resultTokens = await defaultRequest("", "");
-        const dispatch = useAppDispatch();
-        dispatch(setCredentials(resultTokens));
+        /*сделать запрос на обновления access токена с помощь рефреша*/
+        console.log("sending refresh token");
+        const refreshResult = await defaultRequest(refreshToken, { id: 0, refresh: "das" });
+        if (refreshResult.data != null) {
+
+            dispatch(setToken(refreshResult));
+        }
+
+    }
+    else {
+        dispatch(logOut());
+    }
+    if (result == true) {
+        return result;
     }
 
 }
@@ -50,6 +61,5 @@ export const defaultRequest = async (query: string, variables?: unknown) => {
         },
         body: JSON.stringify({ query, variables })
     });
-
     return await request.json();
 }

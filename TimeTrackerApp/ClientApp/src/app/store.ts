@@ -3,6 +3,9 @@ import { authSlice } from '../store/slice/authentication/authSlice';
 import { combineEpics, createEpicMiddleware, ofType } from "redux-observable";
 import calendarSlice from '../store/slice/calendar/calendarSlice';
 import { authEpics } from '../store/slice/epics/auth/authEpics';
+import { Cookies } from 'react-cookie';
+
+
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -12,12 +15,6 @@ const rootReducer = combineReducers({
   calendar: calendarSlice.reducer,
   auth: authSlice.reducer
 })
-
-const seriazebleMiddleware=
-getDefaultMiddleware({
-  serializableCheck: false,
-  
-});
 
 export const store = configureStore({
   reducer: {
