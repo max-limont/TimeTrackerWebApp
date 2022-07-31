@@ -4,12 +4,14 @@ import { combineEpics, createEpicMiddleware, ofType } from "redux-observable";
 import calendarSlice from '../store/slice/calendar/calendarSlice';
 import { authEpics } from '../store/slice/epics/auth/authEpics';
 import { Cookies } from 'react-cookie';
+import { userEpics } from '../store/slice/epics/user/userEpics';
 
 
 
 const epicMiddleware = createEpicMiddleware();
 
-const rootEpic = combineEpics(authEpics);
+const rootEpic = combineEpics(authEpics,userEpics);
+
 
 const rootReducer = combineReducers({
   calendar: calendarSlice.reducer,
@@ -27,5 +29,7 @@ export const store = configureStore({
 
 epicMiddleware.run(rootEpic);
 
+export const dispatchOut =  store.dispatch;
+export const state = store.getState();
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

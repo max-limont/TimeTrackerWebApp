@@ -11,6 +11,9 @@ import {
     faAngleRight
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../../app/hooks";
+import { logOut } from "../../store/slice/authentication/authSlice";
+import { dispatchOut } from "../../app/store";
 
 type MenuState = {
     collapsed: boolean
@@ -21,7 +24,7 @@ const initialMenuState: MenuState = {
 }
 
 export const Menu: FC = () => {
-
+const dispatch = useAppDispatch();
     const [state, setState] = useState(initialMenuState)
 
     const toggle = () => {
@@ -72,7 +75,7 @@ export const Menu: FC = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className={"flex-container"}>
+                                <a className={"flex-container"} onClick={()=> dispatchOut(logOut())}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} className={"icon"} />
                                     <span>Logout</span>
                                 </a>

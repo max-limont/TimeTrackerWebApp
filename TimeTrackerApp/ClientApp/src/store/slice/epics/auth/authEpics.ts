@@ -3,8 +3,13 @@ import { from, map, mergeMap } from "rxjs";
 import { defaultRequest } from "../../../../app/api/api";
 import { authUserActionType } from "../../../actions/auth/authActions";
 import { authUserQuery } from "../graphqlQuery/auth/authQuery";
-import {  setToken } from "../../authentication/authSlice";
+import {  logOut, setToken } from "../../authentication/authSlice";
+import { store } from "../../../../app/store";
 
+
+
+  // get the JWT token out of it
+  // (obviously depends on how your store is structured)
 
 const authUser = (action$: any) =>{
  return action$.pipe(
@@ -14,8 +19,10 @@ const authUser = (action$: any) =>{
         }))
             .pipe(
                 map(response => {
-                    console.log(response);
-                
+                    console.log(response)
+                    if(response.data.auth_login.accessToken==null){
+                        return logOut();
+                    }
                     return setToken(response.data.auth_login);
                 }))));}
 

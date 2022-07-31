@@ -4,16 +4,19 @@ import {FC, useEffect} from "react";
 import {Content} from "./Content";
 import { useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
+import { clearCookie, getCookie, refreshTokenKey } from "../../store/Cookie/Cookie";
 
 export const Index: FC = () => {
-    const token =useAppSelector(s=>s.rootReducer.auth.token);
-    const navigate= useNavigate();
-  
+    const navigate =useNavigate();
+    const refreshToken = getCookie(refreshTokenKey);
+    const accessToken = useAppSelector(s=>s.rootReducer.auth.token?.accessToken);
+
     useEffect(()=>{
-        if(token?.accessToken==null, token?.refreshToken==null){
-            navigate("/welcome")
+        if(refreshToken==null){
+            navigate("/welcome");
         }
-    });
+    },[refreshToken]);
+
     return (
         <main className={"main-container flex-container w-100"}>
             <div className={"container flex-container w-100"}>

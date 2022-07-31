@@ -12,3 +12,17 @@ query($email: String!){
     }
 }
 `;
+
+export const getUserById=`
+query ($id: ID){
+    user_GetById(id: $id){
+        id ,
+        email ,
+        password ,
+        firstName ,
+        lastName,
+        weeklyWorkingTime ,
+        remainingVacationDays ,
+        privilegesValue 
+   }
+ }`

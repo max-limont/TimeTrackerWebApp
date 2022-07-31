@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { access } from "fs";
 import { Cookies } from "react-cookie";
+import { tokenToString } from "typescript";
 import { Token } from "../../../type/Token";
 import { AuthUserResponse, EmptyAuthUser } from "../../../type/User/AuthUser";
 import { EmptyUser, User } from "../../../type/User/User";
-import { refreshTokenKey, setCookie } from "../../Cookie/Cookie";
+import { clearCookie, refreshTokenKey, setCookie } from "../../Cookie/Cookie";
 
 
 
@@ -23,6 +25,9 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         /*на этом этапе ничего не продумано */
+        setUser: (state, action:PayloadAction<User>)=>{
+            return{...state, user: action.payload}
+        },
         setUserDataFromToken: (state, action: PayloadAction<any>) => {
         
             return { ...state, };
@@ -35,12 +40,12 @@ export const authSlice = createSlice({
 
         },
         logOut: (state) => {
-            state.user = null;
-            state.token = null
+            
+            clearCookie(refreshTokenKey);
+            return{...state, token: null, user:null}
         }
     }
 });
 
-export const {logOut, setToken } = authSlice.actions;
-
+export const {logOut, setToken,setUser } = authSlice.actions;
 

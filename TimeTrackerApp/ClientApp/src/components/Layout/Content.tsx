@@ -9,8 +9,7 @@ import Calendar from "../Calendar/Calendar";
 import { Home } from "./Home";
 
 export const Content: FC = () => {
-    const cookie = new Cookies();
-    console.log(parseJwt<AuthUserResponse>(cookie.get(refreshTokenKey)));
+    
     return (
         <div className={"content-container flex-container w-100"}>
             <Routes>

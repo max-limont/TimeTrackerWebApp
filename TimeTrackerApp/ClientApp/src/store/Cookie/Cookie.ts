@@ -12,6 +12,11 @@ const cookie = new Cookies();
 cookie.set(obj.key, obj.value, {maxAge: obj.daysLife*3600*24})
 }
 
+export function clearCookie(key:string){
+    const cookie = new Cookies();
+    cookie.remove(key);
+}
+
 
 export function getCookie(key:string){
     const cookie = new Cookies();

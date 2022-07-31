@@ -32,7 +32,6 @@ export const AuthenticationForm: FC = () => {
                 <div className={"form-item w-100"}>
                     <button onClick={(e)=>{
                         e.preventDefault();
-                        console.log(state);
                         dispatch(authUserAction(state));
                     }} className={"button dark-button w-100"}>
                         Sign in
