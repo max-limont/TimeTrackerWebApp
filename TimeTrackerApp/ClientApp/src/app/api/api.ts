@@ -1,6 +1,10 @@
 import { access } from "fs";
+import { Cookies } from "react-cookie";
+import { getCookie, refreshTokenKey } from "../../store/Cookie/Cookie";
+import { parseJwt } from "../../store/parserJWT/parserJWT";
 import { logOut, setToken } from "../../store/slice/authentication/authSlice";
 import { refreshTokenUpdate } from "../../store/slice/epics/graphqlQuery/auth/authQuery";
+import { AuthUserResponse } from "../../type/User/AuthUser";
 import { useAppDispatch, useAppSelector } from "../hooks";
 
 const apiUrl = "https://localhost:5001/graphql";
@@ -34,16 +38,17 @@ export const baseQueryWithReauth = async (query: string, variables?: unknown) =>
     if (result == false) {
         /*сделать запрос на обновления access токена с помощь рефреша*/
         console.log("sending refresh token");
-        const refreshResult = await defaultRequest(refreshTokenUpdate, { id: 0, refresh: "das" });
+        const refreshToken = getCookie(refreshTokenKey);
+        const refreshResult = await defaultRequest(refreshTokenUpdate, { id: parseJwt<AuthUserResponse>(refreshToken).UserId , refresh:refreshTokenKey});
         if (refreshResult.data != null) {
 
             dispatch(setToken(refreshResult));
         }
-
+        else {
+            dispatch(logOut());
+        }
     }
-    else {
-        dispatch(logOut());
-    }
+   
     if (result == true) {
         return result;
     }

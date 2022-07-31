@@ -5,4 +5,4 @@ export const authUserActionType = "authUser";
 
 
 
-export const authUserAction =createAction<AuthorizationUser>(authUserActionType);
+export const authUserAction = createAction<AuthorizationUser>(authUserActionType);

@@ -11,3 +11,9 @@ export function  setCookie(obj:TypeCookie){
 const cookie = new Cookies();
 cookie.set(obj.key, obj.value, {maxAge: obj.daysLife*3600*24})
 }
+
+
+export function getCookie(key:string){
+    const cookie = new Cookies();
+    return cookie.get(key);
+}
