@@ -1,12 +1,19 @@
-import React, {FC, useState} from 'react';
-import { useAppDispatch } from '../../app/hooks';
+import React, {FC, useEffect, useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { authUserAction } from '../../store/actions/auth/authActions';
-import { AuthUser, EmptyAuthUser } from '../../type/User/AuthUser';
+import { AuthUserResponse, EmptyAuthUser } from '../../type/User/AuthUser';
 
 export const AuthenticationForm: FC = () => {
     const dispatch = useAppDispatch();
     const [state, setState] = useState(EmptyAuthUser);
-
+    const tokens = useAppSelector(s=>s.rootReducer.auth.token);
+    const navigate = useNavigate();
+    useEffect(()=>{
+        if(tokens?.accessToken!=null){
+            navigate("/");
+        }
+    },[tokens]);
     return (
         <form className={"authentication-form"}>
             <div className={"form-group"}>

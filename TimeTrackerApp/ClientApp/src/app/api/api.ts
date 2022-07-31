@@ -1,6 +1,6 @@
 import { access } from "fs";
-import { logOut, setCredentials, setToken } from "../../store/slice/authentication/authSlice";
-import { refreshToken } from "../../store/slice/epics/graphqlQuery/auth/authQuery";
+import { logOut, setToken } from "../../store/slice/authentication/authSlice";
+import { refreshTokenUpdate } from "../../store/slice/epics/graphqlQuery/auth/authQuery";
 import { useAppDispatch, useAppSelector } from "../hooks";
 
 const apiUrl = "https://localhost:5001/graphql";
@@ -34,7 +34,7 @@ export const baseQueryWithReauth = async (query: string, variables?: unknown) =>
     if (result == false) {
         /*сделать запрос на обновления access токена с помощь рефреша*/
         console.log("sending refresh token");
-        const refreshResult = await defaultRequest(refreshToken, { id: 0, refresh: "das" });
+        const refreshResult = await defaultRequest(refreshTokenUpdate, { id: 0, refresh: "das" });
         if (refreshResult.data != null) {
 
             dispatch(setToken(refreshResult));

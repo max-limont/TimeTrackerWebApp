@@ -8,7 +8,7 @@ mutation ($user: UserLogin!){
   }
 `
 
-export const refreshToken = `
+export const refreshTokenUpdate= `
 mutation ($id: ID!, $refresh: String!){
     auth_refresh(userId: $id, refreshToken: $refresh){
       refreshToken,

@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Cookies } from "react-cookie";
 import { Token } from "../../../type/Token";
-import { AuthUser, EmptyAuthUser } from "../../../type/User/AuthUser";
+import { AuthUserResponse, EmptyAuthUser } from "../../../type/User/AuthUser";
 import { EmptyUser, User } from "../../../type/User/User";
 import { refreshTokenKey, setCookie } from "../../Cookie/Cookie";
 
 
 
 interface authState {
-    authUser: AuthUser | null,
+    authUser: AuthUserResponse | null,
     user: User | null,
     token: Token | null
 }
