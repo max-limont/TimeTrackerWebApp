@@ -42,6 +42,7 @@ export const usebaseQueryWithReauth = async (query: string, variables: any) => {
             const refreshResult = await defaultRequest(refreshTokenUpdate, { id: parseJwt<AuthUserResponse>(refreshToken).UserId, refresh: refreshTokenKey });
             if (refreshResult.data != undefined) {
                 dispatchOut(setToken(refreshResult));
+                return await  Request(query, variables);
             }
         }
         else {
