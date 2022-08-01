@@ -1,12 +1,13 @@
-﻿using TimeTrackerApp.Business.Models;
+﻿using Microsoft.Extensions.Configuration;
+using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Repositories;
 
 namespace TimeTrackerApp.Business.Services
 {
 	public class AuthenticationService
 	{
-        private IUserRepository userRepository { get; set; }
-        private IAuthenticationTokenRepository authenticationTokenRepository { get; set; }
+        private IUserRepository userRepository;
+        private IAuthenticationTokenRepository authenticationTokenRepository;
 
         public class AuthenticationResponse
 		{
