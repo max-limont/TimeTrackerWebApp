@@ -1,8 +1,10 @@
 import { configureStore, combineReducers} from '@reduxjs/toolkit';
 import calendarSlice from '../store/slice/calendar/calendarSlice';
+import userListSlice from "../store/slice/user/userListSlice";
 
 const rootReducer = combineReducers({
   calendar: calendarSlice.reducer,
+  userList: userListSlice.reducer
 })
 
 export const store = configureStore({

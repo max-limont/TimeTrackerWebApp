@@ -2,6 +2,7 @@ import {FC} from "react";
 import { Route, Routes } from "react-router-dom";
 import Calendar from "../Calendar/Calendar";
 import {Home} from "./Home";
+import UserList from "../UserList/UserList";
 
 export const Content: FC = () => {
 
@@ -10,6 +11,7 @@ export const Content: FC = () => {
             <Routes>
                 <Route index element={<Home />} />
                 <Route path={"calendar/"} element={<Calendar />} />
+                <Route path={"/userList/"} element={<UserList/>} />
             </Routes>
         </div>
     );
