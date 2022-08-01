@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import { FC, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faGear,
@@ -11,12 +11,10 @@ import {
     faAngleRight
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
 import { useAppDispatch } from "../../app/hooks";
 import { logOut } from "../../store/slice/authentication/authSlice";
 import { dispatchOut } from "../../app/store";
-=======
->>>>>>> 9bad6087b545b86277939ce4b9fc9940c9698454
+
 
 type MenuState = {
     collapsed: boolean
@@ -27,15 +25,11 @@ const initialMenuState: MenuState = {
 }
 
 export const Menu: FC = () => {
-<<<<<<< HEAD
-const dispatch = useAppDispatch();
-=======
-
->>>>>>> 9bad6087b545b86277939ce4b9fc9940c9698454
+    const dispatch = useAppDispatch();
     const [state, setState] = useState(initialMenuState)
 
     const toggle = () => {
-        setState({...state, collapsed: !state.collapsed})
+        setState({ ...state, collapsed: !state.collapsed })
     }
 
     return (
@@ -60,11 +54,8 @@ const dispatch = useAppDispatch();
                                 </Link>
                             </li>
                             <li>
-<<<<<<< HEAD
                                 <Link to={"calendar"} replace className={"flex-container"}>
-=======
-                                <Link to={"/calendar"} replace className={"flex-container"}>
->>>>>>> 9bad6087b545b86277939ce4b9fc9940c9698454
+
                                     <FontAwesomeIcon icon={faCalendarDays} className={"icon"} />
                                     <span>Calendar</span>
                                 </Link>
@@ -86,11 +77,7 @@ const dispatch = useAppDispatch();
                                 </a>
                             </li>
                             <li>
-<<<<<<< HEAD
-                                <a className={"flex-container"} onClick={()=> dispatchOut(logOut())}>
-=======
-                                <a href="#" className={"flex-container"}>
->>>>>>> 9bad6087b545b86277939ce4b9fc9940c9698454
+                                <a href="#" className={"flex-container"} onClick={() => dispatchOut(logOut())}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} className={"icon"} />
                                     <span>Logout</span>
                                 </a>

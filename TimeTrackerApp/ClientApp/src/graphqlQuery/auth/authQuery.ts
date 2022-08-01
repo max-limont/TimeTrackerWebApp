@@ -1,6 +1,6 @@
 export const authUserQuery = `
-mutation ($user: UserLogin!){
-    auth_login(user: $user){
+mutation ($email: String!,$password: String!){
+    auth_login(email: $email,password:$password){
         refreshToken,
         accessToken,
         responseMessage

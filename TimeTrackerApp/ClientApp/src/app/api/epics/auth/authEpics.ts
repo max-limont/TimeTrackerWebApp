@@ -1,10 +1,11 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
 import { from, map, mergeMap } from "rxjs";
-import { defaultRequest } from "../../../../app/api/api";
-import { authUserActionType } from "../../../actions/auth/authActions";
-import { authUserQuery } from "../graphqlQuery/auth/authQuery";
-import {  logOut, setToken } from "../../authentication/authSlice";
-import { store } from "../../../../app/store";
+import { defaultRequest } from "../../api";
+import { authUserActionType } from "../../../../store/actions/auth/authActions";
+import { authUserQuery } from "../../../../graphqlQuery/auth/authQuery";
+import {  logOut, setToken } from "../../../../store/slice/authentication/authSlice";
+import { store } from "../../../store";
+import { AuthorizationUser } from "../../../../type/User/AuthUser";
 
 
 
@@ -14,8 +15,9 @@ import { store } from "../../../../app/store";
 const authUser = (action$: any) =>{
  return action$.pipe(
         ofType(authUserActionType),
-        mergeMap((action: any) => from(defaultRequest(authUserQuery, {
-            user: action.payload
+        mergeMap((action: any ) => from(defaultRequest(authUserQuery, {
+            email: action.payload.email,
+            password: action.payload.password
         }))
             .pipe(
                 map(response => {

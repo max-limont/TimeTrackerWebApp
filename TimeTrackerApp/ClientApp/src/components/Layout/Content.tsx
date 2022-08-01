@@ -1,5 +1,6 @@
+import { FC } from "react";
 import { Route, Routes } from "react-router-dom";
-import { refreshTokenKey } from "../../store/Cookie/Cookie";
+import { refreshTokenKey } from "../../Cookie/Cookie";
 import { parseJwt } from "../../store/parserJWT/parserJWT";
 import { AuthUserResponse } from "../../type/User/AuthUser";
 import Calendar from "../Calendar/Calendar";

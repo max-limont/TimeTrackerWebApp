@@ -1,11 +1,11 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
 import { from, map, mergeMap } from "rxjs";
-import { usebaseQueryWithReauth, defaultRequest } from "../../../../app/api/api";
-import { authUserActionType } from "../../../actions/auth/authActions";
-import { authUserQuery } from "../graphqlQuery/auth/authQuery";
-import {  logOut, setToken, setUser } from "../../authentication/authSlice";
-import { fetchUserByIdActionType } from "../../../actions/user/userActions";
-import { getUserById } from "../graphqlQuery/user/userQuery";
+import { usebaseQueryWithReauth, defaultRequest } from "../../api";
+import { authUserActionType } from "../../../../store/actions/auth/authActions";
+import { authUserQuery } from "../../../../graphqlQuery/auth/authQuery";
+import {  logOut, setToken, setUser } from "../../../../store/slice/authentication/authSlice";
+import { fetchUserByIdActionType } from "../../../../store/actions/user/userActions";
+import { getUserById } from "../../../../graphqlQuery/user/userQuery";
 
 
 const fetchUserById = (action$: any) =>{

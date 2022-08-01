@@ -2,18 +2,24 @@ import React, {FC, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { authUserAction } from '../../store/actions/auth/authActions';
+import { getCookie, refreshTokenKey } from '../../Cookie/Cookie';
 import { AuthUserResponse, EmptyAuthUser } from '../../type/User/AuthUser';
 
 export const AuthenticationForm: FC = () => {
     const dispatch = useAppDispatch();
     const [state, setState] = useState(EmptyAuthUser);
-    const tokens = useAppSelector(s=>s.rootReducer.auth.token);
+    const accessToken = useAppSelector(s=>s.rootReducer.auth.accessToken);
+    const refreshToken = getCookie(refreshTokenKey);
+
     const navigate = useNavigate();
     useEffect(()=>{
-        if(tokens?.accessToken!=null){
+        if(accessToken!=null){
             navigate("/");
         }
-    },[tokens]);
+        if(refreshToken==null){
+            navigate("/welcome");
+        }
+    },[accessToken,refreshToken]);
     return (
         <form className={"authentication-form"}>
             <div className={"form-group"}>
