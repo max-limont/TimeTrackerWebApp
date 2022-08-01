@@ -5,6 +5,10 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
 
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
+using System;
+
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
@@ -13,185 +17,143 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
-            Field<AuthTokenType>(
-                "authToken_create",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<AuthTokenInputType>> { Name = "authToken" }),
-                resolve: context =>
+            Field<UserType, User>()
+                .Name("user_create")
+                .Argument<NonNullGraphType<UserInputType>, User>("User", "User")
+                .ResolveAsync(async context =>
                 {
-                    AuthenticationToken token = context.GetArgument<AuthenticationToken>("authToken");
-                    authenticationTokenRepository.CreateAsync(token);
-                    return token;
-                }
-            );
-            Field<StringGraphType>(
-                "authToken_delete",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }),
-                resolve: context =>
+                    var user = context.GetArgument<User>("User");
+                    return await userRepository.CreateAsync(user);
+                });
+
+            Field<UserType, User>()
+                .Name("user_delete")
+                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
+                .ResolveAsync(async context =>
                 {
-                    int id = context.GetArgument<int>("id");
-                    if (authenticationTokenRepository.GetByIdAsync(id) == null)
-                    {
-                        context.Errors.Add(new ExecutionError("Couldn't find in db."));
-                        return null;
+                    int id = context.GetArgument<int>("Id");
+                    return await userRepository.RemoveAsync(id);
+                });
 
-                    }
-                    authenticationTokenRepository.RemoveAsync(id);
-                    return $"The AuthToken with the id: {id} has been successfully deleted from db.";
-                }
-            );
-            Field<AuthTokenType>(
-                "authToken_edit",
-                arguments: new QueryArguments(
-                new QueryArgument<NonNullGraphType<AuthTokenInputType>> { Name = "authToken" }),
-                resolve: context =>
+            Field<UserType, User>()
+                .Name("user_edit")
+                .Argument<NonNullGraphType<UserInputType>, User>("User", "User")
+                .ResolveAsync(async context =>
                 {
-                    AuthenticationToken token = context.GetArgument<AuthenticationToken>("authToken");
-                    authenticationTokenRepository.EditAsync(token);
-                    return token;
-                }
-            );
+                    var user = context.GetArgument<User>("User");
+                    return await userRepository.EditAsync(user);
+                });
 
-
-            Field<RecordType>(
-                "record_create",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<RecordInputType>> { Name = "record" }),
-                resolve: context =>
+            Field<UserType, User>()
+                .Name("user_changePassword")
+                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
+                .Argument<NonNullGraphType<StringGraphType>, string>("Password", "New user password")
+                .ResolveAsync(async context =>
                 {
-                    Record record = context.GetArgument<Record>("record");
-                    recordRepository.CreateAsync(record);
-                    return record;
-                }
-            );
+                    int id = context.GetArgument<int>("Id");
+                    string password = context.GetArgument<string>("Password");
+                    return await userRepository.ChangePassword(id, password);
+                });
 
-            Field<StringGraphType>(
-                "record_delete",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }),
-                resolve: context =>
+            Field<RecordType, Record>()
+                .Name("record_create")
+                .Argument<NonNullGraphType<RecordInputType>, Record>("Record", "Record")
+                .ResolveAsync(async context =>
                 {
-                    int id = context.GetArgument<int>("id");
-                    if (recordRepository.GetByIdAsync(id) == null)
-                    {
-                        context.Errors.Add(new ExecutionError("Couldn't find in db."));
-                        return null;
+                    var record = context.GetArgument<Record>("Record");
+                    return await recordRepository.CreateAsync(record);
+                });
 
-                    }
-                    authenticationTokenRepository.RemoveAsync(id);
-                    return $"The Record with the id: {id} has been successfully deleted from db.";
-                }
-            );
-            Field<RecordType>(
-                "record_edit",
-                arguments: new QueryArguments(
-                new QueryArgument<NonNullGraphType<RecordInputType>> { Name = "record" }),
-                resolve: context =>
+            Field<RecordType, Record>()
+                .Name("record_edit")
+                .Argument<NonNullGraphType<RecordInputType>, Record>("Record", "Record")
+                .ResolveAsync(async context =>
                 {
-                    Record record = context.GetArgument<Record>("record");
-                    recordRepository.EditAsync(record);
-                    return record;
-                }
-            );
+                    var record = context.GetArgument<Record>("Record");
+                    return await recordRepository.EditAsync(record);
+                });
 
-
-            Field<UserType>(
-                "user_create",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<UserInputType>> { Name = "user" }),
-                resolve: context =>
+            Field<RecordType, Record>()
+                .Name("record_delete")
+                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Record id")
+                .ResolveAsync(async context =>
                 {
-                    User user = context.GetArgument<User>("user");
-                    userRepository.CreateAsync(user);
-                    return user;
-                }
-            );
-            Field<StringGraphType>(
-                "user_delete",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }),
-                resolve: context =>
-                {
-                    int id = context.GetArgument<int>("id");
-                    if (userRepository.GetByIdAsync(id) == null)
-                    {
-                        context.Errors.Add(new ExecutionError("Couldn't find in db."));
-                        return null;
+                    int id = context.GetArgument<int>("Id");
+                    return await recordRepository.RemoveAsync(id);
+                });
 
-                    }
-                    userRepository.RemoveAsync(id);
-                    return $"The User with the id: {id} has been successfully deleted from db.";
-                }
-            );
-            Field<UserType>(
-                "user_edit",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<UserInputType>> { Name = "user" }
-                ),
-                resolve: context =>
+            Field<VacationRequestType, VacationRequest>()
+                .Name("vacationRequest_create")
+                .Argument<NonNullGraphType<VacationRequestInputType>, VacationRequest>("VacationRequest", "Vacation request")
+                .ResolveAsync(async context =>
                 {
-                    User user = context.GetArgument<User>("user");
-                    userRepository.EditAsync(user);
-                    return user;
-                }
-            );
-            Field<UserType>(
-                "user_changePassword",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "password" }
-                ),
-                resolve: context =>
+                    var vacationRequest = context.GetArgument<VacationRequest>("VacationRequest");
+                    return await vacationRequestRepository.CreateAsync(vacationRequest);
+                });
+
+            Field<VacationRequestType, VacationRequest>()
+                .Name("vacationRequest_edit")
+                .Argument<NonNullGraphType<VacationRequestInputType>, VacationRequest>("VacationRequest", "Vacation request")
+                .ResolveAsync(async context =>
                 {
-                    int id = context.GetArgument<int>("id");
-                    string password = context.GetArgument<string>("password");
-                    return userRepository.ChangePassword(id, password);
-                }
-            );
-
-
-            Field<VacationRequestType>(
-                "vacationRequest_create",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<VacationRequestInputType>> { Name = "vacationRequest" }),
-                resolve: context =>
+                    var vacationRequest = context.GetArgument<VacationRequest>("VacationRequest");
+                    return await vacationRequestRepository.EditAsync(vacationRequest);
+                });
+            
+            Field<VacationRequestType, VacationRequest>()
+                .Name("vacationRequest_delete")
+                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Vacation request")
+                .ResolveAsync(async context =>
                 {
-                    VacationRequest vacationRequest = context.GetArgument<VacationRequest>("vacationRequest");
-                    vacationRequestRepository.CreateAsync(vacationRequest);
-                    return vacationRequest;
-                }
-            );
+                    int id = context.GetArgument<int>("Id");
+                    return await vacationRequestRepository.RemoveAsync(id);
+                });
 
-            Field<StringGraphType>(
-                "vacationRequest_delete",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }),
-                resolve: context =>
+            Field<AuthTokenType, AuthenticationToken>()
+                .Name("authToken_create")
+                .Argument<NonNullGraphType<AuthTokenInputType>, AuthenticationToken>("AuthToken", "Authentication token")
+                .ResolveAsync(async context =>
                 {
-                    int id = context.GetArgument<int>("id");
-                    if (vacationRequestRepository.GetByIdAsync(id) == null)
-                    {
-                        context.Errors.Add(new ExecutionError("Couldn't find in db."));
-                        return null;
+                    var authenticationToken = context.GetArgument<AuthenticationToken>("AuthToken");
+                    return await authenticationTokenRepository.CreateAsync(authenticationToken);
+                });
 
-                    }
-                    vacationRequestRepository.RemoveAsync(id);
-                    return $"The VacationRequest with the id: {id} has been successfully deleted from db.";
-                }
-            );
-
-            Field<RecordType>(
-                "vacationRequest_edit",
-                arguments: new QueryArguments(
-                new QueryArgument<NonNullGraphType<VacationRequestInputType>> { Name = "vacationRequest" }),
-                resolve: context =>
+            Field<AuthTokenType, AuthenticationToken>()
+                .Name("authToken_edit")
+                .Argument<NonNullGraphType<AuthTokenInputType>, AuthenticationToken>("AuthToken", "Authentication token")
+                .ResolveAsync(async context =>
                 {
-                    VacationRequest vacationRequest = context.GetArgument<VacationRequest>("vacationRequest");
-                    vacationRequestRepository.EditAsync(vacationRequest);
-                    return vacationRequest;
-                }
-            );
+                    var authenticationToken = context.GetArgument<AuthenticationToken>("AuthToken");
+                    return await authenticationTokenRepository.EditAsync(authenticationToken);
+                });
+
+            Field<AuthTokenType, AuthenticationToken>()
+               .Name("authToken_delete")
+               .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Authentication token id")
+               .ResolveAsync(async context =>
+               {
+                   int id = context.GetArgument<int>("Id");
+                   return await authenticationTokenRepository.RemoveAsync(id);
+               });
+
+            Field<AuthTokenType, AuthenticationToken>()
+                .Name("authToken_deleteByUserId")
+                .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
+                .ResolveAsync(async context =>
+                {
+                    int userId = context.GetArgument<int>("UserId");
+                    return await authenticationTokenRepository.RemoveByUserIdAsync(userId);
+                });
 
             Field<AuthResponseType, AuthResponse>()
                 .Name("auth_login")
-                .Argument<NonNullGraphType<UserLoginType>, string>("user", "User login")
+                .Argument<NonNullGraphType<StringGraphType>, string>("Email", "User email")
+                .Argument<NonNullGraphType<StringGraphType>, string>("Password", "User password")
                 .ResolveAsync(async context =>
                 {
-                    UserLogin userLogin = context.GetArgument<UserLogin>("user");
-                    var authenticationServiceResponse = await authenticationService.Login(userLogin.Email, userLogin.Password);
+                    string email = context.GetArgument<string>("Email");
+                    string password = context.GetArgument<string>("Password");
+                    var authenticationServiceResponse = await authenticationService.Login(email, password);
                     var authenticationServiceApiResponse = new AuthResponse()
                     {
                         AccessToken = authenticationServiceResponse.AccessToken,

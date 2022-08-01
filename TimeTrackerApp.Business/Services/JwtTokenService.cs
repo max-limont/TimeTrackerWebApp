@@ -4,20 +4,24 @@ using System.Security.Cryptography;
 using System.Security.Claims;
 using System.Text;
 using TimeTrackerApp.Business.Models;
+using Microsoft.Extensions.Configuration;
+
 
 namespace TimeTrackerApp.Business.Services
 {
 	public static class JwtTokenService
 	{
-		private static readonly string jwtSecretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")!;
-		
+
+		public static IConfiguration Configuration { get; set; } = null!;
+
 		public static string GenerateJwtToken(IEnumerable<Claim> claims, int tokenDurationInSeconds)
 		{
-			var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
-			var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+			var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JWT_SECRET_KEY"]));
+			var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
 			var jwtSecurityToken = new JwtSecurityToken(
-				issuer: Environment.GetEnvironmentVariable("JWT_TOKEN_ISSUER"),
-				audience: Environment.GetEnvironmentVariable("JWT_TOKEN_AUDIENCE"),
+				issuer: Configuration["Jwt:JWT_TOKEN_ISSUER"],
+				audience: Configuration["Jwt:JWT_TOKEN_AUDIENCE"],
+				notBefore: DateTime.Now,
 				claims: claims,
 				expires: DateTime.Now.AddSeconds(tokenDurationInSeconds),
 				signingCredentials: credentials
@@ -35,7 +39,7 @@ namespace TimeTrackerApp.Business.Services
 			};
 		}
 
-		public static string GenerateAccessToken(User user) => GenerateJwtToken(GetJwtTokenClaims(user), 120);
+		public static string GenerateAccessToken(User user) => GenerateJwtToken(GetJwtTokenClaims(user), 60);
 
 		public static string GenerateRefreshToken(User user) => GenerateJwtToken(GetJwtTokenClaims(user), 2592000);
 	}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { FC, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchUserByIdAction } from "../../store/actions/user/userActions";
@@ -8,6 +9,12 @@ export const Header: FC = () => {
     useEffect(() => {
         dispatch(fetchUserByIdAction(1));
     });
+=======
+import {FC} from "react";
+
+export const Header: FC = () => {
+
+>>>>>>> 9bad6087b545b86277939ce4b9fc9940c9698454
     return (
         <header className={"personal-account-header header flex-container w-100"}>
             <div className={"breadcrumbs flex-container"}>
@@ -22,5 +29,9 @@ export const Header: FC = () => {
             </div>
         </header>
     );
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 9bad6087b545b86277939ce4b9fc9940c9698454

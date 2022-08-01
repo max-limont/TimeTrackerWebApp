@@ -1,5 +1,6 @@
 ﻿import {Header} from "./Header";
 import {Menu} from "./Menu";
+<<<<<<< HEAD
 import {FC, useEffect} from "react";
 import {Content} from "./Content";
 import { useAppSelector } from "../../app/hooks";
@@ -16,6 +17,12 @@ export const Index: FC = () => {
             navigate("/welcome");
         }
     },[refreshToken]);
+=======
+import {FC} from "react";
+import {Content} from "./Content";
+
+export const Index: FC = () => {
+>>>>>>> 9bad6087b545b86277939ce4b9fc9940c9698454
 
     return (
         <main className={"main-container flex-container w-100"}>

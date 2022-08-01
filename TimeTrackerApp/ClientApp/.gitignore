@@ -19,8 +19,11 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 
 .idea
 package-lock.json
 bin
 obj
+=======
+>>>>>>> 9bad6087b545b86277939ce4b9fc9940c9698454
