@@ -61,6 +61,31 @@ body {
 .w-100 {
   width: 100%; }
 
+.h-100 {
+  height: 100%; }
+
+.h-fullscreen {
+  height: 100vh; }
+
+.auth-container {
+  background-size: 100% 100%;
+  align-items: center;
+  justify-content: center; }
+
+.authentication-form {
+  max-width: 400px;
+  width: 100%;
+  background: #EEEEEE;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 0 20px -10px #222831; }
+  .authentication-form span {
+    width: 100%;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 500;
+    color: #222831; }
+
 .menu-container {
   position: relative;
   z-index: 10;

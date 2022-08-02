@@ -1,36 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6054f6d0-e998-4eee-a93d-95cb49aebc51" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/Layout/Menu.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp.sln" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/App.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/App.test.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/app/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/app/store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/features/counter/Counter.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/features/counter/Counter.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/features/counter/counterAPI.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/features/counter/counterSlice.spec.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/features/counter/counterSlice.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLQueries/AppMutation.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLQueries/AppQuery.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLSchema/AppSchema.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLTypes/AuthTokenInputType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLTypes/AuthTokenType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLTypes/RecordInputType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLTypes/RecordType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLTypes/UserInputType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLTypes/UserType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLTypes/VacationRequestInputType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLTypes/VacationRequestType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/TimeTrackerApp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/TimeTrackerApp.csproj" afterDir="false" />
-    </list>
+    <list default="true" id="6054f6d0-e998-4eee-a93d-95cb49aebc51" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

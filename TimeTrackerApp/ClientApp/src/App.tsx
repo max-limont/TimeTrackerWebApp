@@ -4,15 +4,15 @@ import { Index } from "./components/Layout/Index";
 import Calendar from './components/Calendar/Calendar';
 
 const App = () => {
-   
+
     return (
         <BrowserRouter>
             <Routes>
                 <Route path={"/welcome"} element={<AuthenticationIndex />} />
                 <Route path={"/"} element={<Index />} >
                     <Route path="/calendar"  />
-                    </Route>
-                    
+
+                </Route>
             </Routes>
         </BrowserRouter>
     );
