@@ -10,7 +10,6 @@ const App = () => {
                 <Route path={"/welcome"} element={<AuthenticationIndex />} />
                 <Route path={"/"} element={<Index />} />
             </Routes>
-
         </BrowserRouter>
     );
 }
