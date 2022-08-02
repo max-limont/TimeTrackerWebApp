@@ -54,8 +54,7 @@ export const Menu: FC = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"calendar"} replace className={"flex-container"}>
-
+                                <Link to={"/calendar"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faCalendarDays} className={"icon"} />
                                     <span>Calendar</span>
                                 </Link>

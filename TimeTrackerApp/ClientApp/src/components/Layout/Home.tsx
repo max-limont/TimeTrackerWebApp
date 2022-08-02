@@ -16,4 +16,4 @@ export const Home: FC = () => {
             </section>
         </div>
     );
-}
+};
