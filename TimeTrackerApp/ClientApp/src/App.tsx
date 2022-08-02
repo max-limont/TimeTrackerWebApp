@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { AuthenticationIndex} from "./components/login/AuthenticationIndex";
 import { Index } from "./components/Layout/Index";
+import Calendar from './components/Calendar/Calendar';
 
 const App = () => {
    
@@ -8,7 +9,10 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route path={"/welcome"} element={<AuthenticationIndex />} />
-                <Route path={"/"} element={<Index />} />
+                <Route path={"/"} element={<Index />} >
+                    <Route path="/calendar"  />
+                    </Route>
+                    
             </Routes>
         </BrowserRouter>
     );
