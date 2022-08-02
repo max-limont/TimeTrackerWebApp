@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import moment from "moment";
-import { CreateEventType } from "../../../type/Events/CreateEventType";
 import { EventType } from "../../../type/Events/EventType";
 
 interface calendarState {

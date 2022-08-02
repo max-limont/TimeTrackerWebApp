@@ -10,13 +10,14 @@ interface authState {
     authUser: AuthUserResponse | null,
     user: User | null,
     accessToken: string | null
-}
+};
 
 const initialState: authState = {
     authUser: null,
     user: null,
     accessToken: null
-}
+};
+
 export const authSlice = createSlice({
     name: "auth",
     initialState,

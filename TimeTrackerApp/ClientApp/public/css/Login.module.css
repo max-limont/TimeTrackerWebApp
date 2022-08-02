@@ -2,16 +2,17 @@
 [ FONT ]*/
 @font-face {
   font-family: Ubuntu-Regular;
-  src: url("./fonts/ubuntu/Ubuntu-Regular.ttf"); }
+  src: url("../fonts/ubuntu/Ubuntu-Regular.ttf"); }
 @font-face {
   font-family: Ubuntu-Bold;
-  src: url("./fonts/ubuntu/Ubuntu-Bold.ttf"); }
+  src: url("../fonts/ubuntu/Ubuntu-Bold.ttf"); }
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
 * {
   margin: 0px;
   padding: 0px;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 body, html {
   height: 100%;
@@ -155,7 +156,8 @@ label {
   justify-content: center; }
 
 .buttonsubmit:hover {
-  cursor: pointer; }
+  cursor: pointer; 
+}
 
 .container {
   width: 100%;
@@ -184,8 +186,15 @@ label {
   height: 100%;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.65); }
+  background-color: rgba(0, 0, 0, 0); }
 
+  .auth-container{
+    font-family: Ubuntu-Bold;
+    background-color: #6BA4B5;
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 10px;
+  }
 .wrapContainer {
   width: 390px;
   border-radius: 10px;
