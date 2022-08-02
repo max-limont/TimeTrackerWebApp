@@ -5,6 +5,7 @@ import calendarSlice from '../store/slice/calendar/calendarSlice';
 import { authEpics } from './api/epics/auth/authEpics';
 import { Cookies } from 'react-cookie';
 import { userEpics } from './api/epics/user/userEpics';
+import userListSlice from '../store/slice/user/userListSlice';
 
 
 
@@ -15,7 +16,8 @@ const rootEpic = combineEpics(authEpics,userEpics);
 
 const rootReducer = combineReducers({
   calendar: calendarSlice.reducer,
-  auth: authSlice.reducer
+  auth: authSlice.reducer,
+  userList: userListSlice.reducer
 })
 
 export const store = configureStore({

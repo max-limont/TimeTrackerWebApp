@@ -72,4 +72,10 @@
     </ItemGroup>
   </Target>
 
+
 </Project>
+
+  <ProjectExtensions><VisualStudio><UserProperties clientapp_4package_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>
+

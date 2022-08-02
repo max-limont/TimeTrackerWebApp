@@ -1,0 +1,239 @@
+[33mcommit 1ac39aeef92691e65c82c6ab94834c23794a0ab0[m[33m ([m[1;36mHEAD -> [m[1;32mauth-front[m[33m, [m[1;31morigin/auth-front[m[33m)[m
+Merge: 3224f59 55da875
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Tue Aug 2 15:18:24 2022 +0300
+
+    pulled auth-front
+
+[33mcommit 3224f59623154b53b26255208540fd66ece2f5ac[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Tue Aug 2 15:11:44 2022 +0300
+
+    update route
+
+[33mcommit 55da875a8cb5d07596f7403da8673244a7d2663d[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Tue Aug 2 15:06:47 2022 +0300
+
+    Updated authorization form styles and app routes
+
+[33mcommit 0f32d400d685d0e84085b21dc2bae698e0568dd6[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Tue Aug 2 14:53:52 2022 +0300
+
+    nothing
+
+[33mcommit 4c1a0eb5428f310fae0595779b826111926065fa[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Tue Aug 2 14:45:12 2022 +0300
+
+    Updated styles
+
+[33mcommit bcc2802769a4a90f79d8396f42dce5e8ab85365a[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Tue Aug 2 14:19:39 2022 +0300
+
+    nothing to commit
+
+[33mcommit 39a52285d9d5565699ca2962d235cf67426d1fdb[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Tue Aug 2 13:37:56 2022 +0300
+
+    fixed style in auth-form
+
+[33mcommit 5ed663231862ca531a01ac2d28e158e8bf23307c[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Tue Aug 2 00:28:49 2022 +0300
+
+    changed query to api, fix bag, replaced files
+
+[33mcommit 4e600c7c34d4c3eec414917e3614531935dbcfe6[m
+Merge: ae1f94a 9bad608
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Mon Aug 1 23:05:45 2022 +0300
+
+    pulled branch AuthBackend
+
+[33mcommit 9bad6087b545b86277939ce4b9fc9940c9698454[m[33m ([m[1;31morigin/AuthBackend[m[33m)[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Mon Aug 1 19:22:52 2022 +0300
+
+    Finished backend jwt tokens authorization
+
+[33mcommit ae1f94acfb4eb39537ef5560cf0839a749e2a4de[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Mon Aug 1 18:22:55 2022 +0300
+
+    nothing to commit, update last small changes
+
+[33mcommit ecf309081827d37860b10a9445bb99ef7c9338c9[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Mon Aug 1 01:01:07 2022 +0300
+
+    changed function to do query to api
+
+[33mcommit 885df19d36cf5024f5bbf33a9f23a1f24f566f62[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sun Jul 31 20:27:27 2022 +0300
+
+    changed query to api=
+
+[33mcommit 633c4f92d179b523c20a061e4a855e627cc1297f[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sun Jul 31 20:25:37 2022 +0300
+
+    added some code for test api, was added epics and import dispatch and state from store to use them  without react component
+
+[33mcommit c5490fb62e8ada1ac71127baf14d1c3885bbe463[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sun Jul 31 14:37:01 2022 +0300
+
+    modified parser and changed file Cookie
+
+[33mcommit 93e6e9f8ffc959546c3ac133c4af28c77cba8553[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sun Jul 31 14:35:04 2022 +0300
+
+    add fuct for cookies, update query to api
+
+[33mcommit 506f399b4f989a33d895433ff5cd70ef613a66a4[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sun Jul 31 01:44:20 2022 +0300
+
+    update files that dont saved in last commit: changed parser JWt
+
+[33mcommit b6733e204a04068a38481e564cbcadf9212d8cf8[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sun Jul 31 01:40:12 2022 +0300
+
+    delete import
+
+[33mcommit 28a555d470e85d7c0ba35d0ddbad090cf39ac3f2[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sun Jul 31 01:34:48 2022 +0300
+
+    added query, func to save cookie and parser for jwt , changed store and components
+
+[33mcommit 94c5239eb43201ba289f820b88332d997f0a2702[m[33m ([m[1;32mmaster[m[33m)[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sat Jul 30 12:28:16 2022 +0300
+
+    was dowloaded from git, changed user repository, added model for auth, changed on front: route, added epic middleware, not working fetch fc, query for auth
+
+[33mcommit 0142f2546442b27c3c3e445f7460d59932b565b5[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Thu Jul 28 23:14:04 2022 +0300
+
+    Created AuthenticationService and 'refresh' authentication tokens method
+
+[33mcommit 2f3f6a18c9f67c20e716334a5287285116d2b862[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Thu Jul 28 22:24:43 2022 +0300
+
+    Fixed problems with 'remove' methods in repositories
+
+[33mcommit 51779ad04a3c9cef650216cf3e172d879579a20d[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Thu Jul 28 19:25:58 2022 +0300
+
+    Created basic user authentication with jwt tokens
+
+[33mcommit 498b1229bad64a813536371643db1c291bf80ff0[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Tue Jul 26 18:27:35 2022 +0300
+
+    fix package json
+
+[33mcommit 2c5fb56f8ab80f85621a110b8fd12bd245757e03[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Tue Jul 26 15:20:28 2022 +0300
+
+    changed script in  package.json
+
+[33mcommit 353e62b572d84849b2f809d138303ef7bc8e54f8[m
+Merge: 9403ad6 f3c15a5
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Tue Jul 26 14:09:04 2022 +0300
+
+    was merged Layout and Develop branches
+
+[33mcommit f3c15a569c6f49555e06228abbfb31a09ed07e36[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Tue Jul 26 12:41:23 2022 +0300
+
+    Changed calendar design. Fixed some bugs
+
+[33mcommit e573e5b7b208463ea8faa836044a4b41701370a4[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Mon Jul 25 20:51:47 2022 +0300
+
+    Application router was added
+
+[33mcommit 543a4b6c93ed1376b654d67043c037f6324734a3[m
+Merge: fbad12e 9c9719c
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Mon Jul 25 20:06:35 2022 +0300
+
+    Merge Layout branch with calendar
+
+[33mcommit 9403ad64ae61d9010f7c6e82f22d05d1e1cef9b2[m
+Author: Сергій Денисюк <kn202_dsm@student.ztu.edu.ua>
+Date:   Sun Jul 24 22:38:36 2022 +0300
+
+    Fixed mutations
+
+[33mcommit c33f4b52edff239f88e8534a37681bbd94373ae0[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Sun Jul 24 21:51:50 2022 +0300
+
+    Fixed graphql user_changePassowrd mutation
+
+[33mcommit 0f32cb56fc217d0a707e576f245cdd6a97091adf[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Sun Jul 24 21:46:22 2022 +0300
+
+    Updated user repository
+
+[33mcommit 46f6b9283e32bb10f2079a7a65fefcd5fc961bd6[m
+Author: Сергій Денисюк <kn202_dsm@student.ztu.edu.ua>
+Date:   Sun Jul 24 21:13:39 2022 +0300
+
+    The connection string is used in Program.cs, fixed requests, fixed UserInputType.cs
+
+[33mcommit 9c9719c07d141b6f911094d3dc571e1ac4ee21c8[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sun Jul 24 15:10:12 2022 +0300
+
+    added sass style for calendar
+
+[33mcommit 9e34717b087b64d17802fedeb6dc126e3dad40d9[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sun Jul 24 14:45:28 2022 +0300
+
+    add able to edit event
+
+[33mcommit adb64e2572ac7d0ae9fe2c035ef9b10fabed503d[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sat Jul 23 21:41:58 2022 +0300
+
+    change component to add Event
+
+[33mcommit 5eb62de1d8232a5eea1c131c4b7bbc0fe264cda1[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sat Jul 23 21:21:35 2022 +0300
+
+    change compopent ListEvent
+
+[33mcommit fbad12e6553c26c485343a3ab791d95d3094c4b9[m
+Author: Oleksandr Igumnov <igumssukr@gmail.com>
+Date:   Sat Jul 23 20:19:34 2022 +0300
+
+    Basic application layout was created
+
+[33mcommit bfbe71f568a2484a49757e759244397f8f0c8d00[m
+Author: Maks Limont <91567557+ki212-lme@users.noreply.github.com>
+Date:   Sat Jul 23 18:22:15 2022 +0300
+
+    deleted unused component
+
+[

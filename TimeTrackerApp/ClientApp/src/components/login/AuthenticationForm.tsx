@@ -1,3 +1,4 @@
+
 import  {FC, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -20,6 +21,7 @@ export const AuthenticationForm: FC = () => {
             navigate("/welcome");
         }
     },[accessToken,refreshToken]);
+
 
     return (
         <form className={"authentication-form"}>
