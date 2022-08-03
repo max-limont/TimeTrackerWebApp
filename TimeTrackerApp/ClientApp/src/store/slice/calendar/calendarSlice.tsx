@@ -14,32 +14,7 @@ interface calendarState {
 }
 
 const initialState: calendarState = {
-    events: [{
-        id: 1,
-        title: "My event",
-        description: "desc",
-        date: "2022-07-21"
-    }, {
-        id: 2,
-        title: "Create Time Tracker",
-        description: "desc",
-        date: "2022-07-21"
-    }, {
-        id: 3,
-        title: "Make an authorization in our app",
-        description: "desc",
-        date: "2022-07-21"
-    }, {
-        id: 4,
-        title: "Create GraphQL API",
-        description: "desc",
-        date: "2022-07-21"
-    }, {
-        id: 5,
-        title: "User interface",
-        description: "desc",
-        date: "2022-07-25"
-    }],
+    events: [],
     totalDays: 42,
     currentDaysArray: [],
     currentDate: '',

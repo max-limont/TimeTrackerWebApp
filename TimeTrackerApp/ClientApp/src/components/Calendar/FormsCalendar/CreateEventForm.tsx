@@ -26,7 +26,7 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
         setVisible(false);
         document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
     }
-    const { title, description, date } = event;
+    const { title, date } = event;
     const { visible, setVisible } = props;
 
 
@@ -48,10 +48,7 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
                             <label>Name</label>
                             <input value={title} onChange={(e) => setEvent({ ...event, title: e.target.value })} />
                         </div>
-                        <div className={"form-item align-items-start w-100"}>
-                            <label>Description</label>
-                            <textarea value={description} onChange={(e) => setEvent({ ...event, description: e.target.value })} />
-                        </div>
+
                         <div className={"form-item w-100"}>
                             <label>Date</label>
                             <input type="date" value={date} onChange={(e) => setEvent({ ...event, date: e.target.value })} />

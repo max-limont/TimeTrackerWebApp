@@ -48,10 +48,6 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
                                 <label>Name</label>
                                 <input value={editEvent?.title} onChange={(e) => setEvent({ ...editEvent, title: e.target.value })} />
                             </div>
-                            <div className={"form-item align-items-start w-100"}>
-                                <label>Description</label>
-                                <textarea value={editEvent?.description} onChange={(e) => setEvent({ ...editEvent, description: e.target.value })} />
-                            </div>
                             <div className={"form-item w-100"}>
                                 <label>Date</label>
                                 <input type="date" value={editEvent?.date} onChange={(e) => setEvent({ ...editEvent, date: e.target.value })} />
