@@ -11,12 +11,7 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route path={"/welcome"} element={<AuthenticationIndex />} />
-                <Route path={"/"} element={<Index />} >
-                    <Route path="/calendar"  />
-                    <Route path="/userList"  />
-
-                </Route>
-
+                <Route path={"/*"} element={<Index />} />
             </Routes>
         </BrowserRouter>
     );

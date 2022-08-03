@@ -61,6 +61,8 @@ $color-cyan: #00ADB5;
 $color-light: #EEEEEE;
 $color-silver: #D6D6D6;
 $color-red: #F24C4C;
+$color-white: #FFFFFF;
+$color-yellow: #FFC107;
 
 $font-size-default: 18px;
 $font-size-header: 26px;
@@ -359,7 +361,7 @@ section {
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        padding: 10px 15px 10px 15px;
+        padding: 15px;
 
         h2 {
             font-size: $font-size-header;
@@ -374,6 +376,10 @@ section {
         vertical-align: middle;
     }
 
+    display: inline-flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
     font-family: 'Nunito', serif;
     padding: 8px 20px;
     border-radius: 2px;
@@ -393,6 +399,17 @@ section {
         color: $color-cyan;
         border: 1px solid $color-cyan;
     }
+
+    &.inverse {
+        background: transparent;
+        color: $color-cyan;
+        border: 1px solid $color-cyan;
+
+        &:hover {
+            background: $color-cyan;
+            color: $color-light;
+        }
+    }
 }
 
 .dark-button {
@@ -404,6 +421,17 @@ section {
         color: $color-dark;
         border: 1px solid $color-dark;
     }
+
+    &.inverse {
+        background: transparent;
+        color: $color-dark;
+        border: 1px solid $color-dark;
+
+        &:hover {
+            background: $color-dark;
+            color: $color-light;
+        }
+    }
 }
 
 .red-button {
@@ -414,6 +442,39 @@ section {
         background: transparent;
         color: $color-red;
         border: 1px solid $color-red;
+    }
+
+    &.inverse {
+        background: transparent;
+        color: $color-red;
+        border: 1px solid $color-red;
+
+        &:hover {
+            background: $color-red;
+            color: $color-light;
+        }
+    }
+}
+
+.yellow-button {
+    background: $color-yellow;
+    color: $color-dark;
+
+    &:hover {
+        background: transparent;
+        color: $color-yellow;
+        border: 1px solid $color-yellow;
+    }
+
+    &.inverse {
+        background: transparent;
+        color: $color-yellow;
+        border: 1px solid $color-yellow;
+
+        &:hover {
+            background: $color-yellow;
+            color: $color-dark;
+        }
     }
 }
 
@@ -435,51 +496,6 @@ section {
         &:hover {
             background: $color-silver;
             color: $color-dark;
-        }
-    }
-}
-
-.timer {
-    border: 1px solid $color-silver;
-    border-radius: 5px;
-    padding: 20px 15px 20px 15px;
-    margin: 15px auto;
-    max-width: 1024px;
-
-    div {
-        display: inline-flex;
-        width: calc(100% / 3);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-
-        h3 {
-            text-transform: uppercase;
-            color: #AAAAAA;
-            font-weight: 600;
-        }
-
-        span {
-            font-size: 100px;
-            font-weight: 100;
-            padding: 30px 0 30px 0;
-            position: relative;
-        }
-
-        &:not(:last-child)::after {
-            content: ':';
-            display: flex;
-            width: 40px;
-            height: 100px;
-            justify-content: center;
-            align-items: center;
-            color: $color-silver;
-            font-weight: bold;
-            font-size: 100px;
-            right: -20px;
-            top: calc(50% - 60px);
-            position: absolute;
         }
     }
 }
@@ -632,6 +648,10 @@ section {
     align-items: flex-start !important;
 }
 
+.justify-content-center {
+    justify-content: center;
+}
+
 .form-header {
     h2 {
         font-size: $font-size-header;
@@ -719,4 +739,167 @@ section {
     overflow-y: auto;
     max-height: 85px;
     margin: 2px 5px 2px 2px;
+}
+
+.time-tracker-list {
+    background: $color-white;
+    margin: 15px;
+    border-radius: 2px;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+}
+
+table {
+    th {
+        font-size: $font-size-default;
+        font-weight: bold;
+        text-align: left;
+        padding: 15px 10px 15px 10px;
+    }
+
+    td {
+        padding: 20px 10px 20px 10px;
+        font-weight: 300;
+    }
+
+    thead > tr:last-child {
+        border-bottom: 1px solid #E6E6E6;
+    }
+
+    tr:nth-of-type(2n) {
+        background: #F6F6F6;
+    }
+}
+
+.time-tracker-table {
+    .date {
+        width: 200px;
+    }
+
+    .begin, .end, .duration {
+        width: 150px;
+    }
+
+    .actions {
+        width: 190px;
+    }
+
+    .button:not(:last-child) {
+        margin-right: 5px;
+    }
+}
+
+.time-tracker-statistic {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+    grid-gap: 15px;
+    padding-inline: 15px;
+}
+
+.statistic-panel {
+    background: $color-white;
+    border-radius: 2px;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+    padding: 15px;
+    color: $color-dark;
+
+    > h3 {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .statistic-panel-list {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        flex-wrap: wrap;
+        align-items: stretch;
+
+        > div {
+            display: inline-flex;
+            flex-direction: column;
+            padding-bottom: 30px;
+        }
+
+        h4 {
+            text-transform: uppercase;
+            font-weight: 600;
+            color: silver;
+            margin-bottom: 10px;
+        }
+
+        span {
+            color: $color-light-dark;
+            font-weight: 700;
+            font-size: 30px;
+        }
+    }
+
+    .timer-tip {
+        font-weight: 400;
+        font-size: 15px;
+        color: $color-cyan;
+    }
+}
+
+.timer-panel {
+    display: inline-flex;
+    flex-direction: column;
+    background: $color-white;
+    border-radius: 2px;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+    padding: 15px;
+    color: $color-dark;
+
+    > h3 {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .button {
+        margin-top: 20px;
+        font-size: 20px;
+        padding: 10px 70px 10px 70px;
+    }
+}
+
+.timer {
+    display: inline-flex;
+    width: 100%;
+
+    > div {
+        display: inline-flex;
+        width: calc(100% / 3);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        > h3 {
+            text-transform: uppercase;
+            color: #AAAAAA;
+            font-weight: 600;
+        }
+
+        > span {
+            font-size: 100px;
+            font-weight: 100;
+            padding: 30px 0 10px 0;
+            position: relative;
+        }
+
+        &:not(:last-child)::after {
+            content: ':';
+            display: flex;
+            width: 40px;
+            height: 100px;
+            justify-content: center;
+            align-items: center;
+            color: $color-silver;
+            font-weight: bold;
+            font-size: 100px;
+            right: -20px;
+            top: calc(50% - 60px);
+            position: absolute;
+        }
+    }
 }

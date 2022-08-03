@@ -1,17 +1,18 @@
 import {FC} from "react";
-import {Timer} from "./Timer";
+import {TimeTracker} from "./TimeTracker";
+import {TimeTrackerList} from "./TimeTrackerList";
 
 export const Home: FC = () => {
 
     return (
         <div className={"flex-container flex-column w-100"}>
-            <section className={"timer-container"}>
+            <section className={"time-tracker-container"}>
                 <header>
-                    <h2>Timer</h2>
-                    <a className={"button timer-button cyan-button"}>Start</a>
+                    <h2>Time Tracker</h2>
                 </header>
                 <div className={"section-content"}>
-                    <Timer />
+                    <TimeTracker />
+                    <TimeTrackerList />
                 </div>
             </section>
         </div>

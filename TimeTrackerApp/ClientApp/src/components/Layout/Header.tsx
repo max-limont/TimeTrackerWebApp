@@ -1,6 +1,4 @@
-import { FC, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchUserByIdAction } from "../../store/actions/user/userActions";
+import { FC } from "react";
 
 export const Header: FC = () => {
     return (

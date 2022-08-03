@@ -2,17 +2,15 @@
 import {Menu} from "./Menu";
 import {FC, useEffect} from "react";
 import {Content} from "./Content";
-import { useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
-import { clearCookie, getCookie, refreshTokenKey } from "../../Cookie/Cookie";
+import { getCookie, refreshTokenKey } from "../../Cookie/Cookie";
 
 export const Index: FC = () => {
-    const navigate =useNavigate();
+    const navigate = useNavigate();
     const refreshToken = getCookie(refreshTokenKey);
 
-    useEffect(()=>{
-      
-        if(refreshToken==null){
+    useEffect(() => {
+        if (refreshToken == null) {
             navigate("/welcome");
         }
     },[refreshToken]);
