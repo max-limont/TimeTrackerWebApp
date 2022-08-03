@@ -2,23 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6054f6d0-e998-4eee-a93d-95cb49aebc51" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp.Business/Services/AuthenticationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp.Business/Services/AuthenticationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/Login.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/Login.module.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/Login.module.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/style.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/style.css.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/style.scss" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/style.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/util.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/util.module.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/public/css/util.module.scss" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/Layout/Menu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/Layout/Menu.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/login/Login.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/login/Login.module.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/login/Login.module.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/login/util.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/login/util.module.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/login/util.module.scss" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

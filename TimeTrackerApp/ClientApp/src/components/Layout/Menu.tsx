@@ -103,7 +103,7 @@ export const Menu: FC = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className={"flex-container"} onClick={() => dispatchOut(logOut())}>
+                                <a className={"flex-container"} onClick={() => dispatchOut(logOut())}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} className={"icon"} />
                                     <span>Logout</span>
                                 </a>

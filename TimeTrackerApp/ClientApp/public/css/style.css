@@ -205,6 +205,8 @@ body {
       padding: 15px 0 15px 0; }
       .menu-container.collapsed a .icon {
         margin: 0; }
+    .menu-container.collapsed h4 {
+      display: none; }
     .menu-container.collapsed span {
       display: none; }
     .menu-container.collapsed .logo {
