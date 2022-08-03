@@ -155,7 +155,7 @@ body {
 .menu-container {
     position: relative;
     z-index: 10;
-    max-width: 320px;
+    max-width: 280px;
     transition: 0.3s all;
 
     .menu {
@@ -167,16 +167,23 @@ body {
         height: 100vh;
 
         .logo {
-            color: $color-light;
-            font-size: $font-size-header;
-            height: 60px;
-            background: $color-cyan;
+            color: $color-cyan;
+            font-size: 20px;
+            max-height: 54px;
+            height: 100%;
             align-items: center;
-            padding: 17px 15px 17px 0;
+            padding: 15px 15px 15px 0;
+            border-bottom: 1px solid $color-cyan;
+            margin-bottom: 10px;
             font-weight: bold;
+
+            h2 {
+                vertical-align: middle;
+            }
 
             .icon {
                 margin-inline: 20px;
+                vertical-align: middle;
             }
         }
 
@@ -188,17 +195,26 @@ body {
             background: $color-dark;
         }
 
+        h4 {
+            color: gray;
+            text-transform: uppercase;
+            padding: 10px;
+            font-size: 13px;
+        }
+
         a {
             @include link-mixin;
             color: $color-light;
-            font-size: $font-size-default;
-            padding: 20px 15px 20px 0;
+            font-size: 16px;
+            padding: 15px 15px 15px 0;
             transition: 0.2s all;
             width: 100%;
+            vertical-align: middle;
 
             .icon {
                 margin-inline: 15px;
                 width: 32px;
+                vertical-align: middle;
             }
         }
 
@@ -273,6 +289,8 @@ body {
         }
 
         .logo {
+            justify-content: center;
+            padding: 0;
             .icon {
                 margin: 0;
                 padding: 15px;
@@ -289,7 +307,7 @@ body {
     background: $color-dark;
     color: $color-light;
     padding: 15px 15px 15px 15px;
-    height: 60px;
+    height: 54px;
     align-items: center;
     justify-content: space-between;
 
@@ -315,6 +333,7 @@ body {
     }
 
     .user-info {
+        box-sizing: border-box;
         align-items: center;
 
         p {
@@ -336,7 +355,6 @@ section {
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        border-bottom: 1px solid $color-silver;
         padding: 10px 15px 10px 15px;
 
         h2 {

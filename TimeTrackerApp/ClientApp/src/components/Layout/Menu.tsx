@@ -8,7 +8,11 @@ import {
     faStopwatch,
     faUmbrellaBeach,
     faAngleLeft,
-    faAngleRight
+    faAngleRight,
+    faAddressBook,
+    faInbox,
+    faEnvelopeOpenText,
+    faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks";
@@ -46,6 +50,7 @@ export const Menu: FC = () => {
                 </div>
                 <div className={"navigation-links flex-container flex-column"}>
                     <nav className={"top-links"}>
+                        <h4>General</h4>
                         <ul>
                             <li>
                                 <Link to={"/"} replace className={"flex-container"}>
@@ -66,8 +71,30 @@ export const Menu: FC = () => {
                                 </a>
                             </li>
                         </ul>
+                        <h4>Management</h4>
+                        <ul>
+                            <li>
+                                <Link to={"/user-list"} replace className={"flex-container"}>
+                                    <FontAwesomeIcon icon={faAddressBook} className={"icon"} />
+                                    <span>Employees</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to={"/vacation-requests"} replace className={"flex-container"}>
+                                    <FontAwesomeIcon icon={faEnvelopeOpenText} className={"icon"} />
+                                    <span>Vacation requests</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to={"/messages"} replace className={"flex-container"}>
+                                    <FontAwesomeIcon icon={faEnvelope} className={"icon"} />
+                                    <span>Messages</span>
+                                </Link>
+                            </li>
+                        </ul>
                     </nav>
                     <nav className={"bottom-links"}>
+                        <h4>Account</h4>
                         <ul>
                             <li>
                                 <a href="#" className={"flex-container"}>

@@ -86,10 +86,35 @@ body {
     font-weight: 500;
     color: #222831; }
 
+.h-100 {
+  height: 100%; }
+
+.h-fullscreen {
+  height: 100vh; }
+
+.auth-container {
+  background-size: 100% 100%;
+  align-items: center;
+  justify-content: center; }
+
+.authentication-form {
+  max-width: 400px;
+  width: 100%;
+  background: #EEEEEE;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 0 20px -10px #222831; }
+  .authentication-form span {
+    width: 100%;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 500;
+    color: #222831; }
+
 .menu-container {
   position: relative;
   z-index: 10;
-  max-width: 320px;
+  max-width: 280px;
   transition: 0.3s all; }
   .menu-container .menu {
     transition: 0.3s all;
@@ -99,31 +124,43 @@ body {
     width: 100%;
     height: 100vh; }
     .menu-container .menu .logo {
-      color: #EEEEEE;
-      font-size: 26px;
-      height: 60px;
-      background: #00ADB5;
+      color: #00ADB5;
+      font-size: 20px;
+      max-height: 54px;
+      height: 100%;
       align-items: center;
-      padding: 17px 15px 17px 0;
+      padding: 15px 15px 15px 0;
+      border-bottom: 1px solid #00ADB5;
+      margin-bottom: 10px;
       font-weight: bold; }
+      .menu-container .menu .logo h2 {
+        vertical-align: middle; }
       .menu-container .menu .logo .icon {
-        margin-inline: 20px; }
+        margin-inline: 20px;
+        vertical-align: middle; }
     .menu-container .menu .navigation-links {
       height: 100%;
       justify-content: space-between;
       position: relative;
       z-index: 10;
       background: #222831; }
+    .menu-container .menu h4 {
+      color: gray;
+      text-transform: uppercase;
+      padding: 10px;
+      font-size: 13px; }
     .menu-container .menu a {
       text-decoration: none;
       color: #EEEEEE;
-      font-size: 18px;
-      padding: 20px 15px 20px 0;
+      font-size: 16px;
+      padding: 15px 15px 15px 0;
       transition: 0.2s all;
-      width: 100%; }
+      width: 100%;
+      vertical-align: middle; }
       .menu-container .menu a .icon {
         margin-inline: 15px;
-        width: 32px; }
+        width: 32px;
+        vertical-align: middle; }
     .menu-container .menu a:hover {
       background: #393E46;
       color: #00ADB5; }
@@ -170,17 +207,20 @@ body {
         margin: 0; }
     .menu-container.collapsed span {
       display: none; }
-    .menu-container.collapsed .logo .icon {
-      margin: 0;
-      padding: 15px; }
-    .menu-container.collapsed .logo h2 {
-      display: none; }
+    .menu-container.collapsed .logo {
+      justify-content: center;
+      padding: 0; }
+      .menu-container.collapsed .logo .icon {
+        margin: 0;
+        padding: 15px; }
+      .menu-container.collapsed .logo h2 {
+        display: none; }
 
 .header {
   background: #222831;
   color: #EEEEEE;
   padding: 15px 15px 15px 15px;
-  height: 60px;
+  height: 54px;
   align-items: center;
   justify-content: space-between; }
   .header .breadcrumbs {
@@ -197,6 +237,7 @@ body {
       margin-inline: 10px;
       color: #EEEEEE !important; }
   .header .user-info {
+    box-sizing: border-box;
     align-items: center; }
     .header .user-info p {
       font-size: 16px; }
@@ -211,7 +252,6 @@ section header {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  border-bottom: 1px solid #D6D6D6;
   padding: 10px 15px 10px 15px; }
   section header h2 {
     font-size: 26px;

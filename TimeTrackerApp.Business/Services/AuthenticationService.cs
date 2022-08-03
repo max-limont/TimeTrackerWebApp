@@ -71,7 +71,7 @@ namespace TimeTrackerApp.Business.Services
             try
             {
                 await authenticationTokenRepository.RemoveByUserIdAsync(userId);
-                return new AuthenticationResponse("User has successfully been logged out!");
+                return new AuthenticationResponse("User has been successfully logged out!");
             }
             catch (Exception exception)
             {
