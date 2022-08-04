@@ -512,11 +512,11 @@ section {
     width: 100%;
     min-height: 140px;
     background-color: $color-light;
+   
 }
 
 .weekend {
-    background-color: $color-light;
-
+    background-color: $color-red;
     > .day-number > p {
         background-color: $color-dark;
     }
@@ -609,6 +609,8 @@ section {
 .align-items-start {
     align-items: flex-start !important;
 }
+
+
 
 .form-header {
     h2 {

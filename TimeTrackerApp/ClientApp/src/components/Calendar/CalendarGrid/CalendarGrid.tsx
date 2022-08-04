@@ -30,6 +30,8 @@ export function CalendarGrid() {
                         const classNameCurrentDay = formatDayItem == currentDate ? currentDay : "";
                         const classNameMonth = !(dayItem.format("MM") == currentCalendar.format("MM")) ? "unselected-month" : "";
                         const classNameWeekend = dayItem.format("dd") == "Sa" || dayItem.format("dd") == "Su" ? "weekend" : "";
+                     
+                     
                         return (
                             <div key={value} className={"day " + classNameWeekend}>
                                 <div className={"day-number " + classNameMonth}>

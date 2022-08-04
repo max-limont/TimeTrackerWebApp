@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { EventType } from "../../../type/Events/EventType";
 
 interface calendarState {
     totalDays: number,
-    currentDaysArray: moment.Moment[],
+    currentDaysArray: Moment[],
     currentDate: string,
     events: EventType[]
-    currentCalendar: moment.Moment
-    startDay: moment.Moment,
-    currentDateMoment: moment.Moment,
+    currentCalendar: Moment
+    startDay: Moment,
+    currentDateMoment: Moment,
     currentDateList: string
 }
 

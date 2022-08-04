@@ -346,7 +346,13 @@ section header {
   width: 100%;
   min-height: 140px;
   background-color: #EEEEEE; }
-
+.day.weekend{
+  background: #b79797;
+}
+.day.weekend:before{
+  content: "Weekend";
+  position: absolute;
+}
 .weekend {
   background-color: #EEEEEE; }
   .weekend > .day-number > p {
