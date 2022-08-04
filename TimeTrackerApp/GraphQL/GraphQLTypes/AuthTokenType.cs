@@ -7,9 +7,9 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
     {
         public AuthTokenType()
         {
-            Field(x => x.Id, type: typeof(IdGraphType));
-            Field(x => x.UserId);
-            Field(x => x.Token);
+            Field<NonNullGraphType<IdGraphType>, int>().Name("Id").Resolve(context => context.Source.Id);
+            Field<NonNullGraphType<IdGraphType>, int>("UserId").Resolve(context => context.Source.UserId);
+            Field<NonNullGraphType<StringGraphType>, string>().Name("Token").Resolve(context => context.Source.Token);
         }
     }
 }
