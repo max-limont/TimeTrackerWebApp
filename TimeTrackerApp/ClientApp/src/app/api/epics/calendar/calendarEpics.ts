@@ -1,21 +1,21 @@
-﻿import {combineEpics} from "redux-observable";
-import {fetchAllEventsType} from "../../../../store/actions/calendar/calendarActions";
-import {defaultRequest} from "../../api";
-import {fetchAllEventsQuery} from "../../../../graphqlQuery/calendar/calendarQueries";
+﻿import { combineEpics, Epic, ofType } from "redux-observable";
 import { from, map, mergeMap } from "rxjs";
-import {setEvents} from "../../../../store/slice/calendar/calendarSlice";
+import { usebaseQueryWithReauth, defaultRequest } from "../../api";
+import { fetchAllEventsType } from "../../../../store/actions/calendar/calendarActions";
+import { fetchAllEventsQuery } from "../../../../graphqlQuery/calendar/calendarQueries";
+import { setEvents } from "../../../../store/slice/calendar/calendarSlice";
 
 
-const  fetchAllEvent = (action$:any)=>{
-    return action$
-        .ofType(fetchAllEventsType)
-        .mergeMap(()=>from(defaultRequest(fetchAllEventsQuery)))
-        .pipe(
-            map((response:any)=>{
-                console.log(response);
-                return setEvents(response.data.getEvents);
-            })
-        )
-};
+const fetchAllEventsEpic = (action$: any) =>{
+    console.log(123)
+ return action$.pipe(
+        ofType(fetchAllEventsType),
+        mergeMap(() => from(usebaseQueryWithReauth(fetchAllEventsQuery))
+            .pipe(
+                map(response => {
+                    console.log(response);
+                    return setEvents(response.data.getEvents);
+                }))));}
 
-export const calendarEpics = combineEpics(fetchAllEvent);
+export const calendarEpics = combineEpics(fetchAllEventsEpic);
+

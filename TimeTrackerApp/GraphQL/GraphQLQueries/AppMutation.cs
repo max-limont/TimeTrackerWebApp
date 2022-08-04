@@ -198,7 +198,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return authenticationServiceApiResponse;
                 });
 
-
             Field<CalendarType, Calendar>()
                 .Name("addEvent")
                 .Argument<CalendarInputType, Calendar>("event", "add event to calendar")

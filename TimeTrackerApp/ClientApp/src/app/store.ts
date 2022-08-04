@@ -6,7 +6,7 @@ import { authEpics } from './api/epics/auth/authEpics';
 import { Cookies } from 'react-cookie';
 import { userEpics } from './api/epics/user/userEpics';
 import userListSlice from '../store/slice/user/userListSlice';
-import {calendarEpics} from "./api/epics/calendar/calendarEpics";
+import { calendarEpics } from './api/epics/calendar/calendarEpics';
 
 
 

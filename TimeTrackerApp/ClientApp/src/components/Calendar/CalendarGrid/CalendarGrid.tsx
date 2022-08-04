@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { fetchAllEventsAction, fetchRangeEventsAction } from "../../../store/actions/calendar/calendarActions";
 import {EditEventForm} from "../FormsCalendar/EditEventForm";
 
 
@@ -16,7 +17,9 @@ export function CalendarGrid() {
     const days = ["Monday", "Tuesday", 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     let currentDay = " current-day";
 
-
+    useEffect(()=>{
+        dispatch(fetchAllEventsAction());
+    },[]);
     return (
         <>
             <EditEventForm visible={isEditFormVisible} setVisible={setEditFormVisible} id={id} />

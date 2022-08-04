@@ -47,7 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\api\epics\calendar\calendarEpics.ts" />
     <TypeScriptCompile Include="ClientApp\src\graphqlQuery\calendar\calendarQueries.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\actions\calendar\calendarActions.ts" />
   </ItemGroup>

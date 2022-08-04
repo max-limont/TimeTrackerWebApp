@@ -2,8 +2,9 @@
 {
     public enum TypeDay
     {
-        Weekend,
-        Holiday,
-        ShortDay
+        Weekend=1,
+        Holiday=2,
+        ShortDay=3,
+        WorkDay=4
     }
 }
