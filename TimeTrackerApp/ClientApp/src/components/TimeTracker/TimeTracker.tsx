@@ -1,11 +1,13 @@
 import {FC} from "react";
 import {Timer} from "./Timer";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
+import {recordToTimeTrackerListItem} from "../../store/slice/timeTracker/timeTrackerSlice";
 
 export const TimeTracker: FC = () => {
 
     let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
-    let lastRecord = [...records].sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime()).filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined;
+    let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record));
+    let lastRecord = timeTrackerListItems.sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime()).filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined;
 
     return (
         <div className={"time-tracker-statistic"}>

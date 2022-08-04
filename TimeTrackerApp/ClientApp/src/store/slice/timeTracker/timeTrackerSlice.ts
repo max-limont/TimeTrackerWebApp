@@ -1,8 +1,12 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { TimeTrackerItem } from "../../../type/TimeTracker/timeTracker.types";
+import {Record, TimeTrackerItem} from "../../../type/TimeTracker/timeTracker.types";
+import {useTypedSelector} from "../../../hooks/useTypedSelector";
+import userListSlice from "../user/userListSlice";
+import {store} from "../../../app/store";
+
 
 type TimeTrackerState = {
-    records: TimeTrackerItem[]
+    records: Record[]
 }
 
 const initialState: TimeTrackerState = {
@@ -13,13 +17,13 @@ export const timeTrackerSlice = createSlice({
     name: "timeTrackerSlice",
     initialState,
     reducers: {
-        setRecords(state, action: PayloadAction<TimeTrackerItem[]>) {
+        setRecords(state, action: PayloadAction<Record[]>) {
             return {...state, records: action.payload}
         },
-        addRecord(state, action: PayloadAction<TimeTrackerItem>) {
+        addRecord(state, action: PayloadAction<Record>) {
             return {...state, records: [...state.records, {...action.payload, id: state.records.length + 1}]}
         },
-        editRecord(state, action: PayloadAction<TimeTrackerItem>) {
+        editRecord(state, action: PayloadAction<Record>) {
             return {...state, records: state.records.map(record => record.id === action.payload.id ? action.payload : record)}
         },
         removeRecord(state, action: PayloadAction<number>) {
@@ -30,3 +34,15 @@ export const timeTrackerSlice = createSlice({
 
 export const {setRecords, addRecord, editRecord, removeRecord} = timeTrackerSlice.actions;
 export const timeTrackerReducer = timeTrackerSlice.reducer;
+
+export const recordToTimeTrackerListItem = (record: Record): TimeTrackerItem => {
+    return {
+        id: record.id,
+        date: record.createdAt,
+        begin: record.createdAt.getTime(),
+        duration: record.workingTime,
+        end: record.createdAt.getTime() + record.workingTime,
+        comment: record.comment,
+        editor: store.getState().rootReducer.userList.userList.find(user => user.id === record.editorId)
+    }
+}
