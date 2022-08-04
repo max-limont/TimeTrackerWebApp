@@ -9,7 +9,7 @@ create table [Users]
 	[Password] nvarchar(100) not null,
 	[LastName] nvarchar(50),
 	[FirstName] nvarchar(50),
-	[WeeklyWorkingTime] int default 2400,
+	[WeeklyWorkingTime] int default 144000,
 	[RemainingVacationDays] int default 30,
 	[PrivilegesValue] int default 0
 )
@@ -17,7 +17,7 @@ create table [Users]
 create table [Records]
 (
 	[Id] int primary key identity(1, 1),
-	[WorkingTime] int default 480,
+	[WorkingTime] int default 28800,
 	[Comment] text,
 	[CreatorId] int foreign key references [Users]([Id]) on delete no action,
 	[EditorId] int foreign key references [Users]([Id]) on delete no action,

@@ -1,7 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Record, TimeTrackerItem} from "../../../type/TimeTracker/timeTracker.types";
-import {useTypedSelector} from "../../../hooks/useTypedSelector";
-import userListSlice from "../user/userListSlice";
 import {store} from "../../../app/store";
 
 
