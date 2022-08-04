@@ -642,7 +642,7 @@ table tr:nth-of-type(2n) {
       font-weight: bold;
       font-size: 100px;
       right: -20px;
-      top: calc(50% - 60px);
+      top: calc(50% - 50px);
       position: absolute; }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,4 +1,6 @@
 import {FC, useEffect, useState} from "react";
+import {useActions} from "../../hooks/useActions";
+import {TimeTrackerItem} from "../../type/TimeTracker/timeTracker.types";
 
 type TimerStateType = {
     time: number,
@@ -13,6 +15,7 @@ const initialState: TimerStateType = {
 export const Timer: FC = () => {
 
     const [state, setState] = useState(initialState);
+    const {addRecord} = useActions()
 
     useEffect(() => {
         const timerStartTime = window.localStorage.getItem("timerStartTime");
@@ -42,6 +45,13 @@ export const Timer: FC = () => {
     const timerTick = () => setState({...state, time: state.time + 1000})
 
     const timerStop = () => {
+        const record: TimeTrackerItem = {
+            date: new Date(),
+            begin: parseInt(window.localStorage.getItem("timerStartTime") ?? ''),
+            end: parseInt(window.localStorage.getItem("timerStartTime") ?? '') + state.time,
+            duration: state.time
+        }
+        addRecord(record)
         setState(initialState)
         window.localStorage.removeItem("timerStartTime")
     }

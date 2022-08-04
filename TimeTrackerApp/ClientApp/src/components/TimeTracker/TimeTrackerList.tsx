@@ -1,6 +1,21 @@
 import {FC} from "react";
+import {useActions} from "../../hooks/useActions";
+import {useAppSelector} from "../../app/hooks";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
 
 export const TimeTrackerList: FC = () => {
+
+    const {editRecord, removeRecord, setRecords} = useActions()
+    let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
+    records = [...records].sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime())
+
+    const editTimeTrackerListItem = (recordId: number) => {
+
+    }
+
+    const removeTimeTrackerListItem = (recordId: number) => {
+        removeRecord(recordId);
+    }
 
     return (
         <div className={"time-tracker-list"}>
@@ -16,61 +31,22 @@ export const TimeTrackerList: FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>03.08.2022</td>
-                        <td>12:03</td>
-                        <td>18:42</td>
-                        <td>06:39</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</td>
-                        <td>
-                            <a className={"button yellow-button"}>Edit</a>
-                            <a className={"button red-button"}>Delete</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>03.08.2022</td>
-                        <td>12:03</td>
-                        <td>18:42</td>
-                        <td>06:39</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</td>
-                        <td>
-                            <a className={"button yellow-button"}>Edit</a>
-                            <a className={"button red-button"}>Delete</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>03.08.2022</td>
-                        <td>12:03</td>
-                        <td>18:42</td>
-                        <td>06:39</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</td>
-                        <td>
-                            <a className={"button yellow-button"}>Edit</a>
-                            <a className={"button red-button"}>Delete</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>03.08.2022</td>
-                        <td>12:03</td>
-                        <td>18:42</td>
-                        <td>06:39</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</td>
-                        <td>
-                            <a className={"button yellow-button"}>Edit</a>
-                            <a className={"button red-button"}>Delete</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>03.08.2022</td>
-                        <td>12:03</td>
-                        <td>18:42</td>
-                        <td>06:39</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</td>
-                        <td>
-                            <a className={"button yellow-button"}>Edit</a>
-                            <a className={"button red-button"}>Delete</a>
-                        </td>
-                    </tr>
+                { records.map(record => (
+                        <tr key={record.id}>
+                            <td>{record.date.toLocaleDateString()}</td>
+                            <td>{new Date(record.begin).toLocaleTimeString()}</td>
+                            <td>{new Date(record.end).toLocaleTimeString()}</td>
+                            <td>{Math.floor(record.duration / 1000 / 3600) < 10 ? `0${Math.floor(record.duration / 1000 / 3600)}` : Math.floor(record.duration / 1000 / 3600)}
+                                :{Math.floor(record.duration / 1000 / 60) % 60 < 10 ? `0${Math.floor(record.duration / 1000 / 60) % 60}` : Math.floor(record.duration / 1000 / 60) % 60}
+                                :{Math.floor(record.duration / 1000) % 3600 < 10 ? `0${Math.floor(record.duration / 1000) % 3600}` : Math.floor(record.duration / 1000) % 3600}</td>
+                            <td>{record.comment ?? '-'}</td>
+                            <td>
+                                <a className={"button yellow-button"} onClick={() => editTimeTrackerListItem(record.id ?? -1)}>Edit</a>
+                                <a className={"button red-button"} onClick={() => removeTimeTrackerListItem(record.id ?? -1)}>Delete</a>
+                            </td>
+                        </tr>
+                    ))
+                }
                 </tbody>
             </table>
         </div>

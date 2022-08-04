@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import {fetchUserList} from "../../store/actionCreators/userList";
-import {useAction} from "../../hooks/useAction";
+import {useActions} from "../../hooks/useActions";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import User from "../../type/Models/User";
 import "./style.scss"
@@ -13,7 +13,7 @@ const UserList = () => {
         return {userList: state.rootReducer.userList.userList}
     })
     const [value, setValue] = useState("")
-    const {fetchUserList} = useAction()
+    const {fetchUserList} = useActions()
 
     useEffect(() => {
         fetchUserList()
