@@ -83,6 +83,8 @@ builder.Services.AddGraphQL(b => b
                 .AddSchema<AppSchema>()
                 .AddGraphTypes(typeof(AppSchema).Assembly));
 
+
+
 // In production, the React files will be served from this directory
 builder.Services.AddSpaStaticFiles(configuration =>
 {

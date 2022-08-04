@@ -5,7 +5,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes
 {
     public class CalendarInputType :InputObjectGraphType<Calendar>
     {
-        
+
             public CalendarInputType()
             {
                 Field(x => x.Title, nullable: false);
@@ -15,4 +15,4 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes
 
         }
     }
-}
+

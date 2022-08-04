@@ -127,13 +127,10 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 
             Field<ListGraphType<CalendarType>, List<Calendar>>()
                 .Name("getEvents")
-                .ResolveAsync(async context =>
-                {
-                   return await calendarRepository.GetAllEvents();
-                });
+                .ResolveAsync(async context => await calendarRepository.GetAllEvents());
 
 
-            Field<ListGraphType<CalendarType>, List<Calendar>>()
+            Field<ListGraphType<CalendarType>, IEnumerable<Calendar>>()
                 .Name("getRangeEvents")
                 .Argument<DateGraphType, DateTime>("startDate", "start date")
                 .Argument<DateGraphType, DateTime>("finishDate", "finish date")
@@ -149,11 +146,9 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<IdGraphType>, int>("eventId", "event id")
                 .ResolveAsync(async context =>
                 {
-                    int  Id = context.GetArgument<int>("eventId");
-                    return await calendarRepository.GetEventById(Id);
+                    var id = context.GetArgument<int>("eventId");
+                    return await calendarRepository.GetEventById(id);
                 });
-
-
 
         }
     }
