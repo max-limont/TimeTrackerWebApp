@@ -5,8 +5,9 @@ import {Link} from "react-router-dom";
 import {fetchUserList} from "../../store/actionCreators/userList";
 import {useAction} from "../../hooks/useAction";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
-import User from "../../type/Models/User";
 import "./style.scss"
+import { User } from "../../type/User/User";
+
 
 const UserList = () => {
     const {userList} = useTypedSelector(state => {

@@ -86,7 +86,6 @@ const calendarSlice = createSlice({
             return { ...state, events: state.events.filter(item => item.id !== action.payload) }
         },
         setEvents: (state,action:PayloadAction<EventType[]>)=>{
-
             return{
                 ...state,
                 events: action.payload
@@ -96,4 +95,4 @@ const calendarSlice = createSlice({
 })
 
 export default calendarSlice;
-export const { initCalendar, prevMonth, nextMonth ,addEvent,setCurrentDateList,editEventAction, removeEvent} = calendarSlice.actions;
+export const { initCalendar, prevMonth, nextMonth ,addEvent,setCurrentDateList,editEventAction, removeEvent,setEvents} = calendarSlice.actions;

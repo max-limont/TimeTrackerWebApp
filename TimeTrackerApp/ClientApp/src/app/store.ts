@@ -6,12 +6,13 @@ import { authEpics } from './api/epics/auth/authEpics';
 import { Cookies } from 'react-cookie';
 import { userEpics } from './api/epics/user/userEpics';
 import userListSlice from '../store/slice/user/userListSlice';
+import {calendarEpics} from "./api/epics/calendar/calendarEpics";
 
 
 
 const epicMiddleware = createEpicMiddleware();
 
-const rootEpic = combineEpics(authEpics,userEpics);
+const rootEpic = combineEpics(authEpics,userEpics,calendarEpics);
 
 
 const rootReducer = combineReducers({
