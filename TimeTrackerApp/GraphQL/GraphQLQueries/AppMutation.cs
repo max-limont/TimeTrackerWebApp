@@ -153,14 +153,21 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 {
                     string email = context.GetArgument<string>("Email");
                     string password = context.GetArgument<string>("Password");
-                    var authenticationServiceResponse = await authenticationService.Login(email, password);
-                    var authenticationServiceApiResponse = new AuthResponse()
-                    {
-                        AccessToken = authenticationServiceResponse.AccessToken,
-                        RefreshToken = authenticationServiceResponse.RefreshToken,
-                        Message = authenticationServiceResponse.Message,
-                    };
-                    return authenticationServiceApiResponse;
+                    try
+					{
+                        var authenticationServiceResponse = await authenticationService.Login(email, password);
+                        var authenticationServiceApiResponse = new AuthResponse()
+                        {
+                            AccessToken = authenticationServiceResponse.AccessToken,
+                            RefreshToken = authenticationServiceResponse.RefreshToken
+                        };
+                        return authenticationServiceApiResponse;
+                    }
+                    catch (Exception exception)
+					{
+                        context.Errors.Add(new ExecutionError(exception.Message));
+                        return new AuthResponse();
+					}
                 });
 
             Field<AuthResponseType, AuthResponse>()
@@ -173,8 +180,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var authenticationServiceApiResponse = new AuthResponse()
                     {
                         AccessToken = authenticationServiceResponse.AccessToken,
-                        RefreshToken = authenticationServiceResponse.RefreshToken,
-                        Message = authenticationServiceResponse.Message,
+                        RefreshToken = authenticationServiceResponse.RefreshToken
                     };
                     return authenticationServiceApiResponse;
                 });
@@ -191,8 +197,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var authenticationServiceApiResponse = new AuthResponse()
                     {
                         AccessToken = authenticationServiceResponse.AccessToken,
-                        RefreshToken = authenticationServiceResponse.RefreshToken,
-                        Message = authenticationServiceResponse.Message,
+                        RefreshToken = authenticationServiceResponse.RefreshToken
                     };
                     return authenticationServiceApiResponse;
                 });
