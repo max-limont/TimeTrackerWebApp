@@ -10,7 +10,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes
             Field(x => x.Id, nullable: false);
             Field(x => x.Title, nullable: false);
             Field(x => x.Date, nullable: false);
-            Field(x => x.TypeDayId, nullable: false);
+            Field(x => x.TypeDayId, nullable: true);
         }
     }
 }

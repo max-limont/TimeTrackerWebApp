@@ -8,6 +8,7 @@ import { EmptyAuthUser } from '../../type/User/AuthUser';
 
 export const AuthenticationForm: FC = () => {
     const dispatch = useAppDispatch();
+    const isLoadingAuth =useAppSelector(s=>s.rootReducer.auth.isLoading) 
     const [state, setState] = useState(EmptyAuthUser);
     const accessToken = useAppSelector(s=>s.rootReducer.auth.accessToken);
     const refreshToken = getCookie(refreshTokenKey);
@@ -25,7 +26,7 @@ export const AuthenticationForm: FC = () => {
 
     return (
         <form className={"authentication-form"}>
-            <div className={"form-group"}>
+             <div className={"form-group"}>
                 <div className={"form-item w-100"}>
                     <span style={{margin: "0 auto", fontSize: "25px",fontWeight: "2px"}}>TimeTracker</span>
                 </div>
@@ -43,7 +44,8 @@ export const AuthenticationForm: FC = () => {
                         e.preventDefault();
                         dispatch(authUserAction(state));
                     }} className={"button dark-button w-100"}>
-                        Sign in
+                        {isLoadingAuth==true?<div className="loader"></div>:<>Sign In</>}
+          
                     </button>
                 </div>
             </div>

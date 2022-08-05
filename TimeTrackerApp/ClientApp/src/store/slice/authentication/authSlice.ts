@@ -9,12 +9,14 @@ import { clearCookie, refreshTokenKey, setCookie } from "../../../Cookie/Cookie"
 interface authState {
     authUser: AuthUserResponse | null,
     user: User | null,
-    accessToken: string | null
+    accessToken: string | null,
+    isLoading: boolean,
 };
 
 const initialState: authState = {
     authUser: null,
     user: null,
+    isLoading: false,
     accessToken: null
 };
 
@@ -35,9 +37,12 @@ export const authSlice = createSlice({
         logOut: (state:authState) => {
             clearCookie(refreshTokenKey);
             return{...state, accessToken: null, user:null}
+        },
+        setLoadingState:  (state:authState, action: PayloadAction<boolean>) => {
+            return{...state, isLoading: action.payload}
         }
     }
 });
 
-export const {logOut, setToken,setUser } = authSlice.actions;
+export const {logOut, setToken,setUser,setLoadingState } = authSlice.actions;
 

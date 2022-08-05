@@ -12,8 +12,8 @@ export const updateEventType= "updateEvent";
 
 
 
-export const fetchAllEventsAction = createAction(fetchAllEventsType);
 export const fetchRangeEventsAction = createAction<DateInputType>(fetchRangeEventsType);
+export const fetchAllEventsAction = createAction(fetchAllEventsType);
 export const addEventAction = createAction<CreateEventType>(addEventType);
 export const removeEventAction = createAction<number>(removeEventType);
 export const fetchEventByIdAction = createAction<number>(fetchEventByIdType);

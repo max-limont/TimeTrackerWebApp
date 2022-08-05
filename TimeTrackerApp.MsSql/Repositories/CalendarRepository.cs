@@ -25,7 +25,8 @@ namespace TimeTrackerApp.MsSql.Repositories
            Values (@Title,@TypeDayId, @Date)  SELECT @@IDENTITY";
             using (var connection = new SqlConnection(connectionString))
             {
-                int id = await connection.QueryFirst(query, model);
+                int id = await connection.QueryFirstAsync<int>(query, model);
+
                 if (id != 0)
                 {
                     return await GetEventById(id);
@@ -35,10 +36,11 @@ namespace TimeTrackerApp.MsSql.Repositories
         }
         public async Task<Calendar> GetEventById(int id)
         {
-            string query = @"Select * From Calendar where id=@idEvent";
+            string query = @$"Select * From Calendar where Id={id}";
             using (var connection = new SqlConnection(connectionString))
             {
-                Calendar model = await connection.QuerySingleOrDefaultAsync(query, new { idEvent = id });
+                var model = await connection.QueryFirstOrDefaultAsync<Calendar>(query);
+
                 if (model != null)
                 {
                     return model;
@@ -58,7 +60,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<List<Calendar>> GetEventRange(DateTime startDate, DateTime finishDate)
         {
-            string query = @"Select * From Calendar WHERE Date BETWEEN @startDate AND @finishDate;";
+            string query = @"Select * From Calendar WHERE Date BETWEEN @startDate AND @finishDate ";
             using (var connection = new SqlConnection(connectionString))
             {
                 return (await connection.QueryAsync<Calendar>(query, new { 
@@ -70,7 +72,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<Calendar> RemoveEvent(int id)
         {
-            string query = @"Delete * From Calendar where id=@id";
+            string query = @"Delete * From Calendar where Id=@id";
             using (var connection = new SqlConnection(connectionString))
             {
 
@@ -87,7 +89,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<Calendar> UpdateEvent(Calendar model)
         {
-            string query = @"Update Calender set Title=@Title, Date=@Date, TypeDateId=@TypeDateId  where id=@id";
+            string query = @"Update Calender set Title=@Title, Date=@Date, TypeDateId=@TypeDateId  where Id=@id";
             using (var connection = new SqlConnection(connectionString))
             {
                 int affectedRows = await connection.ExecuteAsync(query, model);

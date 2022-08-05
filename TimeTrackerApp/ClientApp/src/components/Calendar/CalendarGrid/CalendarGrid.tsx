@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { fetchAllEventsAction, fetchRangeEventsAction } from "../../../store/actions/calendar/calendarActions";
+import { EventType } from "../../../type/Events/EventType";
 import { EditEventForm } from "../FormsCalendar/EditEventForm";
 
 
@@ -28,19 +29,26 @@ export function CalendarGrid() {
         }));
     }, [daysArray]);
 
-    function setStateDay(value: any) {
+    function setStateDay(value: any,day?:EventType) {
         let styleDayName: any = null;
         if (value == 2) {
             styleDayName = "short-day";
         }
-        if (value == "weekend" || value == null) {
+        if (value == "weekend" || value == 1) {
             styleDayName = "weekend";
         }
         if (styleDayName != null) {
             return (
-                <div className="events " style={{ flexBasis: "100%" }}>
-                    <div className="event ">Day of</div>
+                <>
+                <div onClick={()=>{
+                    if(day!=undefined){
+                    setId(day?.id);
+                    setEditFormVisible(true);
+                    }
+                    }} className={"events "+styleDayName} style={{ flexBasis: "100%" }}>
+                    <div className="event ">{styleDayName}<p>{day?.title}</p></div>
                 </div>
+                </>
             )
         }
     }
@@ -74,8 +82,7 @@ return (
                                 <p className={classNameCurrentDay}>{dayItem.format('DD')}
                                 </p>
                             </div>
-
-                            {setStateDay(stateDay)}
+                            {setStateDay(stateDay,currentDayState)}
                         </div>
                     );
                 })}

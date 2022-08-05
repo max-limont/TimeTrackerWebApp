@@ -35,3 +35,18 @@ mutation ($event: CalendarInputType){
   }
 }
 `
+
+export const editEventQuery= `
+mutation($event: CalendarUpdateType){
+  updateEvent(event: $event){
+    ${EventFragment}
+  }
+}
+`
+export const deleteEventQuery=`
+mutation ($id:ID!){
+  deleteEvent(id: $id){
+    ${EventFragment}
+  }
+}
+`

@@ -446,7 +446,7 @@ section header {
     .form-group .form-item label {
       font-size: 18px;
       margin-right: 15px; }
-    .form-group .form-item input, .form-group .form-item textarea {
+    .form-group .form-item input, .form-group .form-item textarea,.form-group .form-item select {
       font-family: 'Nunito', serif;
       outline: none;
       border: none;
@@ -486,4 +486,31 @@ section header {
   max-height: 85px;
   margin: 2px 5px 2px 2px; }
 
+  .events.short-day .event{
+    background-color: gray;
+  }
+
+  .loader-background{
+    width: fit-content;
+    background-color: white;
+    padding: 8px;
+    border-radius: 20px;
+    position: absolute;
+  }
+  .loader {
+    color: white;
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    margin: 0 auto;
+    background-color: white;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 /*# sourceMappingURL=style.css.map */
