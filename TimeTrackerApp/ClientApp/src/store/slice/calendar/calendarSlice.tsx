@@ -6,8 +6,9 @@ interface calendarState {
     totalDays: number,
     currentDaysArray: Moment[],
     currentDate: string,
-    events: EventType[]
-    currentCalendar: Moment
+    events: EventType[],
+    eventsRange: EventType[],
+    currentCalendar: Moment,
     startDay: Moment,
     currentDateMoment: Moment,
     currentDateList: string
@@ -15,6 +16,7 @@ interface calendarState {
 
 const initialState: calendarState = {
     events: [],
+    eventsRange: [],
     totalDays: 42,
     currentDaysArray: [],
     currentDate: '',
@@ -64,7 +66,7 @@ const calendarSlice = createSlice({
             }
         },
         addEvent: (state, action: PayloadAction<EventType>) => {
-
+            console.log(action.payload);
             return {
                 ...state,
                 events: state.events.concat(action.payload)
@@ -86,13 +88,22 @@ const calendarSlice = createSlice({
             return { ...state, events: state.events.filter(item => item.id !== action.payload) }
         },
         setEvents: (state,action:PayloadAction<EventType[]>)=>{
+            console.log( action.payload);
             return{
                 ...state,
                 events: action.payload
             }
-        }
+        },
+        setRangeEvents: (state,action:PayloadAction<EventType[]>)=>{
+            console.log( action.payload);
+            return{
+                ...state,
+                eventsRange: action.payload
+            }
+        },
+
     }
 })
 
 export default calendarSlice;
-export const { initCalendar, prevMonth, nextMonth ,addEvent,setCurrentDateList,editEventAction, removeEvent,setEvents} = calendarSlice.actions;
+export const { initCalendar, prevMonth, nextMonth ,addEvent,setCurrentDateList,editEventAction,setRangeEvents, removeEvent,setEvents} = calendarSlice.actions;

@@ -32,6 +32,7 @@ export const Request = async (query: string, variables?: unknown) => {
 /* основной который выполянет запросы и запросит access токен если уже вышел срок*/
 export const usebaseQueryWithReauth = async (query: string, variables?: any) => {
     const result = await Request(query, variables);
+    console.log(result)
     /*тут наверное нужно проверить ошибку на access token*/
     if (result.errors != undefined) {
         /*сделать запрос на обновления access токена с помощь рефреша*/
