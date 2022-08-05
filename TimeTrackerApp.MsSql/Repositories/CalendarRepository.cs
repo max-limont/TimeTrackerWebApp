@@ -72,7 +72,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<Calendar> RemoveEvent(int id)
         {
-            string query = @"Delete * From Calendar where Id=@id";
+            string query = @"Delete From Calendar where Id=@id";
             using (var connection = new SqlConnection(connectionString))
             {
 
@@ -89,7 +89,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<Calendar> UpdateEvent(Calendar model)
         {
-            string query = @"Update Calender set Title=@Title, Date=@Date, TypeDateId=@TypeDateId  where Id=@id";
+            string query = @"Update Calendar set Title=@Title, Date=@Date, TypeDayId=@TypeDayId  where Id=@Id";
             using (var connection = new SqlConnection(connectionString))
             {
                 int affectedRows = await connection.ExecuteAsync(query, model);

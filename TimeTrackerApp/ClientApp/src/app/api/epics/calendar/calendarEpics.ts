@@ -14,6 +14,7 @@ import { addEvent, editEvent, removeEvent, setEvents, setRangeEvents } from "../
 import { PayloadAction } from "@reduxjs/toolkit";
 import { EventType } from "../../../../type/Events/EventType";
 import moment from "moment";
+import { dispatchOut } from "../../../store";
 
 
 function formatDateToNormalFormat(array: EventType[]) {
@@ -69,7 +70,6 @@ const addEventEpic = (action$: any) => {
                         });
                     }))))
 };
-
 
 const editEventEpic = (action$: any) => {
     return action$

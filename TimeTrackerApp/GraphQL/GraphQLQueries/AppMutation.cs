@@ -220,7 +220,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<CalendarUpdateType, Calendar>("event", "id to delete")
                 .ResolveAsync(async context =>
                 {
-                    return await calendarRepository.UpdateEvent(context.GetArgument<Calendar>("event"));
+                    var model = context.GetArgument<Calendar>("event");
+                    return await calendarRepository.UpdateEvent(model);
                 });
         }
     }
