@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import {FC, useEffect, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faGear,
@@ -14,10 +14,12 @@ import {
     faEnvelopeOpenText,
     faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../app/hooks";
-import { logOut } from "../../store/slice/authentication/authSlice";
-import { dispatchOut } from "../../app/store";
+import { Link, useNavigate } from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import { authLogoutAction } from "../../store/actions/auth/authActions";
+import { parseJwt } from "../../store/parserJWT/parserJWT";
+import { AuthUserResponse } from "../../type/User/AuthUser";
+import { getCookie, refreshTokenKey } from "../../Cookie/Cookie";
 
 
 type MenuState = {
@@ -29,8 +31,9 @@ const initialMenuState: MenuState = {
 }
 
 export const Menu: FC = () => {
-    const dispatch = useAppDispatch();
+
     const [state, setState] = useState(initialMenuState)
+    const dispatch = useAppDispatch()
 
     const toggle = () => {
         setState({ ...state, collapsed: !state.collapsed })
@@ -103,7 +106,9 @@ export const Menu: FC = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className={"flex-container"} onClick={() => dispatchOut(logOut())}>
+                                <a className={"flex-container"} onClick={() => {
+                                    dispatch(authLogoutAction(parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId)))
+                                }}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} className={"icon"} />
                                     <span>Logout</span>
                                 </a>

@@ -1,24 +1,24 @@
 import { Cookies } from "react-cookie";
 
- type TypeCookie={
+type CookieType = {
     value: string,
     key: string,
     daysLife: number,
 }
-export const refreshTokenKey="refreshToken";
 
-export function  setCookie(obj:TypeCookie){
-const cookie = new Cookies();
-cookie.set(obj.key, obj.value, {maxAge: obj.daysLife*3600*24})
+export const refreshTokenKey = "refreshToken";
+
+export const setCookie = (cookie: CookieType): void => {
+    const cookies = new Cookies();
+    cookies.set(cookie.key, cookie.value, {maxAge: cookie.daysLife * 3600 * 24})
 }
 
-export function clearCookie(key:string){
-    const cookie = new Cookies();
-    cookie.remove(key);
+export const clearCookie = (cookieKey: string): void => {
+    const cookies = new Cookies();
+    cookies.remove(cookieKey);
 }
 
-
-export function getCookie(key:string){
-    const cookie = new Cookies();
-    return cookie.get(key);
+export const getCookie = (cookieKey: string): string => {
+    const cookies = new Cookies();
+    return cookies.get(cookieKey);
 }

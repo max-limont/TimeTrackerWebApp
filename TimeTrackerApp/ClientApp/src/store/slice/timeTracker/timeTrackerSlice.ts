@@ -2,7 +2,6 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Record, TimeTrackerItem} from "../../../type/TimeTracker/timeTracker.types";
 import {store} from "../../../app/store";
 
-
 type TimeTrackerState = {
     records: Record[]
 }
@@ -15,16 +14,16 @@ export const timeTrackerSlice = createSlice({
     name: "timeTrackerSlice",
     initialState,
     reducers: {
-        setRecords(state, action: PayloadAction<Record[]>) {
+        setRecords: (state: TimeTrackerState, action: PayloadAction<Record[]>) => {
             return {...state, records: action.payload}
         },
-        addRecord(state, action: PayloadAction<Record>) {
+        addRecord: (state: TimeTrackerState, action: PayloadAction<Record>) => {
             return {...state, records: [...state.records, {...action.payload, id: state.records.length + 1}]}
         },
-        editRecord(state, action: PayloadAction<Record>) {
+        editRecord: (state: TimeTrackerState, action: PayloadAction<Record>) => {
             return {...state, records: state.records.map(record => record.id === action.payload.id ? action.payload : record)}
         },
-        removeRecord(state, action: PayloadAction<number>) {
+        removeRecord: (state: TimeTrackerState, action: PayloadAction<number>) => {
             return {...state, records: state.records.filter(record => record.id !== action.payload)}
         }
     }

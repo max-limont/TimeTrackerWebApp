@@ -51,6 +51,9 @@ body {
 * {
   box-sizing: border-box; }
 
+.position-relative {
+  position: relative; }
+
 .flex-container {
   display: flex;
   box-sizing: border-box; }
@@ -71,12 +74,14 @@ body {
   background-size: 100% 100%;
   align-items: center;
   justify-content: center; }
+  .auth-container .message {
+    top: -50px; }
 
 .authentication-form {
   max-width: 400px;
   width: 100%;
   background: #EEEEEE;
-  border-radius: 5px;
+  border-radius: 2px;
   padding: 15px;
   box-shadow: 0 0 20px -10px #222831; }
   .authentication-form span {
@@ -96,20 +101,6 @@ body {
   background-size: 100% 100%;
   align-items: center;
   justify-content: center; }
-
-.authentication-form {
-  max-width: 400px;
-  width: 100%;
-  background: #EEEEEE;
-  border-radius: 5px;
-  padding: 15px;
-  box-shadow: 0 0 20px -10px #222831; }
-  .authentication-form span {
-    width: 100%;
-    text-align: center;
-    font-size: 26px;
-    font-weight: 500;
-    color: #222831; }
 
 .menu-container {
   position: relative;
@@ -156,7 +147,8 @@ body {
       padding: 15px 15px 15px 0;
       transition: 0.2s all;
       width: 100%;
-      vertical-align: middle; }
+      vertical-align: middle;
+      cursor: pointer; }
       .menu-container .menu a .icon {
         margin-inline: 15px;
         width: 32px;
@@ -646,5 +638,24 @@ table tr:nth-of-type(2n) {
       right: -20px;
       top: calc(50% - 50px);
       position: absolute; }
+
+.message {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 15px 10px 15px;
+  background: #EEEEEE;
+  border-radius: 2px;
+  position: absolute;
+  width: 100%;
+  box-shadow: 0 0 20px -10px #222831;
+  transition: 0.3s ease;
+  font-size: 15px;
+  font-weight: 500; }
+  .message .icon {
+    margin-right: 15px;
+    font-size: 18px; }
+  .message.error {
+    color: #F24C4C; }
 
 /*# sourceMappingURL=style.css.map */

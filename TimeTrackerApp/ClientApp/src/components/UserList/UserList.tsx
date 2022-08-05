@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
-import {fetchUserList} from "../../store/actionCreators/userList";
-import {useActions} from "../../hooks/useActions";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import User from "../../type/Models/User";
 import "./style.scss"
@@ -12,12 +10,8 @@ const UserList = () => {
     const {userList} = useTypedSelector(state => {
         return {userList: state.rootReducer.userList.userList}
     })
-    const [value, setValue] = useState("")
-    const {fetchUserList} = useActions()
 
-    useEffect(() => {
-        fetchUserList()
-    }, [])
+    const [value, setValue] = useState("")
 
     const filteredItems = userList.filter((item) => {
         return item.firstName.toLowerCase().includes(value.toLowerCase()) || item.lastName.toLowerCase().includes(value.toLowerCase())

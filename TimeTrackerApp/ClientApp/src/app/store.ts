@@ -2,7 +2,7 @@ import { configureStore, combineReducers, getDefaultMiddleware} from '@reduxjs/t
 import { authSlice } from '../store/slice/authentication/authSlice';
 import { timeTrackerReducer } from "../store/slice/timeTracker/timeTrackerSlice";
 import { combineEpics, createEpicMiddleware, ofType } from "redux-observable";
-import calendarSlice from '../store/slice/calendar/calendarSlice';
+import { calendarSlice } from '../store/slice/calendar/calendarSlice';
 import { authEpics } from './api/epics/auth/authEpics';
 import { Cookies } from 'react-cookie';
 import { userEpics } from './api/epics/user/userEpics';

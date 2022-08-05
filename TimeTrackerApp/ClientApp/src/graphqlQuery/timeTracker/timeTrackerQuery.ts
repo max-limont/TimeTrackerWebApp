@@ -1,9 +1,12 @@
-export const fetchUserRecords = `
+export const fetchAllUserRecordsQuery = `
     query FetchAllUserRecords($userId: ID!) {
-        record_fetchAllByUser(userId: $userId) {
+        fetchAllUserRecords(userId: $userId) {
             id
-            creatorId,
-            
+            workingTime
+            comment
+            creatorId
+            editorId
+            createdAt
         }
     }
 `

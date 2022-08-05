@@ -1,18 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Token } from "../../../type/Token";
-import { AuthUserResponse, EmptyAuthUser } from "../../../type/User/AuthUser";
-import {  User } from "../../../type/User/User";
-import { clearCookie, refreshTokenKey, setCookie } from "../../../Cookie/Cookie";
+import { AuthUserResponse } from "../../../type/User/AuthUser";
+import { User } from "../../../type/User/User";
 
-
-
-interface authState {
+type AuthStateType = {
     authUser: AuthUserResponse | null,
     user: User | null,
-    accessToken: string | null
-};
+    accessToken: string | null,
+    error?: string | null
+}
 
-const initialState: authState = {
+const initialState: AuthStateType = {
     authUser: null,
     user: null,
     accessToken: null
@@ -22,22 +19,20 @@ export const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        /*на этом этапе ничего не продумано */
-        setUser: (state:authState, action:PayloadAction<User>)=>{
-            return{...state, user: action.payload}
+        setUser: (state: AuthStateType, action: PayloadAction<User>) => {
+            return {...state, user: action.payload}
         },
-        /*вообше наверное для access токена так как рефреш запишем в куки */
-        setToken: (state:authState, action: PayloadAction<Token>) => {
-            console.log(action.payload);
-            setCookie({key: refreshTokenKey,value: action.payload.refreshToken,daysLife: 7});
-            return { ...state, accessToken: action.payload.accessToken };
+        setToken: (state: AuthStateType, action: PayloadAction<string>) => {
+            return {...state, accessToken: action.payload};
         },
-        logOut: (state:authState) => {
-            clearCookie(refreshTokenKey);
-            return{...state, accessToken: null, user:null}
+        logout: (state: AuthStateType) => {
+            return {...state, accessToken: null, user: null}
+        },
+        setError: (state: AuthStateType, action: PayloadAction<string>) => {
+            return {...state, error: action.payload}
         }
     }
 });
 
-export const {logOut, setToken,setUser } = authSlice.actions;
+export const {logout, setToken, setUser, setError} = authSlice.actions;
 

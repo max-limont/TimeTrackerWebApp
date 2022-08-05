@@ -80,6 +80,10 @@ body {
     box-sizing: border-box;
 }
 
+.position-relative {
+    position: relative;
+}
+
 .flex-container {
     display: flex;
     box-sizing: border-box;
@@ -105,13 +109,17 @@ body {
     background-size: 100% 100%;
     align-items: center;
     justify-content: center;
+
+    .message {
+        top: -50px;
+    }
 }
 
 .authentication-form {
     max-width: 400px;
     width: 100%;
     background: $color-light;
-    border-radius: 5px;
+    border-radius: 2px;
     padding: 15px;
     box-shadow: 0 0 20px -10px $color-dark;
 
@@ -125,33 +133,17 @@ body {
 }
 
 .h-100 {
-  height: 100%;
+    height: 100%;
 }
 
 .h-fullscreen {
-  height: 100vh;
+    height: 100vh;
 }
 
 .auth-container {
-  background-size: 100% 100%;
-  align-items: center;
-  justify-content: center;
-}
-
-.authentication-form {
-  max-width: 400px;
-  width: 100%;
-  background: $color-light;
-  border-radius: 5px;
-  padding: 15px;
-  box-shadow: 0 0 20px -10px $color-dark;
-  span {
-    width: 100%;
-    text-align: center;
-    font-size: $font-size-header;
-    font-weight: 500;
-    color: $color-dark;
-  }
+    background-size: 100% 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu-container {
@@ -212,6 +204,7 @@ body {
             transition: 0.2s all;
             width: 100%;
             vertical-align: middle;
+            cursor: pointer;
 
             .icon {
                 margin-inline: 15px;
@@ -905,5 +898,29 @@ table {
             top: calc(50% - 50px);
             position: absolute;
         }
+    }
+}
+
+.message {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 15px 10px 15px;
+    background: $color-light;
+    border-radius: 2px;
+    position: absolute;
+    width: 100%;
+    box-shadow: 0 0 20px -10px $color-dark;
+    transition: 0.3s ease;
+    font-size: 15px;
+    font-weight: 500;
+
+    .icon {
+        margin-right: 15px;
+        font-size: $font-size-default;
+    }
+
+    &.error {
+        color: $color-red;
     }
 }

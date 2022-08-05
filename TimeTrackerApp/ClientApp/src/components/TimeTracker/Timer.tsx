@@ -1,8 +1,6 @@
 import {FC, useEffect, useState} from "react";
 import {useActions} from "../../hooks/useActions";
 import {Record} from "../../type/TimeTracker/timeTracker.types";
-import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {getCookie} from "../../Cookie/Cookie";
 
 type TimerStateType = {
     time: number,
