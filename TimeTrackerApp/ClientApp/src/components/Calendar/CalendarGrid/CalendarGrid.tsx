@@ -1,5 +1,8 @@
+import { faCircleUser, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { TypeDay } from "../../../enums/TypeDay";
 import { fetchAllEventsAction, fetchRangeEventsAction } from "../../../store/actions/calendar/calendarActions";
 import { EventType } from "../../../type/Events/EventType";
 import { EditEventForm } from "../FormsCalendar/EditEventForm";
@@ -22,22 +25,16 @@ export function CalendarGrid() {
 
 
     useEffect(() => {
-        dispatch(fetchAllEventsAction());
         dispatch(fetchRangeEventsAction({
             startDate: daysArray[0].format("yyyy-MM-DD"),
             finishDate: daysArray[totalDays - 1].format("yyyy-MM-DD")
         }));
-    }, [daysArray]);
+    }, [events,daysArray]);
 
-    function setStateDay(value: any,day?:EventType) {
+    function setEventDay(value: any,day?:EventType) {
         let styleDayName: any = null;
-        if (value == 2) {
-            styleDayName = "short-day";
-        }
-        if (value == "weekend" || value == 1) {
-            styleDayName = "weekend";
-        }
-        if (styleDayName != null) {
+        styleDayName = value=="weekend"?"weekend":value == TypeDay.ShortDay?"short-day":value == TypeDay.Weekend?"weekend":null;
+        if (styleDayName != null) 
             return (
                 <>
                 <div onClick={()=>{
@@ -46,12 +43,13 @@ export function CalendarGrid() {
                     setEditFormVisible(true);
                     }
                     }} className={"events "+styleDayName} style={{ flexBasis: "100%" }}>
-                    <div className="event ">{styleDayName}<p>{day?.title}</p></div>
+                    <div className="event ">{styleDayName}<p>{day?.title}</p>
+                    <p>{day!=undefined?<FontAwesomeIcon icon={faCircleUser} className={"icon"} />:""}</p></div>
                 </div>
                 </>
-            )
-        }
+            )    
     }
+    
 
 return (
     <>
@@ -67,13 +65,11 @@ return (
                     const classNameMonth = !(dayItem.format("MM") == currentCalendar.format("MM")) ? "unselected-month" : "";
                     /*проверяем выходной*/
                     let stateDay: any = dayItem.format("dd") == "Sa" || dayItem.format("dd") == "Su" ? "weekend" : "";
-                 
-                    const currentDayState = events.find(s => s.date == formatDayItem);
+                    const currentDayState = eventsRange.find(s => s.date == formatDayItem);
+
                     if (currentDayState!=undefined) {
-                        console.log(currentDayState);
-                        if (stateDay == "") {
+                        console.log(currentDayState);          
                             stateDay = currentDayState.typeDayId;
-                        }
                     }
 
                     return (
@@ -82,7 +78,7 @@ return (
                                 <p className={classNameCurrentDay}>{dayItem.format('DD')}
                                 </p>
                             </div>
-                            {setStateDay(stateDay,currentDayState)}
+                            {setEventDay(stateDay,currentDayState)}
                         </div>
                     );
                 })}

@@ -25,11 +25,11 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
     const onFinish = (e: React.FormEvent) => {
         e.preventDefault();
         if (editEventFm != undefined) {
-            dispatch(updateEventAction({ ...editEventFm, date: editEventFm.date+"T00:00:00+00:00"}));
+            dispatch(updateEventAction({ ...editEventFm, date: editEventFm.date + "T00:00:00+00:00" }));
         }
         setVisible(false);
     };
-   
+
 
     if (editEventFm) {
         return (
@@ -63,8 +63,10 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
                             </div>
                         </div>
                         <button type="submit" className={"button cyan-button"}>Edit</button>
-                        <button className={"button red-button"} onClick={() =>
+                        <button className={"button red-button"} onClick={(e) => {
+                            e.preventDefault();
                             dispatch(removeEventAction(id))
+                        }
                         }>Remove</button>
                         <button type="reset" className={"button silver-button"}>Reset</button>
                     </form>

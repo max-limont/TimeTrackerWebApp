@@ -1,16 +1,10 @@
 ﻿import { combineEpics, Epic, ofType } from "redux-observable";
 import { from, map, mergeMap } from "rxjs";
 import { usebaseQueryWithReauth, defaultRequest } from "../../api";
-import {
-    addEventType,
-    fetchAllEventsType,
-    fetchRangeEventsAction,
-    fetchRangeEventsType,
-    removeEventType,
-    updateEventType
+import {addEventType,fetchAllEventsType,fetchRangeEventsType,removeEventType,updateEventType
 } from "../../../../store/actions/calendar/calendarActions";
 import { addEventQuery, deleteEventQuery, editEventQuery, fetchAllEventsQuery, fetchRangeEventQuery } from "../../../../graphqlQuery/calendar/calendarQueries";
-import { addEvent, editEvent, removeEvent, setEvents, setRangeEvents } from "../../../../store/slice/calendar/calendarSlice";
+import { addEvent, editEvent, removeEvent,  setEvents, setRangeEvents } from "../../../../store/slice/calendar/calendarSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { EventType } from "../../../../type/Events/EventType";
 import moment from "moment";
@@ -95,9 +89,9 @@ const deleteEventEpic = (action$: any) => {
                 .pipe(
                     map((response: any) => {
                         console.log(response);
-                        return removeEvent(response.data.deleteEvent.Id);
-                    }))))
-};
+                        const id:number = response.data.deleteEvent.id;
+                        return removeEvent(id);
+                    }))))};
 
 
 export const calendarEpics = combineEpics(fetchAllEventsEpic, fetchRangeEventEpic, addEventEpic, editEventEpic,deleteEventEpic);

@@ -15,7 +15,7 @@ type CreateFormPropsType = {
 export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
     
     const dispatch = useAppDispatch();
-    const [event, setEvent] = useState({ ...CreateEventObject, date: moment().format("yyyy-MM-DD") });
+    const [event, setEvent] = useState({ ...CreateEventObject,typeDayId:TypeDay.ShortDay, date: moment().format("yyyy-MM-DD") });
     const onFinish = (e: React.FormEvent) => {
         e.preventDefault();
         console.log(event.date)
@@ -48,8 +48,7 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
                         </div>
                         <div className={"form-item w-100"}>
                             <label>Type Day</label>
-                            <select onChange={(e)=>setEvent({ ...event, typeDayId: parseInt(e.target.value)==0?null: parseInt(e.target.value) })}>
-                               <option value={0}>Work Day</option>
+                            <select onChange={(e)=>setEvent({ ...event, typeDayId: parseInt(e.target.value)})}>
                                <option value={TypeDay.ShortDay}>Short Day</option>
                                <option value={TypeDay.Weekend}>Weekend</option>
                             </select>
