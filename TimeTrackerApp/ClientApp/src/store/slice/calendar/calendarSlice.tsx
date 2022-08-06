@@ -84,17 +84,8 @@ const calendarSlice = createSlice({
             events[i] = action.payload;
             return {...state, events: events}
         },
-        editRangeEvent: (state, action:PayloadAction<EventType>)=>{
-            const i = state.eventsRange.findIndex(item => item.id == action.payload.id);
-            var eventsRange = state.eventsRange.slice();
-            eventsRange[i] = action.payload;
-            return {...state, eventsRange: eventsRange}
-        },
         removeEvent: (state, action:PayloadAction<number>) => {
             return { ...state, events: state.events.filter(item => item.id !== action.payload) }
-        },
-        removeEventFromRange: (state, action:PayloadAction<number>) => {
-            return { ...state, events: state.eventsRange.filter(item => item.id !== action.payload) }
         },
         setEvents: (state,action:PayloadAction<EventType[]>)=>{
             console.log(action.payload);
