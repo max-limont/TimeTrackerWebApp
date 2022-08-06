@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { CreateEventObject } from "../../../type/Events/CreateEventType";
 import moment from "moment";
+import Switch from "react-switch";
 import { TypeDay } from "../../../enums/TypeDay";
 import { addEventAction } from "../../../store/actions/calendar/calendarActions";
 
@@ -13,18 +14,24 @@ type CreateFormPropsType = {
 }
 
 export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
-    
+
     const dispatch = useAppDispatch();
-    const [event, setEvent] = useState({ ...CreateEventObject,typeDayId:TypeDay.ShortDay, date: moment().format("yyyy-MM-DD") });
+    const [event, setEvent] = useState({ ...CreateEventObject, typeDayId: TypeDay.ShortDay, date: moment().format("yyyy-MM-DD") });
+    const [rangeEventState, setRangeEventState] = useState(false);
     const onFinish = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(event.date)
-        dispatch(addEventAction({...event,date: event.date+"T00:00:00+00:00"}));
+        console.log(event);
+        const postFixDate = "T00:00:00+00:00";
+        dispatch(addEventAction({
+            ...event,
+            date: event.date + postFixDate,
+            endDate: event.endDate == "" ? null : event.endDate + postFixDate
+        }));
         setVisible(false);
         document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
     }
 
-    const { title, date ,typeDayId } = event;
+    const { title, date, typeDayId, endDate } = event;
     const { visible, setVisible } = props;
 
 
@@ -48,15 +55,24 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
                         </div>
                         <div className={"form-item w-100"}>
                             <label>Type Day</label>
-                            <select onChange={(e)=>setEvent({ ...event, typeDayId: parseInt(e.target.value)})}>
-                               <option value={TypeDay.ShortDay}>Short Day</option>
-                               <option value={TypeDay.Weekend}>Weekend</option>
+                            <select onChange={(e) => setEvent({ ...event, typeDayId: parseInt(e.target.value) })}>
+                                <option value={TypeDay.ShortDay}>Short Day</option>
+                                <option value={TypeDay.Weekend}>Weekend</option>
                             </select>
+                        </div>
+                        <div className={"form-item w-100"}>
+                            <label>Range Date Event</label>
+                            <Switch onChange={() => setRangeEventState(!rangeEventState)} checked={rangeEventState} checkedIcon={false} uncheckedIcon={false} />
                         </div>
                         <div className={"form-item w-100"}>
                             <label>Date</label>
                             <input type="date" value={date} onChange={(e) => setEvent({ ...event, date: e.target.value })} />
                         </div>
+                        {rangeEventState == true ?
+                            <div className={"form-item w-100"}>
+                                <label>End Date</label>
+                                <input type="date" value={endDate == null ? "" : endDate} onChange={(e) => setEvent({ ...event, endDate: e.target.value })} />
+                            </div> : <></>}
                     </div>
                     <button type="submit" className={"button cyan-button"}>Add</button>
                     <button type="reset" className={"button red-button"}>Reset</button>

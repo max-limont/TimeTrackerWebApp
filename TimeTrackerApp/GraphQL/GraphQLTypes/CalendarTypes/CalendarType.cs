@@ -11,6 +11,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes
             Field(x => x.Title, nullable: false);
             Field(x => x.Date, nullable: false);
             Field(x => x.TypeDayId, nullable: true);
+            Field(x => x.EndDate, nullable: true);
         }
     }
 }

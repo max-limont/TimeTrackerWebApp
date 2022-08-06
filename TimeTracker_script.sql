@@ -47,5 +47,6 @@ create table [Calendar]
 [Id] int primary key identity(1,1),
 [Title] nvarchar(50) not null,
 [Date] date not null ,
+[EndDate] date null,
 [TypeDayId] int 
 )

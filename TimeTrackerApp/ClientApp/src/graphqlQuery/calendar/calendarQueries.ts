@@ -2,7 +2,8 @@
 id,
 date,
 typeDayId,
-title
+title,
+endDate
 `
 
 export const fetchAllEventsQuery = `

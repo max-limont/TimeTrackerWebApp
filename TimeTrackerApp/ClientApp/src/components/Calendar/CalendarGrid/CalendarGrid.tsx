@@ -1,5 +1,6 @@
 import { faCircleUser, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { TypeDay } from "../../../enums/TypeDay";
@@ -22,7 +23,9 @@ export function CalendarGrid() {
     const days = ["Monday", "Tuesday", 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const currentDay = " current-day";
 
-
+    useEffect(()=>{
+        dispatch(fetchAllEventsAction());
+    },[]);
 
     useEffect(() => {
         dispatch(fetchRangeEventsAction({
@@ -65,8 +68,8 @@ return (
                     const classNameMonth = !(dayItem.format("MM") == currentCalendar.format("MM")) ? "unselected-month" : "";
                     /*проверяем выходной*/
                     let stateDay: any = dayItem.format("dd") == "Sa" || dayItem.format("dd") == "Su" ? "weekend" : "";
-                    const currentDayState = eventsRange.find(s => s.date == formatDayItem);
-
+                    const currentDayState = eventsRange.find(s => s.date == formatDayItem||(moment(formatDayItem).isSameOrBefore(s.endDate)&&moment(formatDayItem).isAfter(s.date)));
+                  
                     if (currentDayState!=undefined) {
                         console.log(currentDayState);          
                             stateDay = currentDayState.typeDayId;

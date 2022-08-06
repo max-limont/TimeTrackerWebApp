@@ -21,8 +21,8 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<Calendar> AddEvent(Calendar model)
         {
-            string query = @"Insert Into Calendar (Title,TypeDayId,Date)
-           Values (@Title,@TypeDayId, @Date)  SELECT @@IDENTITY";
+            string query = @"Insert Into Calendar (Title,TypeDayId,Date,EndDate)
+           Values (@Title,@TypeDayId, @Date,@EndDate)  SELECT @@IDENTITY";
             using (var connection = new SqlConnection(connectionString))
             {
                 int id = await connection.QueryFirstAsync<int>(query, model);
@@ -60,7 +60,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<List<Calendar>> GetEventRange(DateTime startDate, DateTime finishDate)
         {
-            string query = @"Select * From Calendar WHERE Date BETWEEN @startDate AND @finishDate ";
+            string query = @"Select * From Calendar WHERE Date BETWEEN @startDate AND @finishDate or EndDate Between  @startDate AND @finishDate";
             using (var connection = new SqlConnection(connectionString))
             {
                 return (await connection.QueryAsync<Calendar>(query, new { 
@@ -89,7 +89,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<Calendar> UpdateEvent(Calendar model)
         {
-            string query = @"Update Calendar set Title=@Title, Date=@Date, TypeDayId=@TypeDayId  where Id=@Id";
+            string query = @"Update Calendar set Title=@Title, Date=@Date, TypeDayId=@TypeDayId,EndDate=@EndDate  where Id=@Id";
             using (var connection = new SqlConnection(connectionString))
             {
                 int affectedRows = await connection.ExecuteAsync(query, model);

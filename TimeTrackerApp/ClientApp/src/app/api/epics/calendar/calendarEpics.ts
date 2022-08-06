@@ -1,10 +1,11 @@
 ﻿import { combineEpics, Epic, ofType } from "redux-observable";
 import { from, map, mergeMap } from "rxjs";
 import { usebaseQueryWithReauth, defaultRequest } from "../../api";
-import {addEventType,fetchAllEventsType,fetchRangeEventsType,removeEventType,updateEventType
+import {
+    addEventType, fetchAllEventsType, fetchRangeEventsType, removeEventType, updateEventType
 } from "../../../../store/actions/calendar/calendarActions";
 import { addEventQuery, deleteEventQuery, editEventQuery, fetchAllEventsQuery, fetchRangeEventQuery } from "../../../../graphqlQuery/calendar/calendarQueries";
-import { addEvent, editEvent, removeEvent,  setEvents, setRangeEvents } from "../../../../store/slice/calendar/calendarSlice";
+import { addEvent, editEvent, removeEvent, setEvents, setRangeEvents } from "../../../../store/slice/calendar/calendarSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { EventType } from "../../../../type/Events/EventType";
 import moment from "moment";
@@ -13,7 +14,11 @@ import { dispatchOut } from "../../../store";
 
 function formatDateToNormalFormat(array: EventType[]) {
     return array.map(item => {
-        return { ...item, date: moment(item.date).format("yyyy-MM-DD") }
+        return {
+            ...item,
+            date: moment(item.date).format("yyyy-MM-DD"),
+            endDate: moment(item.endDate).format("yyyy-MM-DD")
+        }
     });
 }
 
@@ -60,7 +65,8 @@ const addEventEpic = (action$: any) => {
 
                         return addEvent({
                             ...response.data.addEvent,
-                            date: moment(response.data.addEvent.date).format("yyyy-MM-DD")
+                            date: moment(response.data.addEvent.date).format("yyyy-MM-DD"),
+                            endDate: moment(response.data.addEvent.endDate).format("yyyy-MM-DD")
                         });
                     }))))
 };
@@ -89,10 +95,11 @@ const deleteEventEpic = (action$: any) => {
                 .pipe(
                     map((response: any) => {
                         console.log(response);
-                        const id:number = response.data.deleteEvent.id;
+                        const id: number = response.data.deleteEvent.id;
                         return removeEvent(id);
-                    }))))};
+                    }))))
+};
 
 
-export const calendarEpics = combineEpics(fetchAllEventsEpic, fetchRangeEventEpic, addEventEpic, editEventEpic,deleteEventEpic);
+export const calendarEpics = combineEpics(fetchAllEventsEpic, fetchRangeEventEpic, addEventEpic, editEventEpic, deleteEventEpic);
 

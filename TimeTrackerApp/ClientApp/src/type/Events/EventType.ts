@@ -2,6 +2,7 @@ export type EventType={
     id:number,
     title:string,
     date: string,
-    typeDayId: number|null
+    typeDayId: number|null,
+    endDate: string|null,
 }
 
