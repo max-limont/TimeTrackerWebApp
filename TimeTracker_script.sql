@@ -19,8 +19,9 @@ create table [Records]
 	[Id] int primary key identity(1, 1),
 	[WorkingTime] int default 28800,
 	[Comment] text,
-	[CreatorId] int foreign key references [Users]([Id]) on delete no action,
+	[EmployeeId] int foreign key references [Users]([Id]) on delete no action,
 	[EditorId] int foreign key references [Users]([Id]) on delete no action,
+	[IsAutomaticallyCreated] bit default 1, 
 	[CreatedAt] datetime default getdate(),
 )
 

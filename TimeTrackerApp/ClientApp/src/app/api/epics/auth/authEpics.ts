@@ -13,10 +13,11 @@ import {
 } from "../../../../graphqlQuery/auth/authQuery";
 import {logout, setToken, setError} from "../../../../store/slice/authentication/authSlice";
 import {parseJwt} from "../../../../store/parserJWT/parserJWT";
-import {clearCookie, getCookie, refreshTokenKey, setCookie} from "../../../../Cookie/Cookie";
+import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../../../../Cookie/Cookie";
 import {AuthUserResponse} from "../../../../type/User/AuthUser";
 import {store} from "../../../store";
 import {parseError} from "../../../parseError";
+import {Action} from "react-epics";
 
 const authLoginEpic = (action$: any) => {
     return action$.pipe(
@@ -27,8 +28,13 @@ const authLoginEpic = (action$: any) => {
         } as AuthLoginInputType)).pipe(
             map(response => {
                 if (response.data.authLogin && response.data.authLogin.accessToken && response.data.authLogin.refreshToken && !response.errors) {
-                    setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, daysLife: 7});
-                    return store.dispatch(setToken(response.data.authLogin.accessToken));
+                    setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
+                    setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
+                    location.replace('/');
+                    return {
+                        payload: response,
+                        type: "Success"
+                    } as Action;
                 } else if (response.errors) {
                     return store.dispatch(setError(parseError(response.errors[0].message)));
                 }
@@ -46,6 +52,7 @@ const authLogoutEpic = (action$: any) => {
         } as AuthLogoutInputType)).pipe(
             map(() => {
                 clearCookie(refreshTokenKey)
+                clearCookie(accessTokenKey)
                 return store.dispatch(logout())
             }),
             map(() => location.replace("/welcome")),

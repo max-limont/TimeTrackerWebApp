@@ -1,55 +1,77 @@
-import {FC} from "react";
-import {useActions} from "../../hooks/useActions";
-import {useAppSelector} from "../../app/hooks";
-import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {recordToTimeTrackerListItem} from "../../store/slice/timeTracker/timeTrackerSlice";
+import {CSSProperties, FC, useEffect} from "react";
+import {useAppDispatch} from "../../app/hooks";
+import {deleteRecord} from "../../store/slice/timeTracker/timeTrackerSlice";
+import {TimeTrackerDefaultPropsType} from "./Home";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCircleInfo} from "@fortawesome/free-solid-svg-icons";
 
-export const TimeTrackerList: FC = () => {
+type TimeTrackerListPropsType = {
+    defaultProps: TimeTrackerDefaultPropsType
+}
 
-    const {editRecord, removeRecord, setRecords} = useActions()
-    let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
-    let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record));
-    timeTrackerListItems = timeTrackerListItems.sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime())
+export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
+
+    const dispatch = useAppDispatch();
+    const { records } = props.defaultProps
+    let componentStyle: CSSProperties = { maxWidth: window.innerWidth - 310 };
 
     const editTimeTrackerListItem = (recordId: number) => {
 
     }
 
     const removeTimeTrackerListItem = (recordId: number) => {
-        removeRecord(recordId);
+        dispatch(deleteRecord(recordId));
     }
 
     return (
-        <div className={"time-tracker-list"}>
-            <table className={"time-tracker-table w-100"}>
+        <div className={"time-tracker-list flex-container flex-column position-relative"} style={componentStyle}>
+            <table className={"time-tracker-table"}>
                 <thead>
-                    <tr>
-                        <th className={"date"}>Date</th>
-                        <th className={"begin"}>Begin</th>
-                        <th className={"end"}>End</th>
-                        <th className={"duration"}>Duration</th>
-                        <th className={"comment"}>Comment</th>
-                        <th className={"last-edited-by"}>Last edited by</th>
-                        <th className={"actions"}>Actions</th>
-                    </tr>
+                <tr>
+                    <th className={"date"}>Date</th>
+                    <th className={"begin"}>Begin</th>
+                    <th className={"end"}>End</th>
+                    <th className={"duration"}>Duration</th>
+                    <th className={"creation-type"}>Creation type</th>
+                    <th className={"comment"}>Comment</th>
+                    <th className={"last-edited-by"}>Last edited by</th>
+                    <th className={"actions"}>Actions</th>
+                </tr>
                 </thead>
                 <tbody>
-                { timeTrackerListItems.map(item => (
-                        <tr key={item.id}>
-                            <td>{item.date.toLocaleDateString()}</td>
-                            <td>{new Date(item.begin).toLocaleTimeString()}</td>
-                            <td>{new Date(item.end).toLocaleTimeString()}</td>
-                            <td>{Math.floor(item.duration / 1000 / 3600) < 10 ? `0${Math.floor(item.duration / 1000 / 3600)}` : Math.floor(item.duration / 1000 / 3600)}
-                                :{Math.floor(item.duration / 1000 / 60) % 60 < 10 ? `0${Math.floor(item.duration / 1000 / 60) % 60}` : Math.floor(item.duration / 1000 / 60) % 60}
-                                :{Math.floor(item.duration / 1000) % 3600 < 10 ? `0${Math.floor(item.duration / 1000) % 3600}` : Math.floor(item.duration / 1000) % 3600}</td>
-                            <td>{item.comment ?? '-'}</td>
-                            <td>{item.editor ? `${item.editor?.firstName} ${item.editor?.lastName}` : 'You'}</td>
-                            <td>
-                                <a className={"button yellow-button"} onClick={() => editTimeTrackerListItem(item.id ?? -1)}>Edit</a>
-                                <a className={"button red-button"} onClick={() => removeTimeTrackerListItem(item.id ?? -1)}>Delete</a>
-                            </td>
-                        </tr>
-                    ))
+                { records.length === 0 &&
+                    <tr>
+                        <td className={"bottom-table-row"} colSpan={8}>
+                            <p>
+                                <FontAwesomeIcon icon={faCircleInfo} className={"icon"} />
+                                The list of your records is empty!
+                            </p>
+                        </td>
+                    </tr>
+                }
+                { records.map(record => (
+                    <tr key={record.id}>
+                        <td>{record.date.toLocaleDateString()}</td>
+                        <td>{new Date(record.begin).toLocaleTimeString()}</td>
+                        <td>{new Date(record.end).toLocaleTimeString()}</td>
+                        <td>{Math.floor(record.duration / 1000 / 3600) < 10 ? `0${Math.floor(record.duration / 1000 / 3600)}` : Math.floor(record.duration / 1000 / 3600)}
+                            :{Math.floor(record.duration / 1000 / 60) % 60 < 10 ? `0${Math.floor(record.duration / 1000 / 60) % 60}` : Math.floor(record.duration / 1000 / 60) % 60}
+                            :{Math.floor(record.duration / 1000) % 3600 < 10 ? `0${Math.floor(record.duration / 1000) % 3600}` : Math.floor(record.duration / 1000) % 3600}</td>
+                        <td>
+                            {record.isAutomaticallyCreated ?
+                                <span className={"automatically"}>Automatically</span>
+                                :
+                                <span className={"manually"}>Manually</span>
+                            }
+                        </td>
+                        <td>{record.comment?.length && record.comment.length > 0 ? record.comment : '-'}</td>
+                        <td>{record.editor ? `${record.editor?.firstName} ${record.editor?.lastName}` : 'You'}</td>
+                        <td>
+                            <a className={"button yellow-button"} onClick={() => editTimeTrackerListItem(record.id ?? -1)}>Edit</a>
+                            <a className={"button red-button"} onClick={() => removeTimeTrackerListItem(record.id ?? -1)}>Delete</a>
+                        </td>
+                    </tr>
+                ))
                 }
                 </tbody>
             </table>

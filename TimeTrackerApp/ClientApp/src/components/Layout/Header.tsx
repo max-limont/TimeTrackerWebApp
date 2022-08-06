@@ -2,7 +2,7 @@ import { FC } from "react";
 
 export const Header: FC = () => {
     return (
-        <header className={"personal-account-header header flex-container w-100"}>
+        <header className={"personal-account-header header flex-container"}>
             <div className={"breadcrumbs flex-container"}>
                 <nav>
                     <a href="#">Breadcrumbs</a>

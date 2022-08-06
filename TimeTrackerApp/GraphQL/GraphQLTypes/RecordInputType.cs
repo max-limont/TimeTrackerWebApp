@@ -10,8 +10,9 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
         {
             Field<IdGraphType, int?>().Name("Id").Resolve(context => context.Source.Id);
             Field<NonNullGraphType<IntGraphType>, int>().Name("WorkingTime").Resolve(context => context.Source.WorkingTime);
-            Field<NonNullGraphType<IdGraphType>, int>().Name("CreatorId").Resolve(context => context.Source.CreatorId);
+            Field<NonNullGraphType<IdGraphType>, int>().Name("EmployeeId").Resolve(context => context.Source.EmployeeId);
             Field<IdGraphType, int?>().Name("EditorId").Resolve(context => context.Source.EditorId);
+            Field<BooleanGraphType, bool>().Name("IsAutomaticallyCreated").Resolve(context => context.Source.IsAutomaticallyCreated);
             Field<NonNullGraphType<DateTimeGraphType>, DateTime>().Name("CreatedAt").Resolve(context => context.Source.CreatedAt);
             Field<StringGraphType, string>().Name("Comment").Resolve(context => context.Source.Comment);
         }

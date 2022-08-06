@@ -1,17 +1,18 @@
 import {FC} from "react";
 import {Timer} from "./Timer";
-import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {recordToTimeTrackerListItem} from "../../store/slice/timeTracker/timeTrackerSlice";
+import {TimeTrackerDefaultPropsType} from "./Home";
 
-export const TimeTracker: FC = () => {
+type TimeTrackerPropsType = {
+    defaultProps: TimeTrackerDefaultPropsType
+}
 
-    let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
-    let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record));
-    let lastRecord = timeTrackerListItems.sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime()).filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined;
+export const TimeTracker: FC<TimeTrackerPropsType> = (props) => {
+
+    const {records, lastRecord} = props.defaultProps;
 
     return (
-        <div className={"time-tracker-statistic"}>
-            <Timer />
+        <div className={"time-tracker-statistic w-100"}>
+            <Timer defaultProps={{records: records, lastRecord: lastRecord} as TimeTrackerDefaultPropsType}/>
             <div className={"statistic-panel w-100"}>
                 <h3>Today's activity:</h3>
                 <div className={"statistic-panel-list"}>

@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Record, TimeTrackerItem} from "../../../type/TimeTracker/timeTracker.types";
 import {store} from "../../../app/store";
 
@@ -18,7 +18,7 @@ export const timeTrackerSlice = createSlice({
             return {...state, records: action.payload}
         },
         addRecord: (state: TimeTrackerState, action: PayloadAction<Record>) => {
-            return {...state, records: [...state.records, {...action.payload, id: state.records.length + 1}]}
+            return {...state, records: [...state.records, action.payload]}
         },
         editRecord: (state: TimeTrackerState, action: PayloadAction<Record>) => {
             return {...state, records: state.records.map(record => record.id === action.payload.id ? action.payload : record)}
@@ -28,6 +28,14 @@ export const timeTrackerSlice = createSlice({
         }
     }
 })
+
+
+
+export const fetchAllRecords = createAction("FetchAllRecords")
+export const fetchAllUserRecords = createAction<number>("FetchAllUserRecords")
+export const createRecord = createAction<Record>("CreateRecord")
+export const deleteRecord = createAction<number>("DeleteRecord")
+export const updateRecord = createAction<Record>("UpdateRecord")
 
 export const {setRecords, addRecord, editRecord, removeRecord} = timeTrackerSlice.actions;
 export const timeTrackerReducer = timeTrackerSlice.reducer;
@@ -40,6 +48,7 @@ export const recordToTimeTrackerListItem = (record: Record): TimeTrackerItem => 
         duration: record.workingTime,
         end: record.createdAt.getTime() + record.workingTime,
         comment: record.comment,
+        isAutomaticallyCreated: record.isAutomaticallyCreated,
         editor: store.getState().rootReducer.userList.userList.find(user => user.id === record.editorId)
     }
 }

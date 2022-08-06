@@ -1,4 +1,4 @@
-import { getCookie, refreshTokenKey } from "../../Cookie/Cookie";
+import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../../Cookie/Cookie";
 import { parseJwt } from "../../store/parserJWT/parserJWT";
 import { setToken } from "../../store/slice/authentication/authSlice";
 import { AuthRefreshInputType, authRefreshQuery } from "../../graphqlQuery/auth/authQuery";
@@ -9,7 +9,7 @@ import { authLogoutAction } from "../../store/actions/auth/authActions";
 const apiUrl = "https://localhost:5001/graphql";
 
 const getAuthorizationHeader = (): string => {
-    const accessToken = state.rootReducer.auth.accessToken;
+    const accessToken = getCookie(accessTokenKey);
     return accessToken ? `Bearer ${accessToken}` : "";
 }
 
@@ -42,7 +42,8 @@ export const graphqlRequest = async (query: string, variables?: any) => {
         if (refreshResponse.ok) {
             const refreshResponseBody = await refreshResponse.json();
             if (refreshResponseBody.data) {
-                store.dispatch(setToken(refreshResponseBody))
+                setCookie({key: refreshTokenKey, value: refreshResponseBody.data.authRefresh.refreshToken, lifetime: 30 * 24 * 60 * 60})
+                setCookie({key: accessTokenKey, value: refreshResponseBody.data.authRefresh.accessToken, lifetime: 2 * 60})
                 response = await request(query, variables)
                 return response.ok ? await response.json() : response.status;
             }

@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {authLoginAction} from '../../store/actions/auth/authActions';
-import {getCookie, refreshTokenKey} from '../../Cookie/Cookie';
+import {accessTokenKey, getCookie, refreshTokenKey} from '../../Cookie/Cookie';
 import {AuthorizationUser, EmptyAuthUser} from '../../type/User/AuthUser';
 import {setError} from "../../store/slice/authentication/authSlice";
 import {Message, MessageTypes} from "../Layout/Message";
@@ -21,18 +21,10 @@ export const AuthenticationForm: FC = () => {
 
     const dispatch = useAppDispatch();
     const [state, setState] = useState(initialState);
-    const accessToken = useAppSelector(state => state.rootReducer.auth.accessToken);
     const authErrorMessage = useAppSelector(state => state.rootReducer.auth.error);
     const refreshToken = getCookie(refreshTokenKey);
+    const accessToken = getCookie(accessTokenKey);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (accessToken && refreshToken) {
-            navigate("/");
-        } else {
-            navigate("/welcome");
-        }
-    },[accessToken, refreshToken]);
 
     useEffect(() => {
         if (authErrorMessage) {

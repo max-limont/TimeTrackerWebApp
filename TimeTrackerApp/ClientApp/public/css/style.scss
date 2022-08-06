@@ -32,6 +32,7 @@ footer, header, hgroup, menu, nav, section {
 
 body {
     line-height: 1;
+    overflow-x: hidden;
 }
 
 ol, ul {
@@ -72,6 +73,10 @@ body {
     background: $color-light;
 }
 
+.container {
+    width: 100%;
+}
+
 @mixin link-mixin {
     text-decoration: none;
 }
@@ -86,6 +91,14 @@ body {
 
 .flex-container {
     display: flex;
+    box-sizing: border-box;
+}
+
+.flex-stretched {
+    flex: 1;
+}
+
+.main-container {
     box-sizing: border-box;
 }
 
@@ -149,8 +162,12 @@ body {
 .menu-container {
     position: relative;
     z-index: 10;
-    max-width: 280px;
     transition: 0.3s all;
+
+    &:not(.collapsed) {
+        max-width: 280px;
+        min-width: 220px;
+    }
 
     .menu {
         transition: 0.3s all;
@@ -369,6 +386,11 @@ section {
         vertical-align: middle;
     }
 
+    &.disabled {
+        opacity: 0.6;
+        cursor: default;
+    }
+
     display: inline-flex;
     text-align: center;
     justify-content: center;
@@ -387,7 +409,7 @@ section {
     background: $color-cyan;
     color: $color-light;
 
-    &:hover {
+    &:not(.disabled):hover {
         background: transparent;
         color: $color-cyan;
         border: 1px solid $color-cyan;
@@ -398,7 +420,7 @@ section {
         color: $color-cyan;
         border: 1px solid $color-cyan;
 
-        &:hover {
+        &:not(.disabled):hover {
             background: $color-cyan;
             color: $color-light;
         }
@@ -409,7 +431,7 @@ section {
     background: $color-dark;
     color: $color-light;
 
-    &:hover {
+    &:not(.disabled):hover {
         background: transparent;
         color: $color-dark;
         border: 1px solid $color-dark;
@@ -420,7 +442,7 @@ section {
         color: $color-dark;
         border: 1px solid $color-dark;
 
-        &:hover {
+        &:not(.disabled):hover {
             background: $color-dark;
             color: $color-light;
         }
@@ -431,7 +453,7 @@ section {
     background: $color-red;
     color: $color-light;
 
-    &:hover {
+    &:not(.disabled):hover {
         background: transparent;
         color: $color-red;
         border: 1px solid $color-red;
@@ -442,7 +464,7 @@ section {
         color: $color-red;
         border: 1px solid $color-red;
 
-        &:hover {
+        &:not(.disabled):hover {
             background: $color-red;
             color: $color-light;
         }
@@ -453,7 +475,7 @@ section {
     background: $color-yellow;
     color: $color-dark;
 
-    &:hover {
+    &:not(.disabled):hover {
         background: transparent;
         color: $color-yellow;
         border: 1px solid $color-yellow;
@@ -464,7 +486,7 @@ section {
         color: $color-yellow;
         border: 1px solid $color-yellow;
 
-        &:hover {
+        &:not(.disabled):hover {
             background: $color-yellow;
             color: $color-dark;
         }
@@ -475,7 +497,7 @@ section {
     background: $color-silver;
     color: $color-dark;
 
-    &:hover {
+    &:not(.disabled):hover {
         background: transparent;
         color: $color-silver;
         border: 1px solid $color-silver;
@@ -486,7 +508,7 @@ section {
         color: $color-silver;
         border: 1px solid $color-silver;
 
-        &:hover {
+        &:not(.disabled):hover {
             background: $color-silver;
             color: $color-dark;
         }
@@ -739,6 +761,7 @@ section {
     margin: 15px;
     border-radius: 2px;
     box-shadow: 0 0 5px -4px $color-light-dark;
+    overflow-x: auto;
 }
 
 table {
@@ -761,15 +784,32 @@ table {
     tr:nth-of-type(2n) {
         background: #F6F6F6;
     }
+
+    .bottom-table-row {
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        color: #A6A6A6;
+        font-size: 16px;
+        font-weight: 400;
+        user-select: none;
+
+        .icon {
+            margin-inline: 10px;
+        }
+    }
 }
 
 .time-tracker-table {
-    .date {
-        width: 200px;
+
+    min-width: 1500px;
+
+    .date, .creation-type {
+        width: 150px;
     }
 
     .begin, .end, .duration {
-        width: 150px;
+        width: 120px;
     }
 
     .actions {

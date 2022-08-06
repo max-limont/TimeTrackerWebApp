@@ -28,7 +28,8 @@ footer, header, hgroup, menu, nav, section {
   display: block; }
 
 body {
-  line-height: 1; }
+  line-height: 1;
+  overflow-x: hidden; }
 
 ol, ul {
   list-style: none; }
@@ -48,6 +49,9 @@ body {
   font-family: 'Nunito', serif;
   background: #EEEEEE; }
 
+.container {
+  width: 100%; }
+
 * {
   box-sizing: border-box; }
 
@@ -56,6 +60,12 @@ body {
 
 .flex-container {
   display: flex;
+  box-sizing: border-box; }
+
+.flex-stretched {
+  flex: 1; }
+
+.main-container {
   box-sizing: border-box; }
 
 .flex-column {
@@ -105,8 +115,10 @@ body {
 .menu-container {
   position: relative;
   z-index: 10;
-  max-width: 280px;
   transition: 0.3s all; }
+  .menu-container:not(.collapsed) {
+    max-width: 280px;
+    min-width: 220px; }
   .menu-container .menu {
     transition: 0.3s all;
     top: 0;
@@ -267,11 +279,14 @@ section header {
   outline: none; }
   .button .icon {
     vertical-align: middle; }
+  .button.disabled {
+    opacity: 0.6;
+    cursor: default; }
 
 .cyan-button {
   background: #00ADB5;
   color: #EEEEEE; }
-  .cyan-button:hover {
+  .cyan-button:not(.disabled):hover {
     background: transparent;
     color: #00ADB5;
     border: 1px solid #00ADB5; }
@@ -279,14 +294,14 @@ section header {
     background: transparent;
     color: #00ADB5;
     border: 1px solid #00ADB5; }
-    .cyan-button.inverse:hover {
+    .cyan-button.inverse:not(.disabled):hover {
       background: #00ADB5;
       color: #EEEEEE; }
 
 .dark-button {
   background: #222831;
   color: #EEEEEE; }
-  .dark-button:hover {
+  .dark-button:not(.disabled):hover {
     background: transparent;
     color: #222831;
     border: 1px solid #222831; }
@@ -294,14 +309,14 @@ section header {
     background: transparent;
     color: #222831;
     border: 1px solid #222831; }
-    .dark-button.inverse:hover {
+    .dark-button.inverse:not(.disabled):hover {
       background: #222831;
       color: #EEEEEE; }
 
 .red-button {
   background: #F24C4C;
   color: #EEEEEE; }
-  .red-button:hover {
+  .red-button:not(.disabled):hover {
     background: transparent;
     color: #F24C4C;
     border: 1px solid #F24C4C; }
@@ -309,14 +324,14 @@ section header {
     background: transparent;
     color: #F24C4C;
     border: 1px solid #F24C4C; }
-    .red-button.inverse:hover {
+    .red-button.inverse:not(.disabled):hover {
       background: #F24C4C;
       color: #EEEEEE; }
 
 .yellow-button {
   background: #FFC107;
   color: #222831; }
-  .yellow-button:hover {
+  .yellow-button:not(.disabled):hover {
     background: transparent;
     color: #FFC107;
     border: 1px solid #FFC107; }
@@ -324,14 +339,14 @@ section header {
     background: transparent;
     color: #FFC107;
     border: 1px solid #FFC107; }
-    .yellow-button.inverse:hover {
+    .yellow-button.inverse:not(.disabled):hover {
       background: #FFC107;
       color: #222831; }
 
 .silver-button {
   background: #D6D6D6;
   color: #222831; }
-  .silver-button:hover {
+  .silver-button:not(.disabled):hover {
     background: transparent;
     color: #D6D6D6;
     border: 1px solid #D6D6D6; }
@@ -339,7 +354,7 @@ section header {
     background: transparent;
     color: #D6D6D6;
     border: 1px solid #D6D6D6; }
-    .silver-button.inverse:hover {
+    .silver-button.inverse:not(.disabled):hover {
       background: #D6D6D6;
       color: #222831; }
 
@@ -525,7 +540,8 @@ section header {
   background: #FFFFFF;
   margin: 15px;
   border-radius: 2px;
-  box-shadow: 0 0 5px -4px #393E46; }
+  box-shadow: 0 0 5px -4px #393E46;
+  overflow-x: auto; }
 
 table th {
   font-size: 18px;
@@ -539,17 +555,29 @@ table thead > tr:last-child {
   border-bottom: 1px solid #E6E6E6; }
 table tr:nth-of-type(2n) {
   background: #F6F6F6; }
+table .bottom-table-row {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  color: #A6A6A6;
+  font-size: 16px;
+  font-weight: 400;
+  user-select: none; }
+  table .bottom-table-row .icon {
+    margin-inline: 10px; }
 
-.time-tracker-table .date {
-  width: 200px; }
-.time-tracker-table .begin, .time-tracker-table .end, .time-tracker-table .duration {
-  width: 150px; }
-.time-tracker-table .actions {
-  width: 190px; }
-.time-tracker-table .last-edited-by {
-  width: 200px; }
-.time-tracker-table .button:not(:last-child) {
-  margin-right: 5px; }
+.time-tracker-table {
+  min-width: 1500px; }
+  .time-tracker-table .date, .time-tracker-table .creation-type {
+    width: 150px; }
+  .time-tracker-table .begin, .time-tracker-table .end, .time-tracker-table .duration {
+    width: 120px; }
+  .time-tracker-table .actions {
+    width: 190px; }
+  .time-tracker-table .last-edited-by {
+    width: 200px; }
+  .time-tracker-table .button:not(:last-child) {
+    margin-right: 5px; }
 
 .time-tracker-statistic {
   display: grid;

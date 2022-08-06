@@ -3,14 +3,15 @@ import { Cookies } from "react-cookie";
 type CookieType = {
     value: string,
     key: string,
-    daysLife: number,
+    lifetime: number,
 }
 
 export const refreshTokenKey = "refreshToken";
+export const accessTokenKey = "accessToken";
 
 export const setCookie = (cookie: CookieType): void => {
     const cookies = new Cookies();
-    cookies.set(cookie.key, cookie.value, {maxAge: cookie.daysLife * 3600 * 24})
+    cookies.set(cookie.key, cookie.value, {maxAge: cookie.lifetime})
 }
 
 export const clearCookie = (cookieKey: string): void => {

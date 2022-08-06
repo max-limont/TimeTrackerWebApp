@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6054f6d0-e998-4eee-a93d-95cb49aebc51" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/app/api/epics/timeTracker/timeTrackerEpics.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/app/api/epics/timeTracker/timeTrackerEpics.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/app/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/app/store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/login/fonts/ubuntu/Ubuntu-Bold.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/login/fonts/ubuntu/Ubuntu-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/TimeTracker/TimeTrackerList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/TimeTracker/TimeTrackerList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/graphqlQuery/timeTracker/timeTrackerQuery.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/graphqlQuery/timeTracker/timeTrackerQuery.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/store/slice/timeTracker/timeTrackerSlice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/store/slice/timeTracker/timeTrackerSlice.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,6 +62,7 @@
       <workItem from="1658517899960" duration="19590000" />
       <workItem from="1659596494256" duration="173000" />
       <workItem from="1659596673687" duration="56000" />
+      <workItem from="1659701129299" duration="2000" />
     </task>
     <servers />
   </component>

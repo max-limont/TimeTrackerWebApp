@@ -1,10 +1,19 @@
 import {FC, useEffect, useState} from "react";
-import {useActions} from "../../hooks/useActions";
 import {Record} from "../../type/TimeTracker/timeTracker.types";
+import {parseJwt} from "../../store/parserJWT/parserJWT";
+import {AuthUserResponse} from "../../type/User/AuthUser";
+import {getCookie, refreshTokenKey} from "../../Cookie/Cookie";
+import {createRecord} from "../../store/slice/timeTracker/timeTrackerSlice";
+import {useAppDispatch} from "../../app/hooks";
+import {TimeTrackerDefaultPropsType} from "./Home";
 
 type TimerStateType = {
     time: number,
     enabled: boolean
+}
+
+type TimerPropsType = {
+    defaultProps: TimeTrackerDefaultPropsType
 }
 
 const initialState: TimerStateType = {
@@ -12,10 +21,11 @@ const initialState: TimerStateType = {
     enabled: false
 }
 
-export const Timer: FC = () => {
+export const Timer: FC<TimerPropsType> = (props) => {
 
     const [state, setState] = useState(initialState);
-    const {addRecord} = useActions()
+    const {lastRecord} = props.defaultProps
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         const timerStartTime = window.localStorage.getItem("timerStartTime");
@@ -46,16 +56,18 @@ export const Timer: FC = () => {
 
     const timerStop = () => {
         const record: Record = {
+            employeeId: parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId),
+            isAutomaticallyCreated: false,
             createdAt: new Date(parseInt(window.localStorage.getItem("timerStartTime") ?? '')),
             workingTime: state.time,
         }
-        addRecord(record)
+        dispatch(createRecord(record))
         setState(initialState)
         window.localStorage.removeItem("timerStartTime")
     }
 
     return (
-        <div className={"timer-panel"}>
+        <div className={"timer-panel w-100"}>
             <h3>Timer: </h3>
             <div className={"timer"}>
                 <div className={"hours"}>
@@ -73,7 +85,10 @@ export const Timer: FC = () => {
             </div>
             <div className={"flex-container justify-content-center"}>
                 { !state.enabled ?
-                    <a className={"button cyan-button"} onClick={() => timerStart()}>Start</a>
+                    !lastRecord ?
+                        <a className={"button cyan-button"} onClick={() => timerStart()}>Start</a>
+                        :
+                        <a className={"button silver-button disabled"}>Start</a>
                     :
                     <a className={"button red-button"} onClick={() => timerStop()}>Stop</a>
                 }
