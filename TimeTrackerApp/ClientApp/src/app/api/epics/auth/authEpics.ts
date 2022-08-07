@@ -1,5 +1,5 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
-import {from, map, mergeMap, Observable, of} from "rxjs";
+import {from, map, mergeMap, Observable} from "rxjs";
 import { graphqlRequest } from "../../api";
 import {
     authLoginAction,
@@ -12,13 +12,15 @@ import {
     AuthLogoutInputType,
     authLogoutQuery,
 } from "../../../../graphqlQuery/auth/authQuery";
-import {logout, setToken, setError} from "../../../../store/slice/authentication/authSlice";
-import {parseJwt} from "../../../../store/parserJWT/parserJWT";
+import {authorizeUserById, logout, setError, setUser} from "../../../../store/slice/authentication/authSlice";
 import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../../../../Cookie/Cookie";
-import {AuthUserResponse} from "../../../../type/User/AuthUser";
 import {store} from "../../../store";
 import {parseError} from "../../../parseError";
 import {Action} from "react-epics";
+import {parseJwt} from "../../../../store/parserJWT/parserJWT";
+import {AuthUserResponse} from "../../../../type/User/AuthUser";
+import {getUserByIdQuery, GetUserByIdQueryInputType} from "../../../../graphqlQuery/user/userQuery";
+import {User} from "../../../../type/User/User";
 
 const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginAction>>): any => {
     return action$.pipe(
@@ -31,6 +33,8 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
                 if (response.data.authLogin && response.data.authLogin.accessToken && response.data.authLogin.refreshToken && !response.errors) {
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
+                    const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
+                    store.dispatch(authorizeUserById(userId))
                     location.replace('/');
                     return { payload: response, type: "AuthLoginSuccess" } as Action;
                 } else if (response.errors) {
@@ -53,12 +57,34 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
             map(() => {
                 clearCookie(refreshTokenKey)
                 clearCookie(accessTokenKey)
+                window.localStorage.removeItem("AuthorizedUser")
                 store.dispatch(logout())
                 return { payload: "Success", type: "AuthLogoutSuccess" } as Action
             }),
-            map(() => location.replace("/welcome")),
+            map(() => {
+                location.replace("/login")
+                return { payload: "Success", type: "AuthLogoutSuccess" } as Action
+            }),
         ))
     )
 }
 
-export const authEpics = combineEpics(authLogoutEpic, authLoginEpic);
+const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUserById>>): any => {
+    return action$.pipe(
+        ofType("AuthorizeUserById"),
+        mergeMap(action => from(graphqlRequest(getUserByIdQuery, {
+            id: action.payload
+        } as GetUserByIdQueryInputType)).pipe(
+            map(response => {
+                if (response.data && response.data.getUserById) {
+                    const user = response.data.getUserById
+                    window.localStorage.setItem("AuthorizedUser", JSON.stringify(user))
+                    return { payload: "Success", type: "AuthSetUserSuccess" } as Action
+                }
+                return { payload: "Error", type: "AuthSetUserError"} as Action
+            })
+        ))
+    )
+}
+
+export const authEpics = combineEpics(authLogoutEpic, authLoginEpic, authSetUserEpic);

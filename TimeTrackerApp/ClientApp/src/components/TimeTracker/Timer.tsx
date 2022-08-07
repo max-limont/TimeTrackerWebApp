@@ -1,11 +1,9 @@
 import {FC, useEffect, useState} from "react";
 import {Record} from "../../type/TimeTracker/timeTracker.types";
-import {parseJwt} from "../../store/parserJWT/parserJWT";
-import {AuthUserResponse} from "../../type/User/AuthUser";
-import {getCookie, refreshTokenKey} from "../../Cookie/Cookie";
 import {createRecord} from "../../store/slice/timeTracker/timeTrackerSlice";
 import {useAppDispatch} from "../../app/hooks";
 import {TimeTrackerDefaultPropsType} from "./Home";
+import {getAuthorizedUser} from "../../store/slice/authentication/authSlice";
 
 type TimerStateType = {
     time: number,
@@ -56,7 +54,7 @@ export const Timer: FC<TimerPropsType> = (props) => {
 
     const timerStop = () => {
         const record: Record = {
-            employeeId: parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId),
+            employeeId: getAuthorizedUser()!.id,
             isAutomaticallyCreated: false,
             createdAt: new Date(parseInt(window.localStorage.getItem("timerStartTime") ?? '')),
             workingTime: state.time,

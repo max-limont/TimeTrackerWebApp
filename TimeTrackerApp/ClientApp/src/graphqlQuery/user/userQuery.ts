@@ -14,16 +14,23 @@ export const getUserByEmailQuery = `
 `
 
 export const getUserByIdQuery = `
-    query GetUserById($id: ID) {
+    query GetUserById($id: ID!) {
         getUserById(id: $id) {
             id
             email
-            password
             firstName
             lastName
             weeklyWorkingTime
             remainingVacationDays
-            privilegesValue 
-       }
+            privilegesValue
+        }
     }
 `
+
+export type GetUserByIdQueryInputType = {
+    id: number
+}
+
+export type GetUserByEmailQueryInputType = {
+    email: string
+}

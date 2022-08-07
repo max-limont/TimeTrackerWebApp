@@ -1,6 +1,5 @@
 import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../../Cookie/Cookie";
 import { parseJwt } from "../../store/parserJWT/parserJWT";
-import { setToken } from "../../store/slice/authentication/authSlice";
 import { AuthRefreshInputType, authRefreshQuery } from "../../graphqlQuery/auth/authQuery";
 import { AuthUserResponse } from "../../type/User/AuthUser";
 import { state, store } from "../store";

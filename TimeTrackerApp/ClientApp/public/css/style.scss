@@ -869,6 +869,10 @@ table {
         margin-right: 5px;
     }
 
+    td {
+        vertical-align: top;
+    }
+
     .comment-cell {
         overflow-y: auto;
         min-height: 30px;

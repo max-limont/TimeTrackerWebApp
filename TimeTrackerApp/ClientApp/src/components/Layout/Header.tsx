@@ -1,4 +1,5 @@
 import { FC } from "react";
+import {getAuthorizedUser} from "../../store/slice/authentication/authSlice";
 
 export const Header: FC = () => {
     return (
@@ -11,7 +12,7 @@ export const Header: FC = () => {
             </div>
             <div className={"user-info flex-container"}>
                 <img src={`${process.env.PUBLIC_URL}/images/ava.jpg`} alt={"user-profile-image"} />
-                <p>Petro Mostavchuk</p>
+                <p>{getAuthorizedUser()?.firstName} {getAuthorizedUser()?.lastName}</p>
             </div>
         </header>
     );

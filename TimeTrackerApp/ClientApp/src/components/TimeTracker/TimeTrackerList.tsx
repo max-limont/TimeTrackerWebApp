@@ -1,10 +1,11 @@
-import {CSSProperties, FC, useEffect, useState} from "react";
+import {CSSProperties, FC, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {deleteRecord} from "../../store/slice/timeTracker/timeTrackerSlice";
 import {TimeTrackerDefaultPropsType} from "./Home";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleInfo, faPenClip, faGears} from "@fortawesome/free-solid-svg-icons";
 import {EditRecordForm, EditRecordFormStateType} from "../../store/slice/timeTracker/EditRecordForm";
+import {getAuthorizedUser} from "../../store/slice/authentication/authSlice";
 
 type TimeTrackerListPropsType = {
     defaultProps: TimeTrackerDefaultPropsType
@@ -95,7 +96,7 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
                                     </span>
                                 }
                             </td>
-                            <td style={{verticalAlign: "top"}}>
+                            <td>
                                 <div className={"comment-cell"}>
                                     {record.comment?.length && record.comment.length > 0 ? record.comment : '-'}
                                 </div>

@@ -610,6 +610,8 @@ table .bottom-table-row {
     width: 200px; }
   .time-tracker-table .button:not(:last-child) {
     margin-right: 5px; }
+  .time-tracker-table td {
+    vertical-align: top; }
   .time-tracker-table .comment-cell {
     overflow-y: auto;
     min-height: 30px;

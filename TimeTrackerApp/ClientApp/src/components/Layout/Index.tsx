@@ -3,17 +3,18 @@ import {Menu} from "./Menu";
 import {FC, useEffect} from "react";
 import {Content} from "./Content";
 import { useNavigate } from "react-router-dom";
-import { getCookie, refreshTokenKey } from "../../Cookie/Cookie";
+import {accessTokenKey, getCookie, refreshTokenKey} from "../../Cookie/Cookie";
 
 export const Index: FC = () => {
     const navigate = useNavigate();
     const refreshToken = getCookie(refreshTokenKey);
+    const accessToken = getCookie(accessTokenKey);
 
     useEffect(() => {
-        if (refreshToken == null) {
-            navigate("/welcome");
+        if (!refreshToken || !accessToken) {
+            navigate("/login");
         }
-    },[refreshToken]);
+    },[refreshToken, accessToken]);
 
 
     return (
