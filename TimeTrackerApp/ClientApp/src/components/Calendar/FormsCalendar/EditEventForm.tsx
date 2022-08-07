@@ -18,21 +18,25 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
     const dispatch = useAppDispatch();
     const { id, visible, setVisible } = props;
     const [errorForm, setErrorForm] = useState("");
+    console.log(id);
     const [rangeEventState, setRangeEventState] = useState(false);
     const event = useAppSelector(s => s.rootReducer.calendar.events).find(s => s.id == id);
     const [editEventFm, setEvent] = useState(event);
+    
     useEffect(() => {
-        if (editEventFm?.endDate != null) {
+        setEvent(event);
+        if (event?.endDate != null) {
             setRangeEventState(true);
         }
-        setEvent(event);
-    }, [event]);
+        else{
+            setRangeEventState(false);
+        }
+    
+    }, [id]);
 
     const onFinish = (e: React.FormEvent) => {
         e.preventDefault();
         const postFixDate = "T00:00:00+00:00";
-
-
         if (editEventFm != undefined) {
             const checkDates = !(moment(editEventFm.date).isSameOrAfter(editEventFm.endDate))
             if (checkDates) {
@@ -42,14 +46,15 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
                 dispatch(updateEventAction({
                     ...editEventFm,
                     date: editEventFm.date + postFixDate,
-                    endDate: editEventFm.endDate == "" ? null : editEventFm.endDate + postFixDate
+                    endDate: editEventFm.endDate == ""|| editEventFm.endDate==null? null : editEventFm.endDate + postFixDate
                 }));
+                setVisible(false);
             }
             if (!checkDates) {
                 setErrorForm("Date Errors");
             }
         }
-        setVisible(false);
+       
     };
 
     if (editEventFm) {
@@ -65,7 +70,7 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
                             <FontAwesomeIcon icon={faXmark} className={"icon"} />
                         </button>
                     </div>
-                    <form onSubmit={(e) => onFinish(e)}>
+                    <form  onChange={()=>setErrorForm("")}onSubmit={(e) => onFinish(e)}>
                         <div className={"form-group"}>
                             <div className={"form-item w-100"}>
                                 <label>Name</label>
@@ -93,7 +98,6 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
                                     <input type="date" value={editEventFm.endDate == null ? "" : editEventFm.endDate} onChange={(e) => setEvent({ ...editEventFm, endDate: e.target.value })} />
                                 </div> : <></>}
                         </div>
-
                         <button type="submit" className={"button cyan-button"}>Edit</button>
                         <button className={"button red-button"} onClick={(e) => {
                             e.preventDefault();

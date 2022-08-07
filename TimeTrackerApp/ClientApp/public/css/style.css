@@ -486,7 +486,7 @@ section header {
   max-height: 85px;
   margin: 2px 5px 2px 2px; }
 
-  .events.short-day .event{
+ .event.short-day{
     background-color: gray;
   }
 

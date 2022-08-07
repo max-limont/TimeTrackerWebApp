@@ -14,10 +14,15 @@ import { dispatchOut } from "../../../store";
 
 function formatDateToNormalFormat(array: EventType[]) {
     return array.map(item => {
+        let endDate:any= moment(item.endDate).format("yyyy-MM-DD");
+        if(endDate=="Invalid date"){
+            endDate=null;
+        }
+        
         return {
             ...item,
             date: moment(item.date).format("yyyy-MM-DD"),
-            endDate: moment(item.endDate).format("yyyy-MM-DD")
+            endDate: endDate
         }
     });
 }

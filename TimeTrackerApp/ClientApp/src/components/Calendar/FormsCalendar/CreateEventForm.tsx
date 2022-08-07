@@ -21,9 +21,12 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
     const [rangeEventState, setRangeEventState] = useState(false);
     const onFinish = (e: React.FormEvent) => {
         e.preventDefault();
-        const checkDates = !(moment(event.date).isSameOrAfter(event.endDate))
+        let checkDates = !(moment(event.date).isSameOrAfter(event.endDate));
         if (checkDates) {
             const postFixDate = "T00:00:00+00:00";
+            if (rangeEventState == false) {
+                event.endDate == null;
+            }
             dispatch(addEventAction({
                 ...event,
                 date: event.date + postFixDate,
@@ -71,7 +74,11 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
                         </div>
                         <div className={"form-item w-100"}>
                             <label>Range Date Event</label>
-                            <Switch onChange={() => setRangeEventState(!rangeEventState)} checked={rangeEventState} checkedIcon={false} uncheckedIcon={false} />
+                            <Switch onChange={() => {
+                                if(!rangeEventState==false)
+                                setEvent({ ...event, endDate: null });
+                                setRangeEventState(!rangeEventState)
+                            }} checked={rangeEventState} checkedIcon={false} uncheckedIcon={false} />
                         </div>
                         <div className={"form-item w-100"}>
                             <label>Date</label>
