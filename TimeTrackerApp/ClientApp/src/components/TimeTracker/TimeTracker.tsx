@@ -28,7 +28,8 @@ export const TimeTracker: FC<TimeTrackerPropsType> = (props) => {
                         <h4>Duration</h4>
                         <span>
                             {lastRecord ?
-                                `${Math.floor(lastRecord.duration / 1000 / 3600) < 10 ? `0${Math.floor(lastRecord.duration / 1000 / 3600)}` : Math.floor(lastRecord.duration / 1000 / 3600)}:${Math.floor(lastRecord.duration / 1000 / 60) % 60 < 10 ? `0${Math.floor(lastRecord.duration / 1000 / 60) % 60}` : Math.floor(lastRecord.duration / 1000 / 60) % 60}:${Math.floor(lastRecord.duration / 1000) % 3600 < 10 ? `0${Math.floor(lastRecord.duration / 1000) % 3600}` : Math.floor(lastRecord.duration / 1000) % 3600}`
+                                `${Math.floor(lastRecord.duration / 1000 / 3600) < 10 ? 
+                                    `0${Math.floor(lastRecord.duration / 1000 / 3600)}` : Math.floor(lastRecord.duration / 1000 / 3600)}:${Math.floor(lastRecord.duration / 1000 / 60) % 60 < 10 ? `0${Math.floor(lastRecord.duration / 1000 / 60) % 60}` : Math.floor(lastRecord.duration / 1000 / 60) % 60}:${Math.floor(lastRecord.duration / 1000) % 60 < 10 ? `0${Math.floor(lastRecord.duration / 1000) % 60}` : Math.floor(lastRecord.duration / 1000) % 60}`
                                 : '-'
                             }
                         </span>

@@ -65,14 +65,14 @@ body {
 .flex-stretched {
   flex: 1; }
 
-.main-container {
-  box-sizing: border-box; }
-
 .flex-column {
   flex-direction: column; }
 
 .w-100 {
   width: 100%; }
+
+.w-50 {
+  width: 50%; }
 
 .h-100 {
   height: 100%; }
@@ -469,6 +469,9 @@ section header {
 .align-items-start {
   align-items: flex-start !important; }
 
+.align-items-center {
+  align-items: center !important; }
+
 .justify-content-center {
   justify-content: center; }
 
@@ -477,12 +480,16 @@ section header {
   align-items: center;
   justify-content: space-between; }
   .form-header h2 {
-    font-size: 26px; }
+    font-size: 26px;
+    font-weight: 600; }
   .form-header .close {
     padding: 5px 10px 5px 10px !important;
     font-size: 18px;
     display: inline-flex;
     align-items: center; }
+
+.flex-wrap {
+  flex-wrap: wrap; }
 
 .form-group {
   display: flex;
@@ -491,11 +498,10 @@ section header {
     margin-bottom: 15px; }
   .form-group .form-item {
     display: inline-flex;
-    align-items: center;
-    padding: 10px 5px 10px 5px; }
+    align-items: center; }
     .form-group .form-item label {
-      font-size: 18px;
-      margin-right: 15px; }
+      font-size: 16px;
+      margin-right: 5px; }
     .form-group .form-item input, .form-group .form-item textarea {
       font-family: 'Nunito', serif;
       outline: none;
@@ -566,12 +572,32 @@ table .bottom-table-row {
   table .bottom-table-row .icon {
     margin-inline: 10px; }
 
+.creation-type-label {
+  display: inline-flex;
+  padding: 10px;
+  border-radius: 2px;
+  box-shadow: 0 0 5px -4px #222831;
+  font-weight: 500;
+  align-items: center;
+  user-select: none;
+  font-size: 14px; }
+  .creation-type-label.manually {
+    background: #00ADB5;
+    color: #EEEEEE; }
+  .creation-type-label.automatically {
+    background: #EAEAEA;
+    color: #222831; }
+  .creation-type-label .icon {
+    margin-right: 10px; }
+
 .time-tracker-table {
   min-width: 1500px; }
-  .time-tracker-table .date, .time-tracker-table .creation-type {
+  .time-tracker-table .date {
     width: 150px; }
   .time-tracker-table .begin, .time-tracker-table .end, .time-tracker-table .duration {
     width: 120px; }
+  .time-tracker-table .creation-type {
+    width: 180px; }
   .time-tracker-table .actions {
     width: 190px; }
   .time-tracker-table .last-edited-by {
@@ -685,5 +711,44 @@ table .bottom-table-row {
     font-size: 18px; }
   .message.error {
     color: #F24C4C; }
+
+.edit-record-form {
+  position: fixed;
+  background: #FFFFFF;
+  box-shadow: 0 0 40px -20px #222831;
+  border-radius: 2px;
+  z-index: 999;
+  padding: 15px;
+  top: 50%;
+  left: 50%;
+  min-width: 290px;
+  width: 100%;
+  max-width: 600px;
+  transform: translate(-50%, -50%); }
+  .edit-record-form .form-header {
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #E6E6E6; }
+  .edit-record-form .form-item {
+    min-width: 200px; }
+  .edit-record-form span {
+    font-weight: 300; }
+  .edit-record-form .creation-type {
+    margin-block: 10px 0; }
+  .edit-record-form .creation-type-label {
+    margin-left: 10px;
+    font-weight: 500; }
+  .edit-record-form input, .edit-record-form textarea {
+    background: #F6F6F6;
+    box-shadow: inset 0 0 5px -5px #222831; }
+  .edit-record-form label {
+    font-weight: 600; }
+  .edit-record-form textarea {
+    margin-top: 10px;
+    resize: vertical;
+    min-height: 150px;
+    max-height: 300px; }
+  .edit-record-form .button:not(:last-child) {
+    margin-right: 5px; }
 
 /*# sourceMappingURL=style.css.map */

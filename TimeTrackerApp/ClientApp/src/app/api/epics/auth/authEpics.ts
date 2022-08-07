@@ -1,8 +1,9 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
-import {from, map, mergeMap, of} from "rxjs";
+import {from, map, mergeMap, Observable, of} from "rxjs";
 import { graphqlRequest } from "../../api";
 import {
-    AuthLoginActionType,
+    authLoginAction,
+    AuthLoginActionType, authLogoutAction,
     AuthLogoutActionType
 } from "../../../../store/actions/auth/authActions";
 import {
@@ -19,10 +20,10 @@ import {store} from "../../../store";
 import {parseError} from "../../../parseError";
 import {Action} from "react-epics";
 
-const authLoginEpic = (action$: any) => {
+const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginAction>>): any => {
     return action$.pipe(
         ofType(AuthLoginActionType),
-        mergeMap((action: any) => from(graphqlRequest(authLoginQuery, {
+        mergeMap(action => from(graphqlRequest(authLoginQuery, {
             email: action.payload.email,
             password: action.payload.password
         } as AuthLoginInputType)).pipe(
@@ -31,29 +32,29 @@ const authLoginEpic = (action$: any) => {
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
                     location.replace('/');
-                    return {
-                        payload: response,
-                        type: "Success"
-                    } as Action;
+                    return { payload: response, type: "AuthLoginSuccess" } as Action;
                 } else if (response.errors) {
-                    return store.dispatch(setError(parseError(response.errors[0].message)));
+                    store.dispatch(setError(parseError(response.errors[0].message)));
+                    return { payload: response, type: "AuthLoginError" } as Action
                 }
-                return store.dispatch(logout());
+                store.dispatch(logout());
+                return { payload: response, type: "AuthLoginError" } as Action
             })
         ))
     )
 }
 
-const authLogoutEpic = (action$: any) => {
+const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAction>>): any => {
     return action$.pipe(
         ofType(AuthLogoutActionType),
-        mergeMap((action: any) => from(graphqlRequest(authLogoutQuery, {
-            userId: parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId)
+        mergeMap(action => from(graphqlRequest(authLogoutQuery, {
+            userId: action.payload
         } as AuthLogoutInputType)).pipe(
             map(() => {
                 clearCookie(refreshTokenKey)
                 clearCookie(accessTokenKey)
-                return store.dispatch(logout())
+                store.dispatch(logout())
+                return { payload: "Success", type: "AuthLogoutSuccess" } as Action
             }),
             map(() => location.replace("/welcome")),
         ))

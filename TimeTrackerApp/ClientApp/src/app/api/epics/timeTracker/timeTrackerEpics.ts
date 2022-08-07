@@ -1,9 +1,9 @@
 import {combineEpics, Epic, ofType} from "redux-observable";
 import {
-    addRecord,
+    addRecord, editRecord,
     createRecord, deleteRecord,
     fetchAllUserRecords, removeRecord,
-    setRecords,
+    setRecords, updateRecord,
 } from "../../../../store/slice/timeTracker/timeTrackerSlice";
 import {store} from "../../../store";
 import {from, map, mergeMap, Observable} from "rxjs";
@@ -12,7 +12,7 @@ import {
     CreateRecordInputType,
     createRecordMutation, DeleteRecordInputType, deleteRecordMutation,
     FetchAllUserRecordsInputType,
-    fetchAllUserRecordsQuery
+    fetchAllUserRecordsQuery, UpdateRecordInputType, updateRecordMutation
 } from "../../../../graphqlQuery/timeTracker/timeTrackerQuery";
 import {Record} from "../../../../type/TimeTracker/timeTracker.types";
 import {Action} from "react-epics";
@@ -24,7 +24,7 @@ const setRecordsEpic: Epic = (action$: Observable<ReturnType<typeof fetchAllUser
             userId: action.payload
         } as FetchAllUserRecordsInputType)).pipe(
             map(response => {
-                if (response.data.fetchAllUserRecords) {
+                if (response.data && response.data.fetchAllUserRecords) {
                     const records = response.data.fetchAllUserRecords.map((record: any) => {
                         return {
                             id: parseInt(record.id),
@@ -37,11 +37,9 @@ const setRecordsEpic: Epic = (action$: Observable<ReturnType<typeof fetchAllUser
                         } as Record;
                     }) as Record[]
                     store.dispatch(setRecords(records))
-                    return {
-                        payload: "Success",
-                        type: "FetchAllUserRecordsSuccess"
-                    } as Action
+                    return { payload: "Success", type: "FetchAllUserRecordsSuccess" } as Action
                 }
+                return { payload: "Error", type: "FetchAllUserRecordsError" } as Action
             })
         ))
     )
@@ -54,7 +52,7 @@ const addRecordEpic: Epic = (action$: Observable<ReturnType<typeof createRecord>
             record: action.payload
         } as CreateRecordInputType)).pipe(
             map(response => {
-                if (response.data.createRecord) {
+                if (response.data && response.data.createRecord) {
                     const record = response.data.createRecord;
                     store.dispatch(addRecord({
                         id: parseInt(record.id),
@@ -65,11 +63,27 @@ const addRecordEpic: Epic = (action$: Observable<ReturnType<typeof createRecord>
                         editorId: parseInt(record.editorId),
                         createdAt: new Date(record.createdAt)
                     } as Record))
-                    return {
-                        payload: "Success",
-                        type: "CreateRecordSuccess"
-                    } as Action
+                    return { payload: "Success", type: "CreateRecordSuccess" } as Action
                 }
+                return { payload: "Error", type: "CreateRecordError" } as Action
+            })
+        ))
+    )
+}
+
+
+const updateRecordEpic: Epic = (action$: Observable<ReturnType<typeof updateRecord>>): any => {
+    return action$.pipe(
+        ofType("UpdateRecord"),
+        mergeMap(action => from(graphqlRequest(updateRecordMutation, {
+            record: action.payload
+        } as UpdateRecordInputType)).pipe(
+            map(response => {
+                if (response.data && response.data.editRecord) {
+                    store.dispatch(editRecord(action.payload))
+                    return { payload: "Success", type: "UpdateRecordSuccess" }
+                }
+                return { payload: "Error", type: "UpdateRecordError" }
             })
         ))
     )
@@ -82,20 +96,14 @@ const deleteRecordEpic: Epic = (action$: Observable<ReturnType<typeof deleteReco
             id: action.payload
         } as DeleteRecordInputType)).pipe(
             map(response => {
-                if (response.data.deleteRecord) {
+                if (response.data && response.data.deleteRecord) {
                     store.dispatch(removeRecord(action.payload))
-                    return {
-                        payload: "Success",
-                        type: "DeleteRecordSuccess"
-                    } as Action
+                    return { payload: "Success", type: "DeleteRecordSuccess" } as Action
                 }
-                return {
-                    payload: "Error",
-                    type: "DeleteRecordError"
-                } as Action
+                return { payload: "Error", type: "DeleteRecordError" } as Action
             })
         ))
     )
 }
 
-export const timeTrackerEpics = combineEpics(setRecordsEpic, addRecordEpic, deleteRecordEpic)
+export const timeTrackerEpics = combineEpics(setRecordsEpic, addRecordEpic, deleteRecordEpic, updateRecordEpic)
