@@ -22,8 +22,6 @@ export const AuthenticationForm: FC = () => {
     const dispatch = useAppDispatch();
     const [state, setState] = useState(initialState);
     const authErrorMessage = useAppSelector(state => state.rootReducer.auth.error);
-    const refreshToken = getCookie(refreshTokenKey);
-    const accessToken = getCookie(accessTokenKey);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -53,6 +51,8 @@ export const AuthenticationForm: FC = () => {
                         <button onClick={(e) => {
                             e.preventDefault()
                             dispatch(authLoginAction(state.userData))
+                            const refreshToken = getCookie(refreshTokenKey);
+                            const accessToken = getCookie(accessTokenKey);
                         }} className={"button dark-button w-100"}>
                             Sign in
                         </button>

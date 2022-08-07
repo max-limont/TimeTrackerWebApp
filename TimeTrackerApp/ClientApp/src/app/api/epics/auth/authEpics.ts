@@ -17,10 +17,7 @@ import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from
 import {store} from "../../../store";
 import {parseError} from "../../../parseError";
 import {Action} from "react-epics";
-import {parseJwt} from "../../../../store/parserJWT/parserJWT";
-import {AuthUserResponse} from "../../../../type/User/AuthUser";
 import {getUserByIdQuery, GetUserByIdQueryInputType} from "../../../../graphqlQuery/user/userQuery";
-import {User} from "../../../../type/User/User";
 
 const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginAction>>): any => {
     return action$.pipe(
@@ -33,9 +30,9 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
                 if (response.data.authLogin && response.data.authLogin.accessToken && response.data.authLogin.refreshToken && !response.errors) {
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
-                    const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
-                    store.dispatch(authorizeUserById(userId))
-                    location.replace('/');
+                    location.replace('/')
+                    //const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
+                    //store.dispatch(authorizeUserById(userId))
                     return { payload: response, type: "AuthLoginSuccess" } as Action;
                 } else if (response.errors) {
                     store.dispatch(setError(parseError(response.errors[0].message)));
@@ -61,10 +58,6 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
                 store.dispatch(logout())
                 return { payload: "Success", type: "AuthLogoutSuccess" } as Action
             }),
-            map(() => {
-                location.replace("/login")
-                return { payload: "Success", type: "AuthLogoutSuccess" } as Action
-            }),
         ))
     )
 }
@@ -78,7 +71,7 @@ const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUs
             map(response => {
                 if (response.data && response.data.getUserById) {
                     const user = response.data.getUserById
-                    window.localStorage.setItem("AuthorizedUser", JSON.stringify(user))
+                    //window.localStorage.setItem("AuthorizedUser", JSON.stringify(user))
                     return { payload: "Success", type: "AuthSetUserSuccess" } as Action
                 }
                 return { payload: "Error", type: "AuthSetUserError"} as Action

@@ -34,6 +34,7 @@ export const Menu: FC = () => {
 
     const [state, setState] = useState(initialMenuState)
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     const toggle = () => {
         setState({ ...state, collapsed: !state.collapsed })
@@ -108,6 +109,7 @@ export const Menu: FC = () => {
                             <li>
                                 <a className={"flex-container"} onClick={() => {
                                     dispatch(authLogoutAction(parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId)))
+                                    navigate('/login', {replace: true})
                                 }}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} className={"icon"} />
                                     <span>Logout</span>
