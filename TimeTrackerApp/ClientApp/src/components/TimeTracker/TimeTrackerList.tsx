@@ -95,7 +95,11 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
                                     </span>
                                 }
                             </td>
-                            <td>{record.comment?.length && record.comment.length > 0 ? record.comment : '-'}</td>
+                            <td style={{verticalAlign: "top"}}>
+                                <div className={"comment-cell"}>
+                                    {record.comment?.length && record.comment.length > 0 ? record.comment : '-'}
+                                </div>
+                            </td>
                             <td>{record.editor ? `${record.editor?.firstName} ${record.editor?.lastName}` : 'You'}</td>
                             <td>
                                 <a className={"button yellow-button"} onClick={() => editTimeTrackerListItem(record.id ?? -1)}>Edit</a>

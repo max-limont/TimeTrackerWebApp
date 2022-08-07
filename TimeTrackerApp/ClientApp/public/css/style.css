@@ -74,6 +74,9 @@ body {
 .w-50 {
   width: 50%; }
 
+.p-0 {
+  padding: 0 !important; }
+
 .h-100 {
   height: 100%; }
 
@@ -100,6 +103,8 @@ body {
     font-size: 26px;
     font-weight: 500;
     color: #222831; }
+  .authentication-form .form-item {
+    padding: 10px 5px 10px 5px; }
 
 .h-100 {
   height: 100%; }
@@ -360,6 +365,7 @@ section header {
 
 ::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
   background: #D6D6D6;
   border-radius: 1px; }
 
@@ -604,6 +610,12 @@ table .bottom-table-row {
     width: 200px; }
   .time-tracker-table .button:not(:last-child) {
     margin-right: 5px; }
+  .time-tracker-table .comment-cell {
+    overflow-y: auto;
+    min-height: 30px;
+    max-height: 100px;
+    padding-right: 10px;
+    text-align: justify; }
 
 .time-tracker-statistic {
   display: grid;
