@@ -17,18 +17,25 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
 
     const dispatch = useAppDispatch();
     const [event, setEvent] = useState({ ...CreateEventObject, typeDayId: TypeDay.ShortDay, date: moment().format("yyyy-MM-DD") });
+    const [errorForm, setErrorForm] = useState("");
     const [rangeEventState, setRangeEventState] = useState(false);
     const onFinish = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(event);
-        const postFixDate = "T00:00:00+00:00";
-        dispatch(addEventAction({
-            ...event,
-            date: event.date + postFixDate,
-            endDate: event.endDate == "" ? null : event.endDate + postFixDate
-        }));
-        setVisible(false);
-        document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
+        const checkDates = !(moment(event.date).isSameOrAfter(event.endDate))
+        if (checkDates) {
+            const postFixDate = "T00:00:00+00:00";
+            dispatch(addEventAction({
+                ...event,
+                date: event.date + postFixDate,
+                endDate: event.endDate == "" || event.endDate == null ? null : event.endDate + postFixDate
+            }));
+            setVisible(false);
+            document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
+        }
+        if (!checkDates) {
+            setErrorForm("Date Errors");
+        }
+
     }
 
     const { title, date, typeDayId, endDate } = event;
@@ -39,7 +46,9 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
         <div className={`form-event-container dark-background ${!visible && "hidden"}`}>
             <div className={"form-event"}>
                 <div className={"form-header"}>
+
                     <h2>Create event</h2>
+                    <div style={{ color: "red" }}>{errorForm}</div>
                     <button className={"button red-button close"} onClick={() => {
                         setVisible(false)
                         document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
@@ -47,7 +56,7 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
                         <FontAwesomeIcon icon={faXmark} className={"icon"} />
                     </button>
                 </div>
-                <form onSubmit={(e) => onFinish(e)}>
+                <form onSubmit={(e) => onFinish(e)} onChange={() => { setErrorForm("") }}>
                     <div className={"form-group"}>
                         <div className={"form-item w-100"}>
                             <label>Name</label>

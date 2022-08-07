@@ -5,6 +5,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { removeEventAction, updateEventAction } from "../../../store/actions/calendar/calendarActions";
 import { TypeDay } from "../../../enums/TypeDay";
 import Switch from "react-switch";
+import moment from "moment";
 
 type EditFormPropsType = {
     id: number,
@@ -16,6 +17,7 @@ type EditFormPropsType = {
 export const EditEventForm: FC<EditFormPropsType> = (props) => {
     const dispatch = useAppDispatch();
     const { id, visible, setVisible } = props;
+    const [errorForm, setErrorForm] = useState("");
     const [rangeEventState, setRangeEventState] = useState(false);
     const event = useAppSelector(s => s.rootReducer.calendar.events).find(s => s.id == id);
     const [editEventFm, setEvent] = useState(event);
@@ -29,16 +31,23 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
     const onFinish = (e: React.FormEvent) => {
         e.preventDefault();
         const postFixDate = "T00:00:00+00:00";
-       
+
+
         if (editEventFm != undefined) {
-            if (rangeEventState == false) {
-                setEvent({ ...editEventFm, endDate: null });
+            const checkDates = !(moment(editEventFm.date).isSameOrAfter(editEventFm.endDate))
+            if (checkDates) {
+                if (rangeEventState == false) {
+                    setEvent({ ...editEventFm, endDate: null });
+                }
+                dispatch(updateEventAction({
+                    ...editEventFm,
+                    date: editEventFm.date + postFixDate,
+                    endDate: editEventFm.endDate == "" ? null : editEventFm.endDate + postFixDate
+                }));
             }
-            dispatch(updateEventAction({
-                ...editEventFm,
-                date: editEventFm.date + postFixDate,
-                endDate: editEventFm.endDate == "" ? null : editEventFm.endDate + postFixDate
-            }));
+            if (!checkDates) {
+                setErrorForm("Date Errors");
+            }
         }
         setVisible(false);
     };
@@ -49,6 +58,7 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
                 <div className={"form-event"}>
                     <div className={"form-header"}>
                         <h2>Edit event</h2>
+                        <div style={{ color: "red" }}>{errorForm}</div>
                         <button className={"button red-button close"} onClick={() => {
                             setVisible(false);
                         }}>
