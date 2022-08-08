@@ -1,7 +1,10 @@
 import {FC} from "react";
-import {getAuthorizedUser} from "../../store/slice/authentication/authSlice";
+import {useAuth} from "../../hooks/useAuth";
 
 export const Header: FC = () => {
+
+    const auth = useAuth()
+
     return (
         <header className={"personal-account-header header flex-container"}>
             <div className={"breadcrumbs flex-container"}>
@@ -12,7 +15,7 @@ export const Header: FC = () => {
             </div>
             <div className={"user-info flex-container"}>
                 <img src={`${process.env.PUBLIC_URL}/images/ava.jpg`} alt={"user-profile-image"} />
-                <p>Petro Mostavchuk</p>
+                <p>{auth.state?.user?.firstName} {auth.state?.user?.lastName}</p>
             </div>
         </header>
     );

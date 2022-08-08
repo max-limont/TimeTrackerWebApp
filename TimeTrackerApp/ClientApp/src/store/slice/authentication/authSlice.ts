@@ -1,9 +1,8 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { AuthUserResponse } from "../../../type/User/AuthUser";
 import { User } from "../../../type/User/User";
-import {store} from "../../../app/store";
-import {parseJwt} from "../../parserJWT/parserJWT";
-import {getCookie, refreshTokenKey} from "../../../Cookie/Cookie";
+import {useAuth} from "../../../hooks/useAuth";
+import {AuthLoginInputType, AuthRefreshInputType} from "../../../graphqlQuery/auth/authQuery";
 
 type AuthStateType = {
     authUser: AuthUserResponse | null,
@@ -35,25 +34,9 @@ export const authSlice = createSlice({
 });
 
 export const authorizeUserById = createAction<number>("AuthorizeUserById")
+export const authLoginAction = createAction<AuthLoginInputType>("AuthLogin");
+export const authRefreshAction = createAction<AuthRefreshInputType>("AuthRefresh");
+export const authLogoutAction = createAction<number>("AuthLogout");
 
 export const {logout, setUser, setError} = authSlice.actions;
-
-export const getAuthorizedUser = (): User | null => {
-    let user = JSON.parse(window.localStorage.getItem("AuthorizedUser") ?? '')
-
-    if (user === '') {
-        store.dispatch(authorizeUserById(parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId)))
-        user = JSON.parse(window.localStorage.getItem("AuthorizedUser") ?? '')
-    }
-
-    return user !== '' ? {
-        id: parseInt(user.id),
-        email: user.email ?? "",
-        firstName: user.firstName ?? "Unknown",
-        lastName: user.lastName ?? "User",
-        weeklyWorkingTime: parseInt(user.weeklyWorkingTime ?? ''),
-        remainingVacationDays: parseInt(user.remainingVacationDays ?? ''),
-        privilegesValue: parseInt(user.privilegesValue ?? '')
-    } as User : null
-}
 

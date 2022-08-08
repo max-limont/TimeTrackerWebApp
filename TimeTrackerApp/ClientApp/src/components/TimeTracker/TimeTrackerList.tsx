@@ -5,7 +5,6 @@ import {TimeTrackerDefaultPropsType} from "./Home";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleInfo, faPenClip, faGears} from "@fortawesome/free-solid-svg-icons";
 import {EditRecordForm, EditRecordFormStateType} from "../../store/slice/timeTracker/EditRecordForm";
-import {getAuthorizedUser} from "../../store/slice/authentication/authSlice";
 
 type TimeTrackerListPropsType = {
     defaultProps: TimeTrackerDefaultPropsType

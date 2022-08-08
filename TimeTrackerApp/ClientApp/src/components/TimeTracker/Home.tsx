@@ -2,12 +2,10 @@ import {FC, useEffect} from "react";
 import {TimeTracker} from "./TimeTracker";
 import {TimeTrackerList} from "./TimeTrackerList";
 import {useAppDispatch} from "../../app/hooks";
-import {getCookie, refreshTokenKey} from "../../Cookie/Cookie";
 import {fetchAllUserRecords, recordToTimeTrackerListItem} from "../../store/slice/timeTracker/timeTrackerSlice";
-import {parseJwt} from "../../store/parserJWT/parserJWT";
-import {AuthUserResponse} from "../../type/User/AuthUser";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {TimeTrackerItem} from "../../type/TimeTracker/timeTracker.types"
+import {useAuth} from "../../hooks/useAuth";
 
 export type TimeTrackerDefaultPropsType = {
     records: TimeTrackerItem[],
@@ -17,11 +15,13 @@ export type TimeTrackerDefaultPropsType = {
 export const Home: FC = () => {
 
     const dispatch = useAppDispatch()
+    const auth = useAuth()
+
     useEffect(() => {
-        if (getCookie(refreshTokenKey)) {
-            dispatch(fetchAllUserRecords(parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId)))
+        if (auth.state?.user?.id) {
+            dispatch(fetchAllUserRecords(auth.state?.user?.id))
         }
-    }, [window.onload])
+    }, [auth.state?.user?.id])
 
     let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
     let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record)).sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime());

@@ -3,10 +3,10 @@ import {Record} from "../../type/TimeTracker/timeTracker.types";
 import {createRecord} from "../../store/slice/timeTracker/timeTrackerSlice";
 import {useAppDispatch} from "../../app/hooks";
 import {TimeTrackerDefaultPropsType} from "./Home";
-import {getAuthorizedUser} from "../../store/slice/authentication/authSlice";
 import {parseJwt} from "../../store/parserJWT/parserJWT";
 import {AuthUserResponse} from "../../type/User/AuthUser";
 import {getCookie, refreshTokenKey} from "../../Cookie/Cookie";
+import {useAuth} from "../../hooks/useAuth";
 
 type TimerStateType = {
     time: number,
@@ -27,6 +27,7 @@ export const Timer: FC<TimerPropsType> = (props) => {
     const [state, setState] = useState(initialState);
     const {lastRecord} = props.defaultProps
     const dispatch = useAppDispatch()
+    const auth = useAuth()
 
     useEffect(() => {
         const timerStartTime = window.localStorage.getItem("timerStartTime");
@@ -56,13 +57,15 @@ export const Timer: FC<TimerPropsType> = (props) => {
     const timerTick = () => setState({...state, time: state.time + 1000})
 
     const timerStop = () => {
-        const record: Record = {
-            employeeId: parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId),
-            isAutomaticallyCreated: false,
-            createdAt: new Date(parseInt(window.localStorage.getItem("timerStartTime") ?? '')),
-            workingTime: state.time,
+        if (auth.state?.user?.id) {
+            const record: Record = {
+                employeeId: auth.state.user.id,
+                isAutomaticallyCreated: false,
+                createdAt: new Date(parseInt(window.localStorage.getItem("timerStartTime") ?? '')),
+                workingTime: state.time,
+            }
+            dispatch(createRecord(record))
         }
-        dispatch(createRecord(record))
         setState(initialState)
         window.localStorage.removeItem("timerStartTime")
     }

@@ -37,6 +37,7 @@ export const EditRecordForm: FC<EditRecordFormPropsType> = (props) => {
     const [state, setState] = useState(initialState)
     const onSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        setState({comment: ''})
         const editedRecord = {
             id: record.id,
             workingTime: record.workingTime,
@@ -47,7 +48,6 @@ export const EditRecordForm: FC<EditRecordFormPropsType> = (props) => {
             comment: state.comment
         } as Record
         dispatch(updateRecord(editedRecord));
-        setState({comment: ''})
         setVisible(false);
         document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
     }

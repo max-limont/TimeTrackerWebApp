@@ -18,11 +18,11 @@ export const TimeTracker: FC<TimeTrackerPropsType> = (props) => {
                 <div className={"statistic-panel-list"}>
                     <div>
                         <h4>Start time</h4>
-                        <span>{lastRecord ? new Date(lastRecord.begin).toLocaleTimeString() : '-'}</span>
+                        <span>{lastRecord ? new Date(new Date(lastRecord.begin).toLocaleString() + " UTC").toLocaleTimeString() : '-'}</span>
                     </div>
                     <div>
                         <h4>End time</h4>
-                        <span>{lastRecord ? new Date(lastRecord.end).toLocaleTimeString() : '-'}</span>
+                        <span>{lastRecord ? new Date(new Date(lastRecord.end).toLocaleString() + " UTC").toLocaleTimeString() : '-'}</span>
                     </div>
                     <div>
                         <h4>Duration</h4>
