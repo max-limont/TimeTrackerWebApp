@@ -16,10 +16,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import { authLogoutAction } from "../../store/actions/auth/authActions";
 import { parseJwt } from "../../store/parserJWT/parserJWT";
 import { AuthUserResponse } from "../../type/User/AuthUser";
 import { getCookie, refreshTokenKey } from "../../Cookie/Cookie";
+import {useAuth} from "../../hooks/useAuth";
 
 
 type MenuState = {
@@ -33,7 +33,7 @@ const initialMenuState: MenuState = {
 export const Menu: FC = () => {
 
     const [state, setState] = useState(initialMenuState)
-    const dispatch = useAppDispatch()
+    const auth = useAuth()
     const navigate = useNavigate()
 
     const toggle = () => {
@@ -108,8 +108,7 @@ export const Menu: FC = () => {
                             </li>
                             <li>
                                 <a className={"flex-container"} onClick={() => {
-                                    dispatch(authLogoutAction(parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId)))
-                                    navigate('/login', {replace: true})
+                                    auth.signOut(() => navigate('/login', {replace: true}))
                                 }}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} className={"icon"} />
                                     <span>Logout</span>

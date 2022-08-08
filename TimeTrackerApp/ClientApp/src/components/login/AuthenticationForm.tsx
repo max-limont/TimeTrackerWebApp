@@ -1,11 +1,9 @@
 import {FC, useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {authLoginAction} from '../../store/actions/auth/authActions';
-import {accessTokenKey, getCookie, refreshTokenKey} from '../../Cookie/Cookie';
 import {AuthorizationUser, EmptyAuthUser} from '../../type/User/AuthUser';
 import {setError} from "../../store/slice/authentication/authSlice";
 import {Message, MessageTypes} from "../Layout/Message";
+import {useAuth} from "../../hooks/useAuth";
 
 type AuthenticationFormState = {
     userData: AuthorizationUser,
@@ -22,7 +20,7 @@ export const AuthenticationForm: FC = () => {
     const dispatch = useAppDispatch();
     const [state, setState] = useState(initialState);
     const authErrorMessage = useAppSelector(state => state.rootReducer.auth.error);
-    const navigate = useNavigate();
+    const auth = useAuth()
 
     useEffect(() => {
         if (authErrorMessage) {
@@ -50,9 +48,7 @@ export const AuthenticationForm: FC = () => {
                     <div className={"form-item w-100"}>
                         <button onClick={(e) => {
                             e.preventDefault()
-                            dispatch(authLoginAction(state.userData))
-                            const refreshToken = getCookie(refreshTokenKey);
-                            const accessToken = getCookie(accessTokenKey);
+                            auth.signIn(state.userData, () => {})
                         }} className={"button dark-button w-100"}>
                             Sign in
                         </button>

@@ -2,8 +2,8 @@ import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from
 import { parseJwt } from "../../store/parserJWT/parserJWT";
 import { AuthRefreshInputType, authRefreshQuery } from "../../graphqlQuery/auth/authQuery";
 import { AuthUserResponse } from "../../type/User/AuthUser";
-import { state, store } from "../store";
-import { authLogoutAction } from "../../store/actions/auth/authActions";
+import { store } from "../store";
+import {authLogoutAction} from "../../store/slice/authentication/authSlice";
 
 const apiUrl = "https://localhost:5001/graphql";
 
@@ -51,6 +51,7 @@ export const graphqlRequest = async (query: string, variables?: any) => {
                 return response.ok ? await response.json() : response.status;
             }
         }
+        console.log(2)
         store.dispatch(authLogoutAction(authenticatedUserId))
     }
 }
