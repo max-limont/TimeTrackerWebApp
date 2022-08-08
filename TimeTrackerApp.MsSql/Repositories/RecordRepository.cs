@@ -18,7 +18,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<Record> CreateAsync(Record record)
 		{
-			string query = @"INSERT INTO Records (WorkingTime, Comment, CreatorId, EditorId, CreatedAt) VALUES (@WorkingTime, @Comment, @CreatorId, @EditorId, @CreatedAt)";
+			string query = @"INSERT INTO Records (WorkingTime, Comment, EmployeeId, EditorId, IsAutomaticallyCreated, CreatedAt) VALUES (@WorkingTime, @Comment, @EmployeeId, @EditorId, @IsAutomaticallyCreated, @CreatedAt)";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -33,7 +33,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<Record> EditAsync(Record record)
 		{
-			string query = @"UPDATE Records SET WorkingTime = @WorkingTime, Comment = @Comment, CreatorId = @CreatorId, EditorId = @EditorId, CreatedAt = @CreatedAt WHERE Id = @Id";
+			string query = @"UPDATE Records SET WorkingTime = @WorkingTime, Comment = @Comment, EmployeeId = @EmployeeId, EditorId = @EditorId, IsAutomaticallyCreated = @IsAutomaticallyCreated, CreatedAt = @CreatedAt WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -58,11 +58,11 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<Record>> FetchAllUserRecordsAsync(int userId)
 		{
-			string query = @"SELECT * FROM Records WHERE UserId = @UserId";
+			string query = @"SELECT * FROM Records WHERE EmployeeId = @EmployeeId";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				return await connection.QueryAsync<Record>(query, new { UserId = userId });
+				return await connection.QueryAsync<Record>(query, new { EmployeeId = userId });
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<Record> RemoveAsync(int id)
 		{
-			string query = @"DELETE FROM Users WHERE Id = @Id";
+			string query = @"DELETE FROM Records WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{

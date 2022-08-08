@@ -1,15 +1,13 @@
 ﻿import { combineEpics, Epic, ofType } from "redux-observable";
 import { from, map, mergeMap } from "rxjs";
-import { usebaseQueryWithReauth, defaultRequest } from "../../api";
 import {
     addEventType, fetchAllEventsType, fetchRangeEventsType, removeEventType, updateEventType
 } from "../../../../store/actions/calendar/calendarActions";
 import { addEventQuery, deleteEventQuery, editEventQuery, fetchAllEventsQuery, fetchRangeEventQuery } from "../../../../graphqlQuery/calendar/calendarQueries";
 import { addEvent, editEvent, removeEvent, setEvents, setRangeEvents } from "../../../../store/slice/calendar/calendarSlice";
-import { PayloadAction } from "@reduxjs/toolkit";
 import { EventType } from "../../../../type/Events/EventType";
 import moment from "moment";
-import { dispatchOut } from "../../../store";
+import {graphqlRequest} from "../../api";
 
 
 function formatDateToNormalFormat(array: EventType[]) {
@@ -31,7 +29,7 @@ function formatDateToNormalFormat(array: EventType[]) {
 const fetchAllEventsEpic = (action$: any) => {
     return action$.pipe(
         ofType(fetchAllEventsType),
-        mergeMap(() => from(usebaseQueryWithReauth(fetchAllEventsQuery))
+        mergeMap(() => from(graphqlRequest(fetchAllEventsQuery))
             .pipe(
                 map(response => {
                     console.log(response);
@@ -44,7 +42,7 @@ const fetchRangeEventEpic = (action$: any) => {
     return action$
         .pipe(
             ofType(fetchRangeEventsType),
-            mergeMap((action: any) => from(usebaseQueryWithReauth(fetchRangeEventQuery, {
+            mergeMap((action: any) => from(graphqlRequest(fetchRangeEventQuery, {
                 startDate: action.payload.startDate,
                 finishDate: action.payload.finishDate
             }))
@@ -61,7 +59,7 @@ const addEventEpic = (action$: any) => {
     return action$
         .pipe(
             ofType(addEventType),
-            mergeMap((action: any) => from(usebaseQueryWithReauth(addEventQuery, {
+            mergeMap((action: any) => from(graphqlRequest(addEventQuery, {
                 event: action.payload
             }))
                 .pipe(
@@ -80,7 +78,7 @@ const editEventEpic = (action$: any) => {
     return action$
         .pipe(
             ofType(updateEventType),
-            mergeMap((action: any) => from(usebaseQueryWithReauth(editEventQuery, {
+            mergeMap((action: any) => from(graphqlRequest(editEventQuery, {
                 event: action.payload
             }))
                 .pipe(
@@ -94,7 +92,7 @@ const deleteEventEpic = (action$: any) => {
     return action$
         .pipe(
             ofType(removeEventType),
-            mergeMap((action: any) => from(usebaseQueryWithReauth(deleteEventQuery, {
+            mergeMap((action: any) => from(graphqlRequest(deleteEventQuery, {
                 id: action.payload
             }))
                 .pipe(

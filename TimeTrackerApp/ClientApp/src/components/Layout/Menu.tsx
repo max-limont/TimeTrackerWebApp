@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import {FC, useEffect, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faGear,
@@ -8,12 +8,18 @@ import {
     faStopwatch,
     faUmbrellaBeach,
     faAngleLeft,
-    faAngleRight
+    faAngleRight,
+    faAddressBook,
+    faInbox,
+    faEnvelopeOpenText,
+    faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../app/hooks";
-import { logOut } from "../../store/slice/authentication/authSlice";
-import { dispatchOut } from "../../app/store";
+import { Link, useNavigate } from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import { parseJwt } from "../../store/parserJWT/parserJWT";
+import { AuthUserResponse } from "../../type/User/AuthUser";
+import { getCookie, refreshTokenKey } from "../../Cookie/Cookie";
+import {useAuth} from "../../hooks/useAuth";
 
 
 type MenuState = {
@@ -25,8 +31,10 @@ const initialMenuState: MenuState = {
 }
 
 export const Menu: FC = () => {
-    const dispatch = useAppDispatch();
+
     const [state, setState] = useState(initialMenuState)
+    const auth = useAuth()
+    const navigate = useNavigate()
 
     const toggle = () => {
         setState({ ...state, collapsed: !state.collapsed })
@@ -48,6 +56,7 @@ export const Menu: FC = () => {
                 </div>
                 <div className={"navigation-links flex-container flex-column"}>
                     <nav className={"top-links"}>
+                        <h4>General</h4>
                         <ul>
                             <li>
                                 <Link to={"/"} replace className={"flex-container"}>
@@ -68,8 +77,30 @@ export const Menu: FC = () => {
                                 </a>
                             </li>
                         </ul>
+                        <h4>Management</h4>
+                        <ul>
+                            <li>
+                                <Link to={"/user-list"} replace className={"flex-container"}>
+                                    <FontAwesomeIcon icon={faAddressBook} className={"icon"} />
+                                    <span>Employees</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to={"/vacation-requests"} replace className={"flex-container"}>
+                                    <FontAwesomeIcon icon={faEnvelopeOpenText} className={"icon"} />
+                                    <span>Vacation requests</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to={"/messages"} replace className={"flex-container"}>
+                                    <FontAwesomeIcon icon={faEnvelope} className={"icon"} />
+                                    <span>Messages</span>
+                                </Link>
+                            </li>
+                        </ul>
                     </nav>
                     <nav className={"bottom-links"}>
+                        <h4>Account</h4>
                         <ul>
                             <li>
                                 <a href="#" className={"flex-container"}>
@@ -78,7 +109,9 @@ export const Menu: FC = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className={"flex-container"} onClick={() => dispatchOut(logOut())}>
+                                <a className={"flex-container"} onClick={() => {
+                                    auth.signOut(() => navigate('/login', {replace: true}))
+                                }}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} className={"icon"} />
                                     <span>Logout</span>
                                 </a>

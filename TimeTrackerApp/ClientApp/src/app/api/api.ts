@@ -1,75 +1,56 @@
-import { getCookie, refreshTokenKey } from "../../Cookie/Cookie";
+import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../../Cookie/Cookie";
 import { parseJwt } from "../../store/parserJWT/parserJWT";
-import { logOut, setToken } from "../../store/slice/authentication/authSlice";
-import { refreshTokenUpdate } from "../../graphqlQuery/auth/authQuery";
+import { AuthRefreshInputType, authRefreshQuery } from "../../graphqlQuery/auth/authQuery";
 import { AuthUserResponse } from "../../type/User/AuthUser";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { dispatchOut, state, store } from "../store";
+import { store } from "../store";
+import {authLogoutAction} from "../../store/slice/authentication/authSlice";
 
 const apiUrl = "https://localhost:5001/graphql";
-/* accesss токен получаем возвращаем строку для хедера*/
-function useGetTokenState() {
-    const accessToken = state.rootReducer.auth.accessToken;
-    return accessToken == undefined ||accessToken == null ? "" : "Bearer " + accessToken;
+
+const getAuthorizationHeader = (): string => {
+    const accessToken = getCookie(accessTokenKey);
+    return accessToken ? `Bearer ${accessToken}` : "";
 }
 
-
-/*в основном для для аторизаци*/
-export const Request = async (query: string, variables?: unknown) => {
-    const request = await fetch(
-        apiUrl, {
+export const request = async (query: string, variables?: any) => {
+    return await fetch(apiUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: useGetTokenState()
+            'Authorization': getAuthorizationHeader()
         },
-        body: JSON.stringify({ query, variables })
+        body: JSON.stringify({ query, variables }),
     });
-
-    return await request.json();
 }
 
-/* основной который выполянет запросы и запросит access токен если уже вышел срок*/
-export const usebaseQueryWithReauth = async (query: string, variables?: any) => {
-    const result = await Request(query, variables);
-    console.log(result)
-    /*тут наверное нужно проверить ошибку на access token*/
-    if (result.errors != undefined) {
-        /*сделать запрос на обновления access токена с помощь рефреша*/
-        console.log("sending refresh token");
-        const refreshToken = getCookie(refreshTokenKey);
-        
-        if (refreshToken != null) {
-            const refreshResult = await defaultRequest(refreshTokenUpdate, { id: parseJwt<AuthUserResponse>(refreshToken).UserId, refresh: refreshTokenKey });
-            if (refreshResult.data != undefined) {
-                dispatchOut(setToken(refreshResult));
-                return await  Request(query, variables);
-            }
-            else {
-                dispatchOut(logOut());
-            }
-        }
-        else {
-            dispatchOut(logOut());
-        }
+export const graphqlRequest = async (query: string, variables?: any) => {
+    const refreshTokenInCookies = getCookie(refreshTokenKey);
+    let response = await request(query, variables);
+
+    if (response.ok) {
+        return await response.json()
     }
 
-    if (result.data != undefined) {
-        return result;
+    if (refreshTokenInCookies) {
+        const authenticatedUserId = parseInt(parseJwt<AuthUserResponse>(refreshTokenInCookies).UserId)
+        const authRefreshQueryVariables: AuthRefreshInputType = {
+            userId: authenticatedUserId,
+            refreshToken: refreshTokenInCookies,
+        }
+        const refreshResponse = await request(authRefreshQuery, authRefreshQueryVariables);
+        if (refreshResponse.ok) {
+            const refreshResponseBody = await refreshResponse.json();
+            if (refreshResponseBody.data) {
+                if (!refreshResponseBody.data.authRefresh) {
+                    store.dispatch(authLogoutAction(authenticatedUserId))
+                    return "Logout";
+                }
+                setCookie({key: refreshTokenKey, value: refreshResponseBody.data.authRefresh.refreshToken, lifetime: 30 * 24 * 60 * 60})
+                setCookie({key: accessTokenKey, value: refreshResponseBody.data.authRefresh.accessToken, lifetime: 2 * 60})
+                response = await request(query, variables)
+                return response.ok ? await response.json() : response.status;
+            }
+        }
+        store.dispatch(authLogoutAction(authenticatedUserId))
     }
-
-}
-
-
-/*для запроса нетребующих авторизации*/
-export const defaultRequest = async (query: string, variables?: unknown) => {
-    const request = await fetch(
-        apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query, variables })
-    });
-    return await request.json();
 }

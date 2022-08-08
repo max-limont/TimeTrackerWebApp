@@ -92,7 +92,7 @@ export const EditEventForm: FC<EditFormPropsType> = (props) => {
                                 <label>Date</label>
                                 <input type="date" value={editEventFm.date} onChange={(e) => setEvent({ ...editEventFm, date: e.target.value })} />
                             </div>
-                            {rangeEventState == true ?
+                            {rangeEventState ?
                                 <div className={"form-item w-100"}>
                                     <label>End Date</label>
                                     <input type="date" value={editEventFm.endDate == null ? "" : editEventFm.endDate} onChange={(e) => setEvent({ ...editEventFm, endDate: e.target.value })} />

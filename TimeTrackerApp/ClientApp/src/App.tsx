@@ -1,23 +1,19 @@
-
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { AuthenticationIndex} from "./components/login/AuthenticationIndex";
 import { Index } from "./components/Layout/Index";
-import Calendar from './components/Calendar/Calendar';
+import {AuthProvider} from "./components/Auth/AuthProvider";
 
 
 const App = () => {
 
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path={"/welcome"} element={<AuthenticationIndex />} />
-                <Route path={"/"} element={<Index />} >
-                    <Route path="/calendar"  />
-                    <Route path="/userList"  />
-
-                </Route>
-
-            </Routes>
+            <AuthProvider>
+                <Routes>
+                    <Route path={"/login"} element={<AuthenticationIndex />} />
+                    <Route path={"/*"} element={<Index />} />
+                </Routes>
+            </AuthProvider>
         </BrowserRouter>
     );
 }

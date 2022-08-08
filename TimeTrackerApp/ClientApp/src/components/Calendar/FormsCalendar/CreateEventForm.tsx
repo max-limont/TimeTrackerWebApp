@@ -84,7 +84,7 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
                             <label>Date</label>
                             <input type="date" value={date} onChange={(e) => setEvent({ ...event, date: e.target.value })} />
                         </div>
-                        {rangeEventState == true ?
+                        {rangeEventState ?
                             <div className={"form-item w-100"}>
                                 <label>End Date</label>
                                 <input type="date" value={endDate == null ? "" : endDate} onChange={(e) => setEvent({ ...event, endDate: e.target.value })} />

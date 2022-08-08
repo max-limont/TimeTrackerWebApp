@@ -19,7 +19,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
             Field<UserType, User>()
-                .Name("user_create")
+                .Name("CreateUser")
                 .Argument<NonNullGraphType<UserInputType>, User>("User", "User")
                 .ResolveAsync(async context =>
                 {
@@ -28,7 +28,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<UserType, User>()
-                .Name("user_delete")
+                .Name("DeleteUser")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
                 .ResolveAsync(async context =>
                 {
@@ -37,7 +37,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<UserType, User>()
-                .Name("user_edit")
+                .Name("EditUser")
                 .Argument<NonNullGraphType<UserInputType>, User>("User", "User")
                 .ResolveAsync(async context =>
                 {
@@ -46,7 +46,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<UserType, User>()
-                .Name("user_changePassword")
+                .Name("ChangeUserPassword")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
                 .Argument<NonNullGraphType<StringGraphType>, string>("Password", "New user password")
                 .ResolveAsync(async context =>
@@ -57,7 +57,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<RecordType, Record>()
-                .Name("record_create")
+                .Name("CreateRecord")
                 .Argument<NonNullGraphType<RecordInputType>, Record>("Record", "Record")
                 .ResolveAsync(async context =>
                 {
@@ -66,7 +66,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<RecordType, Record>()
-                .Name("record_edit")
+                .Name("EditRecord")
                 .Argument<NonNullGraphType<RecordInputType>, Record>("Record", "Record")
                 .ResolveAsync(async context =>
                 {
@@ -75,7 +75,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<RecordType, Record>()
-                .Name("record_delete")
+                .Name("DeleteRecord")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Record id")
                 .ResolveAsync(async context =>
                 {
@@ -84,7 +84,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<VacationRequestType, VacationRequest>()
-                .Name("vacationRequest_create")
+                .Name("CreateVacationRequest")
                 .Argument<NonNullGraphType<VacationRequestInputType>, VacationRequest>("VacationRequest", "Vacation request")
                 .ResolveAsync(async context =>
                 {
@@ -93,7 +93,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<VacationRequestType, VacationRequest>()
-                .Name("vacationRequest_edit")
+                .Name("EditVacationRequest")
                 .Argument<NonNullGraphType<VacationRequestInputType>, VacationRequest>("VacationRequest", "Vacation request")
                 .ResolveAsync(async context =>
                 {
@@ -102,7 +102,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
             
             Field<VacationRequestType, VacationRequest>()
-                .Name("vacationRequest_delete")
+                .Name("DeleteVacationRequest")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Vacation request")
                 .ResolveAsync(async context =>
                 {
@@ -111,7 +111,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<AuthTokenType, AuthenticationToken>()
-                .Name("authToken_create")
+                .Name("CreateAuthenticationToken")
                 .Argument<NonNullGraphType<AuthTokenInputType>, AuthenticationToken>("AuthToken", "Authentication token")
                 .ResolveAsync(async context =>
                 {
@@ -120,7 +120,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<AuthTokenType, AuthenticationToken>()
-                .Name("authToken_edit")
+                .Name("EditAuthenticationToken")
                 .Argument<NonNullGraphType<AuthTokenInputType>, AuthenticationToken>("AuthToken", "Authentication token")
                 .ResolveAsync(async context =>
                 {
@@ -129,7 +129,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<AuthTokenType, AuthenticationToken>()
-               .Name("authToken_delete")
+               .Name("DeleteAuthenticationToken")
                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Authentication token id")
                .ResolveAsync(async context =>
                {
@@ -138,7 +138,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                });
 
             Field<AuthTokenType, AuthenticationToken>()
-                .Name("authToken_deleteByUserId")
+                .Name("DeleteAuthenticationTokenByUserId")
                 .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
                 .ResolveAsync(async context =>
                 {
@@ -147,25 +147,32 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 });
 
             Field<AuthResponseType, AuthResponse>()
-                .Name("auth_login")
+                .Name("AuthLogin")
                 .Argument<NonNullGraphType<StringGraphType>, string>("Email", "User email")
                 .Argument<NonNullGraphType<StringGraphType>, string>("Password", "User password")
                 .ResolveAsync(async context =>
                 {
                     string email = context.GetArgument<string>("Email");
                     string password = context.GetArgument<string>("Password");
-                    var authenticationServiceResponse = await authenticationService.Login(email, password);
-                    var authenticationServiceApiResponse = new AuthResponse()
-                    {
-                        AccessToken = authenticationServiceResponse.AccessToken,
-                        RefreshToken = authenticationServiceResponse.RefreshToken,
-                        Message = authenticationServiceResponse.Message,
-                    };
-                    return authenticationServiceApiResponse;
+                    try
+					{
+                        var authenticationServiceResponse = await authenticationService.Login(email, password);
+                        var authenticationServiceApiResponse = new AuthResponse()
+                        {
+                            AccessToken = authenticationServiceResponse.AccessToken,
+                            RefreshToken = authenticationServiceResponse.RefreshToken
+                        };
+                        return authenticationServiceApiResponse;
+                    }
+                    catch (Exception exception)
+					{
+                        context.Errors.Add(new ExecutionError(exception.Message));
+                        return new AuthResponse();
+					}
                 });
 
             Field<AuthResponseType, AuthResponse>()
-                .Name("auth_logout")
+                .Name("AuthLogout")
                 .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
                 .ResolveAsync(async context =>
                 {
@@ -174,14 +181,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var authenticationServiceApiResponse = new AuthResponse()
                     {
                         AccessToken = authenticationServiceResponse.AccessToken,
-                        RefreshToken = authenticationServiceResponse.RefreshToken,
-                        Message = authenticationServiceResponse.Message,
+                        RefreshToken = authenticationServiceResponse.RefreshToken
                     };
                     return authenticationServiceApiResponse;
                 });
 
             Field<AuthResponseType, AuthResponse>()
-                .Name("auth_refresh")
+                .Name("AuthRefresh")
                 .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
                 .Argument<NonNullGraphType<StringGraphType>, string>("RefreshToken", "Refresh token")
                 .ResolveAsync(async context =>
@@ -192,8 +198,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var authenticationServiceApiResponse = new AuthResponse()
                     {
                         AccessToken = authenticationServiceResponse.AccessToken,
-                        RefreshToken = authenticationServiceResponse.RefreshToken,
-                        Message = authenticationServiceResponse.Message,
+                        RefreshToken = authenticationServiceResponse.RefreshToken
                     };
                     return authenticationServiceApiResponse;
                 });

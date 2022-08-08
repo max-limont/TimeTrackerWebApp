@@ -1,19 +1,19 @@
 import { faCircleUser, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import moment from "moment";
+import moment, {Moment} from "moment";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { TypeDay } from "../../../enums/TypeDay";
 import { fetchAllEventsAction, fetchRangeEventsAction } from "../../../store/actions/calendar/calendarActions";
 import { EventType } from "../../../type/Events/EventType";
 import { EditEventForm } from "../FormsCalendar/EditEventForm";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 
 export function CalendarGrid() {
-
     const dispatch = useAppDispatch();
     const totalDays = useAppSelector(s => s.rootReducer.calendar.totalDays)
-    const daysArray = useAppSelector((s) => s.rootReducer.calendar.currentDaysArray);
+    const daysArray:Moment[] = useAppSelector((s) => s.rootReducer.calendar.currentDaysArray);
     const currentDate = useAppSelector((s) => s.rootReducer.calendar.currentDate);
     const currentCalendar = useAppSelector((s) => s.rootReducer.calendar.currentCalendar);
     const eventsRange = useAppSelector((s) => s.rootReducer.calendar.eventsRange);
