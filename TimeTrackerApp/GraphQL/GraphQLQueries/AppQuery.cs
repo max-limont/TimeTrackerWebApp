@@ -20,6 +20,32 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                })
                .AuthorizeWithPolicy("LoggedIn");
 
+            Field<ListGraphType<UserType>, IEnumerable<User>>()
+               .Argument<NonNullGraphType<IntGraphType>, int>("from", "From row")
+               .Argument<NonNullGraphType<IntGraphType>, int>("to", "To row")
+               .Argument<StringGraphType?, string?>("orderBy", "Order by")
+               .Name("userFetchPageList")
+               .ResolveAsync(async context =>
+               {
+                   int from = context.GetArgument<int>("from");
+                   int to = context.GetArgument<int>("to");
+                   string? orderBy = context.GetArgument<string?>("orderBy");
+                   if (orderBy != null)
+                       return await userRepository.FetchPageListAsync(from, to, orderBy);
+                   return await userRepository.FetchPageListAsync(from, to);
+               })
+               .AuthorizeWithPolicy("LoggedIn");
+
+            Field<ListGraphType<UserType>, IEnumerable<User>>()
+               .Argument<StringGraphType?, string?>("request", "Request")
+               .Name("userFetchSearchList")
+               .ResolveAsync(async context =>
+               {
+                   string request = context.GetArgument<string>("request");
+                   return await userRepository.FetchSearchListAsync(request);
+               })
+               .AuthorizeWithPolicy("LoggedIn");
+
             Field<UserType, User>()
                 .Name("user_GetById")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")

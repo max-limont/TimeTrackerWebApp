@@ -6,7 +6,7 @@ import { AuthUserResponse } from "../../type/User/AuthUser";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { dispatchOut, state, store } from "../store";
 
-const apiUrl = "https://localhost:5001/graphql";
+const apiUrl = "https://localhost:44322/graphql";
 /* accesss токен получаем возвращаем строку для хедера*/
 function useGetTokenState() {
     const accessToken = state.rootReducer.auth.accessToken;

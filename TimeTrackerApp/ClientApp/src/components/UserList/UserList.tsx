@@ -45,10 +45,17 @@ const UserList = () => {
 
 
         <div className="userList-list">
+            <div className="userList-list-title">
+                <span>Name</span>
+                <span>Weekly Working Time</span>
+            </div>
             {filteredItems.map(
                 (item: User,id) =>
                     <Link key={id} className="link-btn userItem" to={""}>
-                        <ul>{item.firstName} {item.lastName}</ul>
+                        <ul>
+                            <span>{item.firstName} {item.lastName}</span>
+                            <span>{item.weeklyWorkingTime}</span>
+                        </ul>
                     </Link>
             )}
         </div>

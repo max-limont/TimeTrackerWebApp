@@ -58,12 +58,22 @@ $font-size-header: 26px;
     display: flex;
     flex-flow: column;
     align-items: center;
+    &-title{
+      display: flex;
+      justify-content: space-between;
+      width: 500px;
+      padding: 10px;
+    }
     .userItem{
       background: $color-silver;
       color: $color-dark;
       width: 500px;
       margin: 5px 0;
       padding: 10px;
+      ul{
+        display: flex;
+        justify-content: space-between;
+      }
       &:hover{
         background: #9a9a9a;
       }
