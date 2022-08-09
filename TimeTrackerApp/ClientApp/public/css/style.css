@@ -252,6 +252,9 @@ body {
     align-items: center; }
     .header .user-info p {
       font-size: 16px; }
+    .header .user-info > a {
+      color: #EEEEEE;
+      text-decoration: none; }
     .header .user-info img {
       width: 32px;
       height: 32px;
