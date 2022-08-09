@@ -154,6 +154,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 {
                     string email = context.GetArgument<string>("Email");
                     string password = context.GetArgument<string>("Password");
+                    
                     try
 					{
                         var authenticationServiceResponse = await authenticationService.Login(email, password);
