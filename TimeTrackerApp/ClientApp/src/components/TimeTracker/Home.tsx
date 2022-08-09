@@ -25,6 +25,9 @@ export const Home: FC = () => {
     const dispatch = useAppDispatch()
     const auth = useAuth()
     const [state, setState] = useState(initialState)
+    let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
+    let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record)).sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime());
+    let lastRecord = timeTrackerListItems.filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined
 
     useEffect(() => {
         if (auth.state?.user?.id) {
@@ -32,9 +35,6 @@ export const Home: FC = () => {
         }
     }, [auth.state?.user?.id])
 
-    let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
-    let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record)).sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime());
-    let lastRecord = timeTrackerListItems.filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined
 
     useEffect(() => {
         if (auth.state?.user?.id && records && lastRecord) {
