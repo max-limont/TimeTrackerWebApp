@@ -643,7 +643,7 @@ table .bottom-table-row {
     .statistic-panel .statistic-panel-list > div {
       display: inline-flex;
       flex-direction: column;
-      padding-bottom: 30px; }
+      padding-block: 0 30px; }
     .statistic-panel .statistic-panel-list h4 {
       text-transform: uppercase;
       font-weight: 600;
@@ -652,11 +652,8 @@ table .bottom-table-row {
     .statistic-panel .statistic-panel-list span {
       color: #393E46;
       font-weight: 700;
-      font-size: 30px; }
-  .statistic-panel .timer-tip {
-    font-weight: 400;
-    font-size: 15px;
-    color: #00ADB5; }
+      font-size: 30px;
+      margin-top: 10px; }
 
 .timer-panel {
   display: inline-flex;
@@ -673,6 +670,39 @@ table .bottom-table-row {
     margin-top: 20px;
     font-size: 20px;
     padding: 10px 70px 10px 70px; }
+
+.full-timer-choose-time-panel {
+  display: inline-flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border-radius: 2px;
+  box-shadow: 0 0 5px -4px #393E46;
+  padding: 15px;
+  color: #222831; }
+  .full-timer-choose-time-panel > h3 {
+    font-weight: bold;
+    font-size: 20px; }
+  .full-timer-choose-time-panel .button {
+    font-size: 20px;
+    padding: 10px 65px 10px 65px; }
+  .full-timer-choose-time-panel > div {
+    height: 100%;
+    padding-block: 20px;
+    align-items: center;
+    justify-content: center; }
+    .full-timer-choose-time-panel > div span {
+      font-size: 26px;
+      font-weight: 300; }
+    .full-timer-choose-time-panel > div input {
+      border: none;
+      outline: none;
+      padding: 10px 30px 10px 30px;
+      border-radius: 2px;
+      box-shadow: inset 0 0 5px -4px #393E46;
+      font-family: 'Nunito', sans-serif;
+      font-size: 26px;
+      background: #EEEEEE;
+      margin-block: 20px; }
 
 .timer {
   display: inline-flex;

@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGears, faPenClip, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {useAppDispatch} from "../../../app/hooks";
@@ -30,14 +30,18 @@ let initialState: EditRecordFormFieldsStateType = {
 export const EditRecordForm: FC<EditRecordFormPropsType> = (props) => {
 
     const dispatch = useAppDispatch();
-    const { record, visible, setVisible } = props;
-    if (record) {
-        initialState = {...initialState, comment: record.comment}
-    }
+    const {record, visible, setVisible} = props;
     const [state, setState] = useState(initialState)
+
+    useEffect(() => {
+        if (record) {
+            setState({...state, comment: record.comment})
+        }
+    }, [record])
+
     const onSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setState({comment: ''})
+        setState({...state, comment: ''})
         const editedRecord = {
             id: record.id,
             workingTime: record.workingTime,
@@ -59,6 +63,7 @@ export const EditRecordForm: FC<EditRecordFormPropsType> = (props) => {
                 <div className={"form-header"}>
                     <h2>Edit record</h2>
                     <button className={"button red-button close"} onClick={() => {
+                        setState({...state, comment: ''})
                         setVisible(false)
                         document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
                     }}>
@@ -111,7 +116,7 @@ export const EditRecordForm: FC<EditRecordFormPropsType> = (props) => {
                     <div className={"form-group"}>
                         <div className={"form-item flex-wrap w-100"}>
                             <label>Comment:</label>
-                            <textarea defaultValue={record.comment ?? undefined} onChange={event => setState({...state, comment: event.target.value})} />
+                            <textarea defaultValue={state.comment ?? ''} onChange={event => setState({...state, comment: event.target.value})} />
                         </div>
                     </div>
                     <button type="submit" className={"button yellow-button"}>Save</button>

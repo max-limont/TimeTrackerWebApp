@@ -31,13 +31,13 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
             password: action.payload.password
         } as AuthLoginInputType)).pipe(
             map(response => {
-                if (response.data.authLogin && response.data.authLogin.accessToken && response.data.authLogin.refreshToken && !response.errors) {
+                if (response && response.data.authLogin && response.data.authLogin.accessToken && response.data.authLogin.refreshToken && !response.errors) {
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
                     const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
                     store.dispatch(authorizeUserById(userId))
                     return { payload: response, type: "AuthLoginSuccess" } as Action;
-                } else if (response.errors) {
+                } else if (response && response.errors) {
                     store.dispatch(setError(parseError(response.errors[0].message)));
                     return { payload: response, type: "AuthLoginError" } as Action
                 }
@@ -57,7 +57,6 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
             map(() => {
                 clearCookie(refreshTokenKey)
                 clearCookie(accessTokenKey)
-                window.localStorage.removeItem("AuthorizedUser")
                 store.dispatch(logout())
                 return { payload: "Success", type: "AuthLogoutSuccess" } as Action
             }),
@@ -72,7 +71,7 @@ const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUs
             id: action.payload
         } as GetUserByIdQueryInputType)).pipe(
             map(response => {
-                if (response.data && response.data.getUserById) {
+                if (response && response.data && response.data.getUserById) {
                     const apiResponse = response.data.getUserById
                     const user = {
                         id: parseInt(apiResponse.id),
