@@ -17,7 +17,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using TimeTrackerApp.Handlers;
 using TimeTrackerApp.Business.Services;
 using System;
 
@@ -25,17 +24,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 string connectionString = builder.Configuration.GetConnectionString(Constants.DatabaseConnectionString);
 
-
 builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new AuthenticationTokenRepository(connectionString));
 builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
+builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
 builder.Services.AddSingleton<IVacationRequestRepository>(provider => new VacationRequestRepository(connectionString));
+
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
-// Add services to the container.
 
+
+// Add services to the container.
 builder.Services.AddCors(
     builder => {
         builder.AddPolicy("DefaultPolicy", option =>
@@ -78,6 +79,8 @@ builder.Services.AddGraphQL(b => b
                 .AddErrorInfoProvider(options => options.ExposeExceptionStackTrace = true)
                 .AddSchema<AppSchema>()
                 .AddGraphTypes(typeof(AppSchema).Assembly));
+
+
 
 // In production, the React files will be served from this directory
 builder.Services.AddSpaStaticFiles(configuration =>

@@ -1,10 +1,12 @@
-import React, {FC, useState} from "react";
-import {faXmark} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {CreateEventObject} from "../../../type/Events/CreateEventType";
+import React, { FC, useState } from "react";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { CreateEventObject } from "../../../type/Events/CreateEventType";
 import moment from "moment";
-import {addEvent} from "../../../store/slice/calendar/calendarSlice";
+import Switch from "react-switch";
+import { TypeDay } from "../../../enums/TypeDay";
+import { addEventAction } from "../../../store/actions/calendar/calendarActions";
 
 type CreateFormPropsType = {
     visible: boolean,
@@ -14,19 +16,32 @@ type CreateFormPropsType = {
 export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
 
     const dispatch = useAppDispatch();
-    const events = useAppSelector(s => s.rootReducer.calendar.events);
-    const id = events && events.length > 0 ? events[events.length - 1].id + 1 : 1;
-    const [event, setEvent] = useState({ ...CreateEventObject, date: moment().format("yyyy-MM-DD") });
+    const [event, setEvent] = useState({ ...CreateEventObject, typeDayId: TypeDay.ShortDay, date: moment().format("yyyy-MM-DD") });
+    const [errorForm, setErrorForm] = useState("");
+    const [rangeEventState, setRangeEventState] = useState(false);
     const onFinish = (e: React.FormEvent) => {
         e.preventDefault();
-        dispatch(addEvent({
-            ...event,
-            id: id
-        }));
-        setVisible(false);
-        document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
+        let checkDates = !(moment(event.date).isSameOrAfter(event.endDate));
+        if (checkDates) {
+            const postFixDate = "T00:00:00+00:00";
+            if (rangeEventState == false) {
+                event.endDate == null;
+            }
+            dispatch(addEventAction({
+                ...event,
+                date: event.date + postFixDate,
+                endDate: event.endDate == "" || event.endDate == null ? null : event.endDate + postFixDate
+            }));
+            setVisible(false);
+            document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
+        }
+        if (!checkDates) {
+            setErrorForm("Date Errors");
+        }
+
     }
-    const { title, description, date } = event;
+
+    const { title, date, typeDayId, endDate } = event;
     const { visible, setVisible } = props;
 
 
@@ -34,7 +49,9 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
         <div className={`form-event-container dark-background ${!visible && "hidden"}`}>
             <div className={"form-event"}>
                 <div className={"form-header"}>
+
                     <h2>Create event</h2>
+                    <div style={{ color: "red" }}>{errorForm}</div>
                     <button className={"button red-button close"} onClick={() => {
                         setVisible(false)
                         document.getElementsByTagName('body')[0].attributes.removeNamedItem('style');
@@ -42,20 +59,36 @@ export const CreateEventForm: FC<CreateFormPropsType> = (props) => {
                         <FontAwesomeIcon icon={faXmark} className={"icon"} />
                     </button>
                 </div>
-                <form onSubmit={(e) => onFinish(e)}>
+                <form onSubmit={(e) => onFinish(e)} onChange={() => { setErrorForm("") }}>
                     <div className={"form-group"}>
                         <div className={"form-item w-100"}>
                             <label>Name</label>
                             <input value={title} onChange={(e) => setEvent({ ...event, title: e.target.value })} />
                         </div>
-                        <div className={"form-item align-items-start w-100"}>
-                            <label>Description</label>
-                            <textarea value={description} onChange={(e) => setEvent({ ...event, description: e.target.value })} />
+                        <div className={"form-item w-100"}>
+                            <label>Type Day</label>
+                            <select onChange={(e) => setEvent({ ...event, typeDayId: parseInt(e.target.value) })}>
+                                <option value={TypeDay.ShortDay}>Short Day</option>
+                                <option value={TypeDay.Weekend}>Weekend</option>
+                            </select>
+                        </div>
+                        <div className={"form-item w-100"}>
+                            <label>Range Date Event</label>
+                            <Switch onChange={() => {
+                                if(!rangeEventState==false)
+                                setEvent({ ...event, endDate: null });
+                                setRangeEventState(!rangeEventState)
+                            }} checked={rangeEventState} checkedIcon={false} uncheckedIcon={false} />
                         </div>
                         <div className={"form-item w-100"}>
                             <label>Date</label>
                             <input type="date" value={date} onChange={(e) => setEvent({ ...event, date: e.target.value })} />
                         </div>
+                        {rangeEventState ?
+                            <div className={"form-item w-100"}>
+                                <label>End Date</label>
+                                <input type="date" value={endDate == null ? "" : endDate} onChange={(e) => setEvent({ ...event, endDate: e.target.value })} />
+                            </div> : <></>}
                     </div>
                     <button type="submit" className={"button cyan-button"}>Add</button>
                     <button type="reset" className={"button red-button"}>Reset</button>

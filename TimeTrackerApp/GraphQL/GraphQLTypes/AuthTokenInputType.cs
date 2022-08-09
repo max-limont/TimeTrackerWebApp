@@ -1,15 +1,15 @@
 ﻿using GraphQL.Types;
+using TimeTrackerApp.Business.Models;
 
 namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
-    public class AuthTokenInputType : InputObjectGraphType
+    public class AuthTokenInputType : InputObjectGraphType<AuthenticationToken>
     {
         public AuthTokenInputType()
         {
-            Name = "authTokenInput";
-            Field<IdGraphType>("id");
-            Field<NonNullGraphType<IntGraphType>>("userId");
-            Field<NonNullGraphType<StringGraphType>>("token");
+            Field<IdGraphType, int?>().Name("Id").Resolve(context => context.Source.Id);
+            Field<NonNullGraphType<IdGraphType>, int>().Name("UserId").Resolve(context => context.Source.UserId);
+            Field<NonNullGraphType<StringGraphType>, string>().Name("Token").Resolve(context => context.Source.Token);
         }
     }
 }

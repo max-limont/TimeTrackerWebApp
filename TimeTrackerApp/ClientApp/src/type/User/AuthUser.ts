@@ -14,5 +14,5 @@ export type AuthorizationUser = {
 
 export const EmptyAuthUser: AuthorizationUser = {
     email: '',
-    password: ""
+    password: "",
 }

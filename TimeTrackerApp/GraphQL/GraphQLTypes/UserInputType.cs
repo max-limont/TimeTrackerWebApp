@@ -1,20 +1,20 @@
 ﻿using GraphQL.Types;
+using TimeTrackerApp.Business.Models;
 
 namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
-    public class UserInputType : InputObjectGraphType
+    public class UserInputType : InputObjectGraphType<User>
     {
         public UserInputType()
         {
-            Name = "UserInput";
-            Field<IdGraphType>("id");
-            Field<NonNullGraphType<StringGraphType>>("email");
-            Field<StringGraphType>("password");
-            Field<StringGraphType>("firstName");
-            Field<StringGraphType>("lastName");
-            Field<IntGraphType>("weeklyWorkingTime");
-            Field<IntGraphType>("remainingVacationDays");
-            Field<IntGraphType>("privilegesValue");
+            Field<IdGraphType, int>().Name("Id").Resolve(context => context.Source.Id);
+            Field<NonNullGraphType<StringGraphType>, string>().Name("Email").Resolve(context => context.Source.Email);
+            Field<NonNullGraphType<StringGraphType>, string>().Name("Password").Resolve(context => context.Source.Password);
+            Field<StringGraphType, string>().Name("FirstName").Resolve(context => context.Source.FirstName);
+            Field<StringGraphType, string>().Name("LastName").Resolve(context => context.Source.LastName);
+            Field<IntGraphType, int?>().Name("WeeklyWorkingTime").Resolve(context => context.Source.WeeklyWorkingTime);
+            Field<IntGraphType, int?>().Name("RemainingVacationDays").Resolve(context => context.Source.RemainingVacationDays);
+            Field<IntGraphType, int?>().Name("PrivilegesValue").Resolve(context => context.Source.PrivilegesValue);
         }
     }
 }

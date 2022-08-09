@@ -1,10 +1,13 @@
-import { FC, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchUserByIdAction } from "../../store/actions/user/userActions";
+import {FC} from "react";
+import {useAuth} from "../../hooks/useAuth";
+import {Link} from "react-router-dom";
 
 export const Header: FC = () => {
+
+    const auth = useAuth()
+
     return (
-        <header className={"personal-account-header header flex-container w-100"}>
+        <header className={"personal-account-header header flex-container"}>
             <div className={"breadcrumbs flex-container"}>
                 <nav>
                     <a href="#">Breadcrumbs</a>
@@ -12,8 +15,10 @@ export const Header: FC = () => {
                 </nav>
             </div>
             <div className={"user-info flex-container"}>
-                <img src={`${process.env.PUBLIC_URL}/images/ava.jpg`} alt={"user-profile-image"} />
-                <p>Petro Mostavchuk</p>
+                <Link to={'/user-page'} replace className={"flex-container align-items-center"}>
+                    <img src={`${process.env.PUBLIC_URL}/images/ava.jpg`} alt={"user-profile-image"} />
+                    <p>{auth.state?.user?.firstName} {auth.state?.user?.lastName}</p>
+                </Link>
             </div>
         </header>
     );
