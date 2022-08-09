@@ -28,7 +28,7 @@ query ($request: String!){
 `
 
 export const getUserCount=`
-query{
+query GetUserCount{
   userCount
 }
 `

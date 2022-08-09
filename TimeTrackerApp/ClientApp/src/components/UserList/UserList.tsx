@@ -5,41 +5,39 @@ import {Link} from "react-router-dom";
 import User from "../../type/Models/User";
 import "./style.scss"
 import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {useAction} from "../../hooks/useAction";
 import {UserListPage} from "../../type/User/User";
+import {useActions} from "../../hooks/useActions";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {
+    fetchUserCountAction,
+    fetchUserListPageAction,
+    fetchUserListSearchRequestAction
+} from "../../store/actions/userList/userListActions";
 
 const UserList = () => {
-    const {userList, userListCount} = useTypedSelector(state => {
-        return {
-            userList: state.rootReducer.userList.userList,
-            userListCount: state.rootReducer.userList.count
-        }
-    })
-    console.log(userList)
-    const [value, setValue] = useState<UserListPage>({from: 0, to: 3, orderBy: null})
-    const {fetchUserList, fetchUserListCount} = useAction()
+    const dispatch = useAppDispatch();
+    const [state, setState] = useState<UserListPage>({from: 0, to: 10, orderBy: null});
+    const [search, setSearch] = useState<string>("");
+    const {userList, count} = useAppSelector(state => state.rootReducer.userList);
 
     useEffect(() => {
-        fetchUserList(value)
-    }, [])
-
-    // const filteredItems = userList.filter((item) => {
-    //     return item.firstName.toLowerCase().includes(value.toLowerCase()) || item.lastName.toLowerCase().includes(value.toLowerCase())
-    // })
-
-    // const dispatch = useAppDispatch();
-    // const [state, setState] = useState<UserListPage>({from: 0, to: 3, orderBy: null});
-    // dispatch(fetchUserListPageAction(state))
-    // const userList = useAppSelector(s=>s.rootReducer.userList.userList);
+        dispatch(fetchUserCountAction())
+        if (search.length < 2)
+            dispatch(fetchUserListPageAction(state))
+        else
+            dispatch(fetchUserListSearchRequestAction(search))
+    }, [search])
+    // console.log("Count " + count)
+    // console.log(userList)
 
     return <section className="userList">
         <div className="userList-controls">
             <form className="search_form">
-                {/*<input*/}
-                {/*    type="text"*/}
-                {/*    onChange={(event => setValue(event.target.value))}*/}
-                {/*    placeholder="Search..."*/}
-                {/*/>*/}
+                <input
+                    type="text"
+                    onChange={(event => setSearch(event.target.value))}
+                    placeholder="Search..."
+                />
                 <FontAwesomeIcon icon={faMagnifyingGlass} className={"icon"}/>
             </form>
 
@@ -58,23 +56,27 @@ const UserList = () => {
                 <span>Name</span>
                 <span>Weekly Working Time</span>
             </div>
-            {/*{userList.map(*/}
-            {/*    (item: User,id) =>*/}
-            {/*        <Link key={id} className="link-btn userItem" to={""}>*/}
-            {/*            <ul>*/}
-            {/*                <span>{item.firstName} {item.lastName}</span>*/}
-            {/*                <span>{item.weeklyWorkingTime}</span>*/}
-            {/*            </ul>*/}
-            {/*        </Link>*/}
-            {/*)}*/}
-            <div className={"pageButton"}>
-                {
-                    Array(10).map((value, index) => {
-                    return <div key={index}>
-
-                    </div>
-                })}
-            </div>
+            {
+                userList
+                    ? userList.map(
+                    (item: User) =>
+                        <Link key={item.id} className="link-btn userItem" to={""}>
+                            <ul>
+                                <span>{item.firstName} {item.lastName}</span>
+                                <span>{item.weeklyWorkingTime}</span>
+                            </ul>
+                        </Link>
+                    )
+                    : null
+            }
+            {/*<div className={"pageButtons"}>*/}
+            {/*    {*/}
+            {/*        Array(Math.ceil(count / 2)).map((value, index) => {*/}
+            {/*        return <div className={"pageButtons-elem"} key={index}>*/}
+            {/*            {index}*/}
+            {/*        </div>*/}
+            {/*    })}*/}
+            {/*</div>*/}
         </div>
 
     </section>

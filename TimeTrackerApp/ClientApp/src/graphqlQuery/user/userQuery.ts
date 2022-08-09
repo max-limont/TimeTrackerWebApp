@@ -1,28 +1,36 @@
 export const getUserByEmailQuery = `
-query($email: String!){
-    user_getByEmail(email: $email){
-        id ,
-        email ,
-        password ,
-        firstName ,
-        lastName,
-        weeklyWorkingTime ,
-        remainingVacationDays ,
-        privilegesValue 
+    query GetUserByEmail($email: String!) {
+        getUserByEmail(email: $email) {
+            id
+            email
+            password
+            firstName
+            lastName
+            weeklyWorkingTime
+            remainingVacationDays
+            privilegesValue 
+        }
     }
-}
-`;
+`
 
-export const getUserById=`
-query ($id: ID){
-    user_GetById(id: $id){
-        id ,
-        email ,
-        password ,
-        firstName ,
-        lastName,
-        weeklyWorkingTime ,
-        remainingVacationDays ,
-        privilegesValue 
-   }
- }`
+export const getUserByIdQuery = `
+    query GetUserById($id: ID!) {
+        getUserById(id: $id) {
+            id
+            email
+            firstName
+            lastName
+            weeklyWorkingTime
+            remainingVacationDays
+            privilegesValue
+        }
+    }
+`
+
+export type GetUserByIdQueryInputType = {
+    id: number
+}
+
+export type GetUserByEmailQueryInputType = {
+    email: string
+}

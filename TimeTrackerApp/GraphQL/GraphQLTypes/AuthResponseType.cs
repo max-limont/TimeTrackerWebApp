@@ -8,7 +8,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
 		{
 			Field<StringGraphType, string>().Name("AccessToken").Resolve(context => context.Source.AccessToken);
 			Field<StringGraphType, string>().Name("RefreshToken").Resolve(context => context.Source.RefreshToken);
-			Field<StringGraphType, string>().Name("ResponseMessage").Resolve(context => context.Source.Message);
 		}		
 	}
 }

@@ -1,17 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import User from "../../../type/Models/User";
 
-interface UserListState{
+type UserListStateType = {
     userList: User[],
     count: number
     error: null | string
 }
 
-const initialState: UserListState = {
+const initialState: UserListStateType = {
     userList: [],
     count: 0,
     error: null
 }
+
 const userListSlice = createSlice({
     name: "userListSlice",
     initialState,
