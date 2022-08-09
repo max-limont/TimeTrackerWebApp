@@ -117,31 +117,6 @@ body {
   align-items: center;
   justify-content: center; }
 
-.h-100 {
-  height: 100%; }
-
-.h-fullscreen {
-  height: 100vh; }
-
-.auth-container {
-  background-size: 100% 100%;
-  align-items: center;
-  justify-content: center; }
-
-.authentication-form {
-  max-width: 400px;
-  width: 100%;
-  background: #EEEEEE;
-  border-radius: 5px;
-  padding: 15px;
-  box-shadow: 0 0 20px -10px #222831; }
-  .authentication-form span {
-    width: 100%;
-    text-align: center;
-    font-size: 26px;
-    font-weight: 500;
-    color: #222831; }
-
 .menu-container {
   position: relative;
   z-index: 10;
@@ -421,6 +396,10 @@ section header {
     padding: 20px 10px 20px 10px;
     text-align: center; }
 
+.control-panel {
+  display: flex;
+  align-items: stretch; }
+
 .calendar-controls {
   display: flex;
   background: #393E46;
@@ -557,6 +536,8 @@ section header {
   padding: 15px;
   max-width: 720px;
   width: 100%; }
+  .form-event .form-item {
+    padding: 10px 0 10px 0; }
   .form-event form .button {
     margin-right: 5px; }
   .form-event .form-header {

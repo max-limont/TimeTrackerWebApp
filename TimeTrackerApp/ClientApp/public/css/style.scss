@@ -566,6 +566,11 @@ section {
     }
 }
 
+.control-panel {
+    display: flex;
+    align-items: stretch;
+}
+
 .calendar-controls {
     display: flex;
     background: $color-light-dark;
@@ -749,6 +754,10 @@ section {
     padding: 15px;
     max-width: 720px;
     width: 100%;
+
+    .form-item {
+        padding: 10px 0 10px 0;
+    }
 
     form .button {
         margin-right: 5px;
