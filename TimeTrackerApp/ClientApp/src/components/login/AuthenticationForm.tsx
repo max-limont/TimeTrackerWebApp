@@ -16,11 +16,12 @@ const initialState: AuthenticationFormState = {
 }
 
 export const AuthenticationForm: FC = () => {
-
     const dispatch = useAppDispatch();
+    const isLoadingAuth =useAppSelector(s=>s.rootReducer.auth.isLoading)
+    const accessToken = useAppSelector(s=>s.rootReducer.auth.accessToken);
     const [state, setState] = useState(initialState);
     const authErrorMessage = useAppSelector(state => state.rootReducer.auth.error);
-    const auth = useAuth()
+    const auth = useAuth();
 
     useEffect(() => {
         if (authErrorMessage) {

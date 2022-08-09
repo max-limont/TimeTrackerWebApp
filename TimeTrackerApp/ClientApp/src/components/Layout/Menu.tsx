@@ -48,6 +48,8 @@ export const Menu: FC = () => {
                 </div>
                 <div className={"logo flex-container"}>
                     <FontAwesomeIcon icon={faStopwatch} className={"icon"} />
+           
+           
                     <h2>
                         TimeTracker
                     </h2>

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import User from "../../../type/Models/User";
+import {User} from "../../../type/User/User";
 
 type UserListStateType = {
     userList: User[],

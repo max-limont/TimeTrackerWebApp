@@ -5,12 +5,13 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using System.Collections.Generic;
 using System;
+using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppQuery : ObjectGraphType
     {
-        public AppQuery(IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
+        public AppQuery(ICalendarRepository calendarRepository,IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
         {
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
@@ -123,6 +124,33 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return await authenticationTokenRepository.GetByUserIdAsync(userId);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
+
+            Field<ListGraphType<CalendarType>, List<Calendar>>()
+                .Name("getEvents")
+                .ResolveAsync(async context => await calendarRepository.GetAllEvents());
+
+
+            Field<ListGraphType<CalendarType>, IEnumerable<Calendar>>()
+                .Name("getRangeEvents")
+                .Argument<DateGraphType>("startDate", "start date")
+                .Argument<DateGraphType>("finishDate", "finish date")
+                .ResolveAsync(async context =>
+                {
+                    DateTime startDate = context.GetArgument<DateTime>("startDate"),
+                    finishDate = context.GetArgument<DateTime>("finishDate");
+                    return await calendarRepository.GetEventRange(startDate, finishDate);
+                });
+
+
+            Field<CalendarType, Calendar>()
+                .Name("getEventById")
+                .Argument<NonNullGraphType<IdGraphType>>("eventId", "event id")
+                .ResolveAsync(async context =>
+                {
+                    var id = context.GetArgument<int>("eventId");
+                    return await calendarRepository.GetEventById(id);
+                });
+
         }
     }
 }

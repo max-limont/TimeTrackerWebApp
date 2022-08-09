@@ -1,17 +1,19 @@
 import { configureStore, combineReducers} from '@reduxjs/toolkit';
 import { authSlice } from '../store/slice/authentication/authSlice';
 import { timeTrackerReducer } from "../store/slice/timeTracker/timeTrackerSlice";
-import { combineEpics, createEpicMiddleware, ofType } from "redux-observable";
+import { combineEpics, createEpicMiddleware} from "redux-observable";
 import { calendarSlice } from '../store/slice/calendar/calendarSlice';
 import { authEpics } from './api/epics/auth/authEpics';
 import { userEpics } from './api/epics/user/userEpics';
 import userListSlice from '../store/slice/user/userListSlice';
+import { calendarEpics } from './api/epics/calendar/calendarEpics';
 import {timeTrackerEpics} from "./api/epics/timeTracker/timeTrackerEpics";
 
 
 const epicMiddleware = createEpicMiddleware();
 
-const rootEpic = combineEpics(authEpics, userEpics, timeTrackerEpics);
+const rootEpic = combineEpics(authEpics,userEpics,calendarEpics, timeTrackerEpics);
+
 
 const rootReducer = combineReducers({
   calendar: calendarSlice.reducer,

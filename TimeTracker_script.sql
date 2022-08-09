@@ -40,3 +40,14 @@ create table [AuthenticationTokens]
 	[UserId] int not null foreign key references [Users]([Id]) on delete cascade,
 	[Token] text not null
 )
+
+
+
+create table [Calendar]
+(
+[Id] int primary key identity(1,1),
+[Title] nvarchar(50) not null,
+[Date] date not null ,
+[EndDate] date null,
+[TypeDayId] int 
+)

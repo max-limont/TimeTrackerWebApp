@@ -1,11 +1,13 @@
 export type CreateEventType = {
     title: string,
-    desription: string,
-    dateCreate: string
+    date: string,
+    typeDayId: number|null,
+    endDate: string|null,
 }
 
-export const CreateEventObject = {
+export const CreateEventObject:CreateEventType = {
     title: '',
-    description: '',
-    date: ''
+    date: '',
+    endDate: null,
+    typeDayId:null,
 }

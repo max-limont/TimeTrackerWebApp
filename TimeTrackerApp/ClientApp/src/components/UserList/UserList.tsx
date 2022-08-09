@@ -3,8 +3,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
-import User from "../../type/Models/User";
 import "./style.scss"
+import { User } from "../../type/User/User";
+
 
 const UserList = () => {
     const {userList} = useTypedSelector(state => {

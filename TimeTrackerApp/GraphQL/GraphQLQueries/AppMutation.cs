@@ -8,12 +8,13 @@ using TimeTrackerApp.Business.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using System;
+using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
+        public AppMutation(ICalendarRepository calendarRepository,IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
@@ -200,6 +201,32 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                         RefreshToken = authenticationServiceResponse.RefreshToken
                     };
                     return authenticationServiceApiResponse;
+                });
+
+            Field<CalendarType, Calendar>()
+                .Name("addEvent")
+                .Argument<CalendarInputType, Calendar>("event", "add event to calendar")
+                .ResolveAsync(async context =>
+                {
+                    return await calendarRepository.AddEvent(context.GetArgument<Calendar>("event"));
+                });
+
+
+            Field<CalendarType, Calendar>()
+                .Name("deleteEvent")
+                .Argument<NonNullGraphType<IdGraphType>, int>("id", "id to delete")
+                .ResolveAsync(async context =>
+                {
+                    return await calendarRepository.RemoveEvent(context.GetArgument<int>("id"));
+                });
+            
+            Field<CalendarType, Calendar>()
+                .Name("updateEvent")
+                .Argument<CalendarUpdateType, Calendar>("event", "id to delete")
+                .ResolveAsync(async context =>
+                {
+                    var model = context.GetArgument<Calendar>("event");
+                    return await calendarRepository.UpdateEvent(model);
                 });
         }
     }

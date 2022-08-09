@@ -579,11 +579,11 @@ section {
     width: 100%;
     min-height: 140px;
     background-color: $color-light;
+   
 }
 
 .weekend {
-    background-color: $color-light;
-
+    background-color: $color-red;
     > .day-number > p {
         background-color: $color-dark;
     }
@@ -677,6 +677,9 @@ section {
     align-items: flex-start !important;
 }
 
+<<<<<<< HEAD
+
+=======
 .align-items-center {
     align-items: center !important;
 }
@@ -684,6 +687,7 @@ section {
 .justify-content-center {
     justify-content: center;
 }
+>>>>>>> 54e06e94df6967c4574cfa30fe9fc82df8228b47
 
 .form-header {
     h2 {
