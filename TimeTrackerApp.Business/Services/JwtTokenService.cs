@@ -39,7 +39,7 @@ namespace TimeTrackerApp.Business.Services
 			};
 		}
 
-		public static string GenerateAccessToken(User user) => GenerateJwtToken(GetJwtTokenClaims(user), 60);
+		public static string GenerateAccessToken(User user) => GenerateJwtToken(GetJwtTokenClaims(user), 600);
 
 		public static string GenerateRefreshToken(User user) => GenerateJwtToken(GetJwtTokenClaims(user), 2592000);
 	}

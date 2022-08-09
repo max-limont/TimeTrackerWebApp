@@ -37,12 +37,20 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                .AuthorizeWithPolicy("LoggedIn");
 
             Field<ListGraphType<UserType>, IEnumerable<User>>()
-               .Argument<StringGraphType?, string?>("request", "Request")
+               .Argument<StringGraphType, string>("request", "Request")
                .Name("userFetchSearchList")
                .ResolveAsync(async context =>
                {
                    string request = context.GetArgument<string>("request");
                    return await userRepository.FetchSearchListAsync(request);
+               })
+               .AuthorizeWithPolicy("LoggedIn");
+
+            Field<IntGraphType, int>()
+               .Name("userCount")
+               .ResolveAsync(async context =>
+               {
+                   return await userRepository.GetCountAsync();
                })
                .AuthorizeWithPolicy("LoggedIn");
 

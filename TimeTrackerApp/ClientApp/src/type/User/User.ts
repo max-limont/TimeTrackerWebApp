@@ -20,3 +20,9 @@ export const EmptyUser:User ={
     remainingVacationDays: 0,
     privilegesValue: 0
 }
+
+export interface UserListPage{
+    from: number,
+    to: number,
+    orderBy: string | null
+}

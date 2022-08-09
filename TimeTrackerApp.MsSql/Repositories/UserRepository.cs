@@ -91,13 +91,22 @@ namespace TimeTrackerApp.MsSql.Repositories
 		{
 			request += "%"; 
 			string query = $"SELECT * FROM Users " +
-                $"WHERE (LastName LIKE {request}) " +
-                $"OR (FirstName LIKE {request}) " +
-                $"OR (Email LIKE {request})";
+                $"WHERE (LastName LIKE '{request}') " +
+                $"OR (FirstName LIKE '{request}') " +
+                $"OR (Email LIKE '{request}')";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
 				return await connection.QueryAsync<User>(query);
+			}
+		}
+
+		public async Task<int> GetCountAsync()
+		{
+			string query = "SELECT COUNT(*) FROM Users";
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QuerySingleOrDefaultAsync<int>(query);
 			}
 		}
 
