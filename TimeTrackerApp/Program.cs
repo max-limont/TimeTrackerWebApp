@@ -24,7 +24,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 string connectionString = builder.Configuration.GetConnectionString(Constants.DatabaseConnectionString);
 
-
 builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new AuthenticationTokenRepository(connectionString));
 builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
@@ -32,13 +31,12 @@ builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepos
 builder.Services.AddSingleton<IVacationRequestRepository>(provider => new VacationRequestRepository(connectionString));
 
 
-
-
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
-// Add services to the container.
 
+
+// Add services to the container.
 builder.Services.AddCors(
     builder => {
         builder.AddPolicy("DefaultPolicy", option =>
