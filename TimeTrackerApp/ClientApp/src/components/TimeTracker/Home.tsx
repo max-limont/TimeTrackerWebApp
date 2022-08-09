@@ -25,9 +25,6 @@ export const Home: FC = () => {
     const dispatch = useAppDispatch()
     const auth = useAuth()
     const [state, setState] = useState(initialState)
-    let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
-    let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record)).sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime());
-    let lastRecord = timeTrackerListItems.filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined
 
     useEffect(() => {
         if (auth.state?.user?.id) {
@@ -35,15 +32,18 @@ export const Home: FC = () => {
         }
     }, [auth.state?.user?.id])
 
+    let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
+    let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record)).sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime());
+    let lastRecord = timeTrackerListItems.filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined
 
     useEffect(() => {
         if (auth.state?.user?.id && records && lastRecord) {
             setState({...state, showContent: true})
         }
-    }, [auth.state?.user?.id, records])
+    }, [])
 
 
-    return state.showContent ? (
+    return (
         <div className={"flex-container flex-column w-100"}>
             <section className={"time-tracker-container w-100"}>
                 <header>
@@ -55,9 +55,9 @@ export const Home: FC = () => {
                 </div>
             </section>
         </div>
-    ) : (
+    ) /*: (
         <div className={"loading-container flex-container flex-column justify-content-center align-items-center w-100 h-fullscreen"} >
             <img src={`${process.env.PUBLIC_URL}/images/loading.jpg`} width={"128px"} height={"128px"} alt="loading" />
         </div>
-    )
+    )*/
 }
