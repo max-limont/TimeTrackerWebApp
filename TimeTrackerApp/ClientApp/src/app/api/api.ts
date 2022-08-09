@@ -20,6 +20,7 @@ export const request = async (query: string, variables?: any) => {
             'Authorization': getAuthorizationHeader()
         },
         body: JSON.stringify({ query, variables }),
+ 
     });
 }
 
