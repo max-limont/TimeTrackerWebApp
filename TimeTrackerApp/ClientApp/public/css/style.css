@@ -418,6 +418,10 @@ section header {
   .weekend > .day-number > p {
     background-color: #222831; }
 
+    .event.short-day{
+      background-color: #A6A6A6;
+    }
+
 .event {
   background-color: #00ADB5;
   font-size: 15px;
