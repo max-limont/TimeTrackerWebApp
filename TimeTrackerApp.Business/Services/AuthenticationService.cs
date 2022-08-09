@@ -14,24 +14,13 @@ namespace TimeTrackerApp.Business.Services
 		{
             public string? AccessToken { get; set; }
             public string? RefreshToken { get; set; }
-            public string? Message { get; set; }
+
+            public AuthenticationResponse() { }
 
             public AuthenticationResponse(string accessToken, string refreshToken)
 			{
                 AccessToken = accessToken;
                 RefreshToken = refreshToken;
-			}
-
-            public AuthenticationResponse(string accessToken, string refreshToken, string message)
-			{
-                AccessToken = accessToken;
-                RefreshToken = refreshToken;
-                Message = message;  
-			}
-
-            public AuthenticationResponse(string message)
-			{
-                Message = message;
 			}
 		}
 
@@ -48,7 +37,7 @@ namespace TimeTrackerApp.Business.Services
                 var user = await userRepository.GetByEmailAsync(email);
                 if (!PasswordService.CompareWithHash(user.Password, password))
                 {
-                    return new AuthenticationResponse("Wrong password!");
+                    throw new Exception("Wrong password!");
                 }
                 var accessToken = JwtTokenService.GenerateAccessToken(user);
                 var refreshToken = JwtTokenService.GenerateRefreshToken(user);
@@ -58,11 +47,11 @@ namespace TimeTrackerApp.Business.Services
                     Token = refreshToken
                 };
                 await authenticationTokenRepository.CreateAsync(refreshTokenDb);
-                return new AuthenticationResponse(accessToken, refreshToken, "Jwt tokens have been successfully received!");
+                return new AuthenticationResponse(accessToken, refreshToken);
             }
             catch (Exception exception)
             {
-                return new AuthenticationResponse(exception.Message);
+                throw new Exception(exception.Message);
             }
         }
 
@@ -71,11 +60,11 @@ namespace TimeTrackerApp.Business.Services
             try
             {
                 await authenticationTokenRepository.RemoveByUserIdAsync(userId);
-                return new AuthenticationResponse("User has successfully been logged out!");
+                return new AuthenticationResponse();
             }
             catch (Exception exception)
             {
-                return new AuthenticationResponse(exception.Message);
+                throw new Exception(exception.Message);
             }
         }
 
@@ -96,13 +85,13 @@ namespace TimeTrackerApp.Business.Services
                     };
                     await authenticationTokenRepository.RemoveByUserIdAsync(userId);
                     await authenticationTokenRepository.CreateAsync(userRefreshTokenDb);
-                    return new AuthenticationResponse(newAccessToken, newRefreshToken, "Jwt tokens have been successfully refreshed!");
+                    return new AuthenticationResponse(newAccessToken, newRefreshToken);
 				}
-                return new AuthenticationResponse("Refresh tokens are different!");
+                throw new Exception("Refresh tokens are different!");
 			}
             catch (Exception exception)
 			{
-                return new AuthenticationResponse(exception.Message);
+                throw new Exception(exception.Message);
 			}
 		}
 	}

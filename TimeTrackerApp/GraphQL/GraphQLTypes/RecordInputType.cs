@@ -1,18 +1,20 @@
 ﻿using GraphQL.Types;
+using System;
+using TimeTrackerApp.Business.Models;
 
 namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
-    public class RecordInputType : InputObjectGraphType
+    public class RecordInputType : InputObjectGraphType<Record>
     {
         public RecordInputType()
         {
-            Name = "recordInput";
-            Field<IdGraphType>("id");
-            Field<NonNullGraphType<IntGraphType>>("workingTime");
-            Field<NonNullGraphType<IntGraphType>>("creatorId");
-            Field<IntGraphType>("editorId");
-            Field<NonNullGraphType<DateTimeGraphType>>("createdAt");
-            Field<StringGraphType>("comment");
+            Field<IdGraphType, int?>().Name("Id").Resolve(context => context.Source.Id);
+            Field<NonNullGraphType<IntGraphType>, int>().Name("WorkingTime").Resolve(context => context.Source.WorkingTime);
+            Field<NonNullGraphType<IdGraphType>, int>().Name("EmployeeId").Resolve(context => context.Source.EmployeeId);
+            Field<IdGraphType, int?>().Name("EditorId").Resolve(context => context.Source.EditorId);
+            Field<BooleanGraphType, bool>().Name("IsAutomaticallyCreated").Resolve(context => context.Source.IsAutomaticallyCreated);
+            Field<NonNullGraphType<DateTimeGraphType>, DateTime>().Name("CreatedAt").Resolve(context => context.Source.CreatedAt);
+            Field<StringGraphType, string>().Name("Comment").Resolve(context => context.Source.Comment);
         }
     }
 }

@@ -1,17 +1,8 @@
-﻿using GraphQL.Types;
-using TimeTrackerApp.Business.Models;
-
-namespace TimeTrackerApp.GraphQL.GraphQLTypes
+﻿namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
-    public class UserLoginType : InputObjectGraphType<UserLogin>
+    public class UserLogin
     {
-        public UserLoginType()
-        {
-            Name = "UserLogin";
-
-            Field<NonNullGraphType<StringGraphType>>("email");
-            Field<NonNullGraphType<StringGraphType>>("password");
-
-        }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

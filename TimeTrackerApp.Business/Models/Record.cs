@@ -7,8 +7,9 @@
 		public int Id { get; set; }
 		public int WorkingTime { get; set; } = defaultWorkingTime;
 		public string? Comment { get; set; } = string.Empty;
-		public int CreatorId { get; set; }
+		public int EmployeeId { get; set; }
 		public int? EditorId { get; set; } = null;
+		public bool IsAutomaticallyCreated { get; set; }
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 	}
 }

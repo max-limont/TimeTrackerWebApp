@@ -73,11 +73,11 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<AuthenticationToken> GetByUserIdAsync(int userId)
 		{
-			string query = @"SELECT * FROM AuthenticationTokens WHERE UserId = @UserId";
+			string query = @"SELECT * FROM AuthenticationTokens WHERE UserId = @UserId ORDER BY Id DESC";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				var authenticationToken = await connection.QuerySingleOrDefaultAsync<AuthenticationToken>(query, new { UserId = userId });
+				var authenticationToken = await connection.QueryFirstOrDefaultAsync<AuthenticationToken>(query, new { UserId = userId });
 				if (authenticationToken is not null)
 				{
 					return authenticationToken;

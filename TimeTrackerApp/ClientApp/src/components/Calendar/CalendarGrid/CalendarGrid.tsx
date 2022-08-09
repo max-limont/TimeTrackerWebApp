@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import {EditEventForm} from "../FormsCalendar/EditEventForm";
+import { EditEventForm } from "../FormsCalendar/EditEventForm";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 
 export function CalendarGrid() {
     const dispatch = useAppDispatch();
 
-    const daysArray = useAppSelector((s) => s.rootReducer.calendar.currentDaysArray);
-    const currentDate = useAppSelector((s) => s.rootReducer.calendar.currentDate);
-    const currentCalendar = useAppSelector((s) => s.rootReducer.calendar.currentCalendar);
+    const daysArray = useTypedSelector(state => state.rootReducer.calendar.currentDaysArray);
+    const currentDate = useTypedSelector(state => state.rootReducer.calendar.currentDate);
+    const currentCalendar = useTypedSelector(state => state.rootReducer.calendar.currentCalendar);
 
-    const events = useAppSelector((s) => s.rootReducer.calendar.events);
+    const events = useTypedSelector(state => state.rootReducer.calendar.events);
     const [isEditFormVisible, setEditFormVisible] = useState(false);
     const [id, setId]= useState(0);
     const days = ["Monday", "Tuesday", 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
