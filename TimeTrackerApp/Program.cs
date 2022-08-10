@@ -40,12 +40,12 @@ builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
 
-builder.Services.AddFluentMigratorCore().
-    ConfigureRunner(config =>config.AddSqlServer()
-        .WithGlobalConnectionString(connectionString)
-        .ScanIn(typeof(InitMigrations).Assembly)
-        .For.All())
-    .AddLogging(config=>config.AddFluentMigratorConsole());
+// builder.Services.AddFluentMigratorCore().
+//     ConfigureRunner(config =>config.AddSqlServer()
+//         .WithGlobalConnectionString(connectionString)
+//         .ScanIn(typeof(InitMigrations).Assembly)
+//         .For.All())
+//     .AddLogging(config=>config.AddFluentMigratorConsole());
 
 
 // Add services to the container.
@@ -134,9 +134,9 @@ app.UseSpa(spa =>
     }
 });
 
-using var scope = app.Services.CreateScope();
-var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
-migrationService.MigrateUp();
+// using var scope = app.Services.CreateScope();
+// var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
+// migrationService.MigrateUp();
 
 
 app.Run();
