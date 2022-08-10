@@ -34,12 +34,9 @@ const fetchUserCount = (action$: any) =>{
                 }))));}
 
 const fetchUserListSearchResponse = (action$: any) =>{
-    // console.log(521);
     return action$.pipe(
         ofType(fetchUserListSearchRequestActionType),
-        mergeMap((action: any) => from(graphqlRequest(getSearchResponse, {
-            request: action.payload.request
-        }))
+        mergeMap((action: any) => from(graphqlRequest(getSearchResponse, {request: action.payload.request}))
             .pipe(
                 map(response => {
                     console.log(response);
