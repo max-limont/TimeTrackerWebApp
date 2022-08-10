@@ -25,13 +25,14 @@ create table [Records]
 	[CreatedAt] datetime default getdate(),
 )
 
-create table [VacationRequests]
+create table [Vacation]
 (
 	[Id] int primary key identity(1, 1),
 	[UserId] int foreign key references [Users]([Id]) on delete no action,
 	[StartingTime] date not null,
 	[EndingTime] date not null,
-	[Comment] text
+	[Comment] text,
+    [IsAccepted] bit ,
 )
 
 create table [AuthenticationTokens] 
