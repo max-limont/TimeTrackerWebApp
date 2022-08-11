@@ -3,7 +3,7 @@ import { VacationType } from "../../../type/Vacation/VacationsTypes";
 
 interface vacationState{
   vacations: VacationType[],
-  requestVacation: VacationType[]
+  requestVacations: VacationType[]
 }
 
 const initialState:vacationState={
@@ -15,17 +15,23 @@ const initialState:vacationState={
         comment: "pls",
         isAccepted: false
     }],
-    requestVacation: []
+    requestVacations: []
 }
-
 
 export const vacationSlice = createSlice({
     name: "vacationSlice",
     initialState: initialState,
     reducers:{
-        addVacation: (state, action: PayloadAction<VacationType>)=>{
+        setVacation: (state, action: PayloadAction<VacationType[]>)=>{
+            return {...state, vacations: action.payload};
         },
-        removeVacation: (state, action: PayloadAction<VacationType>)=>{
-        }
+        addVacation: (state, action: PayloadAction<VacationType>)=>{
+            return {...state, vacations: state.vacations.concat(action.payload)};
+        },
+        removeVacation: (state, action: PayloadAction<number>)=>{
+            return {...state, vacations: state.vacations.filter(item => item.id !== action.payload)}
+        },
     }
 });
+
+export const {removeVacation,addVacation,setVacation}=vacationSlice.actions;

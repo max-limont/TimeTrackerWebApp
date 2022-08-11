@@ -43,6 +43,7 @@ builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>()
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()
 //         .WithGlobalConnectionString(connectionString)
+//         /* initMigration миграция яка буде використовуватисб*/
 //         .ScanIn(typeof(InitMigrations).Assembly)
 //         .For.All())
 //     .AddLogging(config=>config.AddFluentMigratorConsole());

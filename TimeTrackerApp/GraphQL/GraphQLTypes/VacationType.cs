@@ -8,11 +8,11 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
     {
         public VacationType()
         {
-            Field<NonNullGraphType<IdGraphType>, int>().Name("Id").Resolve(context => context.Source.Id);
-            Field<NonNullGraphType<IdGraphType>, int>().Name("UserId").Resolve(context => context.Source.UserId);
-            Field<NonNullGraphType<DateTimeGraphType>, DateTime>().Name("StartingTime").Resolve(context => context.Source.StartingTime);
-            Field<NonNullGraphType<DateTimeGraphType>, DateTime>().Name("EndingTime").Resolve(context => context.Source.EndingTime);
-            Field<StringGraphType, string>().Name("Comment").Resolve(context => context.Source.Comment);
+            Field(x => x.Id, nullable: false);
+            Field(x => x.Comment,nullable:true);
+            Field(x => x.EndingTime, nullable: false);
+            Field(x => x.StartingTime, nullable: false);
+            Field(x => x.UserId,nullable: false);
             Field(x => x.IsAccepted,nullable:true);
         }
     }

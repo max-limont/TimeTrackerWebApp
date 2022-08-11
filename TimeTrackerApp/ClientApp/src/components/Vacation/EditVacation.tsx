@@ -18,7 +18,7 @@ export function EditVacation(obj: Props) {
         e.preventDefault();
     }
     if (vacation) {
-        const { id, comment, startingTime, endingTime } = vacation
+        const {  comment, startingTime, endingTime } = vacation
         return (
             <div className={`form-event-container dark-background ${!visible && "hidden"}`}>
                 <div className={"form-event"}>

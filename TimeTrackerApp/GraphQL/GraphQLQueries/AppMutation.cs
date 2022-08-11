@@ -4,7 +4,6 @@ using TimeTrackerApp.GraphQL.GraphQLTypes;
 using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -82,7 +81,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     int id = context.GetArgument<int>("Id");
                     return await recordRepository.RemoveAsync(id);
                 });
-
+            
             Field<VacationType, Vacation>()
                 .Name("CreateVacationRequest")
                 .Argument<NonNullGraphType<VacationInputType>, Vacation>("VacationRequest", "Vacation request")
@@ -91,7 +90,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var vacationRequest = context.GetArgument<Vacation>("VacationRequest");
                     return await vacationRepository.CreateAsync(vacationRequest);
                 });
-
+            
             Field<VacationType, Vacation>()
                 .Name("EditVacationRequest")
                 .Argument<NonNullGraphType<VacationInputType>, Vacation>("VacationRequest", "Vacation request")
@@ -229,6 +228,15 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var model = context.GetArgument<Calendar>("event");
                     return await calendarRepository.UpdateEvent(model);
                 });
+            
+            Field<VacationType,Vacation>()
+                .Name("createVacation")
+                .Argument<VacationInputType, Vacation>("vacation", "vacation arguments")
+                .ResolveAsync(async _ =>
+                {
+                    var model = _.GetArgument<Vacation>("vacation");
+                    return await vacationRepository.CreateAsync(model);
+                });
 
             Field<VacationType, Vacation>()
                 .Name("changeAcceptedState")
@@ -240,14 +248,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var state = _.GetArgument<bool>("stateAccepted");
                     return await vacationRepository.ChangeAcceptedState(id, state);
                 });
-            Field<VacationType, Vacation>()
-                .Name("createVacationRequest")
-                .Argument<VacationInputType>("vacationRequest", "info about request")
-                .ResolveAsync(async context =>
-                {
-                    var model = context.GetArgument<Vacation>("vacationRequest")
-                    return await vacationRepository.CreateAsync(model);
-                })
         }
     }
 }

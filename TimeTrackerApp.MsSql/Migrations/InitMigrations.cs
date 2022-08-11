@@ -17,7 +17,7 @@ public class InitMigrations:Migration
             .WithColumn("RemainingVacationDays").AsInt32().Nullable()
             .WithColumn("PrivilegesValue").AsInt32().Nullable();
         
-        // //Records table begin
+       //Records table begin
         Create.Table("Records")
             .WithColumn("Id").AsInt32().Identity()
             .WithColumn("WorkingTime").AsInt32()

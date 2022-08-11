@@ -46,13 +46,13 @@ namespace TimeTrackerApp.MsSql.Repositories
 			}
 		}
 
-		public async Task<IEnumerable<Vacation>> FetchAllAsync()
+		public async Task<List<Vacation>> FetchAllAsync()
 		{
 			string query = @"SELECT * FROM Vacation";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				return await connection.QueryAsync<Vacation>(query);
+				return (await connection.QueryAsync<Vacation>(query)).ToList();
 			}
 		}
 

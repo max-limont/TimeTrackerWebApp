@@ -59,7 +59,7 @@ export const calendarSlice = createSlice({
                 currentDaysArray: [...Array(state.totalDays)].map(() => day.add(1, "day").clone()),
             }
         },
-        addEvent: (state, action: PayloadAction<EventType>) => {
+        addEvent: (state:CalendarStateType, action: PayloadAction<EventType>) => {
             console.log(action.payload);
             return {
                 ...state,

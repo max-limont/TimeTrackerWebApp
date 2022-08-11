@@ -68,28 +68,28 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return await recordRepository.FetchAllUserRecordsAsync(userId);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
-
-            Field<ListGraphType<VacationType>, IEnumerable<Vacation>>()
+            
+            Field<ListGraphType<VacationType>, List<Vacation>>()
                 .Name("FetchAllVacationRequests")
                 .ResolveAsync(async context =>
                 {
                     return await vacationRepository.FetchAllAsync();
                 })
                 .AuthorizeWithPolicy("LoggedIn");
-
+            
             Field<VacationType, Vacation>()
                 .Name("GetVacationRequestById")
-                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Vacation request id")
+                .Argument<NonNullGraphType<IdGraphType>>("Id", "Vacation request id")
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
                     return await vacationRepository.GetByIdAsync(id);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
-
+            
             Field<ListGraphType<VacationType>, IEnumerable<Vacation>>()
                 .Name("FetchAllUserVacationRequests")
-                .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
+                .Argument<NonNullGraphType<IdGraphType>>("UserId", "User id")
                 .ResolveAsync(async context =>
                 {
                     int userId = context.GetArgument<int>("UserId");
