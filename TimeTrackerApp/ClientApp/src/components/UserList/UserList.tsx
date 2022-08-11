@@ -3,10 +3,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import User from "../../type/Models/User";
-import "./style.scss"
-import {useTypedSelector} from "../../hooks/useTypedSelector";
+import "./styles/style.scss"
 import {UserListPage} from "../../type/User/User";
-import {useActions} from "../../hooks/useActions";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {
     fetchUserCountAction,
@@ -14,6 +12,7 @@ import {
     fetchUserListSearchRequestAction
 } from "../../store/actions/userList/userListActions";
 import usePagination from "../../hooks/usePagination";
+import Select from "./Select";
 
 const UserList = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
@@ -29,18 +28,48 @@ const UserList = () => {
     } = usePagination({
         contentPerPage,
         count,
-    });
+    })
 
 
     const dispatch = useAppDispatch()
-    const [state, setState] = useState<UserListPage>({from: firstContentIndex, to: contentPerPage, orderBy: "Id"})
+    const [state, setState] = useState<UserListPage>({
+        from: firstContentIndex,
+        contentPerPage,
+        orderBy: "Id",
+        isReverse: null
+    })
+
     const [search, setSearch] = useState<string>("")
     const [loaded, setLoaded] = useState<boolean>(false)
+    const [sortSetting, setSortSetting] = useState({orderBy: "Id", isReverse: false})
+
+    const selectHandler = (settings: {orderBy: string, isReverse: boolean}) => {
+        setSortSetting(settings)
+        setLoaded(true)
+    }
+
+    const selectOptions = [
+        {label: "First Name A-Z", value: {orderBy: "FistName", isReverse: false}},
+        {label: "First Name Z-A", value: {orderBy: "FirstName", isReverse: true}},
+        {label: "Last Name A-Z", value: {orderBy: "LastName", isReverse: false}},
+        {label: "Last Name Z-A", value: {orderBy: "LastName", isReverse: true}},
+        {label: "Email A-Z", value: {orderBy: "Email", isReverse: false}},
+        {label: "Email Z-A", value: {orderBy: "Email", isReverse: true}},
+        {label: "Weekly Working Time Min↓", value: {orderBy: "WeeklyWorkingTime", isReverse: false}},
+        {label: "Weekly Working Time Max↓", value: {orderBy: "WeeklyWorkingTime", isReverse: true}}
+    ]
 
     useEffect(() => {
         if (loaded) {
-            setState({...state, from: firstContentIndex, to: contentPerPage})
+            setState({
+                ...state,
+                from: firstContentIndex,
+                contentPerPage,
+                orderBy: sortSetting.orderBy,
+                isReverse: sortSetting.isReverse
+            })
             setLoaded(false)
+            console.log(sortSetting)
         }
 
         dispatch(fetchUserCountAction())
@@ -63,10 +92,8 @@ const UserList = () => {
             </form>
 
             <div className="userList-controls-group">
-                <div className="filter">
-
-                </div>
-
+                <span>Sort by:</span>
+                <Select options={selectOptions} selectHandler={selectHandler}/>
                 <Link className="link-btn addUser" to=" ">Add</Link>
             </div>
         </div>

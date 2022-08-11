@@ -1,13 +1,6 @@
-$color-dark: #222831;
-$color-light-dark: #393E46;
-$color-cyan: #00ADB5;
-$color-light: #EEEEEE;
-$color-silver: #D6D6D6;
-$color-red: #F24C4C;
-
-$font-size-default: 18px;
-$font-size-header: 26px;
-
+@import "variables";
+@import "pagination";
+@import "select";
 
 .link-btn{
   text-decoration: none;
@@ -25,7 +18,18 @@ $font-size-header: 26px;
     align-items: center;
     background: $color-light-dark;
     &-group{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: $control-group-height;
+      &>*{
+        margin: 0 5px;
+      }
+      &>span{
+        color: $color-light;
+      }
       .addUser{
+        height: $control-group-height;
         background: $color-cyan;
         color: $color-light;
         &:hover{
@@ -75,14 +79,8 @@ $font-size-header: 26px;
         justify-content: space-between;
       }
       &:hover{
-        background: #9a9a9a;
+        background: $color-active;
       }
     }
   }
-  .pageButtons{
-    width: 100px;
-    height: 50px;
-    background: red;
-  }
-
 }

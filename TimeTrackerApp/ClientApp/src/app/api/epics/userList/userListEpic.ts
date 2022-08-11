@@ -5,7 +5,7 @@ import {
     fetchUserCountActionType,
     fetchUserListPageActionType, fetchUserListSearchRequestActionType
 } from "../../../../store/actions/userList/userListActions";
-import {set_user_list, set_user_list_count} from "../../../../store/slice/user/userListSlice";
+import {setUserList, setUserListCount} from "../../../../store/slice/user/userListSlice";
 import {graphqlRequest} from "../../api";
 
 
@@ -14,25 +14,25 @@ const fetchUserListPage = (action$: any) =>{
         ofType(fetchUserListPageActionType),
         mergeMap((action: any) => from(graphqlRequest(getPaginatedUserList, {
             from: action.payload.from,
-            to: action.payload.to,
-            orderBy: action.payload.orderBy
+            contentPerPage: action.payload.contentPerPage,
+            orderBy: action.payload.orderBy,
+            isReverse: action.payload.isReverse
         }))
             .pipe(
                 map(response => {
-                    return set_user_list(response.data.userFetchPageList);
+                    return setUserList(response.data.userFetchPageList);
                 }))));}
 
 const fetchUserCount = (action$: any) =>{
-    // console.log(123);
     return action$.pipe(
         ofType(fetchUserCountActionType),
         mergeMap((action: any) => from(graphqlRequest(getUserCount))
             .pipe(
                 map(response => {
-                    // console.log(response);
-                    return set_user_list_count(response.data.userCount);
+                    return setUserListCount(response.data.userCount);
                 }))));}
 
+// Работоспособность спорная
 const fetchUserListSearchResponse = (action$: any) =>{
     return action$.pipe(
         ofType(fetchUserListSearchRequestActionType),
@@ -40,7 +40,7 @@ const fetchUserListSearchResponse = (action$: any) =>{
             .pipe(
                 map(response => {
                     console.log(response);
-                    return set_user_list(response.data.userFetchSearchList);
+                    return setUserList(response.data.userFetchSearchList);
                 }))));}
 
 export const userListEpics = combineEpics(fetchUserListPage, fetchUserCount, fetchUserListSearchResponse);

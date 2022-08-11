@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {set_user_list_count, user_list_error, set_user_list} from "../slice/user/userListSlice";
+import {setUserListCount, userListError, setUserList} from "../slice/user/userListSlice";
 import testData from "./testData";
 import {getPaginatedUserList, getUserCount} from "../../graphqlQuery/userList/userListQuery";
 import {UserListPage} from "../../type/User/User";
@@ -9,11 +9,11 @@ export const fetchUserListCount = () => {
     return async (dispatch: Dispatch) => {
         try {
             const data = await graphqlRequest(getUserCount, {})
-            dispatch(set_user_list_count(data))
+            dispatch(setUserListCount(data))
         }
         catch (e){
             console.log(e)
-            dispatch(user_list_error("Can't fetch"))
+            dispatch(userListError("Can't fetch"))
         }
     }
 }
@@ -22,10 +22,10 @@ export const fetchUserList = (variables:UserListPage) => {
     return async (dispatch: Dispatch) => {
         try {
             const data = await graphqlRequest(getPaginatedUserList, variables)
-            dispatch(set_user_list(data))
+            dispatch(setUserList(data))
         }catch (e){
             console.log(e)
-            dispatch(user_list_error("Can't fetch"))
+            dispatch(userListError("Can't fetch"))
         }
     }
 }

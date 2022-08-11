@@ -1,6 +1,6 @@
 export const getPaginatedUserList=`
-query ($from: Int!, $to: Int!, $orderBy: String){
-    userFetchPageList(from: $from, to: $to, orderBy: $orderBy){
+query ($from: Int!, $contentPerPage: Int!, $orderBy: String, $isReverse: Boolean){
+    userFetchPageList(from: $from, contentPerPage: $contentPerPage, orderBy: $orderBy, isReverse: $isReverse){
         id,
         email,
         firstName,
