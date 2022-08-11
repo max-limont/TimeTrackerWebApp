@@ -14,7 +14,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(ICalendarRepository calendarRepository,IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
+        public AppMutation(ICalendarRepository calendarRepository,IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
@@ -83,31 +83,31 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return await recordRepository.RemoveAsync(id);
                 });
 
-            Field<VacationRequestType, VacationRequest>()
+            Field<VacationType, Vacation>()
                 .Name("CreateVacationRequest")
-                .Argument<NonNullGraphType<VacationRequestInputType>, VacationRequest>("VacationRequest", "Vacation request")
+                .Argument<NonNullGraphType<VacationInputType>, Vacation>("VacationRequest", "Vacation request")
                 .ResolveAsync(async context =>
                 {
-                    var vacationRequest = context.GetArgument<VacationRequest>("VacationRequest");
-                    return await vacationRequestRepository.CreateAsync(vacationRequest);
+                    var vacationRequest = context.GetArgument<Vacation>("VacationRequest");
+                    return await vacationRepository.CreateAsync(vacationRequest);
                 });
 
-            Field<VacationRequestType, VacationRequest>()
+            Field<VacationType, Vacation>()
                 .Name("EditVacationRequest")
-                .Argument<NonNullGraphType<VacationRequestInputType>, VacationRequest>("VacationRequest", "Vacation request")
+                .Argument<NonNullGraphType<VacationInputType>, Vacation>("VacationRequest", "Vacation request")
                 .ResolveAsync(async context =>
                 {
-                    var vacationRequest = context.GetArgument<VacationRequest>("VacationRequest");
-                    return await vacationRequestRepository.EditAsync(vacationRequest);
+                    var vacationRequest = context.GetArgument<Vacation>("VacationRequest");
+                    return await vacationRepository.EditAsync(vacationRequest);
                 });
             
-            Field<VacationRequestType, VacationRequest>()
+            Field<VacationType, Vacation>()
                 .Name("DeleteVacationRequest")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Vacation request")
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
-                    return await vacationRequestRepository.RemoveAsync(id);
+                    return await vacationRepository.RemoveAsync(id);
                 });
 
             Field<AuthTokenType, AuthenticationToken>()
@@ -229,6 +229,25 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var model = context.GetArgument<Calendar>("event");
                     return await calendarRepository.UpdateEvent(model);
                 });
+
+            Field<VacationType, Vacation>()
+                .Name("changeAcceptedState")
+                .Argument<IntGraphType, int>("id", "id user")
+                .Argument<BooleanGraphType, bool>("stateAccepted", "new state Accepted")
+                .ResolveAsync(async _ =>
+                {
+                    var id = _.GetArgument<int>("stateAccepted");
+                    var state = _.GetArgument<bool>("stateAccepted");
+                    return await vacationRepository.ChangeAcceptedState(id, state);
+                });
+            Field<VacationType, Vacation>()
+                .Name("createVacationRequest")
+                .Argument<VacationInputType>("vacationRequest", "info about request")
+                .ResolveAsync(async context =>
+                {
+                    var model = context.GetArgument<Vacation>("vacationRequest")
+                    return await vacationRepository.CreateAsync(model);
+                })
         }
     }
 }

@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {AuthorizationUser, EmptyAuthUser} from '../../type/User/AuthUser';
+import {AuthorizationUser} from '../../type/User/AuthUser';
 import {setError} from "../../store/slice/authentication/authSlice";
 import {Message, MessageTypes} from "../Layout/Message";
 import {useAuth} from "../../hooks/useAuth";
@@ -11,7 +11,7 @@ type AuthenticationFormState = {
 }
 
 const initialState: AuthenticationFormState = {
-    userData: EmptyAuthUser,
+    userData: {} as AuthorizationUser,
     error: null
 }
 

@@ -808,4 +808,26 @@ table .bottom-table-row {
   .edit-record-form .button:not(:last-child) {
     margin-right: 5px; }
 
+.vacation-container{
+  width: 100%;
+  padding: 5px;
+
+}
+
+.vacation-control-panel{
+  justify-content: space-between;
+}
+.vacation-item{
+display: flex;
+}
+
+.list-vacation-container{
+  margin: 15px;
+}
+.list-vacation-container p{
+  font-size: 20px;
+  text-align: center;
+  border-bottom: 2px solid #00ADB5;
+}
+
 /*# sourceMappingURL=style.css.map */

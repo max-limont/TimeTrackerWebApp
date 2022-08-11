@@ -8,6 +8,7 @@ import { userEpics } from './api/epics/user/userEpics';
 import userListSlice from '../store/slice/user/userListSlice';
 import { calendarEpics } from './api/epics/calendar/calendarEpics';
 import {timeTrackerEpics} from "./api/epics/timeTracker/timeTrackerEpics";
+import { vacationSlice } from '../store/slice/vacation/vacationSlice';
 
 
 const epicMiddleware = createEpicMiddleware();
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   calendar: calendarSlice.reducer,
   auth: authSlice.reducer,
   userList: userListSlice.reducer,
-  timeTracker: timeTrackerReducer
+  timeTracker: timeTrackerReducer,
+  vacation: vacationSlice.reducer
 })
 
 export const store = configureStore({

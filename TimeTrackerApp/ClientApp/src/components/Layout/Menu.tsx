@@ -71,10 +71,10 @@ export const Menu: FC = () => {
                                 </Link>
                             </li>
                             <li>
-                                <a href="#" className={"flex-container"}>
+                                <Link to={"/vacation"} className={"flex-container"}>
                                     <FontAwesomeIcon icon={faUmbrellaBeach} className={"icon"} />
                                     <span>Vacations</span>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                         <h4>Management</h4>

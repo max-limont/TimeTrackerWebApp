@@ -32,7 +32,7 @@ builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new Au
 builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
-builder.Services.AddSingleton<IVacationRequestRepository>(provider => new VacationRequestRepository(connectionString));
+builder.Services.AddSingleton<IVacationRepository>(provider => new VacationRepository(connectionString));
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());

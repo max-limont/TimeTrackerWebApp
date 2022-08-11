@@ -16,8 +16,8 @@ public class InitMigrations:Migration
             .WithColumn("WeeklyWorkingTime").AsInt32().Nullable()
             .WithColumn("RemainingVacationDays").AsInt32().Nullable()
             .WithColumn("PrivilegesValue").AsInt32().Nullable();
-
-        //Records table begin
+        
+        // //Records table begin
         Create.Table("Records")
             .WithColumn("Id").AsInt32().Identity()
             .WithColumn("WorkingTime").AsInt32()
@@ -26,7 +26,7 @@ public class InitMigrations:Migration
             .WithColumn("EditorId").AsInt32()
             .WithColumn("IsAutomaticallyCreated").AsBoolean()
             .WithColumn("CreatedAt").AsDateTime();
-
+        
         Create.ForeignKey("FK_Records_UserId")
             .FromTable("Records").ForeignColumn("EmployeeId")
             .ToTable("Users").PrimaryColumn("Id");
@@ -55,13 +55,11 @@ public class InitMigrations:Migration
             .WithColumn("Id").AsInt32().PrimaryKey().Identity()
             .WithColumn("UserId").AsInt32()
             .WithColumn("Token").AsCustom("text");
-
+        
         Create.ForeignKey("FK_AuthToken_UserId")
             .FromTable("AuthenticationTokens").ForeignColumn("UserId")
             .ToTable("Users").PrimaryColumn("Id");
         //AuthenticationToken end
-
-
 
     }
 

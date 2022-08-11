@@ -11,7 +11,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppQuery : ObjectGraphType
     {
-        public AppQuery(ICalendarRepository calendarRepository,IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
+        public AppQuery(ICalendarRepository calendarRepository,IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
         {
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
@@ -69,31 +69,31 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 })
                 .AuthorizeWithPolicy("LoggedIn");
 
-            Field<ListGraphType<VacationRequestType>, IEnumerable<VacationRequest>>()
+            Field<ListGraphType<VacationType>, IEnumerable<Vacation>>()
                 .Name("FetchAllVacationRequests")
                 .ResolveAsync(async context =>
                 {
-                    return await vacationRequestRepository.FetchAllAsync();
+                    return await vacationRepository.FetchAllAsync();
                 })
                 .AuthorizeWithPolicy("LoggedIn");
 
-            Field<VacationRequestType, VacationRequest>()
+            Field<VacationType, Vacation>()
                 .Name("GetVacationRequestById")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Vacation request id")
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
-                    return await vacationRequestRepository.GetByIdAsync(id);
+                    return await vacationRepository.GetByIdAsync(id);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
 
-            Field<ListGraphType<VacationRequestType>, IEnumerable<VacationRequest>>()
+            Field<ListGraphType<VacationType>, IEnumerable<Vacation>>()
                 .Name("FetchAllUserVacationRequests")
                 .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
                 .ResolveAsync(async context =>
                 {
                     int userId = context.GetArgument<int>("UserId");
-                    return await vacationRequestRepository.FetchAllUserVacationRequestsAsync(userId);
+                    return await vacationRepository.FetchAllUserVacationAsync(userId);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
 
