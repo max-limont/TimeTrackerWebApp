@@ -5,6 +5,7 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using System.Collections.Generic;
 using System;
+using TimeTrackerApp.GraphQL.GraphQLQueries.VacationLevelGraphql;
 using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
@@ -150,7 +151,10 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var id = context.GetArgument<int>("eventId");
                     return await calendarRepository.GetEventById(id);
                 });
-
+            
+            Field<VacationLevelQueries>()
+                .Name("VacationLevelQueries")
+                .Resolve(_ => new { });
         }
     }
 }

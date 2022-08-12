@@ -4,6 +4,8 @@ using TimeTrackerApp.Business.Models;
 
 namespace TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
 
+
+/*need to refactor and merge with class CalendarInputType*/
 public class CalendarUpdateType:InputObjectGraphType<Calendar>
 {
     public CalendarUpdateType()

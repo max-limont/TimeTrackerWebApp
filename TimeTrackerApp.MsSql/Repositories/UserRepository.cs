@@ -38,7 +38,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> CreateAsync(User user)
 		{
-			string query = @"INSERT INTO Users (Email, Password, FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue) VALUES (@Email, @Password, @FirstName, @LastName, @WeeklyWorkingTime, @RemainingVacationDays, @PrivilegesValue)";
+			string query = @"INSERT INTO Users (Email, Password, FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue,VacationPermissionId) VALUES (@Email, @Password, @FirstName, @LastName, @WeeklyWorkingTime, @RemainingVacationDays, @PrivilegesValue,@VacationPermissionId)";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -54,7 +54,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> EditAsync(User user)
 		{
-			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue WHERE Id = @Id";
+			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays,VacationPermissionId=@VacationPermissionId, PrivilegesValue = @PrivilegesValue WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{

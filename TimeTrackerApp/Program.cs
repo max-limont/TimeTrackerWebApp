@@ -40,15 +40,15 @@ builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAutho
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
-
-builder.Services.AddFluentMigratorCore().
-    ConfigureRunner(config =>config.AddSqlServer()
-        .WithGlobalConnectionString(connectionString)
-        /* typeof(migration) миграция яка буде використовуватисб ,
-         также нужно в класе всегда помечать [migration(nummberId)] */
-        .ScanIn(typeof(DeleteVacationRequestTable).Assembly)
-        .For.All())
-    .AddLogging(config=>config.AddFluentMigratorConsole());
+//
+// builder.Services.AddFluentMigratorCore().
+//     ConfigureRunner(config =>config.AddSqlServer()
+//         .WithGlobalConnectionString(connectionString)
+//         /* typeof(migration) миграция яка буде використовуватисб ,
+//          также нужно в класе всегда помечать [migration(nummberId)] */
+//         .ScanIn(typeof(DeleteVacationRequestTable).Assembly)
+//         .For.All())
+//     .AddLogging(config=>config.AddFluentMigratorConsole());
 
 
 // Add services to the container.
@@ -137,9 +137,9 @@ app.UseSpa(spa =>
     }
 });
 
-using var scope = app.Services.CreateScope();
-var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
-migrationService.MigrateUp(); 
+// using var scope = app.Services.CreateScope();
+// var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
+// migrationService.MigrateUp(); 
 
 
 app.Run();

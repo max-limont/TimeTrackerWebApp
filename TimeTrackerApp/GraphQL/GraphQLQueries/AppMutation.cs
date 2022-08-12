@@ -7,6 +7,7 @@ using TimeTrackerApp.Business.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using System;
+using TimeTrackerApp.GraphQL.GraphQLQueries.VacationLevelGraphql;
 using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
@@ -248,6 +249,11 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var state = _.GetArgument<bool>("stateAccepted");
                     return await vacationRepository.ChangeAcceptedState(id, state);
                 });
+            
+            
+            Field<VacationLevelMutations>()
+                .Name("VacationLevelMutation")
+                .Resolve(_ => new { });
         }
     }
 }

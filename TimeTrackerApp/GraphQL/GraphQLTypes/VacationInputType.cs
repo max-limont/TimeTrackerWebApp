@@ -12,6 +12,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
             Field(x => x.EndingTime);
             Field(x => x.StartingTime);
             Field(x => x.UserId);
+            Field(x => x.Id);
             Field(x => x.IsAccepted, nullable:true);
         }
     }

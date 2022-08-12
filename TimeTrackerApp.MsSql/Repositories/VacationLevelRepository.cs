@@ -81,6 +81,6 @@ public class VacationLevelRepository:IVacationLevelRepository
                 return model;
             }
         }
-        throw new Exception("Error to get by id");
+        throw new Exception("Error to get vacation level by id");
     }
 }
