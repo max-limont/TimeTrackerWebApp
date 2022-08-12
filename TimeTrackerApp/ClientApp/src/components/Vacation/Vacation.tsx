@@ -13,6 +13,7 @@ export function Vacation() {
     const [editState, setEditState] = useState(false);
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(s => s.rootReducer.vacation.vacations);
+    
 
     return (
         <>

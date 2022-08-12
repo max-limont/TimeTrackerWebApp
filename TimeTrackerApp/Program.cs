@@ -33,6 +33,7 @@ builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepositor
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
 builder.Services.AddSingleton<IVacationRepository>(provider => new VacationRepository(connectionString));
+builder.Services.AddSingleton<IVacationLevelRepository>(provider => new VacationLevelRepository(connectionString));
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
@@ -40,13 +41,14 @@ builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
 
-// builder.Services.AddFluentMigratorCore().
-//     ConfigureRunner(config =>config.AddSqlServer()
-//         .WithGlobalConnectionString(connectionString)
-//         /* initMigration миграция яка буде використовуватисб*/
-//         .ScanIn(typeof(InitMigrations).Assembly)
-//         .For.All())
-//     .AddLogging(config=>config.AddFluentMigratorConsole());
+builder.Services.AddFluentMigratorCore().
+    ConfigureRunner(config =>config.AddSqlServer()
+        .WithGlobalConnectionString(connectionString)
+        /* typeof(migration) миграция яка буде використовуватисб ,
+         также нужно в класе всегда помечать [migration(nummberId)] */
+        .ScanIn(typeof(DeleteVacationRequestTable).Assembly)
+        .For.All())
+    .AddLogging(config=>config.AddFluentMigratorConsole());
 
 
 // Add services to the container.
@@ -135,9 +137,9 @@ app.UseSpa(spa =>
     }
 });
 
-// using var scope = app.Services.CreateScope();
-// var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
-// migrationService.MigrateUp();
+using var scope = app.Services.CreateScope();
+var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
+migrationService.MigrateUp(); 
 
 
 app.Run();

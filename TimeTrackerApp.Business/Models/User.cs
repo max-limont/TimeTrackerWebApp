@@ -4,7 +4,7 @@
 	{
 		private static readonly int defaultWeeklyWorkingTime = 8 * 60 * 5; // 8 hours * 60 minutes * 5 days
 		private static readonly int defaultRemainingVacationDays = 30; // 30 days
-			
+
 		public int Id { get; set; }
 		public string Email { get; set; } = string.Empty;
 		public string Password { get; set; } = string.Empty;
@@ -13,5 +13,6 @@
 		public int WeeklyWorkingTime { get; set; } = defaultWeeklyWorkingTime;
 		public int RemainingVacationDays { get; set; } = defaultRemainingVacationDays;
 		public int PrivilegesValue { get; set; }
+		public int VacationPermissionId { get; set; }
 	}
 }

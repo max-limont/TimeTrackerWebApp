@@ -12,7 +12,6 @@ const vacationGetByUserId = (action$: any) => {
             id: action.payload
         })).pipe(
             map(response => {
-             
             })
         )));
 }
