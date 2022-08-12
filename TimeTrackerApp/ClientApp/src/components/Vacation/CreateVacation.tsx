@@ -1,7 +1,10 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import { VacationType } from "../../type/Vacation/VacationsTypes";
+import { useAppDispatch } from "../../app/hooks";
+import { useAuth } from "../../hooks/useAuth";
+import { createVacationAction } from "../../store/actions/vacation/vacationActions";
+import { CreateVacationType, VacationType } from "../../type/Vacation/VacationsTypes";
 
 
 type Props = {
@@ -10,12 +13,21 @@ type Props = {
 }
 
 export function CreateVacation(obj: Props) {
+    const dispatch = useAppDispatch();
     const setState = obj.stateForm;
     const { visible } = obj;
-    const [vacation, setVacation] = useState({} as VacationType);
+    const auth = useAuth();
+    const [vacation, setVacation] = useState({ userId: auth.state?.user?.id } as CreateVacationType);
 
     function onFinish(e: React.FormEvent) {
         e.preventDefault();
+        const postFixDate = "T00:00:00+00:00";
+        console.log(vacation);
+        dispatch(createVacationAction({
+            ...vacation,
+            startingTime: vacation.startingTime + postFixDate,
+            endingTime: vacation.endingTime + postFixDate
+        }));
     }
     const { startingTime, endingTime, comment } = vacation
     return (
@@ -37,7 +49,7 @@ export function CreateVacation(obj: Props) {
                             <label>Ending Time</label>
                             <input value={endingTime} type="date" onChange={(e) => setVacation({ ...vacation, endingTime: e.target.value })} />
                         </div>
-                        <div  className={"form-item w-100"}>
+                        <div className={"form-item w-100"}>
                             <label>Comment</label>
                             <textarea value={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }}></textarea>
                         </div>

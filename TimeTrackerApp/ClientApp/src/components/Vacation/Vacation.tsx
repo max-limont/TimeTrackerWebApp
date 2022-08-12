@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {useAppDispatch, useAppSelector } from "../../app/hooks";
 import { removeVacation } from "../../store/slice/vacation/vacationSlice";
 import { CreateVacation } from "./CreateVacation";
 import { EditVacation } from "./EditVacation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBan, faClock, faClose, faTimes, faXmark} from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../hooks/useAuth";
+import { getVacationsByUserIdAction } from "../../store/actions/vacation/vacationActions";
 
 
 export function Vacation() {
@@ -13,7 +15,12 @@ export function Vacation() {
     const [editState, setEditState] = useState(false);
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(s => s.rootReducer.vacation.vacations);
-    
+    const auth = useAuth();
+    useEffect(()=>{
+        const id = auth.state?.user?.id;
+        if(id)
+        dispatch(getVacationsByUserIdAction(id));
+    },[]);
 
     return (
         <>

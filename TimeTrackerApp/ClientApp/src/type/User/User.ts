@@ -6,5 +6,6 @@ export type User = {
     lastName: string,
     weeklyWorkingTime: number,
     remainingVacationDays: number,
-    privilegesValue: number
+    privilegesValue: number,
+    vacationPermissionId: number
 }

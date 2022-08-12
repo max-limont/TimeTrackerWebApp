@@ -9,7 +9,13 @@ export type  VacationType ={
 
 export type CreateVacationType={
     userId: number,
-    StartingTime:string,
-    EndingTime: string,
-    Comment: string
+    startingTime:string,
+    endingTime: string,
+    comment: string
+}
+
+export type VacationLevelType={
+    id:number,
+    nameLevel: string,
+    value: number
 }

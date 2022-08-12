@@ -9,11 +9,12 @@ import userListSlice from '../store/slice/user/userListSlice';
 import { calendarEpics } from './api/epics/calendar/calendarEpics';
 import {timeTrackerEpics} from "./api/epics/timeTracker/timeTrackerEpics";
 import { vacationSlice } from '../store/slice/vacation/vacationSlice';
+import { vacationEpic } from './api/epics/vacation/vacation';
 
 
 const epicMiddleware = createEpicMiddleware();
 
-const rootEpic = combineEpics(authEpics,userEpics,calendarEpics, timeTrackerEpics);
+const rootEpic = combineEpics(authEpics,userEpics,calendarEpics, timeTrackerEpics,vacationEpic);
 
 
 const rootReducer = combineReducers({

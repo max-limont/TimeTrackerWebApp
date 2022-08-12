@@ -25,9 +25,9 @@ const initialState: TimerStateType = {
 export const Timer: FC<TimerPropsType> = (props) => {
 
     const [state, setState] = useState(initialState);
-    const {lastRecord} = props.defaultProps
-    const dispatch = useAppDispatch()
-    const auth = useAuth()
+    const {lastRecord} = props.defaultProps;
+    const dispatch = useAppDispatch();
+    const auth = useAuth();
 
     useEffect(() => {
         const timerStartTime = window.localStorage.getItem("timerStartTime");
