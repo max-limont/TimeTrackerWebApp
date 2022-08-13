@@ -30,7 +30,10 @@ export const vacationSlice = createSlice({
             vacations[i] = action.payload;
             return {...state, vacations: vacations}
         },
+        setRequestVacation:  (state, action: PayloadAction<VacationType[]>)=>{
+            return {...state, requestVacations: action.payload};
+        }
     }
 });
 
-export const {removeVacation,addVacation,setVacation}=vacationSlice.actions;
+export const {removeVacation,addVacation,setVacation,setRequestVacation}=vacationSlice.actions;

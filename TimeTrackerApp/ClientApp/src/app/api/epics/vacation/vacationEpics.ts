@@ -3,9 +3,9 @@ import { from, map, mergeMap } from "rxjs";
 import { graphqlRequest } from "../../api";
 import { fetchUserByIdActionType } from "../../../../store/actions/user/userActions";
 import { getUserByIdQuery } from "../../../../graphqlQuery/user/userQuery";
-import { createVacationTypeAction, getAllVacationsTypeTypeAction, getVacationsByUserIdTypeAction } from "../../../../store/actions/vacation/vacationActions";
-import { createVacationQuery, getVacationsByUserIdQuery } from "../../../../graphqlQuery/vacation/vacationQuery";
-import { addVacation, setVacation } from "../../../../store/slice/vacation/vacationSlice";
+import { createVacationTypeAction, getAllVacationsTypeTypeAction, getRequestVacationTypeAction, getVacationsByUserIdTypeAction } from "../../../../store/actions/vacation/vacationActions";
+import { createVacationQuery, getVacationRequestQuery, getVacationsByUserIdQuery } from "../../../../graphqlQuery/vacation/vacationQuery";
+import { addVacation, setRequestVacation, setVacation } from "../../../../store/slice/vacation/vacationSlice";
 import moment from "moment";
 import { VacationType } from "../../../../type/Vacation/VacationsTypes";
 
@@ -52,4 +52,21 @@ const createVacationRequest = (action$: any) => {
         )));
 }
 
-export const vacationEpic = combineEpics(vacationGetByUserId, createVacationRequest);
+export const getVacationRequestEpic = (action$: any) => {
+    return action$.pipe(
+        ofType(getRequestVacationTypeAction),
+        mergeMap((action: any) => from(graphqlRequest(getVacationRequestQuery, {
+            id: action.payload
+        })).pipe(
+            map(response => {
+                if (response.errors == undefined) {
+                    console.log(response);
+                    return setRequestVacation(formatDateToNormalFormat(response.data.getRequestVaction));
+                }
+                throw new Error();
+            })
+        )));
+}
+
+export const vacationEpic = combineEpics(vacationGetByUserId, createVacationRequest, getVacationRequestEpic);
+

@@ -5,9 +5,11 @@ export const getAllVacationsTypeTypeAction="getAllVacations";
 export const getVacationsByUserIdTypeAction="getVacationsByUserId";
 export const getVacationByIdTypeAction="getVacationById";
 export const createVacationTypeAction="createVacation";
+export const getRequestVacationTypeAction="getRequestVacation";
 export const removeVacationTypeAction ="removeVacation";
 export const updateVacationTypeAction="updateVacation";
 
+export const getRequestVacationAction=createAction<number>(getRequestVacationTypeAction);
 export const getAllVacationsAction= createAction(getAllVacationsTypeTypeAction);
 export const getVacationsByUserIdAction =createAction<number>(getVacationsByUserIdTypeAction);
 export const getVacationByIdAction = createAction<number>(getVacationByIdTypeAction);

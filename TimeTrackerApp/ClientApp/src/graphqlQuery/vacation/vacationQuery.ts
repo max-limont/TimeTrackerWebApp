@@ -55,3 +55,16 @@ mutation ($model: VacationInputType!){
   }
 `;
 
+export const getVacationRequestQuery = `
+query($id: Int!){
+    getRequestVaction(receiverId: $id){
+      ${queryFragment},
+      user{
+            id
+            email
+            firstName
+            lastName
+      }
+    }
+  }`
+

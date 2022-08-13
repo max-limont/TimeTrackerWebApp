@@ -1,10 +1,13 @@
+import { User } from "../User/User";
+
 export type  VacationType ={
     id:number,
     userId: number,
     startingTime:string,
     endingTime: string,
     comment: string,
-    isAccepted: boolean|null
+    isAccepted: boolean|null,
+    user: User|null
 }; 
 
 export type CreateVacationType={
