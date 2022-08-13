@@ -111,7 +111,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("DefaultPolicy");
 
-
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();

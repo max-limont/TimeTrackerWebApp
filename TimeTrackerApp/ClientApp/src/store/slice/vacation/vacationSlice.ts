@@ -7,14 +7,7 @@ interface vacationState{
 }
 
 const initialState:vacationState={
-    vacations: [{
-        id: 1,
-        userId: 2,
-        startingTime: "2022-12-12",
-        endingTime: "2022-12-13",
-        comment: "pls",
-        isAccepted: false
-    }],
+    vacations: [],
     requestVacations: []
 }
 
@@ -30,6 +23,12 @@ export const vacationSlice = createSlice({
         },
         removeVacation: (state, action: PayloadAction<number>)=>{
             return {...state, vacations: state.vacations.filter(item => item.id !== action.payload)}
+        },
+        updateVacation: (state, action: PayloadAction<VacationType>)=>{
+            const i = state.vacations.findIndex(item => item.id == action.payload.id);
+            let vacations = state.vacations.slice();
+            vacations[i] = action.payload;
+            return {...state, vacations: vacations}
         },
     }
 });

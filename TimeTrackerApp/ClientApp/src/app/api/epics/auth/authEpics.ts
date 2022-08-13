@@ -80,7 +80,8 @@ const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUs
                         lastName: apiResponse.lastName ?? "User",
                         weeklyWorkingTime: parseInt(apiResponse.weeklyWorkingTime ?? ''),
                         remainingVacationDays: parseInt(apiResponse.remainingVacationDays ?? ''),
-                        privilegesValue: parseInt(apiResponse.privilegesValue ?? '')
+                        privilegesValue: parseInt(apiResponse.privilegesValue ?? ''),
+                        vacationPermissionId: parseInt(apiResponse.vacationPermissionId??"")
                     } as User
                     store.dispatch(setUser(user))
                     return { payload: "Success", type: "AuthSetUserSuccess" } as Action

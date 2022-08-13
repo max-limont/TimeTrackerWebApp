@@ -11,5 +11,6 @@ namespace TimeTrackerApp.Business.Repositories
 		Task<Vacation> CreateAsync(Vacation vacation);
 		Task<Vacation> EditAsync(Vacation vacation);
 		Task<Vacation> RemoveAsync(int id);
+		Task<List<Vacation>> GetRequestVacation(int receiverUserId);
 	}
 }

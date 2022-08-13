@@ -14,6 +14,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
             Field(x => x.StartingTime, nullable: false);
             Field(x => x.UserId,nullable: false);
             Field(x => x.IsAccepted,nullable:true);
+            Field<UserType, User>().Name("User").Resolve(context=>context.Source.User);
         }
     }
 }

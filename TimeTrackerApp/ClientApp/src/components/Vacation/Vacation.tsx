@@ -7,6 +7,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBan, faClock, faClose, faTimes, faXmark} from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/useAuth";
 import { getVacationsByUserIdAction } from "../../store/actions/vacation/vacationActions";
+import { getAllVacationLevelAction } from "../../store/actions/vacationLevel/vacationLevel";
+import { Link } from "react-router-dom";
 
 
 export function Vacation() {
@@ -16,10 +18,14 @@ export function Vacation() {
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(s => s.rootReducer.vacation.vacations);
     const auth = useAuth();
+    const vacationLevel = useAppSelector(s=>s.rootReducer.vacationLevel.vacationLevels.find(x=>x.id==auth.state?.user?.vacationPermissionId));
+
     useEffect(()=>{
         const id = auth.state?.user?.id;
+        console.log(auth.state?.user);
         if(id)
         dispatch(getVacationsByUserIdAction(id));
+        dispatch(getAllVacationLevelAction());
     },[]);
 
     return (
@@ -32,7 +38,7 @@ export function Vacation() {
                         <button onClick={() => setCreateState(true)} className="button cyan-button">CreateVacation</button>
                     </div>
                     <div>
-                        <button className="button cyan-button">Manage Requests Vacations</button>
+                        {vacationLevel?.value?vacationLevel.value>1?<Link to ="/manage-vacation"><button className="button cyan-button">Manage Requests Vacations</button></Link>:<></>:<></>}
                     </div>
                 </div>
                 <div className="list-vacation-container">

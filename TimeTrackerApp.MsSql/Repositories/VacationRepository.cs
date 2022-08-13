@@ -44,7 +44,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 				}
 				throw new Exception("Vacation request editing error!");
 			}
-		}
+	 	}
 
 		public async Task<List<Vacation>> FetchAllAsync()
 		{
@@ -92,6 +92,24 @@ namespace TimeTrackerApp.MsSql.Repositories
 					return vacationRequest;
 				}
 				throw new Exception("This vacation request was not found");
+			}
+		}
+
+		public async Task<List<Vacation>> GetRequestVacation(int receiverUserId)
+		{
+			string query = @$"
+SELECT  * from Vacation as c Inner Join Users as d on (c.UserId=d.Id) and UserId in
+(Select b.id from Users as b where b.VacationPermissionId in (select id from VacationLevel as vl where vl.Value <
+(Select Value From VacationLevel as vl2 Where vl2.Id =(Select VacationPermissionId from Users Where Id={receiverUserId}))))";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				var listVacation = await connection.QueryAsync<Vacation>(query);
+				if (listVacation != null)
+				{
+					return listVacation.ToList();
+				}
+				throw new Exception("error to fetch");
 			}
 		}
 

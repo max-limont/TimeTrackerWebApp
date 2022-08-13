@@ -5,8 +5,11 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using System.Collections.Generic;
 using System;
+using GraphQL.MicrosoftDI;
+using Microsoft.AspNetCore.Http;
 using TimeTrackerApp.GraphQL.GraphQLQueries.VacationLevelGraphql;
 using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
+using TimeTrackerApp.Helpers;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
@@ -128,7 +131,10 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 
             Field<ListGraphType<CalendarType>, List<Calendar>>()
                 .Name("getEvents")
-                .ResolveAsync(async context => await calendarRepository.GetAllEvents());
+                .ResolveAsync(async context =>
+                {
+                    return await calendarRepository.GetAllEvents();
+                });
 
 
             Field<ListGraphType<CalendarType>, IEnumerable<Calendar>>()
@@ -148,11 +154,21 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<IdGraphType>>("eventId", "event id")
                 .ResolveAsync(async context =>
                 {
+                    
                     var id = context.GetArgument<int>("eventId");
                     return await calendarRepository.GetEventById(id);
                 });
-            
-            Field<VacationLevelQueries>()
+
+            Field<ListGraphType<VacationType>, List<Vacation>>()
+                .Name("getRequestVaction")
+                .Argument<IntGraphType, int>("receiverId", "")
+                .ResolveAsync(async contex =>
+                {
+                    var id = contex.GetArgument<int>("receiverId");
+                    return await vacationRepository.GetRequestVacation(id);
+                });
+                
+                Field<VacationLevelQueries>()
                 .Name("VacationLevelQueries")
                 .Resolve(_ => new { });
         }

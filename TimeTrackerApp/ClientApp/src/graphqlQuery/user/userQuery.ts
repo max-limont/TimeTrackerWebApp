@@ -23,6 +23,7 @@ export const getUserByIdQuery = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
+            vacationPermissionId
         }
     }
 `
