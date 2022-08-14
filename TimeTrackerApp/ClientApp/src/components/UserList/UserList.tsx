@@ -13,10 +13,11 @@ import {
 } from "../../store/actions/userList/userListActions";
 import usePagination from "../../hooks/usePagination";
 import Select from "./Select";
+import ExportXlsx from "./ExportXlsx";
 
 const UserList = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
-    const contentPerPage = 10
+    const contentPerPage = 2
 
     const {
         firstContentIndex,
@@ -92,6 +93,7 @@ const UserList = () => {
             </form>
 
             <div className="userList-controls-group">
+                <ExportXlsx count={count} isReverse={sortSetting.isReverse} orderBy={sortSetting.orderBy}/>
                 <span>Sort by:</span>
                 <Select options={selectOptions} selectHandler={selectHandler}/>
                 <Link className="link-btn addUser" to=" ">Add</Link>

@@ -5,7 +5,7 @@ namespace TimeTrackerApp.Business.Repositories
 	public interface IUserRepository
 	{
 		Task<IEnumerable<User>> FetchAllAsync();
-		Task<IEnumerable<User>> FetchPageListAsync(int from, int to, string orderBy = "FirstName");
+		Task<IEnumerable<User>> FetchPageListAsync(int from, int contentPerPage, string orderBy = "FirstName", bool isReverse = false);
 		Task<IEnumerable<User>> FetchSearchListAsync(string request);
 		Task<int> GetCountAsync();
 		Task<User> GetByIdAsync(int id);

@@ -22,17 +22,23 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Argument<NonNullGraphType<IntGraphType>, int>("from", "From row")
-               .Argument<NonNullGraphType<IntGraphType>, int>("to", "To row")
+               .Argument<NonNullGraphType<IntGraphType>, int>("contentPerPage", "Content per page")
                .Argument<StringGraphType?, string?>("orderBy", "Order by")
+               .Argument<BooleanGraphType?, bool?>("isReverse", "Is reverse")
                .Name("userFetchPageList")
                .ResolveAsync(async context =>
                {
                    int from = context.GetArgument<int>("from");
-                   int to = context.GetArgument<int>("to");
+                   int contentPerPage = context.GetArgument<int>("contentPerPage");
                    string? orderBy = context.GetArgument<string?>("orderBy");
+                   bool? isReverse = context.GetArgument<bool?>("isReverse");
                    if (orderBy != null)
-                       return await userRepository.FetchPageListAsync(from, to, orderBy);
-                   return await userRepository.FetchPageListAsync(from, to);
+                   {
+                       if (isReverse != null)
+                           return await userRepository.FetchPageListAsync(from, contentPerPage, orderBy, (bool)isReverse);
+                       return await userRepository.FetchPageListAsync(from, contentPerPage, orderBy);
+                   }
+                   return await userRepository.FetchPageListAsync(from, contentPerPage);
                })
                .AuthorizeWithPolicy("LoggedIn");
 

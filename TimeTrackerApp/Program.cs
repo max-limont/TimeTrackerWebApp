@@ -23,7 +23,7 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string connectionString = builder.Configuration.GetConnectionString(Constants.DatabaseConnectionString);
+string connectionString = builder.Configuration.GetConnectionString(Constants.DatabaseConnectionStringAzure);
 
 
 builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new AuthenticationTokenRepository(connectionString));

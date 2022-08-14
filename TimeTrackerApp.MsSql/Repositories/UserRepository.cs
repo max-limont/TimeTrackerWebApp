@@ -77,9 +77,10 @@ namespace TimeTrackerApp.MsSql.Repositories
 			}
 		}
 
-		public async Task<IEnumerable<User>> FetchPageListAsync(int from, int to, string orderBy = "FirstName")
+		public async Task<IEnumerable<User>> FetchPageListAsync(int from, int contentPerPage, string orderBy = "FirstName", bool isReverse = false)
 		{
-			string query = $"SELECT * FROM Users ORDER BY {orderBy} OFFSET {from} ROWS FETCH NEXT {to} ROWS ONLY";
+			string direction = isReverse ? "DESC" : "ASC";
+			string query = $"SELECT * FROM Users ORDER BY {orderBy} {direction} OFFSET {from} ROWS FETCH NEXT {contentPerPage} ROWS ONLY";
 
 			using (var connection = new SqlConnection(connectionString))
 			{

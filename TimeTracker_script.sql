@@ -40,3 +40,5 @@ create table [AuthenticationTokens]
 	[UserId] int not null foreign key references [Users]([Id]) on delete cascade,
 	[Token] text not null
 )
+
+SELECT * FROM Users ORDER BY Id asc offset 0 ROWS FETCH NEXT 3 ROWS ONLY 

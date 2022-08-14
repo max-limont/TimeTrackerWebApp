@@ -6,6 +6,7 @@
   text-decoration: none;
   padding: 4px 10px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .userList{
@@ -34,6 +35,12 @@
         color: $color-light;
         &:hover{
           background: #019299;
+        }
+      }
+      .exportXlsx{
+        background: $color-silver;
+        &:hover{
+          background: $color-active;
         }
       }
     }
