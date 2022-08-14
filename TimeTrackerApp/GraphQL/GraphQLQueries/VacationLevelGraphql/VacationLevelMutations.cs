@@ -17,7 +17,8 @@ public class VacationLevelMutations:ObjectGraphType
             {
                 var model = context.GetArgument<VacationLevel>("vacationLevel");
                 return await vacationLevelRepository.CreateVacationLevel(model);
-            });
+            })
+             .AuthorizeWithPolicy("LoggedIn");
 
         Field<VacationLevelType, VacationLevel>()
             .Name("updateVacationLevel")
@@ -26,7 +27,7 @@ public class VacationLevelMutations:ObjectGraphType
             {
                 var model = context.GetArgument<VacationLevel>("vacationLevel");
                 return await vacationLevelRepository.UpdateVacationLevel(model);
-            });
+            }).AuthorizeWithPolicy("LoggedIn"); ;
 
 
         Field<VacationLevelType, VacationLevel>()
@@ -36,6 +37,6 @@ public class VacationLevelMutations:ObjectGraphType
             {
                 int id = context.GetArgument<int>("id");
                 return await vacationLevelRepository.RemoveVacationLevel(id);
-            });
+            }).AuthorizeWithPolicy("LoggedIn"); ;
     }
 }

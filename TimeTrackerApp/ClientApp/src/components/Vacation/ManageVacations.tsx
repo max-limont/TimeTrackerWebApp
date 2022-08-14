@@ -26,6 +26,7 @@ export function ManageVacationRequest() {
             navigate("/vacation");
         }
     }, [auth.state?.user]);
+    
     return (
         <>
             {editState ? <EditVacation sourceVacation={2} stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}

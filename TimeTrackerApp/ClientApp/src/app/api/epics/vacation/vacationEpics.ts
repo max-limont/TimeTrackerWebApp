@@ -1,14 +1,17 @@
-import { combineEpics, ofType } from "redux-observable";
-import { from, map, merge, mergeMap } from "rxjs";
+import { combineEpics, ofType, StateObservable } from "redux-observable";
+import { from, map, merge, mergeMap, Observable } from "rxjs";
 import { graphqlRequest } from "../../api";
 import { fetchUserByIdActionType } from "../../../../store/actions/user/userActions";
 import { getUserByIdQuery } from "../../../../graphqlQuery/user/userQuery";
 import { createVacationTypeAction, getAllVacationsTypeTypeAction, getRequestVacationTypeAction, getVacationsByUserIdTypeAction, removeVacationTypeAction, updateVacationTypeAction } from "../../../../store/actions/vacation/vacationActions";
 import { createVacationQuery, getVacationRequestQuery, getVacationsByUserIdQuery, removeVacationQuery, updateVacationQuery } from "../../../../graphqlQuery/vacation/vacationQuery";
-import { addVacation, removeVacation, setRequestVacation, setVacation } from "../../../../store/slice/vacation/vacationSlice";
+import { addVacation, removeRequestVacation,updateVacation,updateRequestVacation,removeVacation, setRequestVacation, setVacation } from "../../../../store/slice/vacation/vacationSlice";
 import moment from "moment";
 import { VacationType } from "../../../../type/Vacation/VacationsTypes";
 import { PayloadAction } from "@reduxjs/toolkit";
+import { useAuth } from "../../../../hooks/useAuth";
+import { RootState, state, store } from "../../../store";
+import { Store } from "react-epics";
 
 
 function formatDateToNormalFormat(array: VacationType[]) {
@@ -29,7 +32,6 @@ const vacationGetByUserId = (action$: any) => {
             userId: action.payload
         })).pipe(
             map(response => {
-                console.log(response);
                 return setVacation(formatDateToNormalFormat(response.data.fetchAllUserVacationRequests));
             })
         )));
@@ -77,8 +79,14 @@ export const removeVacationEpic = (action$: any) => {
         })).pipe(
             map(response => {
                 if (response.errors == undefined) {
-                    console.log(response);
-                    return removeVacation(response.data.deleteVacationRequest.id);
+                    console.log(state);
+                    const userId = store.getState().rootReducer.auth.user?.id??0;
+                 
+                    const dataResponse:VacationType = response.data.deleteVacationRequest;
+                    if(userId == dataResponse.userId){
+                        return removeVacation(dataResponse.id);
+                    }
+                    return removeRequestVacation(dataResponse.id)
                 }
                 throw new Error();
             })
@@ -90,8 +98,20 @@ action$.pipe(
     ofType(updateVacationTypeAction),
     mergeMap((action: PayloadAction<VacationType>)=>from(graphqlRequest(updateVacationQuery, {
         model: action.payload
-    })))
-)
+    })).pipe(
+        map(response=>{
+            if (response.errors == undefined) {
+               
+                const userId = store.getState().rootReducer.auth.user?.id??0;
+                const dataResponse:VacationType = response.data.editVacationRequest;
+                if(userId == dataResponse.userId){
+                    return updateVacation(dataResponse);
+                }
+                return updateRequestVacation(dataResponse);
+            }
+            throw new Error();}))));
 
-export const vacationEpic = combineEpics(vacationGetByUserId, createVacationRequest, getVacationRequestEpic,removeVacationEpic);
+export const vacationEpic = combineEpics(vacationGetByUserId,updateVacationEpic, createVacationRequest, getVacationRequestEpic,removeVacationEpic);
+
+
 

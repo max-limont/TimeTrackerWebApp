@@ -53,7 +53,7 @@ builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>()
 
 // Add services to the container.
 builder.Services.AddCors(
-    builder => {
+builder => {
         builder.AddPolicy("DefaultPolicy", option =>
         {
             option.AllowAnyMethod();

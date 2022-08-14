@@ -33,14 +33,19 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<Vacation> EditAsync(Vacation vacation)
 		{
-			string query = @"UPDATE Vacation SET UserId = @UserId,IsAccepted=@IsAccepted, StartingTime = @StartingTime, EndingTime = @EndingTime, Comment = @Comment WHERE Id = @Id";
+			string query = @"UPDATE Vacation SET UserId = @UserId,IsAccepted=@IsAccepted, StartingTime = @StartingTime, EndingTime = @EndingTime, Comment = @Comment WHERE Id = @Id;
+              Select * from Vacation as b Inner Join Users as u on b.UserId=u.Id and b.Id=@Id and u.Id=@UserId";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				int affectedRows = await connection.ExecuteAsync(query, vacation);
-				if (affectedRows > 0)
+				var  model  = await connection.QueryAsync<Vacation, User, Vacation>(query, (c, d) =>
 				{
-					return vacation;
+					c.User = d;
+					return c;
+				}, vacation , splitOn: "Id");
+				if (model !=  null)
+				{
+					return model.First();
 				}
 				throw new Exception("Vacation request editing error!");
 			}
@@ -55,7 +60,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 				return (await connection.QueryAsync<Vacation>(query)).ToList();
 			}
 		}
-
+		
 		public async Task<Vacation> ChangeAcceptedState(int id, bool stateAccept)
 		{
 			string query = @"Update Vacation set IsAccepted=@StateAccepted Where Id=@Id";
@@ -98,13 +103,19 @@ namespace TimeTrackerApp.MsSql.Repositories
 		public async Task<List<Vacation>> GetRequestVacation(int receiverUserId)
 		{
 			string query = @$"
-SELECT  * from Vacation as c Inner Join Users as d on (c.UserId=d.Id) and UserId in
-(Select b.id from Users as b where b.VacationPermissionId in (select id from VacationLevel as vl where vl.Value <
-(Select Value From VacationLevel as vl2 Where vl2.Id =(Select VacationPermissionId from Users Where Id={receiverUserId}))))";
+				SELECT  * from Vacation as c Inner Join Users as d on (c.UserId=d.Id) and UserId in
+				(Select b.id from Users as b where b.VacationPermissionId in (select id from VacationLevel as vl where vl.Value <
+				(Select Value From VacationLevel as vl2 Where vl2.Id =(Select VacationPermissionId from Users Where Id={receiverUserId}))))";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				var listVacation = await connection.QueryAsync<Vacation>(query);
+				var listVacation = await connection.QueryAsync<Vacation,User,Vacation>(query, (c, d) =>
+					{
+						c.User = d;
+						return c;
+					},
+					splitOn: "Id");
+				
 				if (listVacation != null)
 				{
 					return listVacation.ToList();

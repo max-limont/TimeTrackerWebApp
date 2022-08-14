@@ -166,7 +166,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 {
                     var id = contex.GetArgument<int>("receiverId");
                     return await vacationRepository.GetRequestVacation(id);
-                });
+                })
+                 .AuthorizeWithPolicy("LoggedIn"); ;
                 
                 Field<VacationLevelQueries>()
                 .Name("VacationLevelQueries")

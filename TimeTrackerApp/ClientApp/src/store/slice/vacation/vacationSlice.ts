@@ -35,8 +35,14 @@ export const vacationSlice = createSlice({
         },
         removeRequestVacation: (state, action: PayloadAction<number>)=>{
             return {...state, requestVacations: state.requestVacations.filter(item=> item.id !== action.payload)}
-        }
+        },
+        updateRequestVacation: (state, action: PayloadAction<VacationType>)=>{
+            const i = state.requestVacations.findIndex(item => item.id == action.payload.id);
+            let vacations = state.requestVacations.slice();
+            vacations[i] = action.payload;
+            return {...state, requestVacations: vacations}
+        },
     }
 });
 
-export const {removeVacation,addVacation,setVacation,setRequestVacation}=vacationSlice.actions;
+export const {removeVacation,addVacation,setVacation,updateVacation,updateRequestVacation,setRequestVacation,removeRequestVacation}=vacationSlice.actions;

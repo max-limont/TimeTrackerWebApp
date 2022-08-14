@@ -6,6 +6,7 @@ import { useAppDispatch } from "../../app/hooks";
 import { useAuth } from "../../hooks/useAuth";
 import { createVacationAction } from "../../store/actions/vacation/vacationActions";
 import { CreateVacationType, VacationType } from "../../type/Vacation/VacationsTypes";
+import { postFixDate } from "./EditVacation";
 
 
 type Props = {
@@ -26,7 +27,6 @@ export function CreateVacation(obj: Props) {
 
     function onFinish(e: React.FormEvent) {
         e.preventDefault();
-        const postFixDate = "T00:00:00+00:00";
         console.log(vacation);
         dispatch(createVacationAction({
             ...vacation,

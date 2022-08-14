@@ -16,7 +16,8 @@ public class VacationLevelQueries:ObjectGraphType
             .ResolveAsync(async context =>
             {
                 return await vacationLevelRepository.GetVacationLevels();
-            });
+            })
+             .AuthorizeWithPolicy("LoggedIn"); ;
 
         Field<VacationLevelType, VacationLevel>()
             .Name("getVacationLevelById")
@@ -25,7 +26,8 @@ public class VacationLevelQueries:ObjectGraphType
             {
                 int id = context.GetArgument<int>("id");
                 return await vacationLevelRepository.GetVacationLevelById(id);
-            });
+            })
+             .AuthorizeWithPolicy("LoggedIn"); ;
     }
     
 }
