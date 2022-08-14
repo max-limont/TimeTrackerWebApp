@@ -32,6 +32,9 @@ export const vacationSlice = createSlice({
         },
         setRequestVacation:  (state, action: PayloadAction<VacationType[]>)=>{
             return {...state, requestVacations: action.payload};
+        },
+        removeRequestVacation: (state, action: PayloadAction<number>)=>{
+            return {...state, requestVacations: state.requestVacations.filter(item=> item.id !== action.payload)}
         }
     }
 });

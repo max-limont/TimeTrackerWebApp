@@ -1,5 +1,6 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
 import React, { useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
 import { useAuth } from "../../hooks/useAuth";
@@ -17,7 +18,11 @@ export function CreateVacation(obj: Props) {
     const setState = obj.stateForm;
     const { visible } = obj;
     const auth = useAuth();
-    const [vacation, setVacation] = useState({ userId: auth.state?.user?.id } as CreateVacationType);
+    const [vacation, setVacation] = useState({
+        userId: auth.state?.user?.id,
+        startingTime: moment().format("yyyy-MM-DD"),
+        endingTime: moment().add("day", 1).format("yyyy-MM-DD")
+    } as CreateVacationType);
 
     function onFinish(e: React.FormEvent) {
         e.preventDefault();
@@ -28,6 +33,7 @@ export function CreateVacation(obj: Props) {
             startingTime: vacation.startingTime + postFixDate,
             endingTime: vacation.endingTime + postFixDate
         }));
+        setState(false);
     }
     const { startingTime, endingTime, comment } = vacation
     return (
@@ -51,7 +57,7 @@ export function CreateVacation(obj: Props) {
                         </div>
                         <div className={"form-item w-100"}>
                             <label>Comment</label>
-                            <textarea value={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }}></textarea>
+                            <textarea  className="text-area-form" value={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }}></textarea>
                         </div>
                     </div >
                     <button type="submit" className={"button cyan-button"}>Add</button>

@@ -86,7 +86,7 @@ export const Menu: FC = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"/vacation-requests"} replace className={"flex-container"}>
+                                <Link to={"/manage-vacation"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faEnvelopeOpenText} className={"icon"} />
                                     <span>Vacation requests</span>
                                 </Link>

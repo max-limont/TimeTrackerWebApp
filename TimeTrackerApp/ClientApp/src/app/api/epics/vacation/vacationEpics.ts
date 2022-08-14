@@ -1,13 +1,14 @@
 import { combineEpics, ofType } from "redux-observable";
-import { from, map, mergeMap } from "rxjs";
+import { from, map, merge, mergeMap } from "rxjs";
 import { graphqlRequest } from "../../api";
 import { fetchUserByIdActionType } from "../../../../store/actions/user/userActions";
 import { getUserByIdQuery } from "../../../../graphqlQuery/user/userQuery";
-import { createVacationTypeAction, getAllVacationsTypeTypeAction, getRequestVacationTypeAction, getVacationsByUserIdTypeAction } from "../../../../store/actions/vacation/vacationActions";
-import { createVacationQuery, getVacationRequestQuery, getVacationsByUserIdQuery } from "../../../../graphqlQuery/vacation/vacationQuery";
-import { addVacation, setRequestVacation, setVacation } from "../../../../store/slice/vacation/vacationSlice";
+import { createVacationTypeAction, getAllVacationsTypeTypeAction, getRequestVacationTypeAction, getVacationsByUserIdTypeAction, removeVacationTypeAction, updateVacationTypeAction } from "../../../../store/actions/vacation/vacationActions";
+import { createVacationQuery, getVacationRequestQuery, getVacationsByUserIdQuery, removeVacationQuery, updateVacationQuery } from "../../../../graphqlQuery/vacation/vacationQuery";
+import { addVacation, removeVacation, setRequestVacation, setVacation } from "../../../../store/slice/vacation/vacationSlice";
 import moment from "moment";
 import { VacationType } from "../../../../type/Vacation/VacationsTypes";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 
 function formatDateToNormalFormat(array: VacationType[]) {
@@ -68,5 +69,29 @@ export const getVacationRequestEpic = (action$: any) => {
         )));
 }
 
-export const vacationEpic = combineEpics(vacationGetByUserId, createVacationRequest, getVacationRequestEpic);
+export const removeVacationEpic = (action$: any) => {
+    return action$.pipe(
+        ofType(removeVacationTypeAction),
+        mergeMap((action: PayloadAction<number>) => from(graphqlRequest(removeVacationQuery, {
+            id: action.payload
+        })).pipe(
+            map(response => {
+                if (response.errors == undefined) {
+                    console.log(response);
+                    return removeVacation(response.data.deleteVacationRequest.id);
+                }
+                throw new Error();
+            })
+        )))
+};
+
+export const updateVacationEpic = (action$:any)=>
+action$.pipe(
+    ofType(updateVacationTypeAction),
+    mergeMap((action: PayloadAction<VacationType>)=>from(graphqlRequest(updateVacationQuery, {
+        model: action.payload
+    })))
+)
+
+export const vacationEpic = combineEpics(vacationGetByUserId, createVacationRequest, getVacationRequestEpic,removeVacationEpic);
 

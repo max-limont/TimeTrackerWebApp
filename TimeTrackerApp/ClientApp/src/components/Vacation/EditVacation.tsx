@@ -1,24 +1,41 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { removeVacationAction, updateVacationAction } from "../../store/actions/vacation/vacationActions";
 
+
+export const  postFixDate = "T00:00:00+00:00";
 type Props = {
     stateForm: React.Dispatch<React.SetStateAction<boolean>>,
     visible: boolean,
     idVacation: number,
+    sourceVacation?: any
 }
 
 export function EditVacation(obj: Props) {
-    const { stateForm, visible, idVacation } = obj;
+    const dispatch = useAppDispatch();
+    const { stateForm, visible, idVacation,sourceVacation } = obj;
     const setVisible = stateForm;
-    const [vacation, setVacation] = useState(useAppSelector(s => s.rootReducer.vacation.vacations.find(item => item.id == idVacation)));
-    console.log(idVacation);
+    const [vacation, setVacation] = useState(
+        sourceVacation==undefined?useAppSelector(s => s.rootReducer.vacation.vacations.find(item => item.id == idVacation))
+        :useAppSelector(s => s.rootReducer.vacation.requestVacations.find(item => item.id == idVacation)));
+
+
     function onFinish(e: React.FormEvent) {
         e.preventDefault();
+        if (vacation) {
+            dispatch(updateVacationAction({
+                ...vacation,
+                startingTime: vacation.startingTime + postFixDate,
+                endingTime: vacation.endingTime + postFixDate
+            }));
+        }
+        setVisible(false);
     }
+
     if (vacation) {
-        const {  comment, startingTime, endingTime } = vacation
+        const { id, comment, startingTime, endingTime } = vacation;
         return (
             <div className={`form-event-container dark-background ${!visible && "hidden"}`}>
                 <div className={"form-event"}>
@@ -48,7 +65,7 @@ export function EditVacation(obj: Props) {
                         <button type="submit" className={"button cyan-button"}>Edit</button>
                         <button className={"button red-button"} onClick={(e) => {
                             e.preventDefault();
-                            // dispatch(removeVacationAction(id))
+                            dispatch(removeVacationAction(id))
                         }
                         }>Remove</button>
                         <button type="reset" className={"button silver-button"}>Reset</button>

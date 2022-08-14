@@ -445,6 +445,27 @@ section header h2 {
     color: #EEEEEE;
 }
 
+.orange-button {
+    background: #d67900;
+    color: #EEEEEE;
+}
+.orange-button:not(.disabled):hover {
+    background: transparent;
+    color: #d67900;
+    border: 1px solid #d67900;
+}
+
+.green-button {
+    background: #16ec56;
+    color: #EEEEEE;
+}
+
+.green-button:not(.disabled):hover {
+    background: transparent;
+    color: #16ec56;
+    border: 1px solid #16ec56;
+}
+
 .red-button:not(.disabled):hover {
     background: transparent;
     color: #F24C4C;
@@ -750,7 +771,7 @@ section header h2 {
 
 .form-event textarea {
     resize: none;
-    min-height: 150px;
+    min-height: 100px;
 }
 
 .events {
@@ -1139,6 +1160,21 @@ table .bottom-table-row .icon {
     text-align: center;
     border-bottom: 2px solid #00ADB5;
 }
+
+.link {
+    text-decoration: none;
+}
+
+div.end-item-action{
+     flex-basis: 250px; 
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+.end-item-action > * {
+    margin-right: 2px;
+}
+
 
 
 /*# sourceMappingURL=style.css.map */
