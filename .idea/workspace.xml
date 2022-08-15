@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6054f6d0-e998-4eee-a93d-95cb49aebc51" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/app/api/epics/userList/userListEpic.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/app/api/epics/userList/userListEpic.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/Select.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/Select.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/UserList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/UserList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/graphqlQuery/userList/userListQuery.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/graphqlQuery/userList/userListQuery.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/store/actions/userList/userListActions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/store/actions/userList/userListActions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/styles/style.scss" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/styles/style.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

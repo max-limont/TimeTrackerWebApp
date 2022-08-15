@@ -65,26 +65,14 @@
   }
   &-list{
     padding: 50px 0;
-    width: 100%;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    &-title{
-      display: flex;
-      justify-content: space-between;
-      width: 500px;
-      padding: 10px;
+    width: 600px;
+    margin: 100px auto;
+    td, th{
+      text-align: center;
     }
     .userItem{
       background: $color-silver;
       color: $color-dark;
-      width: 500px;
-      margin: 5px 0;
-      padding: 10px;
-      ul{
-        display: flex;
-        justify-content: space-between;
-      }
       &:hover{
         background: $color-active;
       }

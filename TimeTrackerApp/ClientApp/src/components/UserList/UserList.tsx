@@ -18,7 +18,7 @@ import Pagination from "./Pagination";
 const UserList = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
 
-    const contentPerPage = 2
+    const contentPerPage = 5
 
     const dispatch = useAppDispatch()
     const [state, setState] = useState<UserListPage>({
@@ -86,37 +86,35 @@ const UserList = () => {
             </div>
         </div>
 
-        <div className="userList-list">
-            <div className="userList-list-title">
-                <span>Name</span>
-                <span>Email</span>
-                <span>Weekly Working Time</span>
-            </div>
+        <table className="userList-list">
+            <thead>
+            <tr className="userList-list-title">
+                <th>Name</th>
+                <th>Email</th>
+                <th>Weekly Working Time</th>
+            </tr>
+            </thead>
+            <tbody>
             {
                 userList
                     ? userList.map(
                     (item: User) =>
-                        <Link key={item.id} className="link-btn userItem" to={""}>
-                            <ul>
-                                {/*<span>{item.id}</span>*/}
-                                <span>{item.firstName} {item.lastName}</span>
-                                <span>{item.email}</span>
-                                <span>{item.weeklyWorkingTime}</span>
-                            </ul>
-                        </Link>
+                        <tr onClick={() => document.location = "user?id=" + item.id} key={item.id} className="link-btn userItem">
+                            <td>{item.firstName} {item.lastName}</td>
+                            <td>{item.email}</td>
+                            <td>{item.weeklyWorkingTime}</td>
+                        </tr>
                     )
                     : null
             }
-
-            {
-                request.length
-                    ? null
-                    : <Pagination contentPerPage={contentPerPage} count={count}
-                                  setFirstContentIndex={firstContentIndexHandler}/>
-            }
-
-
-        </div>
+            </tbody>
+        </table>
+        {
+            request.length
+                ? null
+                : <Pagination contentPerPage={contentPerPage} count={count}
+                              setFirstContentIndex={firstContentIndexHandler}/>
+        }
 
     </section>
 }
