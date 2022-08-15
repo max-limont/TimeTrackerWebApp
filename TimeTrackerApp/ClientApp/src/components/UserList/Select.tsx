@@ -9,50 +9,12 @@ const Select: FC<Prop> = ({selectHandler, options}) => {
     const [isOptionsOpen, setIsOptionsOpen] = useState(false)
     const [selectedOptionId, setSelectedOptionId] = useState(0)
 
-    const toggleOptions = () => {
-        setIsOptionsOpen(!isOptionsOpen)
-    }
-
     const setSelectedThenCloseDropdown = (index: number) => {
         setSelectedOptionId(index)
-        selectHandler(options[selectedOptionId].value)
+        console.log(options)
+        console.log(index)
+        selectHandler(options[index].value)
         setIsOptionsOpen(false)
-    }
-
-    const handleKeyDown = (index: number) => (e: React.KeyboardEvent<HTMLLIElement>) => {
-        switch (e.key) {
-            case " ":
-            case "SpaceBar":
-            case "Enter":
-                e.preventDefault()
-                setSelectedThenCloseDropdown(index)
-                break
-            default:
-                break
-        }
-    }
-
-    const handleListKeyDown = (e: React.KeyboardEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLUListElement>) => {
-        switch (e.key) {
-            case "Escape":
-                e.preventDefault()
-                setIsOptionsOpen(false)
-                break
-            case "ArrowUp":
-                e.preventDefault()
-                setSelectedOptionId(
-                    selectedOptionId - 1 >= 0 ? selectedOptionId - 1 : options.length - 1
-                )
-                break
-            case "ArrowDown":
-                e.preventDefault()
-                setSelectedOptionId(
-                    selectedOptionId == options.length - 1 ? 0 : selectedOptionId + 1
-                )
-                break
-            default:
-                break
-        }
     }
 
     return (
@@ -64,8 +26,7 @@ const Select: FC<Prop> = ({selectHandler, options}) => {
                     aria-haspopup="listbox"
                     aria-expanded={isOptionsOpen}
                     className={"selectBtn " + (isOptionsOpen ? "expanded" : "")}
-                    onClick={toggleOptions}
-                    onKeyDown={handleListKeyDown}
+                    onClick={() => setIsOptionsOpen(!isOptionsOpen)}
                 >
                     {options[selectedOptionId].label}
                 </button>
@@ -76,7 +37,6 @@ const Select: FC<Prop> = ({selectHandler, options}) => {
                     role="listbox"
                     aria-activedescendant={options[selectedOptionId].label}
                     tabIndex={-1}
-                    onKeyDown={handleListKeyDown}
                 >
                     {options.map((option, index) => (
                         <li
@@ -85,7 +45,6 @@ const Select: FC<Prop> = ({selectHandler, options}) => {
                             role="option"
                             aria-selected={selectedOptionId == index}
                             tabIndex={0}
-                            onKeyDown={handleKeyDown(index)}
                             onClick={() => {
                                 setSelectedThenCloseDropdown(index);
                             }}

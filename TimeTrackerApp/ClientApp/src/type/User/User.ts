@@ -24,6 +24,6 @@ export const EmptyUser:User ={
 export interface UserListPage{
     from: number,
     contentPerPage: number,
-    orderBy: string | null
-    isReverse: boolean | null
+    orderBy: string
+    isReverse: boolean
 }

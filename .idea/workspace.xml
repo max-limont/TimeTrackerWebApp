@@ -3,16 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="6054f6d0-e998-4eee-a93d-95cb49aebc51" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp.Business/Repositories/IUserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp.Business/Repositories/IUserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp.MsSql/Repositories/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp.MsSql/Repositories/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/Select.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/Select.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/UserList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/UserList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/styles/style.scss" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/components/UserList/styles/style.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLQueries/AppQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/GraphQL/GraphQLQueries/AppQuery.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/Helpers/Constants.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/Helpers/Constants.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeTracker_script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTracker_script.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/store/actions/userList/userListActions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/store/actions/userList/userListActions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/type/User/User.ts" beforeDir="false" afterPath="$PROJECT_DIR$/TimeTrackerApp/ClientApp/src/type/User/User.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +52,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/TimeTrackerApp/ClientApp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../CourseWorkBD/CourseWorkDB" />
     <property name="list.type.of.created.stylesheet" value="SCSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />

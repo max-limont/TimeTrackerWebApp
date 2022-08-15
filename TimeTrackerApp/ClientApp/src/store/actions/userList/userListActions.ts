@@ -3,7 +3,7 @@ import {UserListPage} from "../../../type/User/User";
 
 export const fetchUserListPageActionType = "fetchUserListPage";
 export const fetchUserCountActionType = "fetchUserCount";
-export const fetchUserListSearchRequestActionType = "fetchUserListSearchResponse";
+export const fetchUserListSearchRequestActionType = "fetchUserListSearchRequest";
 
 
 

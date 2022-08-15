@@ -11,46 +11,34 @@ import {
     fetchUserListPageAction,
     fetchUserListSearchRequestAction
 } from "../../store/actions/userList/userListActions";
-import usePagination from "../../hooks/usePagination";
 import Select from "./Select";
 import ExportXlsx from "./ExportXlsx";
+import Pagination from "./Pagination";
 
 const UserList = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
+
     const contentPerPage = 2
-
-    const {
-        firstContentIndex,
-        nextPage,
-        prevPage,
-        page,
-        setPage,
-        totalPages,
-    } = usePagination({
-        contentPerPage,
-        count,
-    })
-
 
     const dispatch = useAppDispatch()
     const [state, setState] = useState<UserListPage>({
-        from: firstContentIndex,
+        from: 0,
         contentPerPage,
         orderBy: "Id",
-        isReverse: null
+        isReverse: false
     })
 
     const [search, setSearch] = useState<string>("")
-    const [loaded, setLoaded] = useState<boolean>(false)
-    const [sortSetting, setSortSetting] = useState({orderBy: "Id", isReverse: false})
 
-    const selectHandler = (settings: {orderBy: string, isReverse: boolean}) => {
-        setSortSetting(settings)
-        setLoaded(true)
+    const selectHandler = (settings: { orderBy: string, isReverse: boolean }) => {
+        setState({...state, ...settings})
+    }
+    const firstContentIndexHandler = (index:number) => {
+        setState({...state, from: index})
     }
 
     const selectOptions = [
-        {label: "First Name A-Z", value: {orderBy: "FistName", isReverse: false}},
+        {label: "First Name A-Z", value: {orderBy: "FirstName", isReverse: false}},
         {label: "First Name Z-A", value: {orderBy: "FirstName", isReverse: true}},
         {label: "Last Name A-Z", value: {orderBy: "LastName", isReverse: false}},
         {label: "Last Name Z-A", value: {orderBy: "LastName", isReverse: true}},
@@ -61,25 +49,16 @@ const UserList = () => {
     ]
 
     useEffect(() => {
-        if (loaded) {
-            setState({
-                ...state,
-                from: firstContentIndex,
-                contentPerPage,
-                orderBy: sortSetting.orderBy,
-                isReverse: sortSetting.isReverse
-            })
-            setLoaded(false)
-            console.log(sortSetting)
-        }
-
         dispatch(fetchUserCountAction())
+    }, [])
+
+    useEffect(() => {
         if (search.length)
             dispatch(fetchUserListSearchRequestAction(search))
         else
             dispatch(fetchUserListPageAction(state))
-    }, [search, loaded])
-
+    }, [search, state])
+    console.log(state)
 
     return <section className="userList">
         <div className="userList-controls">
@@ -93,7 +72,7 @@ const UserList = () => {
             </form>
 
             <div className="userList-controls-group">
-                <ExportXlsx count={count} isReverse={sortSetting.isReverse} orderBy={sortSetting.orderBy}/>
+                <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
                 <span>Sort by:</span>
                 <Select options={selectOptions} selectHandler={selectHandler}/>
                 <Link className="link-btn addUser" to=" ">Add</Link>
@@ -112,7 +91,7 @@ const UserList = () => {
                     (item: User) =>
                         <Link key={item.id} className="link-btn userItem" to={""}>
                             <ul>
-                                <span>{item.id}</span>
+                                {/*<span>{item.id}</span>*/}
                                 <span>{item.firstName} {item.lastName}</span>
                                 <span>{item.email}</span>
                                 <span>{item.weeklyWorkingTime}</span>
@@ -122,40 +101,7 @@ const UserList = () => {
                     : null
             }
 
-            {
-                totalPages > 1
-                    ? <div className="pagination">
-                        <p className="text">
-                            {page}/{totalPages}
-                        </p>
-                        <button onClick={() => {
-                            prevPage()
-                            setLoaded(true)
-                        }} className="page">
-                            &larr;
-                        </button>
-                        {/* @ts-ignore */}
-                        {[...Array(totalPages).keys()].map((el) => (
-                            <button
-                                onClick={() => {
-                                    setPage(el + 1)
-                                    setLoaded(true)
-                                }}
-                                key={el}
-                                className={`page ${page === el + 1 ? "active" : ""}`}
-                            >
-                                {el + 1}
-                            </button>
-                        ))}
-                        <button onClick={() => {
-                            nextPage()
-                            setLoaded(true)
-                        }} className="page">
-                            &rarr;
-                        </button>
-                    </div>
-                    : null
-            }
+            <Pagination contentPerPage={contentPerPage} count={count} setFirstContentIndex={firstContentIndexHandler}/>
 
         </div>
 
