@@ -35,7 +35,6 @@ export function ManageVacationRequest() {
                 </div>
                 <div className="list-vacation-container">
                     <p>Manage Vacations Request</p>
-
                     <div className="list-vacations">
                         {!(requestsVacation.length == 0) ?
                             <>
@@ -53,7 +52,8 @@ export function ManageVacationRequest() {
                                     const itemToUpdate= {
                                         ...item,
                                         startingTime: item.startingTime + postFixDate,
-                                        endingTime: item.endingTime + postFixDate
+                                        endingTime: item.endingTime + postFixDate,
+                                        
                                     };
                                     return (
                                         <div key={i} className="vacation-item">
@@ -81,7 +81,6 @@ export function ManageVacationRequest() {
                                                     <FontAwesomeIcon icon={faCheck} className={"icon"} />
                                                 </button>
                                                 <button className="button red-button close" onClick={() => {
-
                                                 }}>
                                                     <FontAwesomeIcon icon={faTrash} className={"icon"} />
                                                 </button>

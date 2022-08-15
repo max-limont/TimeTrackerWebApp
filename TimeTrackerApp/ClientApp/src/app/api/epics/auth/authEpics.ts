@@ -1,5 +1,5 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
-import {from, map, mergeMap, Observable} from "rxjs";
+import {from, map, mergeMap, startWith,Observable, endWith} from "rxjs";
 import { graphqlRequest } from "../../api";
 import {
     AuthLoginInputType,
@@ -12,6 +12,7 @@ import {
     authorizeUserById,
     logout,
     setError,
+    setLoadingState,
     setUser
 } from "../../../../store/slice/authentication/authSlice";
 import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../../../../Cookie/Cookie";
@@ -41,10 +42,11 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
                     store.dispatch(setError(parseError(response.errors[0].message)));
                     return { payload: response, type: "AuthLoginError" } as Action
                 }
+              
                 store.dispatch(logout());
                 return { payload: response, type: "AuthLoginError" } as Action
             })
-        ))
+        )),
     )
 }
 

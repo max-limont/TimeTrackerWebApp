@@ -5,7 +5,7 @@ import { fetchUserByIdActionType } from "../../../../store/actions/user/userActi
 import { getUserByIdQuery } from "../../../../graphqlQuery/user/userQuery";
 import { createVacationTypeAction, getAllVacationsTypeTypeAction, getRequestVacationTypeAction, getVacationsByUserIdTypeAction, removeVacationTypeAction, updateVacationTypeAction } from "../../../../store/actions/vacation/vacationActions";
 import { createVacationQuery, getVacationRequestQuery, getVacationsByUserIdQuery, removeVacationQuery, updateVacationQuery } from "../../../../graphqlQuery/vacation/vacationQuery";
-import { addVacation, removeRequestVacation,updateVacation,updateRequestVacation,removeVacation, setRequestVacation, setVacation } from "../../../../store/slice/vacation/vacationSlice";
+import { addVacation, removeRequestVacation, updateVacation, updateRequestVacation, removeVacation, setRequestVacation, setVacation } from "../../../../store/slice/vacation/vacationSlice";
 import moment from "moment";
 import { VacationType } from "../../../../type/Vacation/VacationsTypes";
 import { PayloadAction } from "@reduxjs/toolkit";
@@ -80,10 +80,10 @@ export const removeVacationEpic = (action$: any) => {
             map(response => {
                 if (response.errors == undefined) {
                     console.log(state);
-                    const userId = store.getState().rootReducer.auth.user?.id??0;
-                 
-                    const dataResponse:VacationType = response.data.deleteVacationRequest;
-                    if(userId == dataResponse.userId){
+                    const userId = store.getState().rootReducer.auth.user?.id ?? 0;
+
+                    const dataResponse: VacationType = response.data.deleteVacationRequest;
+                    if (userId == dataResponse.userId) {
                         return removeVacation(dataResponse.id);
                     }
                     return removeRequestVacation(dataResponse.id)
@@ -93,25 +93,37 @@ export const removeVacationEpic = (action$: any) => {
         )))
 };
 
-export const updateVacationEpic = (action$:any)=>
-action$.pipe(
-    ofType(updateVacationTypeAction),
-    mergeMap((action: PayloadAction<VacationType>)=>from(graphqlRequest(updateVacationQuery, {
-        model: action.payload
-    })).pipe(
-        map(response=>{
-            if (response.errors == undefined) {
-               
-                const userId = store.getState().rootReducer.auth.user?.id??0;
-                const dataResponse:VacationType = response.data.editVacationRequest;
-                if(userId == dataResponse.userId){
-                    return updateVacation(dataResponse);
-                }
-                return updateRequestVacation(dataResponse);
-            }
-            throw new Error();}))));
+export const updateVacationEpic = (action$: any) =>
+    action$.pipe(
+        ofType(updateVacationTypeAction),
+        mergeMap((action: PayloadAction<VacationType>) => {
+            let updateVacationModel: any = action.payload;
+            delete updateVacationModel.user;
+            return from(graphqlRequest(updateVacationQuery, {
+                model: updateVacationModel
+            })).pipe(
+                map(response => {
+                    if (response.errors == undefined) {
+                        const userId = store.getState().rootReducer.auth.user?.id ?? 0;
+                        const dataResponse: VacationType = response.data.editVacationRequest;
+                        const dataResponseFormatDate: VacationType = {
+                            ...dataResponse,
+                            startingTime: moment(dataResponse.startingTime).format("yyyy-MM-DD"),
+                            endingTime: moment(dataResponse.endingTime).format("yyyy-MM-DD")
+                        }
+                        if (userId == dataResponse.userId) {
+                            return updateVacation(dataResponseFormatDate);
+                        }
+                        if (dataResponseFormatDate.isAccepted == null) {
+                            return updateRequestVacation(dataResponseFormatDate);
+                        }
+                        return removeRequestVacation(dataResponse.id);
+                    }
+                    throw new Error();
+                }))
+        }));
 
-export const vacationEpic = combineEpics(vacationGetByUserId,updateVacationEpic, createVacationRequest, getVacationRequestEpic,removeVacationEpic);
+export const vacationEpic = combineEpics(vacationGetByUserId, updateVacationEpic, createVacationRequest, getVacationRequestEpic, removeVacationEpic);
 
 
 
