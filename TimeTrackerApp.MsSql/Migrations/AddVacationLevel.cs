@@ -11,6 +11,10 @@ public class AddVacationLevel:Migration
             .WithColumn("Id").AsInt32().PrimaryKey().Identity()
             .WithColumn("NameLevel").AsString(50)
             .WithColumn("Value").AsInt32();
+        
+        
+        
+        
     }
 
     public override void Down()

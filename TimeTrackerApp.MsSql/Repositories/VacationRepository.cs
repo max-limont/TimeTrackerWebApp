@@ -103,7 +103,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 		public async Task<List<Vacation>> GetRequestVacation(int receiverUserId)
 		{
 			string query = @$"
-				SELECT  * from Vacation as c Inner Join Users as d on (c.UserId=d.Id) and UserId in
+				SELECT  * from Vacation as c Inner Join Users as d on (c.UserId=d.Id) and c.IsAccepted=null and UserId in
 				(Select b.id from Users as b where b.VacationPermissionId in (select id from VacationLevel as vl where vl.Value <
 				(Select Value From VacationLevel as vl2 Where vl2.Id =(Select VacationPermissionId from Users Where Id={receiverUserId}))))";
 
