@@ -12,9 +12,6 @@ public class AddVacationLevel:Migration
             .WithColumn("NameLevel").AsString(50)
             .WithColumn("Value").AsInt32();
         
-        
-        
-        
     }
 
     public override void Down()
