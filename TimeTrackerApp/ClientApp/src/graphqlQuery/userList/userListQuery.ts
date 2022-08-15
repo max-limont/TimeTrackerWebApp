@@ -11,7 +11,7 @@ query ($from: Int!, $contentPerPage: Int!, $orderBy: String, $isReverse: Boolean
  }`
 
 export const getSearchResponse=`
-query ($request: String!){
+query ($request: String){
     userFetchSearchList(request: $request){
         id,
         email,

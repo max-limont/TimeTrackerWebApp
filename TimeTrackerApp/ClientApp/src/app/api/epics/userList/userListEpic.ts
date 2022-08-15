@@ -32,14 +32,13 @@ const fetchUserCount = (action$: any) =>{
                     return setUserListCount(response.data.userCount);
                 }))));}
 
-// Работоспособность спорная
 const fetchUserListSearchResponse = (action$: any) =>{
     return action$.pipe(
         ofType(fetchUserListSearchRequestActionType),
         mergeMap((action: any) => from(graphqlRequest(getSearchResponse, {request: action.payload.request}))
             .pipe(
                 map(response => {
-                    console.log(response);
+                    console.warn(action.payload.request);
                     return setUserList(response.data.userFetchSearchList);
                 }))));}
 

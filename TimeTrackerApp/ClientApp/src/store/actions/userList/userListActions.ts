@@ -9,4 +9,4 @@ export const fetchUserListSearchRequestActionType = "fetchUserListSearchRequest"
 
 export const fetchUserListPageAction = createAction<UserListPage>(fetchUserListPageActionType);
 export const fetchUserCountAction = createAction(fetchUserCountActionType);
-export const fetchUserListSearchRequestAction = createAction<string>(fetchUserListSearchRequestActionType);
+export const fetchUserListSearchRequestAction = createAction<{request: string}>(fetchUserListSearchRequestActionType);

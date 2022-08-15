@@ -28,12 +28,12 @@ const UserList = () => {
         isReverse: false
     })
 
-    const [search, setSearch] = useState<string>("")
+    const [request, setSearch] = useState<string>("")
 
     const selectHandler = (settings: { orderBy: string, isReverse: boolean }) => {
         setState({...state, ...settings})
     }
-    const firstContentIndexHandler = (index:number) => {
+    const firstContentIndexHandler = (index: number) => {
         setState({...state, from: index})
     }
 
@@ -53,12 +53,11 @@ const UserList = () => {
     }, [])
 
     useEffect(() => {
-        if (search.length)
-            dispatch(fetchUserListSearchRequestAction(search))
+        if (request.length)
+            dispatch(fetchUserListSearchRequestAction({request}))
         else
             dispatch(fetchUserListPageAction(state))
-    }, [search, state])
-    console.log(state)
+    }, [request, state])
 
     return <section className="userList">
         <div className="userList-controls">
@@ -72,9 +71,17 @@ const UserList = () => {
             </form>
 
             <div className="userList-controls-group">
-                <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
-                <span>Sort by:</span>
-                <Select options={selectOptions} selectHandler={selectHandler}/>
+                {
+                    request.length
+                        ? null
+                        : <>
+                            <ExportXlsx count={count} isReverse={state.isReverse}
+                                        orderBy={state.orderBy}/>
+                            <span>Sort by:</span>
+                            <Select options={selectOptions}
+                                    selectHandler={selectHandler}/>
+                        </>
+                }
                 <Link className="link-btn addUser" to=" ">Add</Link>
             </div>
         </div>
@@ -101,7 +108,13 @@ const UserList = () => {
                     : null
             }
 
-            <Pagination contentPerPage={contentPerPage} count={count} setFirstContentIndex={firstContentIndexHandler}/>
+            {
+                request.length
+                    ? null
+                    : <Pagination contentPerPage={contentPerPage} count={count}
+                                  setFirstContentIndex={firstContentIndexHandler}/>
+            }
+
 
         </div>
 

@@ -11,8 +11,6 @@ const Select: FC<Prop> = ({selectHandler, options}) => {
 
     const setSelectedThenCloseDropdown = (index: number) => {
         setSelectedOptionId(index)
-        console.log(options)
-        console.log(index)
         selectHandler(options[index].value)
         setIsOptionsOpen(false)
     }
@@ -20,7 +18,6 @@ const Select: FC<Prop> = ({selectHandler, options}) => {
     return (
         <div className="selectWrapper">
             <div className="selectContainer">
-
                 <button
                     type="button"
                     aria-haspopup="listbox"
