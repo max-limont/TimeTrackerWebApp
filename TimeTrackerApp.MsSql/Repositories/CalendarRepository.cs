@@ -21,7 +21,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<Calendar> AddEvent(Calendar model)
         {
-            string query = @"Insert Into Calendar (Title,TypeDayId,Date,EndDate)
+            string query = @"Insert Into Calendar (Title,DayTypeId,Date,EndDate)
            Values (@Title,@TypeDayId, @Date,@EndDate)  SELECT @@IDENTITY";
             using (var connection = new SqlConnection(connectionString))
             {
@@ -89,7 +89,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<Calendar> UpdateEvent(Calendar model)
         {
-            string query = @"Update Calendar set Title=@Title, Date=@Date, TypeDayId=@TypeDayId,EndDate=@EndDate  where Id=@Id";
+            string query = @"Update Calendar set Title=@Title, Date=@Date, DayTypeId=@TypeDayId,EndDate=@EndDate  where Id=@Id";
             using (var connection = new SqlConnection(connectionString))
             {
                 int affectedRows = await connection.ExecuteAsync(query, model);

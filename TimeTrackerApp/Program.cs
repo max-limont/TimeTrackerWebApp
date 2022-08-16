@@ -40,13 +40,13 @@ builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAutho
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
-
+//
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()
 //         .WithGlobalConnectionString(connectionString)
 //         /* typeof(migration) миграция яка буде використовуватисб ,
 //          также нужно в класе всегда помечать [migration(nummberId)] */
-//         .ScanIn(typeof(DeleteVacationRequestTable).Assembly)
+//         .ScanIn(typeof(ChangeCalendarTimeTracker).Assembly)
 //         .For.All())
 //     .AddLogging(config=>config.AddFluentMigratorConsole());
 
@@ -138,7 +138,6 @@ app.UseSpa(spa =>
 
 // using var scope = app.Services.CreateScope();
 // var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
-// migrationService.MigrateUp(); 
-
+// migrationService.MigrateUp();
 
 app.Run();
