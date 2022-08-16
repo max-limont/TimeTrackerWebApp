@@ -24,10 +24,10 @@ const UserList = () => {
     const dispatch = useAppDispatch()
     const [state, setState] = useState<UserListPage>({
         from: 0,
-        contentPerPage,
+        contentPerPage: contentPerPage,
         orderBy: "Id",
-        isReverse: false
-    })
+        isReverse: false,
+    } as UserListPage)
 
     const [request, setSearch] = useState<string>("")
 

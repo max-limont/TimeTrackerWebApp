@@ -1,5 +1,5 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
-import {from, map, mergeMap, Observable} from "rxjs";
+import {from, map, mergeMap, startWith,Observable, endWith} from "rxjs";
 import { graphqlRequest } from "../../api";
 import {
     AuthLoginInputType,
@@ -12,6 +12,7 @@ import {
     authorizeUserById,
     logout,
     setError,
+    setLoadingState,
     setUser
 } from "../../../../store/slice/authentication/authSlice";
 import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../../../../Cookie/Cookie";
@@ -43,7 +44,7 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
                 }
                 return { payload: response, type: "AuthLoginError" } as Action
             })
-        ))
+        )),
     )
 }
 
@@ -79,7 +80,8 @@ const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUs
                         isFullTimeEmployee: Boolean(JSON.parse(apiResponse.isFullTimeEmployee)),
                         weeklyWorkingTime: parseInt(apiResponse.weeklyWorkingTime ?? ''),
                         remainingVacationDays: parseInt(apiResponse.remainingVacationDays ?? ''),
-                        privilegesValue: parseInt(apiResponse.privilegesValue ?? '')
+                        privilegesValue: parseInt(apiResponse.privilegesValue ?? ''),
+                        vacationPermissionId: parseInt(apiResponse.vacationPermissionId??"")
                     } as User
                     store.dispatch(setUser(user))
                     return { payload: "Success", type: "AuthSetUserSuccess" } as Action

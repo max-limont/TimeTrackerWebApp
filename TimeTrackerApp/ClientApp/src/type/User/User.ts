@@ -8,11 +8,14 @@ export type User = {
     weeklyWorkingTime: number,
     remainingVacationDays: number,
     privilegesValue: number
+    vacationPermissionId: number
 }
 
-export interface UserListPage{
+export interface UserListPage {
     from: number,
     contentPerPage: number,
     orderBy: string
     isReverse: boolean
+    privilegesValue: number
+    vacationPermissionId?: number
 }
