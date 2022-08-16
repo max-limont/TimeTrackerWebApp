@@ -250,8 +250,6 @@ body {
   .header .user-info {
     box-sizing: border-box;
     align-items: center; }
-    .header .user-info p {
-      font-size: 16px; }
     .header .user-info > a {
       color: #EEEEEE;
       text-decoration: none; }
@@ -260,6 +258,8 @@ body {
       height: 32px;
       border-radius: 100%;
       margin-inline: 10px; }
+    .header .user-info a:hover {
+      color: #00ADB5; }
 
 section > header {
   display: flex;
@@ -848,5 +848,8 @@ table .bottom-table-row {
     max-height: 300px; }
   .edit-record-form .button:not(:last-child) {
     margin-right: 5px; }
+
+.user-title {
+  padding-top: 15px; }
 
 /*# sourceMappingURL=style.css.map */
