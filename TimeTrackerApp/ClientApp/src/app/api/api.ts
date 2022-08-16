@@ -5,7 +5,7 @@ import { AuthUserResponse } from "../../type/User/AuthUser";
 import {store} from "../store";
 import {authLogoutAction} from "../../store/slice/authentication/authSlice";
 
-const apiUrl = "https://localhost:5001/graphql";
+const apiUrl = "https://timetrackerwebapp1.azurewebsites.net/graphql";
 
 const getAuthorizationHeader = (): string => {
     const accessToken = getCookie(accessTokenKey);
