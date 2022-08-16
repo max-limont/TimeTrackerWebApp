@@ -21,6 +21,46 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                })
                .AuthorizeWithPolicy("LoggedIn");
 
+            Field<ListGraphType<UserType>, IEnumerable<User>>()
+               .Argument<NonNullGraphType<IntGraphType>, int>("from", "From row")
+               .Argument<NonNullGraphType<IntGraphType>, int>("contentPerPage", "Content per page")
+               .Argument<StringGraphType?, string?>("orderBy", "Order by")
+               .Argument<BooleanGraphType?, bool?>("isReverse", "Is reverse")
+               .Name("userFetchPageList")
+               .ResolveAsync(async context =>
+               {
+                   int from = context.GetArgument<int>("from");
+                   int contentPerPage = context.GetArgument<int>("contentPerPage");
+                   string? orderBy = context.GetArgument<string?>("orderBy");
+                   bool? isReverse = context.GetArgument<bool?>("isReverse");
+                   if (orderBy != null)
+                   {
+                       if (isReverse != null)
+                           return await userRepository.FetchPageListAsync(from, contentPerPage, orderBy, (bool)isReverse);
+                       return await userRepository.FetchPageListAsync(from, contentPerPage, orderBy);
+                   }
+                   return await userRepository.FetchPageListAsync(from, contentPerPage);
+               })
+               .AuthorizeWithPolicy("LoggedIn");
+
+            Field<ListGraphType<UserType>, IEnumerable<User>>()
+               .Argument<StringGraphType, string>("request", "Request")
+               .Name("userFetchSearchList")
+               .ResolveAsync(async context =>
+               {
+                   string request = context.GetArgument<string>("request");
+                   return await userRepository.FetchSearchListAsync(request);
+               })
+               .AuthorizeWithPolicy("LoggedIn");
+
+            Field<IntGraphType, int>()
+               .Name("userCount")
+               .ResolveAsync(async context =>
+               {
+                   return await userRepository.GetCountAsync();
+               })
+               .AuthorizeWithPolicy("LoggedIn");
+
             Field<UserType, User>()
                 .Name("GetUserById")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")

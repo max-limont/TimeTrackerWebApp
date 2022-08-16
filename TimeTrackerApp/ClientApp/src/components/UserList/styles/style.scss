@@ -1,18 +1,12 @@
-$color-dark: #222831;
-$color-light-dark: #393E46;
-$color-cyan: #00ADB5;
-$color-light: #EEEEEE;
-$color-silver: #D6D6D6;
-$color-red: #F24C4C;
-
-$font-size-default: 18px;
-$font-size-header: 26px;
-
+@import "variables";
+@import "pagination";
+@import "select";
 
 .link-btn{
   text-decoration: none;
   padding: 4px 10px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .userList{
@@ -25,11 +19,28 @@ $font-size-header: 26px;
     align-items: center;
     background: $color-light-dark;
     &-group{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: $control-group-height;
+      &>*{
+        margin: 0 5px;
+      }
+      &>span{
+        color: $color-light;
+      }
       .addUser{
+        height: $control-group-height;
         background: $color-cyan;
         color: $color-light;
         &:hover{
           background: #019299;
+        }
+      }
+      .exportXlsx{
+        background: $color-silver;
+        &:hover{
+          background: $color-active;
         }
       }
     }
@@ -54,18 +65,16 @@ $font-size-header: 26px;
   }
   &-list{
     padding: 50px 0;
-    width: 100%;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
+    width: 600px;
+    margin: 100px auto;
+    td, th{
+      text-align: center;
+    }
     .userItem{
       background: $color-silver;
       color: $color-dark;
-      width: 500px;
-      margin: 5px 0;
-      padding: 10px;
       &:hover{
-        background: #9a9a9a;
+        background: $color-active;
       }
     }
   }

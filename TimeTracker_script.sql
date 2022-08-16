@@ -49,3 +49,4 @@ create table [Calendar]
 	[EndDate] date null,
 	[DayTypeId] int 
 )
+

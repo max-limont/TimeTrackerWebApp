@@ -16,7 +16,7 @@ export const Content: FC = () => {
             <Routes>
                 <Route index element={<ProtectedComponent component={<Home />} />} />
                 <Route path={"/calendar"} element={<ProtectedComponent component={<Calendar />} />} />
-                <Route path={"/userList"} element={<ProtectedComponent component={<UserList />} />} />
+                <Route path={"/user-list"} element={<ProtectedComponent component={<UserList />} />} />
             </Routes>
         </div>
     )

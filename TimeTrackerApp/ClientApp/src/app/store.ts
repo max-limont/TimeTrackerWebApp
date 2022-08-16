@@ -7,13 +7,13 @@ import { authEpics } from './api/epics/auth/authEpics';
 import { userEpics } from './api/epics/user/userEpics';
 import userListSlice from '../store/slice/user/userListSlice';
 import { calendarEpics } from './api/epics/calendar/calendarEpics';
+import {userListEpics} from "./api/epics/userList/userListEpic";
 import {timeTrackerEpics} from "./api/epics/timeTracker/timeTrackerEpics";
 
 
 const epicMiddleware = createEpicMiddleware();
 
-const rootEpic = combineEpics(authEpics,userEpics,calendarEpics, timeTrackerEpics);
-
+const rootEpic = combineEpics(authEpics, userEpics, userListEpics, calendarEpics, timeTrackerEpics);
 
 const rootReducer = combineReducers({
   calendar: calendarSlice.reducer,

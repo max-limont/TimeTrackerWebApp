@@ -27,7 +27,6 @@ export const graphqlRequest = async (query: string, variables?: any) => {
     const refreshTokenInCookies = getCookie(refreshTokenKey);
     const accessTokenInCookies = getCookie(accessTokenKey) ?? '';
     let response = await request(query, variables);
-
     if (response.ok) {
         return await response.json()
     }

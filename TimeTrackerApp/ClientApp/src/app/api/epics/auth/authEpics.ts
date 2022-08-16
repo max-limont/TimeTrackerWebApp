@@ -41,7 +41,6 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
                     store.dispatch(setError(parseError(response.errors[0].message)));
                     return { payload: response, type: "AuthLoginError" } as Action
                 }
-                store.dispatch(logout());
                 return { payload: response, type: "AuthLoginError" } as Action
             })
         ))
@@ -57,7 +56,6 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
             map(() => {
                 clearCookie(refreshTokenKey)
                 clearCookie(accessTokenKey)
-                store.dispatch(logout())
                 return { payload: "Success", type: "AuthLogoutSuccess" } as Action
             }),
         ))

@@ -9,3 +9,10 @@ export type User = {
     remainingVacationDays: number,
     privilegesValue: number
 }
+
+export interface UserListPage{
+    from: number,
+    contentPerPage: number,
+    orderBy: string
+    isReverse: boolean
+}

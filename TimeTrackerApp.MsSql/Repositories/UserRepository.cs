@@ -77,6 +77,40 @@ namespace TimeTrackerApp.MsSql.Repositories
 			}
 		}
 
+		public async Task<IEnumerable<User>> FetchPageListAsync(int from, int contentPerPage, string orderBy = "FirstName", bool isReverse = false)
+		{
+			string direction = isReverse ? "DESC" : "ASC";
+			string query = $"SELECT * FROM Users ORDER BY {orderBy} {direction} OFFSET {from} ROWS FETCH NEXT {contentPerPage} ROWS ONLY";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
+			}
+		}
+
+		public async Task<IEnumerable<User>> FetchSearchListAsync(string request)
+		{
+			request += "%"; 
+			string query = $"SELECT * FROM Users " +
+                $"WHERE (LastName LIKE '{request}') " +
+                $"OR (FirstName LIKE '{request}') " +
+                $"OR (Email LIKE '{request}')";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
+			}
+		}
+
+		public async Task<int> GetCountAsync()
+		{
+			string query = "SELECT COUNT(*) FROM Users";
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QuerySingleOrDefaultAsync<int>(query);
+			}
+		}
+
 		public async Task<User> GetByIdAsync(int id)
 		{
 			string query = @"SELECT * FROM Users WHERE Id = @Id";
