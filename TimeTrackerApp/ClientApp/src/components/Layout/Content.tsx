@@ -1,9 +1,13 @@
-import { FC } from "react";
+import {FC} from "react";
 import { Route, Routes } from "react-router-dom";
 import Calendar from "../Calendar/Calendar";
 import {Home} from "../TimeTracker/Home";
 import UserList from "../UserList/UserList";
 import {ProtectedComponent} from "../Auth/ProtectedComponent";
+
+export type ContentStateType = {
+    showContent: boolean
+}
 
 export const Content: FC = () => {
 
@@ -15,5 +19,5 @@ export const Content: FC = () => {
                 <Route path={"/userList"} element={<ProtectedComponent component={<UserList />} />} />
             </Routes>
         </div>
-    );
+    )
 }

@@ -42,5 +42,33 @@ namespace TimeTrackerApp.Business.Services
 		public static string GenerateAccessToken(User user) => GenerateJwtToken(GetJwtTokenClaims(user), 60);
 
 		public static string GenerateRefreshToken(User user) => GenerateJwtToken(GetJwtTokenClaims(user), 2592000);
+
+		public static bool VaildateJwtToken(string token)
+		{
+			if (token is not null)
+			{
+				var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+				var jwtSecretKey = Encoding.UTF8.GetBytes(Configuration[$"Jwt:JWT_SECRET_KEY"]);
+				try
+				{
+					var claimsPrincipal = jwtSecurityTokenHandler.ValidateToken(token, new TokenValidationParameters
+					{
+						ValidateIssuerSigningKey = true,
+						IssuerSigningKey = new SymmetricSecurityKey(jwtSecretKey),
+						ValidateIssuer = false,
+						ValidateAudience = false,
+						ValidAudience = Configuration[$"Jwt:JWT_TOKEN_AUDIENCE"],
+						ValidIssuer = Configuration[$"Jwt:JWT_TOKEN_ISSUER"],
+						ValidateLifetime = true,
+					}, out var securityToken);
+				}
+				catch
+				{
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
 	}
 }

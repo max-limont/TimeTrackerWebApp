@@ -1,15 +1,14 @@
-﻿
-using TimeTrackerApp.Business.Models;
+﻿using TimeTrackerApp.Business.Models;
 
 namespace TimeTrackerApp.Business.Repositories
 {
     public interface ICalendarRepository
     {
-        public Task<List<Calendar>> GetEventRange(DateTime startDate, DateTime finishDate);
-        public Task<List<Calendar>> GetAllEvents();
-        public  Task<Calendar> AddEvent(Calendar model);
-        public Task<Calendar> RemoveEvent(int id);
-        public Task<Calendar> UpdateEvent(Calendar model);
-        public Task<Calendar> GetEventById(int id);
+        public Task<IEnumerable<CalendarDay>> FetchAllDaysAsync();
+        public Task<IEnumerable<CalendarDay>> FetchDaysRangeAsync(DateTime startDate, DateTime finishDate);
+        public Task<CalendarDay> GetDayByIdAsync(int id);
+        public Task<CalendarDay> CreateDayAsync(CalendarDay day);
+        public Task<CalendarDay> EditDayAsync(CalendarDay day);
+        public Task<CalendarDay> RemoveDayAsync(int id);
     }
 }

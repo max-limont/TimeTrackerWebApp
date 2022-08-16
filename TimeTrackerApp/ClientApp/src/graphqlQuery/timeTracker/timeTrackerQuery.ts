@@ -5,7 +5,6 @@ export const fetchAllUserRecordsQuery = `
         fetchAllUserRecords(userId: $userId) {
             id
             workingTime
-            comment
             employeeId
             editorId
             isAutomaticallyCreated
@@ -19,7 +18,6 @@ export const createRecordMutation = `
         createRecord(record: $record) {
             id
             workingTime
-            comment
             employeeId
             editorId
             isAutomaticallyCreated
@@ -33,7 +31,6 @@ export const updateRecordMutation = `
         editRecord(record: $record) {
             id
             workingTime
-            comment
             employeeId
             editorId
             isAutomaticallyCreated
@@ -47,7 +44,6 @@ export const deleteRecordMutation = `
         deleteRecord(id: $id) {
             id
             workingTime
-            comment
             employeeId
             editorId
             isAutomaticallyCreated

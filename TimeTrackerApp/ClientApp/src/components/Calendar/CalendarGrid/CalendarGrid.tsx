@@ -1,101 +1,110 @@
-import { faCircleUser, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import moment, {Moment} from "moment";
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { TypeDay } from "../../../enums/TypeDay";
-import { fetchAllEventsAction, fetchRangeEventsAction } from "../../../store/actions/calendar/calendarActions";
-import { EventType } from "../../../type/Events/EventType";
-import { EditEventForm } from "../FormsCalendar/EditEventForm";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import {useEffect, useState} from "react";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {DayTypes} from "../../../enums/DayTypes";
+import {fetchAllCalendarDays, fetchCalendarDaysRange} from "../../../store/actions/calendar/calendarActions";
+import {CalendarDayType} from "../../../type/CalendarDay/CalendarDayType";
+import {useAuth} from "../../../hooks/useAuth";
+import {Controls} from "../Controls/Controls";
+import {compareDate} from "../../../store/slice/calendar/calendarSlice";
+import {CalendarForm, CalendarFormStatus} from "../FormsCalendar/CalendarForm";
+import {ContentStateType} from "../../Layout/Content";
+import {Loading} from "../../Layout/Loading";
 
+export type CalendarStateType = {
+    isCalendarFormVisible: boolean,
+    data?: CalendarDayType | null,
+    calendarFormStatus: CalendarFormStatus,
+    contentState: ContentStateType
+}
+
+const initialState: CalendarStateType = {
+    isCalendarFormVisible: false,
+    data: null,
+    calendarFormStatus: CalendarFormStatus.Create,
+    contentState: { showContent: false }
+}
 
 export function CalendarGrid() {
+
+    const auth = useAuth()
+    const [state, setState] = useState(initialState)
     const dispatch = useAppDispatch();
-    const totalDays = useAppSelector(s => s.rootReducer.calendar.totalDays)
-    const daysArray:Moment[] = useAppSelector((s) => s.rootReducer.calendar.currentDaysArray);
-    const currentDate = useAppSelector((s) => s.rootReducer.calendar.currentDate);
-    const currentCalendar = useAppSelector((s) => s.rootReducer.calendar.currentCalendar);
-    const eventsRange = useAppSelector((s) => s.rootReducer.calendar.eventsRange);
-    const events = useAppSelector((s) => s.rootReducer.calendar.events);
-    const [isEditFormVisible, setEditFormVisible] = useState(false);
-    const [id, setId] = useState(0);
-    const days = ["Monday", "Tuesday", 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const currentDay = " current-day";
+    const days = useAppSelector(state => state.rootReducer.calendar.days)
+    const selectedMonth = useAppSelector(state => state.rootReducer.calendar.selectedMonth)
+    const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-    useEffect(() => {
-        dispatch(fetchAllEventsAction());
-    },[]);
-
-    useEffect(() => {
-        dispatch(fetchRangeEventsAction({
-            startDate: daysArray[0].format("yyyy-MM-DD"),
-            finishDate: daysArray[totalDays - 1].format("yyyy-MM-DD")
-        }));
-    }, [events, daysArray]);
-
-    function setEventDay(value: any, day: EventType[]) {
-        let styleDayName: any = null;
-        const newDays = day.filter(s=>s!=undefined);
-        const eventsDay = newDays.map((s) => {
-                value = s.typeDayId != null ? s.typeDayId : value;
-                styleDayName = value == "weekend" ? "weekend" : value == TypeDay.ShortDay ? "short-day" : value == TypeDay.Weekend ? "weekend" : null;
-                return (
-             
-                        <div key={s.id} onClick={() => {
-                            setId(s.id);
-                            setEditFormVisible(true);
-                        }} className={"event " + styleDayName} style={{ minWidth: "85px" }}>
-                            <p>{s.title}</p>
-                            <p>{styleDayName}</p>
-                            <p>{day != undefined ? <FontAwesomeIcon icon={faCircleUser} className={"icon"} /> : <></>}</p>
-                        </div>
-                    )});
-        
-        if (newDays.length==0) {
-            if(value == "weekend")
-                return (<div className={"event "} style={{ minWidth: "85px" }}>Weekend</div>);
+    const getDayDataItemClassName = (data: CalendarDayType) => {
+        switch (data.dayTypeId) {
+            case DayTypes.Weekend.valueOf():
+                return 'day-off'
+            case DayTypes.ShortDay.valueOf():
+                return 'short-day'
+            default:
+                return 'default'
         }
-        return eventsDay;
     }
 
+    const updateDay = (data: CalendarDayType | null, calendarFormStatus: CalendarFormStatus) => {
+        setState({...state, data: data, isCalendarFormVisible: true, calendarFormStatus: calendarFormStatus})
+        document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+    }
 
-    return (
+    useEffect(() => {
+        setState({...state, contentState: { showContent: false }})
+        if (auth.state?.user?.id) {
+            /*
+            dispatch(fetchCalendarDaysRange({
+                startDate: new Date(new Date(structuredClone(selectedMonth).setHours(0, 0, 0, 0)) + " UTC"),
+                finishDate: new Date(new Date(new Date(structuredClone(selectedMonth).setMonth(selectedMonth.getMonth() + 1, 0)).setHours(0, 0, 0, 0)) + " UTC")
+            }));*/
+            dispatch(fetchAllCalendarDays())
+            setState({...state, contentState: { showContent: true }})
+        }
+    }, [auth.state?.user?.id, selectedMonth])
+
+    return state.contentState.showContent ? (
         <>
-            
-            <div key={1} className={"calendar"}>
-            <EditEventForm visible={isEditFormVisible} setVisible={setEditFormVisible} id={id} />
-                <div className="days">
-                    {days.map((dayItem,i) => <div key={i}>{dayItem}</div>)}
+            {state.isCalendarFormVisible &&
+                <CalendarForm data={state.data} isVisible={state.isCalendarFormVisible} setVisible={(isVisible: boolean) => setState({...state, isCalendarFormVisible: isVisible})} status={state.calendarFormStatus} />
+            }
+            <div className={'calendar'}>
+                <Controls />
+                <div className={'days'}>
+                    {
+                        weekdays.map((weekday, key) => (
+                            <div key={key}>{weekday}</div>
+                        ))
+                    }
                 </div>
-                <div className="calendar-grid">
-                    {daysArray.map((dayItem, value) => {
-                        const formatDayItem = dayItem.format("yyyy-MM-DD");
-                        const classNameCurrentDay = formatDayItem == currentDate ? currentDay : "";
-                        const classNameMonth = !(dayItem.format("MM") == currentCalendar.format("MM")) ? "unselected-month" : "";
-                        /*проверяем выходной*/
-                        let stateDay: any = dayItem.format("dd") == "Sa" || dayItem.format("dd") == "Su" ? "weekend" : '';
-                        /*масив ивентов*/
-                        const currentDayState = eventsRange.filter((s) => {
-                            if (s.date == formatDayItem || (moment(formatDayItem).isSameOrBefore(s.endDate) && moment(formatDayItem).isAfter(s.date))) {
-                                return s;
-                            }
-                        });
-
-                        return (
-                                <div key={value} className={"day "}>
-                                    <div className={"day-number " + classNameMonth}>
-                                        <p className={classNameCurrentDay}>{dayItem.format('DD')}
-                                        </p>
-                                    </div>
-                                    <div  className="events" style={{ flexBasis: "100%" }}>
-                                        {(stateDay==""||currentDayState.length>1)||stateDay=="weekend"?setEventDay(stateDay, currentDayState):<></>}
-                                    </div>
+                <div className={'calendar-grid'}>
+                    {
+                        days.map((day, key) => (
+                            <div key={key} className={`day ${day.date.getMonth() !== selectedMonth.getMonth() ? 'disabled ' : ''}${day.data.length === 0 ? 'empty' : ''}`} onClick={event => {
+                                if (event.target instanceof Element) {
+                                    const element: Element = event.target
+                                    const dayDataItem = element.closest('.day-data-item')
+                                    return !dayDataItem ? updateDay({ date: structuredClone(day.date) } as CalendarDayType, CalendarFormStatus.Create) : undefined;
+                                }
+                            }}>
+                                <div className={`day-number ${compareDate(day.date, new Date()) ? 'current-day' : ''}`}>
+                                    <p>{day.date.getDate().toString().padStart(2, '0')}</p>
                                 </div>
-                        );
-                    })}
+                                <div className="day-data">
+                                    {
+                                        day.data.map((data, dataKey) => (
+                                            <div key={dataKey} className={`day-data-item ${getDayDataItemClassName(data)}`} onClick={() => data.id ? updateDay(data, CalendarFormStatus.Edit) : undefined}>
+                                                <p>{data.title}</p>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
         </>
-    );
+    ) : (
+        <Loading />
+    )
 }

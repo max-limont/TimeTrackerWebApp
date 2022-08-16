@@ -20,12 +20,12 @@ export const request = async (query: string, variables?: any) => {
             'Authorization': getAuthorizationHeader()
         },
         body: JSON.stringify({ query, variables }),
- 
     });
 }
 
 export const graphqlRequest = async (query: string, variables?: any) => {
     const refreshTokenInCookies = getCookie(refreshTokenKey);
+    const accessTokenInCookies = getCookie(accessTokenKey) ?? '';
     let response = await request(query, variables);
 
     if (response.ok) {
@@ -36,12 +36,13 @@ export const graphqlRequest = async (query: string, variables?: any) => {
         const authenticatedUserId = parseInt(parseJwt<AuthUserResponse>(refreshTokenInCookies).UserId)
         const authRefreshQueryVariables: AuthRefreshInputType = {
             userId: authenticatedUserId,
+            accessToken: accessTokenInCookies,
             refreshToken: refreshTokenInCookies,
         }
         const refreshResponse = await request(authRefreshQuery, authRefreshQueryVariables);
         if (refreshResponse.ok) {
             const refreshResponseBody = await refreshResponse.json();
-            if (refreshResponseBody.data && refreshResponseBody.data.authRefresh) {
+            if (refreshResponseBody?.data?.authRefresh) {
                 setCookie({key: refreshTokenKey, value: refreshResponseBody.data.authRefresh.refreshToken, lifetime: 30 * 24 * 60 * 60})
                 setCookie({key: accessTokenKey, value: refreshResponseBody.data.authRefresh.accessToken, lifetime: 2 * 60})
                 response = await request(query, variables)

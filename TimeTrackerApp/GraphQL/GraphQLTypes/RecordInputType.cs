@@ -14,7 +14,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
             Field<IdGraphType, int?>().Name("EditorId").Resolve(context => context.Source.EditorId);
             Field<BooleanGraphType, bool>().Name("IsAutomaticallyCreated").Resolve(context => context.Source.IsAutomaticallyCreated);
             Field<NonNullGraphType<DateTimeGraphType>, DateTime>().Name("CreatedAt").Resolve(context => context.Source.CreatedAt);
-            Field<StringGraphType, string>().Name("Comment").Resolve(context => context.Source.Comment);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppQuery : ObjectGraphType
     {
-        public AppQuery(ICalendarRepository calendarRepository,IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
+        public AppQuery(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
         {
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
@@ -125,32 +125,35 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 })
                 .AuthorizeWithPolicy("LoggedIn");
 
-            Field<ListGraphType<CalendarType>, List<Calendar>>()
-                .Name("getEvents")
-                .ResolveAsync(async context => await calendarRepository.GetAllEvents());
+            Field<ListGraphType<CalendarDayType>, IEnumerable<CalendarDay>>()
+                .Name("FetchAllCalendarDays")
+                .ResolveAsync(async context => {
+                    return await calendarRepository.FetchAllDaysAsync();
+                })
+                .AuthorizeWithPolicy("LoggedIn");
 
-
-            Field<ListGraphType<CalendarType>, IEnumerable<Calendar>>()
-                .Name("getRangeEvents")
-                .Argument<DateGraphType>("startDate", "start date")
-                .Argument<DateGraphType>("finishDate", "finish date")
+            Field<ListGraphType<CalendarDayType>, IEnumerable<CalendarDay>>()
+                .Name("FetchCalendarDaysRange")
+                .Argument<DateGraphType>("StartDate", "Start date")
+                .Argument<DateGraphType>("FinishDate", "Finish date")
                 .ResolveAsync(async context =>
                 {
-                    DateTime startDate = context.GetArgument<DateTime>("startDate"),
-                    finishDate = context.GetArgument<DateTime>("finishDate");
-                    return await calendarRepository.GetEventRange(startDate, finishDate);
-                });
+                    var startDate = context.GetArgument<DateTime>("StartDate");
+                    var finishDate = context.GetArgument<DateTime>("FinishDate");
+                    return await calendarRepository.FetchDaysRangeAsync(startDate, finishDate);
+                })
+                .AuthorizeWithPolicy("LoggedIn");
 
 
-            Field<CalendarType, Calendar>()
-                .Name("getEventById")
-                .Argument<NonNullGraphType<IdGraphType>>("eventId", "event id")
+            Field<CalendarDayType, CalendarDay>()
+                .Name("GetCalendarDayById")
+                .Argument<NonNullGraphType<IdGraphType>>("Id", "Day id")
                 .ResolveAsync(async context =>
                 {
-                    var id = context.GetArgument<int>("eventId");
-                    return await calendarRepository.GetEventById(id);
-                });
-
+                    var id = context.GetArgument<int>("Id");
+                    return await calendarRepository.GetDayByIdAsync(id);
+                })
+                .AuthorizeWithPolicy("LoggedIn");
         }
     }
 }

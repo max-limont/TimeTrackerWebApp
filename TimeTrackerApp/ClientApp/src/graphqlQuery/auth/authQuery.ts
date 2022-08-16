@@ -8,8 +8,8 @@ export const authLoginQuery = `
 `
 
 export const authRefreshQuery = `
-    mutation AuthRefresh($userId: ID!, $refreshToken: String!) {
-        authRefresh(userId: $userId, refreshToken: $refreshToken) {
+    mutation AuthRefresh($userId: ID!, $accessToken: String!, $refreshToken: String!) {
+        authRefresh(userId: $userId, accessToken: $accessToken, refreshToken: $refreshToken) {
             refreshToken
             accessToken
         }
@@ -27,6 +27,7 @@ export const authLogoutQuery = `
 
 export type AuthRefreshInputType = {
     userId: number,
+    accessToken: string,
     refreshToken: string
 }
 

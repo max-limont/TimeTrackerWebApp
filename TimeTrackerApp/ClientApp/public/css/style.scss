@@ -379,7 +379,7 @@ body {
 }
 
 section {
-    header {
+    > header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -400,7 +400,7 @@ section {
     }
 
     &.disabled {
-        opacity: 0.6;
+        opacity: 0.4;
         cursor: default;
     }
 
@@ -545,8 +545,7 @@ section {
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-    background-color: $color-silver;
+    background-color: #F0F0F0;
     grid-gap: 1px;
     color: $color-light;
     width: 100%;
@@ -554,13 +553,12 @@ section {
 
 .days {
     display: grid;
-    background-color: $color-silver;
     color: white;
     grid-template-columns: repeat(7, 1fr);
 
     > div {
         color: $color-dark;
-        background-color: $color-light;
+        background-color: $color-white;
         padding: 20px 10px 20px 10px;
         text-align: center;
     }
@@ -573,34 +571,83 @@ section {
 
 .calendar-controls {
     display: flex;
-    background: $color-light-dark;
-    justify-content: space-between;
-    align-items: center;
+    padding-block: 10px;
+    border-bottom: 1px solid #F6F6F6;
+    header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .button {
+            padding: 10px 15px 10px 15px;
+        }
+    }
+    h2 {
+        font-size: $font-size-header;
+        font-weight: 200;
+        span {
+            margin-left: 10px;
+        }
+    }
 }
 
 .day {
+    padding: 5px;
     display: flex;
     flex-direction: column;
     width: 100%;
     min-height: 140px;
-    background-color: $color-light;
-   
-}
+    background-color: $color-white;
+    position: relative;
+    cursor: pointer;
+    border-radius: 2px;
 
-.weekend {
-    background-color: $color-red;
-    > .day-number > p {
-        background-color: $color-dark;
+    .day-data {
+        z-index: 5;
+    }
+
+    &:not(.disabled).empty:hover::after {
+        content: '+';
+        color: $color-light;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 80px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    &.disabled {
+        background: lightgray;
+        .day-number > p {
+            background: gray;
+        }
+        .day-data {
+            opacity: 0.5;
+        }
     }
 }
 
-.event {
+.day-off {
     background-color: $color-cyan;
+    color: $color-light;
+    font-size: $font-size-default;
+}
+
+.short-day {
+    background-color: $color-yellow;
+    color: $color-light;
+    font-size: $font-size-default;
+}
+
+.day-data-item {
+    display: inline-flex;
     font-size: 15px;
     padding: 5px 10px 5px 10px;
     border-radius: 2px;
     width: 100%;
-    margin-inline: 5px;
 
     &:not(:first-child) {
         margin-top: 2px;
@@ -616,13 +663,61 @@ section {
     }
 }
 
-.day-number > p.current-day {
+.calendar-form {
+    position: fixed;
+    background: $color-white;
+    border-radius: 2px;
+    box-shadow: 0 0 20px -10px $color-light-dark;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 640px;
+    width: 100%;
+    z-index: 999;
+    padding: 15px;
+
+    label {
+        max-width: 100px;
+        width: 100%;
+    }
+
+    .form-item {
+        padding: 5px 0 5px 0;
+    }
+
+    .form-header {
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #E6E6E6;
+    }
+
+    input, textarea, select {
+        background: #F6F6F6;
+        box-shadow: inset 0 0 5px -5px $color-dark;
+    }
+
+    label {
+        font-weight: 600;
+    }
+
+    textarea {
+        margin-top: 10px;
+        resize: vertical;
+        min-height: 150px;
+        max-height: 300px;
+    }
+
+    .button:not(:last-child) {
+        margin-right: 5px;
+    }
+}
+
+.day-number.current-day > p {
     background-color: $color-red;
 }
 
 .day-number {
     display: inline-flex;
-    padding: 5px;
     justify-content: flex-end;
     margin-bottom: 10px;
 
@@ -635,29 +730,22 @@ section {
 }
 
 .calendar {
-    padding: 0 10px;
+    margin: 15px;
+    background: $color-white;
+    border-radius: 2px;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+    padding: 0 10px 10px 10px;
 }
 
 .calendar-container {
-    width: 100%;
 
+    user-select: none;
     .button {
         margin: 2px;
     }
 
-    header {
-        padding: 10px 10px 10px 15px;
-    }
-
-    h2 {
-        color: $color-light;
-
-        span {
-            font-size: 16px;
-            font-weight: 300;
-            margin-inline: 5px;
-            vertical-align: -5px;
-        }
+    > header {
+        padding: 15px;
     }
 }
 
@@ -739,6 +827,16 @@ section {
             font-size: 16px;
             width: 100%;
         }
+
+        select {
+            font-family: 'Nunito', serif;
+            outline: none;
+            border: none;
+            border-radius: 2px;
+            padding: 7px 5px;
+            font-size: 16px;
+            width: 100%;
+        }
     }
 }
 
@@ -777,14 +875,14 @@ section {
     }
 }
 
-.events {
-    display: flex;
+.day-data {
+    padding-right: 2px;
     position: relative;
+    flex-basis: 100%;
     flex-wrap: wrap;
     box-sizing: border-box;
     overflow-y: auto;
-    max-height: 85px;
-    margin: 2px 5px 2px 2px;
+    max-height: 95px;
 }
 
 .time-tracker-list {
@@ -858,25 +956,21 @@ table {
 
 .time-tracker-table {
 
+    td {
+        padding-block: 10px;
+    }
+
     min-width: 1500px;
 
-    .date {
-        width: 150px;
+    .date, .begin, .end, .duration {
+        width: 200px;
     }
 
-    .begin, .end, .duration {
-        width: 120px;
-    }
-
-    .creation-type {
-        width: 180px;
+    .creation-type, .last-edited-by {
+        width: 300px;
     }
 
     .actions {
-        width: 190px;
-    }
-
-    .last-edited-by {
         width: 200px;
     }
 
@@ -884,24 +978,28 @@ table {
         margin-right: 5px;
     }
 
-    td {
-        vertical-align: top;
+    .time-picker-input {
+        font-family: 'Nunito', serif;
+        outline: none;
+        border: none;
+        border-radius: 2px;
+        padding: 7px 5px;
+        font-size: 16px;
+        width: 100%;
+        background: #E6E6E6;
+        box-shadow: inset 0 0 5px -5px $color-dark;
     }
 
-    .comment-cell {
-        overflow-y: auto;
-        min-height: 30px;
-        max-height: 100px;
-        padding-right: 10px;
-        text-align: justify;
+    .bottom-table-row {
+        padding-block: 20px;
     }
 }
 
 .time-tracker-statistic {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(700px, 100%), 1fr));
     grid-gap: 15px;
-    padding-inline: 15px;
+    padding: 15px 15px 0 15px;
 }
 
 .statistic-panel {
@@ -962,49 +1060,10 @@ table {
     .button {
         margin-top: 20px;
         font-size: 20px;
+    }
+
+    .button:not(.full-timer-employee-button) {
         padding: 10px 70px 10px 70px;
-    }
-}
-
-.full-timer-choose-time-panel {
-    display: inline-flex;
-    flex-direction: column;
-    background: $color-white;
-    border-radius: 2px;
-    box-shadow: 0 0 5px -4px $color-light-dark;
-    padding: 15px;
-    color: $color-dark;
-
-    > h3 {
-        font-weight: bold;
-        font-size: 20px;
-    }
-
-    .button {
-        font-size: 20px;
-        padding: 10px 65px 10px 65px;
-    }
-
-    > div {
-        span {
-            font-size: $font-size-header;
-            font-weight: 300;
-        }
-        input {
-            border: none;
-            outline: none;
-            padding: 10px 30px 10px 30px;
-            border-radius: 2px;
-            box-shadow: inset 0 0 5px -4px $color-light-dark;
-            font-family: 'Nunito', sans-serif;
-            font-size: $font-size-header;
-            background: $color-light;
-            margin-block: 20px;
-        }
-        height: 100%;
-        padding-block: 20px;
-        align-items: center;
-        justify-content: center;
     }
 }
 

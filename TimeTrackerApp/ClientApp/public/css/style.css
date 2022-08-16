@@ -261,13 +261,13 @@ body {
       border-radius: 100%;
       margin-inline: 10px; }
 
-section header {
+section > header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 15px; }
-  section header h2 {
+  section > header h2 {
     font-size: 26px;
     font-weight: 600;
     color: #222831; }
@@ -288,7 +288,7 @@ section header {
   .button .icon {
     vertical-align: middle; }
   .button.disabled {
-    opacity: 0.6;
+    opacity: 0.4;
     cursor: default; }
 
 .cyan-button {
@@ -379,20 +379,18 @@ section header {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  background-color: #D6D6D6;
+  background-color: #F0F0F0;
   grid-gap: 1px;
   color: #EEEEEE;
   width: 100%; }
 
 .days {
   display: grid;
-  background-color: #D6D6D6;
   color: white;
   grid-template-columns: repeat(7, 1fr); }
   .days > div {
     color: #222831;
-    background-color: #EEEEEE;
+    background-color: #FFFFFF;
     padding: 20px 10px 20px 10px;
     text-align: center; }
 
@@ -402,43 +400,115 @@ section header {
 
 .calendar-controls {
   display: flex;
-  background: #393E46;
-  justify-content: space-between;
-  align-items: center; }
+  padding-block: 10px;
+  border-bottom: 1px solid #F6F6F6; }
+  .calendar-controls header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; }
+    .calendar-controls header .button {
+      padding: 10px 15px 10px 15px; }
+  .calendar-controls h2 {
+    font-size: 26px;
+    font-weight: 200; }
+    .calendar-controls h2 span {
+      margin-left: 10px; }
 
 .day {
+  padding: 5px;
   display: flex;
   flex-direction: column;
   width: 100%;
   min-height: 140px;
-  background-color: #EEEEEE; }
+  background-color: #FFFFFF;
+  position: relative;
+  cursor: pointer;
+  border-radius: 2px; }
+  .day .day-data {
+    z-index: 5; }
+  .day:not(.disabled).empty:hover::after {
+    content: '+';
+    color: #EEEEEE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; }
+  .day.disabled {
+    background: lightgray; }
+    .day.disabled .day-number > p {
+      background: gray; }
+    .day.disabled .day-data {
+      opacity: 0.5; }
 
-.weekend {
-  background-color: #F24C4C; }
-  .weekend > .day-number > p {
-    background-color: #222831; }
-
-.event {
+.day-off {
   background-color: #00ADB5;
+  color: #EEEEEE;
+  font-size: 18px; }
+
+.short-day {
+  background-color: #FFC107;
+  color: #EEEEEE;
+  font-size: 18px; }
+
+.day-data-item {
+  display: inline-flex;
   font-size: 15px;
   padding: 5px 10px 5px 10px;
   border-radius: 2px;
   width: 100%;
-  margin-inline: 5px;
   cursor: pointer; }
-  .event:not(:first-child) {
+  .day-data-item:not(:first-child) {
     margin-top: 2px; }
 
 .unselected-month > p {
   color: darkgray;
   background-color: #D6D6D6 !important; }
 
-.day-number > p.current-day {
+.calendar-form {
+  position: fixed;
+  background: #FFFFFF;
+  border-radius: 2px;
+  box-shadow: 0 0 20px -10px #393E46;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 640px;
+  width: 100%;
+  z-index: 999;
+  padding: 15px; }
+  .calendar-form label {
+    max-width: 100px;
+    width: 100%; }
+  .calendar-form .form-item {
+    padding: 5px 0 5px 0; }
+  .calendar-form .form-header {
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #E6E6E6; }
+  .calendar-form input, .calendar-form textarea, .calendar-form select {
+    background: #F6F6F6;
+    box-shadow: inset 0 0 5px -5px #222831; }
+  .calendar-form label {
+    font-weight: 600; }
+  .calendar-form textarea {
+    margin-top: 10px;
+    resize: vertical;
+    min-height: 150px;
+    max-height: 300px; }
+  .calendar-form .button:not(:last-child) {
+    margin-right: 5px; }
+
+.day-number.current-day > p {
   background-color: #F24C4C; }
 
 .day-number {
   display: inline-flex;
-  padding: 5px;
   justify-content: flex-end;
   margin-bottom: 10px; }
   .day-number > p {
@@ -448,21 +518,18 @@ section header {
     font-size: 16px; }
 
 .calendar {
-  padding: 0 10px; }
+  margin: 15px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  box-shadow: 0 0 5px -4px #393E46;
+  padding: 0 10px 10px 10px; }
 
 .calendar-container {
-  width: 100%; }
+  user-select: none; }
   .calendar-container .button {
     margin: 2px; }
-  .calendar-container header {
-    padding: 10px 10px 10px 15px; }
-  .calendar-container h2 {
-    color: #EEEEEE; }
-    .calendar-container h2 span {
-      font-size: 16px;
-      font-weight: 300;
-      margin-inline: 5px;
-      vertical-align: -5px; }
+  .calendar-container > header {
+    padding: 15px; }
 
 .dark-background::before {
   content: '';
@@ -523,6 +590,14 @@ section header {
       padding: 7px 5px;
       font-size: 16px;
       width: 100%; }
+    .form-group .form-item select {
+      font-family: 'Nunito', serif;
+      outline: none;
+      border: none;
+      border-radius: 2px;
+      padding: 7px 5px;
+      font-size: 16px;
+      width: 100%; }
 
 .form-event {
   left: 50%;
@@ -548,14 +623,14 @@ section header {
     resize: none;
     min-height: 150px; }
 
-.events {
-  display: flex;
+.day-data {
+  padding-right: 2px;
   position: relative;
+  flex-basis: 100%;
   flex-wrap: wrap;
   box-sizing: border-box;
   overflow-y: auto;
-  max-height: 85px;
-  margin: 2px 5px 2px 2px; }
+  max-height: 95px; }
 
 .time-tracker-list {
   background: #FFFFFF;
@@ -607,32 +682,34 @@ table .bottom-table-row {
 
 .time-tracker-table {
   min-width: 1500px; }
-  .time-tracker-table .date {
-    width: 150px; }
-  .time-tracker-table .begin, .time-tracker-table .end, .time-tracker-table .duration {
-    width: 120px; }
-  .time-tracker-table .creation-type {
-    width: 180px; }
+  .time-tracker-table td {
+    padding-block: 10px; }
+  .time-tracker-table .date, .time-tracker-table .begin, .time-tracker-table .end, .time-tracker-table .duration {
+    width: 200px; }
+  .time-tracker-table .creation-type, .time-tracker-table .last-edited-by {
+    width: 300px; }
   .time-tracker-table .actions {
-    width: 190px; }
-  .time-tracker-table .last-edited-by {
     width: 200px; }
   .time-tracker-table .button:not(:last-child) {
     margin-right: 5px; }
-  .time-tracker-table td {
-    vertical-align: top; }
-  .time-tracker-table .comment-cell {
-    overflow-y: auto;
-    min-height: 30px;
-    max-height: 100px;
-    padding-right: 10px;
-    text-align: justify; }
+  .time-tracker-table .time-picker-input {
+    font-family: 'Nunito', serif;
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    padding: 7px 5px;
+    font-size: 16px;
+    width: 100%;
+    background: #E6E6E6;
+    box-shadow: inset 0 0 5px -5px #222831; }
+  .time-tracker-table .bottom-table-row {
+    padding-block: 20px; }
 
 .time-tracker-statistic {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(700px, 100%), 1fr));
   grid-gap: 15px;
-  padding-inline: 15px; }
+  padding: 15px 15px 0 15px; }
 
 .statistic-panel {
   background: #FFFFFF;
@@ -677,41 +754,9 @@ table .bottom-table-row {
     font-size: 20px; }
   .timer-panel .button {
     margin-top: 20px;
-    font-size: 20px;
-    padding: 10px 70px 10px 70px; }
-
-.full-timer-choose-time-panel {
-  display: inline-flex;
-  flex-direction: column;
-  background: #FFFFFF;
-  border-radius: 2px;
-  box-shadow: 0 0 5px -4px #393E46;
-  padding: 15px;
-  color: #222831; }
-  .full-timer-choose-time-panel > h3 {
-    font-weight: bold;
     font-size: 20px; }
-  .full-timer-choose-time-panel .button {
-    font-size: 20px;
-    padding: 10px 65px 10px 65px; }
-  .full-timer-choose-time-panel > div {
-    height: 100%;
-    padding-block: 20px;
-    align-items: center;
-    justify-content: center; }
-    .full-timer-choose-time-panel > div span {
-      font-size: 26px;
-      font-weight: 300; }
-    .full-timer-choose-time-panel > div input {
-      border: none;
-      outline: none;
-      padding: 10px 30px 10px 30px;
-      border-radius: 2px;
-      box-shadow: inset 0 0 5px -4px #393E46;
-      font-family: 'Nunito', sans-serif;
-      font-size: 26px;
-      background: #EEEEEE;
-      margin-block: 20px; }
+  .timer-panel .button:not(.full-timer-employee-button) {
+    padding: 10px 70px 10px 70px; }
 
 .timer {
   display: inline-flex;

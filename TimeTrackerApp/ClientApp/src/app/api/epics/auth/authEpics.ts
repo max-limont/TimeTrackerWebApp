@@ -25,19 +25,19 @@ import {AuthUserResponse} from "../../../../type/User/AuthUser";
 
 const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginAction>>): any => {
     return action$.pipe(
-        ofType("AuthLogin"),
+        ofType(authLoginAction.type),
         mergeMap(action => from(graphqlRequest(authLoginQuery, {
             email: action.payload.email,
             password: action.payload.password
         } as AuthLoginInputType)).pipe(
             map(response => {
-                if (response && response.data.authLogin && response.data.authLogin.accessToken && response.data.authLogin.refreshToken && !response.errors) {
+                if (response?.data?.authLogin?.accessToken && response?.data?.authLogin?.refreshToken && !response?.errors) {
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
                     const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
                     store.dispatch(authorizeUserById(userId))
                     return { payload: response, type: "AuthLoginSuccess" } as Action;
-                } else if (response && response.errors) {
+                } else if (response?.errors) {
                     store.dispatch(setError(parseError(response.errors[0].message)));
                     return { payload: response, type: "AuthLoginError" } as Action
                 }
@@ -50,7 +50,7 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
 
 const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAction>>): any => {
     return action$.pipe(
-        ofType("AuthLogout"),
+        ofType(authLogoutAction.type),
         mergeMap(action => from(graphqlRequest(authLogoutQuery, {
             userId: action.payload
         } as AuthLogoutInputType)).pipe(
@@ -66,18 +66,19 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
 
 const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUserById>>): any => {
     return action$.pipe(
-        ofType("AuthorizeUserById"),
+        ofType(authorizeUserById.type),
         mergeMap(action => from(graphqlRequest(getUserByIdQuery, {
             id: action.payload
         } as GetUserByIdQueryInputType)).pipe(
             map(response => {
-                if (response && response.data && response.data.getUserById) {
+                if (response?.data?.getUserById) {
                     const apiResponse = response.data.getUserById
                     const user = {
                         id: parseInt(apiResponse.id),
                         email: apiResponse.email ?? "",
                         firstName: apiResponse.firstName ?? "Unknown",
                         lastName: apiResponse.lastName ?? "User",
+                        isFullTimeEmployee: Boolean(JSON.parse(apiResponse.isFullTimeEmployee)),
                         weeklyWorkingTime: parseInt(apiResponse.weeklyWorkingTime ?? ''),
                         remainingVacationDays: parseInt(apiResponse.remainingVacationDays ?? ''),
                         privilegesValue: parseInt(apiResponse.privilegesValue ?? '')

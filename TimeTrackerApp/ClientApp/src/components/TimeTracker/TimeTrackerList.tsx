@@ -1,54 +1,70 @@
-import {CSSProperties, FC, useState} from "react";
+import {CSSProperties, FC, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {deleteRecord} from "../../store/slice/timeTracker/timeTrackerSlice";
+import {deleteRecord, updateRecord} from "../../store/slice/timeTracker/timeTrackerSlice";
 import {TimeTrackerDefaultPropsType} from "./Home";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleInfo, faPenClip, faGears} from "@fortawesome/free-solid-svg-icons";
-import {EditRecordForm, EditRecordFormStateType} from "../../store/slice/timeTracker/EditRecordForm";
+import {Record} from "../../type/TimeTracker/timeTracker.types";
+import {useAuth} from "../../hooks/useAuth";
 
 type TimeTrackerListPropsType = {
     defaultProps: TimeTrackerDefaultPropsType
 }
 
 type TimeTrackerListStateType = {
-    editRecordFormState: EditRecordFormStateType
+    recordIsBeingEdited?: Record | null
 }
 
 const initialState: TimeTrackerListStateType = {
-    editRecordFormState: {
-        visible: false,
-        record: null
-    }
+    recordIsBeingEdited: null
 }
 
 export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
 
+    const auth = useAuth()
     const dispatch = useAppDispatch();
     const [state, setState] = useState(initialState);
     const {records} = props.defaultProps
     const recordsInStore = useAppSelector(state => state.rootReducer.timeTracker.records)
+    const dateTimeFormatter = Intl.DateTimeFormat('default', {hour: '2-digit', minute: 'numeric', second: 'numeric'})
     let componentStyle: CSSProperties = {maxWidth: window.innerWidth - 310};
+
+    let mouseListener = (event: Event) => {
+        const element = event.target as Element
+        if (!element.classList.contains('time-picker-input') && !element.classList.contains('save-record')) {
+            setState({...state, recordIsBeingEdited: null})
+        }
+    }
 
     const editTimeTrackerListItem = (recordId: number) => {
         const record = recordsInStore.find(record => record.id === recordId)
         if (record) {
-            setState({...state, editRecordFormState: {...state.editRecordFormState, visible: true, record: record}})
-            document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+            setState({...state, recordIsBeingEdited: record})
         }
+    }
+
+    const saveRecordChanges = (record: Record) => {
+        dispatch(updateRecord({...record, isAutomaticallyCreated: false, editorId: auth.state?.user?.id}))
+        setState({...state, recordIsBeingEdited: null})
+        window.onclick = null
+    }
+
+    const convertStringToTime = (time: string) => {
+        const substrings = time.split(':');
+        return parseInt(substrings[0]) * 3600000 + parseInt(substrings[1]) * 60000 + parseInt(substrings[2]) * 1000
     }
 
     const removeTimeTrackerListItem = (recordId: number) => {
         dispatch(deleteRecord(recordId));
     }
 
+    useEffect(() => {
+        if (state.recordIsBeingEdited)
+            window.onclick = mouseListener
+    }, [state.recordIsBeingEdited])
+
     return (
         <>
-            {state.editRecordFormState.record &&
-                <EditRecordForm record={state.editRecordFormState.record}
-                                visible={state.editRecordFormState.visible}
-                                setVisible={(visible) => setState({...state, editRecordFormState: {...state.editRecordFormState, visible: visible}})}
-                />
-            }
             <div className={"time-tracker-list flex-container flex-column position-relative"} style={componentStyle}>
                 <table className={"time-tracker-table"}>
                     <thead>
@@ -58,7 +74,6 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
                         <th className={"end"}>End</th>
                         <th className={"duration"}>Duration</th>
                         <th className={"creation-type"}>Creation type</th>
-                        <th className={"comment"}>Comment</th>
                         <th className={"last-edited-by"}>Last edited by</th>
                         <th className={"actions"}>Actions</th>
                     </tr>
@@ -74,39 +89,47 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
                             </td>
                         </tr>
                     }
-                    { records.map(record => (
-                        <tr key={record.id}>
-                            <td>{record.date.toLocaleDateString()}</td>
-                            <td>{new Date(new Date(record.begin).toLocaleString() + " UTC").toLocaleTimeString()}</td>
-                            <td>{new Date(new Date(record.end).toLocaleString() + " UTC").toLocaleTimeString()}</td>
-                            <td>{Math.floor(record.duration / 1000 / 3600) < 10 ? `0${Math.floor(record.duration / 1000 / 3600)}` : Math.floor(record.duration / 1000 / 3600)}
-                                :{Math.floor(record.duration / 1000 / 60) % 60 < 10 ? `0${Math.floor(record.duration / 1000 / 60) % 60}` : Math.floor(record.duration / 1000 / 60) % 60}
-                                :{Math.floor(record.duration / 1000) % 60 < 10 ? `0${Math.floor(record.duration / 1000) % 60}` : Math.floor(record.duration / 1000) % 60}</td>
-                            <td>
-                                {record.isAutomaticallyCreated ?
-                                    <span className={"creation-type-label automatically"}>
-                                        <FontAwesomeIcon icon={faGears} className={"icon"} />
-                                        Automatically
-                                    </span>
-                                    :
-                                    <span className={"creation-type-label manually"}>
-                                        <FontAwesomeIcon icon={faPenClip} className={"icon"} />
-                                        Manually
-                                    </span>
-                                }
-                            </td>
-                            <td>
-                                <div className={"comment-cell"}>
-                                    {record.comment?.length && record.comment.length > 0 ? record.comment : '-'}
-                                </div>
-                            </td>
-                            <td>{record.editor ? `${record.editor?.firstName} ${record.editor?.lastName}` : 'You'}</td>
-                            <td>
-                                <a className={"button yellow-button"} onClick={() => editTimeTrackerListItem(record.id ?? -1)}>Edit</a>
-                                <a className={"button red-button"} onClick={() => removeTimeTrackerListItem(record.id ?? -1)}>Delete</a>
-                            </td>
-                        </tr>
-                    ))
+                    {
+                        records.map(record => (
+                            <tr key={record.id}>
+                                <td>{record.date.toLocaleDateString()}</td>
+                                <td>{new Date(record.begin).toLocaleTimeString()}</td>
+                                <td>{new Date(record.end).toLocaleTimeString()}</td>
+                                <td>
+                                    { record.id === state.recordIsBeingEdited?.id ?
+                                        <input className={'time-picker-input'} type={'time'} step={1} defaultValue={dateTimeFormatter.format(record.duration + new Date().getTimezoneOffset() * 60000)} onChange={event => setState({...state, recordIsBeingEdited: {...state.recordIsBeingEdited, workingTime: convertStringToTime(event.target.value)} as Record})} />
+                                        :
+                                        dateTimeFormatter.format(record.duration + new Date().getTimezoneOffset() * 60000)
+                                    }
+
+                                </td>
+                                <td>
+                                    {record.isAutomaticallyCreated ?
+                                        <span className={"creation-type-label automatically"}>
+                                            <FontAwesomeIcon icon={faGears} className={"icon"} />
+                                            Automatically
+                                        </span>
+                                        :
+                                        <span className={"creation-type-label manually"}>
+                                            <FontAwesomeIcon icon={faPenClip} className={"icon"} />
+                                            Manually
+                                        </span>
+                                    }
+                                </td>
+                                <td>{record.editor ? `${record.editor?.firstName} ${record.editor?.lastName}` : 'You'}</td>
+                                <td>
+
+                                    { !auth.state?.user?.isFullTimeEmployee &&
+                                        <>{ record.id !== state.recordIsBeingEdited?.id ?
+                                            <a className={"button yellow-button edit-record"} onClick={() => editTimeTrackerListItem(record.id ?? -1)}>Edit</a>
+                                            :
+                                            <a className={"button yellow-button save-record"} onClick={() => saveRecordChanges(state.recordIsBeingEdited!)}>Save</a>
+                                        }</>
+                                    }
+                                    <a className={"button red-button"} onClick={() => removeTimeTrackerListItem(record.id ?? -1)}>Delete</a>
+                                </td>
+                            </tr>
+                        ))
                     }
                     </tbody>
                 </table>

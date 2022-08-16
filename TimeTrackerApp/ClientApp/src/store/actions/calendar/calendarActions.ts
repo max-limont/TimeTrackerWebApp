@@ -1,23 +1,14 @@
 ﻿import {createAction} from "@reduxjs/toolkit";
-import {EventType} from "../../../type/Events/EventType";
-import {CreateEventType} from "../../../type/Events/CreateEventType";
+import {CalendarDayType} from "../../../type/CalendarDay/CalendarDayType";
+import {CreateCalendarDayType} from "../../../type/CalendarDay/CreateCalendarDayType";
 import { DateInputType } from "../../../type/DateInputType";
 
-export const fetchAllEventsType = "fetchAllEvents";
-export const fetchRangeEventsType = "fetchRangeEvents";
-export const fetchEventByIdType = "fetchEventById";
-export const addEventType = "addEvent";
-export const removeEventType = "removeEvent";
-export const updateEventType= "updateEvent";
-
-
-
-export const fetchRangeEventsAction = createAction<DateInputType>(fetchRangeEventsType);
-export const fetchAllEventsAction = createAction(fetchAllEventsType);
-export const addEventAction = createAction<CreateEventType>(addEventType);
-export const removeEventAction = createAction<number>(removeEventType);
-export const fetchEventByIdAction = createAction<number>(fetchEventByIdType);
-export const updateEventAction= createAction<EventType>(updateEventType);
+export const fetchCalendarDaysRange = createAction<DateInputType>("FetchCalendarDaysRange");
+export const fetchAllCalendarDays = createAction("FetchAllCalendarDays");
+export const getCalendarDayById = createAction<number>("GetCalendarDayById");
+export const createCalendarDay = createAction<CreateCalendarDayType>("CreateCalendarDay");
+export const editCalendarDay = createAction<CalendarDayType>("EditCalendarDay");
+export const removeCalendarDay = createAction<number>("RemoveCalendarDay");
 
 
  
