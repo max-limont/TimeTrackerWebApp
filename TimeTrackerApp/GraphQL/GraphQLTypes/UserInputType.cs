@@ -7,7 +7,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
     {
         public UserInputType()
         {
-            Field<IdGraphType, int>().Name("Id").Resolve(context => context.Source.Id);
             Field<NonNullGraphType<StringGraphType>, string>().Name("Email").Resolve(context => context.Source.Email);
             Field<NonNullGraphType<StringGraphType>, string>().Name("Password").Resolve(context => context.Source.Password);
             Field<StringGraphType, string>().Name("FirstName").Resolve(context => context.Source.FirstName);

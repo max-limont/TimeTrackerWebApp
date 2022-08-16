@@ -7,9 +7,13 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <UserSecretsId>47f7654b-1102-4c12-847e-45dd8ace3057</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentMigrator" Version="3.3.2" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
+    <PackageReference Include="FluentMigrator.Runner.SqlServer" Version="3.3.2" />
     <PackageReference Include="GraphQL" Version="5.3.3" />
     <PackageReference Include="GraphQL.Authorization" Version="5.0.0" />
     <PackageReference Include="GraphQL.MicrosoftDI" Version="5.3.3" />

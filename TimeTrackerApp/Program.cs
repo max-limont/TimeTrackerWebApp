@@ -19,6 +19,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using TimeTrackerApp.Business.Services;
 using System;
+using System.Formats.Asn1;
+using System.Reflection;
+using FluentMigrator.Runner;
+using TimeTrackerApp.MsSql.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +38,14 @@ builder.Services.AddSingleton<IVacationRequestRepository>(provider => new Vacati
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
+
+
+// builder.Services.AddFluentMigratorCore().
+//     ConfigureRunner(config =>config.AddSqlServer()
+//         .WithGlobalConnectionString(connectionString)
+//         .ScanIn(typeof(InitMigrations).Assembly)
+//         .For.All())
+//     .AddLogging(config=>config.AddFluentMigratorConsole());
 
 
 // Add services to the container.
@@ -121,5 +133,10 @@ app.UseSpa(spa =>
         spa.UseReactDevelopmentServer(npmScript: "start");
     }
 });
+
+// using var scope = app.Services.CreateScope();
+// var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
+// migrationService.MigrateUp();
+
 
 app.Run();
