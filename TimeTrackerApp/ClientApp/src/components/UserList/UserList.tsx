@@ -3,7 +3,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link, useNavigate} from "react-router-dom";
 import {User} from "../../type/User/User";
-import "./styles/style.scss"
 import {UserListPage} from "../../type/User/User";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {
@@ -52,74 +51,73 @@ const UserList = () => {
     ]
 
     useEffect(() => {
-        dispatch(fetchUserCountAction())
+        if (auth.state?.user?.id) {
+            dispatch(fetchUserCountAction())
+        }
     }, [auth.state?.user?.id])
 
     useEffect(() => {
-        if (request.length)
-            dispatch(fetchUserListSearchRequestAction({request}))
-        else
-            dispatch(fetchUserListPageAction(state))
+        if (auth.state?.user?.id) {
+            if (request.length)
+                dispatch(fetchUserListSearchRequestAction({request}))
+            else
+                dispatch(fetchUserListPageAction(state))
+        }
     }, [request, state, auth.state?.user?.id])
 
-    return <section className="userList">
-        <div className="userList-controls">
-            <form className="search_form">
-                <input
-                    type="text"
-                    onChange={(event => setSearch(event.target.value))}
-                    placeholder="Search..."
-                />
-                <FontAwesomeIcon icon={faMagnifyingGlass} className={"icon"}/>
-            </form>
-
-            <div className="userList-controls-group">
-                {
-                    request.length
-                        ? null
-                        : <>
-                            <ExportXlsx count={count} isReverse={state.isReverse}
-                                        orderBy={state.orderBy}/>
-                            <span>Sort by:</span>
-                            <Select options={selectOptions}
-                                    selectHandler={selectHandler}/>
-                        </>
-                }
-                <Link className="link-btn addUser" to=" ">Add</Link>
+    return (
+        <section className={"user-list flex-container flex-column w-100"}>
+            <div className={"user-list-controls flex-container"}>
+                <form className={"search-form flex-container align-items-center w-100"}>
+                    <div className={'form-group w-100'}>
+                        <div className={"form-item w-100"}>
+                            <label>Search users: </label>
+                            <input type={"text"} onChange={(event => setSearch(event.target.value))} />
+                            <FontAwesomeIcon icon={faMagnifyingGlass} className={"icon"}/>
+                        </div>
+                    </div>
+                </form>
+                <div className={"user-list-controls-group flex-container align-items-center"}>
+                    {
+                        request.length
+                            ? null
+                            : <>
+                                <span>Sort by:</span>
+                                <Select options={selectOptions} selectHandler={selectHandler}/>
+                                <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
+                            </>
+                    }
+                    <a className="link-btn addUser button cyan-button">Create user</a>
+                </div>
             </div>
-        </div>
-
-        <table className="userList-list">
-            <thead>
-            <tr className="userList-list-title">
-                <th>Name</th>
-                <th>Email</th>
-                <th>Weekly Working Time</th>
-            </tr>
-            </thead>
-            <tbody>
-            {
-                userList
-                    ? userList.map(
-                    (item: User) =>
-                        <tr onClick={() => navigate("/user?id=" + item.id, )} key={item.id} className="link-btn userItem">
-                            <td>{item.firstName} {item.lastName}</td>
-                            <td>{item.email}</td>
-                            <td>{item.weeklyWorkingTime}</td>
-                        </tr>
-                    )
-                    : null
+            <table className={"user-list-list"}>
+                <thead>
+                    <tr className={"userList-list-title"}>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Weekly Working Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        userList
+                            ? userList.map(
+                            (item: User) =>
+                                <tr onClick={() => navigate("/user?id=" + item.id, )} key={item.id} className="link-btn userItem">
+                                    <td>{item.firstName} {item.lastName}</td>
+                                    <td>{item.email}</td>
+                                    <td>{item.weeklyWorkingTime}</td>
+                                </tr>
+                            )
+                            : null
+                    }
+                </tbody>
+            </table>
+            { !request.length &&
+                <Pagination contentPerPage={contentPerPage} count={count} setFirstContentIndex={firstContentIndexHandler}/>
             }
-            </tbody>
-        </table>
-        {
-            request.length
-                ? null
-                : <Pagination contentPerPage={contentPerPage} count={count}
-                              setFirstContentIndex={firstContentIndexHandler}/>
-        }
-
-    </section>
+        </section>
+    )
 }
 
 export default UserList

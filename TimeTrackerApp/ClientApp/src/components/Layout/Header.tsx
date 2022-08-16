@@ -11,7 +11,7 @@ export const Header: FC = () => {
             <div className={"breadcrumbs flex-container"}>
                 <nav>
                     <a href="/">TimeTracker</a>
-                    <a>Calendar</a>
+                    <a>Breadcrumbs</a>
                 </nav>
             </div>
             <div className={"user-info flex-container"}>

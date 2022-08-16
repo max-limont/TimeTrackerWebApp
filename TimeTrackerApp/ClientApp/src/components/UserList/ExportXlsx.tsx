@@ -25,7 +25,7 @@ const ExportXlsx: FC<Prop> = ({count, orderBy, isReverse}) => {
         XLSX.writeFile(wb, "Users.xlsx")
     }
     return (
-        <button className={"link-btn exportXlsx"} onClick={() => exportToCSV()}>Export</button>
+        <a className={"link-btn exportXlsx button dark-button"} onClick={() => exportToCSV()}>Export users data</a>
     );
 };
 
