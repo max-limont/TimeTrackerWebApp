@@ -1,0 +1,63 @@
+@import "variables";
+
+.selectWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.selectContainer {
+  width: 200px;
+  position: relative;
+  height: $control-group-height;
+}
+
+.selectBtn {
+  height: inherit;
+  border: 0;
+  border-radius: 4px;
+  background: $color-light;
+  width: 100%;
+  padding: 6px 8px;
+  position: relative;
+  text-align: left;
+  &:hover{
+    cursor: pointer;
+  }
+  &::after{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    content: "▾";
+  }
+  &.expanded::after {
+    content: "▴";
+  }
+}
+
+
+.options {
+  width: inherit;
+  height: inherit;
+  display: none;
+  list-style: none;
+  padding: 4px 0;
+  margin-top: -4px;
+  position: absolute;
+  top: $control-group-height;
+  li{
+    border: 1px solid $color-dark;
+    padding: 6px 10px;
+    background: $color-light;
+  }
+  li:active,
+  li:focus,
+  li:hover,
+  li[aria-selected="true"]{
+    background: $color-active;
+    cursor: pointer;
+  }
+}
+
+.show {
+  display: block;
+}

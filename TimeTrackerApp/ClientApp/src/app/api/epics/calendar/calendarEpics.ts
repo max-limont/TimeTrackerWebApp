@@ -1,108 +1,132 @@
 ﻿import { combineEpics, Epic, ofType } from "redux-observable";
-import { from, map, mergeMap } from "rxjs";
+import {from, map, mergeMap, Observable} from "rxjs";
 import {
-    addEventType, fetchAllEventsType, fetchRangeEventsType, removeEventType, updateEventType
+    createCalendarDay, editCalendarDay,
+    fetchAllCalendarDays,
+    fetchCalendarDaysRange, removeCalendarDay
 } from "../../../../store/actions/calendar/calendarActions";
-import { addEventQuery, deleteEventQuery, editEventQuery, fetchAllEventsQuery, fetchRangeEventQuery } from "../../../../graphqlQuery/calendar/calendarQueries";
-import { addEvent, editEvent, removeEvent, setEvents, setRangeEvents } from "../../../../store/slice/calendar/calendarSlice";
-import { EventType } from "../../../../type/Events/EventType";
-import moment from "moment";
+import {
+    CreateCalendarDayInputType,
+    createCalendarDayMutation, EditCalendarDayInputType, editCalendarDayMutation,
+    fetchAllCalendarDaysQuery, FetchCalendarDaysRangeInputType,
+    fetchCalendarDaysRangeQuery, RemoveCalendarDayInputType, removeCalendarDayMutation
+} from "../../../../graphqlQuery/calendar/calendarQueries";
+import {createDay, editDay, removeDay, setDays, setDaysRange} from "../../../../store/slice/calendar/calendarSlice";
+import { CalendarDayType } from "../../../../type/CalendarDay/CalendarDayType";
 import {graphqlRequest} from "../../api";
+import {store} from "../../../store";
+import {Action} from "react-epics";
 
-
-function formatDateToNormalFormat(array: EventType[]) {
-    return array.map(item => {
-        let endDate:any= moment(item.endDate).format("yyyy-MM-DD");
-        if(endDate=="Invalid date"){
-            endDate=null;
-        }
-        
-        return {
-            ...item,
-            date: moment(item.date).format("yyyy-MM-DD"),
-            endDate: endDate
-        }
-    });
+const fetchAllCalendarDaysEpic: Epic = (action$: Observable<ReturnType<typeof fetchAllCalendarDays>>): any => {
+    return action$.pipe(
+        ofType(fetchAllCalendarDays.type),
+        mergeMap(action => from(graphqlRequest(fetchAllCalendarDaysQuery)).pipe(
+            map(response => {
+                if (response?.data?.fetchAllCalendarDays) {
+                    const responseCalendarDays = response.data.fetchAllCalendarDays
+                    const calendarDays: CalendarDayType[] = responseCalendarDays?.map((day: any) => ({
+                        id: parseInt(day?.id),
+                        title: day?.title,
+                        date: new Date(day?.date),
+                        dayTypeId: parseInt(day?.dayTypeId),
+                        endDate: day?.endDate ? new Date(day.endDate) : null
+                    }) as CalendarDayType)
+                    store.dispatch(setDays(calendarDays))
+                    return {type: "FetchAllCalendarDaysSuccess", payload: "Success"} as Action
+                }
+                return {type: "FetchAllCalendarDaysError", payload: "Error"} as Action
+            })
+        ))
+    )
 }
 
 
-const fetchAllEventsEpic = (action$: any) => {
+const fetchCalendarDaysRangeEpic: Epic = (action$: Observable<ReturnType<typeof fetchCalendarDaysRange>>): any => {
     return action$.pipe(
-        ofType(fetchAllEventsType),
-        mergeMap(() => from(graphqlRequest(fetchAllEventsQuery))
-            .pipe(
-                map(response => {
-                    console.log(response);
-                    return setEvents(formatDateToNormalFormat(response.data.getEvents));
-                }))))
-};
+        ofType(fetchCalendarDaysRange.type),
+        mergeMap(action => from(graphqlRequest(fetchCalendarDaysRangeQuery, {
+            startDate: action.payload.startDate.toLocaleDateString('sv'),
+            finishDate: action.payload.finishDate.toLocaleDateString('sv'),
+        } as FetchCalendarDaysRangeInputType)).pipe(
+            map(response => {
+                if (response?.data?.fetchCalendarDaysRange) {
+                    const apiResponse = response.data.fetchCalendarDaysRange
+                    const calendarDays: CalendarDayType[] = apiResponse.map((day: any) => ({
+                        id: parseInt(day?.id),
+                        title: day?.title,
+                        date: new Date(day?.date),
+                        dayTypeId: parseInt(day?.dayTypeId),
+                        endDate: day?.endDate ? new Date(day.endDate) : null
+                    }) as CalendarDayType)
+                    store.dispatch(setDays(calendarDays))
+                    return {type: "FetchCalendarDaysRangeSuccess", payload: "Success"} as Action
+                }
+                return {type: "FetchCalendarDaysRangeError", payload: "Error"} as Action
+            })
+        ))
+    )
+}
 
 
-const fetchRangeEventEpic = (action$: any) => {
-    return action$
-        .pipe(
-            ofType(fetchRangeEventsType),
-            mergeMap((action: any) => from(graphqlRequest(fetchRangeEventQuery, {
-                startDate: action.payload.startDate,
-                finishDate: action.payload.finishDate
-            }))
-                .pipe(
-                    map((response: any) => {
-                        console.log(response);
-                        return setRangeEvents(formatDateToNormalFormat(response.data.getRangeEvents));
-                    }))))
-};
+const createCalendarDayEpic: Epic = (action$: Observable<ReturnType<typeof createCalendarDay>>): any => {
+    return action$.pipe(
+        ofType(createCalendarDay.type),
+        mergeMap(action => from(graphqlRequest(createCalendarDayMutation, {
+            calendarDay: action.payload
+        } as CreateCalendarDayInputType)).pipe(
+            map(response => {
+                if (response?.data?.createCalendarDay) {
+                    const day = response.data.createCalendarDay
+                    const calendarDay: CalendarDayType = {
+                        id: parseInt(day?.id),
+                        title: day?.title,
+                        date: new Date(day?.date),
+                        dayTypeId: parseInt(day?.dayTypeId),
+                        endDate: day?.endDate ? new Date(day.endDate) : null
+                    }
+                    store.dispatch(createDay(calendarDay));
+                    return {type: "CreateCalendarDaySuccess", payload: "Success"} as Action
+                }
+                return {type: "CreateCalendarDayError", payload: "Error"} as Action
+            })
+        ))
+    )
+}
+
+const editCalendarDayEpic: Epic = (action$: Observable<ReturnType<typeof editCalendarDay>>): any => {
+    return action$.pipe(
+        ofType(editCalendarDay.type),
+        mergeMap(action => from(graphqlRequest(editCalendarDayMutation, {
+            calendarDay: action.payload
+        } as EditCalendarDayInputType)).pipe(
+            map(response => {
+                if (response?.data?.editCalendarDay) {
+                    store.dispatch(editDay(action.payload))
+                    return {type: "EditCalendarDaySuccess", payload: "Success"} as Action
+                }
+                return {type: "EditCalendarDayError", payload: "Error"} as Action
+            })
+        ))
+    )
+}
+
+const removeCalendarDayEpic: Epic = (action$: Observable<ReturnType<typeof removeCalendarDay>>): any => {
+    return action$.pipe(
+        ofType(removeCalendarDay.type),
+        mergeMap(action => from(graphqlRequest(removeCalendarDayMutation, {
+            id: action.payload
+        } as RemoveCalendarDayInputType)).pipe(
+            map(response => {
+                if (response?.data?.removeCalendarDay) {
+                    store.dispatch(removeDay(action.payload))
+                    return {type: "RemoveCalendarDaySuccess", payload: "Success"} as Action
+                }
+                return {type: "RemoveCalendarDayError", payload: "Error"} as Action
+            })
+        ))
+    )
+}
 
 
-const addEventEpic = (action$: any) => {
-    console.log("here")
-    return action$
-        .pipe(
-            ofType(addEventType),
-            mergeMap((action: any) => from(graphqlRequest(addEventQuery, {
-                event: action.payload
-            }))
-                .pipe(
-                    map((response: any) => {
-                        console.log(response);
-
-                        return addEvent({
-                            ...response.data.addEvent,
-                            date: moment(response.data.addEvent.date).format("yyyy-MM-DD"),
-                            endDate: moment(response.data.addEvent.endDate).format("yyyy-MM-DD")
-                        });
-                    }))))
-};
-
-const editEventEpic = (action$: any) => {
-    return action$
-        .pipe(
-            ofType(updateEventType),
-            mergeMap((action: any) => from(graphqlRequest(editEventQuery, {
-                event: action.payload
-            }))
-                .pipe(
-                    map((response: any) => {
-                        console.log(response);
-                        return editEvent(response.data.updateEvent);
-                    }))))
-};
-
-const deleteEventEpic = (action$: any) => {
-    return action$
-        .pipe(
-            ofType(removeEventType),
-            mergeMap((action: any) => from(graphqlRequest(deleteEventQuery, {
-                id: action.payload
-            }))
-                .pipe(
-                    map((response: any) => {
-                        console.log(response);
-                        const id: number = response.data.deleteEvent.id;
-                        return removeEvent(id);
-                    }))))
-};
-
-
-export const calendarEpics = combineEpics(fetchAllEventsEpic, fetchRangeEventEpic, addEventEpic, editEventEpic, deleteEventEpic);
+export const calendarEpics = combineEpics(fetchAllCalendarDaysEpic, fetchCalendarDaysRangeEpic, createCalendarDayEpic, editCalendarDayEpic, removeCalendarDayEpic);
 

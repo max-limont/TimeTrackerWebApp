@@ -1,10 +1,5 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Repositories;
 
@@ -19,86 +14,90 @@ namespace TimeTrackerApp.MsSql.Repositories
             this.connectionString = connectionString;
         }
 
-        public async Task<Calendar> AddEvent(Calendar model)
+        public async Task<CalendarDay> CreateDayAsync(CalendarDay model)
         {
-            string query = @"Insert Into Calendar (Title,TypeDayId,Date,EndDate)
-           Values (@Title,@TypeDayId, @Date,@EndDate)  SELECT @@IDENTITY";
+            string query = @"INSERT INTO Calendar (Title, DayTypeId, Date, EndDate) VALUES (@Title, @DayTypeId, @Date, @EndDate) SELECT @@IDENTITY";
             using (var connection = new SqlConnection(connectionString))
             {
                 int id = await connection.QueryFirstAsync<int>(query, model);
-
                 if (id != 0)
                 {
-                    return await GetEventById(id);
+                    try
+					{
+                        return await GetDayByIdAsync(id);
+					}
+                    catch (Exception exception)
+					{
+                        throw new Exception(exception.Message);
+					}
                 }
-                throw new NotImplementedException();
+                throw new Exception("Calendar day creation error!");
             }
         }
-        public async Task<Calendar> GetEventById(int id)
+        public async Task<CalendarDay> GetDayByIdAsync(int id)
         {
-            string query = @$"Select * From Calendar where Id={id}";
+            string query = @"SELECT * FROM Calendar WHERE Id = @Id";
             using (var connection = new SqlConnection(connectionString))
             {
-                var model = await connection.QueryFirstOrDefaultAsync<Calendar>(query);
-
-                if (model != null)
+                var model = await connection.QuerySingleOrDefaultAsync<CalendarDay>(query, new { Id = id });
+                if (model is not null)
                 {
                     return model;
                 }
-                throw new NotImplementedException();
+                throw new Exception("Calendar day with this id was not found!");
             }
         }
 
-        public async Task<List<Calendar>> GetAllEvents()
+        public async Task<IEnumerable<CalendarDay>> FetchAllDaysAsync()
         {
-            string query = @"Select * From Calendar";
+            string query = @"SELECT * FROM Calendar";
             using (var connection = new SqlConnection(connectionString))
             {
-                return (await connection.QueryAsync<Calendar>(query)).ToList();
+                return await connection.QueryAsync<CalendarDay>(query);
             }
         }
 
-        public async Task<List<Calendar>> GetEventRange(DateTime startDate, DateTime finishDate)
+        public async Task<IEnumerable<CalendarDay>> FetchDaysRangeAsync(DateTime startDate, DateTime finishDate)
         {
-            string query = @"Select * From Calendar WHERE Date BETWEEN @startDate AND @finishDate or EndDate Between  @startDate AND @finishDate";
+            string query = @"SELECT * FROM Calendar WHERE Date BETWEEN @StartDate AND @FinishDate OR EndDate BETWEEN @StartDate AND @FinishDate";
             using (var connection = new SqlConnection(connectionString))
             {
-                return (await connection.QueryAsync<Calendar>(query, new { 
-                startDate = startDate, 
-                finishDate = finishDate
-                })).ToList();
+                return await connection.QueryAsync<CalendarDay>(query, new { 
+                    StartDate = startDate, 
+                    FinishDate = finishDate
+                });
             }
         }
 
-        public async Task<Calendar> RemoveEvent(int id)
+        public async Task<CalendarDay> RemoveDayAsync(int id)
         {
-            string query = @"Delete From Calendar where Id=@id";
+            string query = @"DELETE FROM Calendar WHERE Id = @Id";
             using (var connection = new SqlConnection(connectionString))
             {
 
-                var record = await GetEventById(id);
-                int affectedRows = await connection.ExecuteAsync(query, new { id = id });
+                var day = await GetDayByIdAsync(id);
+                int affectedRows = await connection.ExecuteAsync(query, new { Id = id });
                 if (affectedRows > 0)
                 {
-                    return record;
+                    return day;
                 }
-                throw new NotImplementedException();
+                throw new Exception("Calendar day removal error!");
             }
 
         }
 
-        public async Task<Calendar> UpdateEvent(Calendar model)
+        public async Task<CalendarDay> EditDayAsync(CalendarDay day)
         {
-            string query = @"Update Calendar set Title=@Title, Date=@Date, TypeDayId=@TypeDayId,EndDate=@EndDate  where Id=@Id";
+            string query = @"UPDATE Calendar SET Title = @Title, Date = @Date, DayTypeId = @DayTypeId, EndDate = @EndDate WHERE Id = @Id";
             using (var connection = new SqlConnection(connectionString))
             {
-                int affectedRows = await connection.ExecuteAsync(query, model);
+                int affectedRows = await connection.ExecuteAsync(query, day);
                 if (affectedRows > 0)
                 {
-                    return model;
+                    return day;
                 }
             }
-            throw new NotImplementedException();
+            throw new Exception("Calendar day editing error!");
         }
     }
 }

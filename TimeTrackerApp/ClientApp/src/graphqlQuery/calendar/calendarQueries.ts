@@ -1,53 +1,78 @@
-﻿const EventFragment=`
-id,
-date,
-typeDayId,
-title,
-endDate
+﻿import {CalendarDayType} from "../../type/CalendarDay/CalendarDayType";
+import {CreateCalendarDayType} from "../../type/CalendarDay/CreateCalendarDayType";
+
+const CalendarDayFragment = `
+    id,
+    date,
+    dayTypeId,
+    title,
+    endDate
 `
 
-export const fetchAllEventsQuery = `
-  query{
-    getEvents{
-      ${EventFragment}
+export const fetchAllCalendarDaysQuery = `
+    query FetchAllCalendarDays {
+        fetchAllCalendarDays {
+            ${CalendarDayFragment}
+        }
     }
-  }
 `
 
-export const fetchRangeEventQuery = `
- query ($startDate: Date,$finishDate: Date){
-    getRangeEvents(startDate: $startDate,finishDate: $finishDate){
-      ${EventFragment}
+export const fetchCalendarDaysRangeQuery = `
+    query FetchCalendarDaysRange($startDate: Date!, $finishDate: Date!) {
+        fetchCalendarDaysRange(startDate: $startDate, finishDate: $finishDate) {
+            ${CalendarDayFragment}
+        }
     }
-  }
 `
 
-export const fetchEventByIdQuery=`query ($id: Int!){
-  getEventById(eventId: $id){
-    ${EventFragment}
-  }
-}
+export const getCalendarDayByIdQuery = `
+    query GetCalendarDayById($id: ID!) {
+        getCalendarDayById(eventId: $id) {
+            ${CalendarDayFragment}
+        }
+    }
 `
 
-export const addEventQuery=`
-mutation ($event: CalendarInputType){
-  addEvent(event: $event){
-    ${EventFragment}
-  }
-}
+export const createCalendarDayMutation = `
+    mutation CreateCalendarDay($calendarDay: CalendarDayInputType!) {
+        createCalendarDay(day: $calendarDay) {
+            ${CalendarDayFragment}
+        }
+    }
 `
 
-export const editEventQuery= `
-mutation($event: CalendarUpdateType){
-  updateEvent(event: $event){
-    ${EventFragment}
-  }
-}
+export const editCalendarDayMutation = `
+    mutation EditCalendarDay($calendarDay: CalendarDayUpdateType!) {
+        editCalendarDay(day: $calendarDay) {
+            ${CalendarDayFragment}
+        }
+    }
 `
-export const deleteEventQuery=`
-mutation ($id:ID!){
-  deleteEvent(id: $id){
-    ${EventFragment}
-  }
-}
+export const removeCalendarDayMutation = `
+    mutation RemoveCalendarDay($id: ID!) {
+        removeCalendarDay(id: $id) {
+            ${CalendarDayFragment}
+        }
+    }
 `
+
+export type FetchCalendarDaysRangeInputType = {
+    startDate: string,
+    finishDate: string
+}
+
+export type GetCalendarDayByIdInputType = {
+    id: number
+}
+
+export type CreateCalendarDayInputType = {
+    calendarDay: CreateCalendarDayType
+}
+
+export type EditCalendarDayInputType = {
+    calendarDay: CalendarDayType
+}
+
+export type RemoveCalendarDayInputType = {
+    id: number
+}

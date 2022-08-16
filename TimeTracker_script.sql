@@ -1,6 +1,6 @@
 create database TimeTrackerDB
 use TimeTrackerDB
-drop database TimeTrackerDB
+drop table TimeTrackerDB
 
 create table [Users] 
 (
@@ -9,16 +9,17 @@ create table [Users]
 	[Password] nvarchar(100) not null,
 	[LastName] nvarchar(50),
 	[FirstName] nvarchar(50),
+	[IsFullTimeEmployee] bit default 1, 
 	[WeeklyWorkingTime] int default 144000,
 	[RemainingVacationDays] int default 30,
-	[PrivilegesValue] int default 0
+	[PrivilegesValue] int default 0,
+	[VacationPermissionId] int default 1 
 )
 
 create table [Records]
 (
 	[Id] int primary key identity(1, 1),
 	[WorkingTime] int default 28800,
-	[Comment] text,
 	[EmployeeId] int foreign key references [Users]([Id]) on delete no action,
 	[EditorId] int foreign key references [Users]([Id]) on delete no action,
 	[IsAutomaticallyCreated] bit default 1, 
@@ -42,13 +43,12 @@ create table [AuthenticationTokens]
 	[Token] text not null
 )
 
-
-
 create table [Calendar]
 (
-[Id] int primary key identity(1,1),
-[Title] nvarchar(50) not null,
-[Date] date not null ,
-[EndDate] date null,
-[TypeDayId] int 
+	[Id] int primary key identity(1, 1),
+	[Title] nvarchar(50) not null,
+	[Date] date not null,
+	[EndDate] date null,
+	[DayTypeId] int 
 )
+

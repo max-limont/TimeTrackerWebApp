@@ -4,7 +4,18 @@ export type User = {
     password?: string | null,
     firstName: string,
     lastName: string,
+    isFullTimeEmployee: boolean,
     weeklyWorkingTime: number,
     remainingVacationDays: number,
     privilegesValue: number
+    vacationPermissionId: number
+}
+
+export interface UserListPage {
+    from: number,
+    contentPerPage: number,
+    orderBy: string
+    isReverse: boolean
+    privilegesValue: number
+    vacationPermissionId?: number
 }

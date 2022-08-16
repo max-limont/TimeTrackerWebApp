@@ -7,5 +7,6 @@
 		public static readonly string JwtTokenIssuer = "JWT_TOKEN_ISSUER";
 		public static readonly string JwtTokenAudience = "JWT_TOKEN_AUDIENCE";
 		public static readonly string DatabaseConnectionString = "MsSqlConnection";
+		public static readonly string DatabaseConnectionStringAzure = "MsSqlAzure";
 	}
 }

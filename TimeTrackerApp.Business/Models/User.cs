@@ -10,8 +10,10 @@
 		public string Password { get; set; } = string.Empty;
 		public string? FirstName { get; set; }
 		public string? LastName { get; set; }
+		public bool IsFullTimeEmployee { get; set; } = true;
 		public int WeeklyWorkingTime { get; set; } = defaultWeeklyWorkingTime;
 		public int RemainingVacationDays { get; set; } = defaultRemainingVacationDays;
 		public int PrivilegesValue { get; set; }
+		public int VacationPermissionId { get; set; }
 	}
 }

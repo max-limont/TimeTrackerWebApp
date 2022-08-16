@@ -19,21 +19,20 @@ import {Action} from "react-epics";
 
 const setRecordsEpic: Epic = (action$: Observable<ReturnType<typeof fetchAllUserRecords>>): any => {
     return action$.pipe(
-        ofType("FetchAllUserRecords"),
+        ofType(fetchAllUserRecords.type),
         mergeMap(action => from(graphqlRequest(fetchAllUserRecordsQuery, {
             userId: action.payload
         } as FetchAllUserRecordsInputType)).pipe(
             map(response => {
-                if (response.data && response.data.fetchAllUserRecords) {
+                if (response?.data?.fetchAllUserRecords) {
                     const records = response.data.fetchAllUserRecords.map((record: any) => {
                         return {
                             id: parseInt(record.id),
                             workingTime: parseInt(record.workingTime),
-                            comment: record.comment,
                             employeeId: parseInt(record.employeeId),
                             isAutomaticallyCreated: Boolean(JSON.parse(record.isAutomaticallyCreated)),
                             editorId: parseInt(record.editorId),
-                            createdAt: new Date(record.createdAt)
+                            createdAt: new Date(new Date(record.createdAt) + " UTC")
                         } as Record;
                     }) as Record[]
                     store.dispatch(setRecords(records))
@@ -47,21 +46,20 @@ const setRecordsEpic: Epic = (action$: Observable<ReturnType<typeof fetchAllUser
 
 const addRecordEpic: Epic = (action$: Observable<ReturnType<typeof createRecord>>): any => {
     return action$.pipe(
-        ofType("CreateRecord"),
+        ofType(createRecord.type),
         mergeMap(action => from(graphqlRequest(createRecordMutation, {
             record: action.payload
         } as CreateRecordInputType)).pipe(
             map(response => {
-                if (response.data && response.data.createRecord) {
+                if (response?.data?.createRecord) {
                     const record = response.data.createRecord;
                     store.dispatch(addRecord({
                         id: parseInt(record.id),
                         workingTime: parseInt(record.workingTime),
-                        comment: record.comment,
                         employeeId: parseInt(record.employeeId),
                         isAutomaticallyCreated: Boolean(JSON.parse(record.isAutomaticallyCreated)),
                         editorId: parseInt(record.editorId),
-                        createdAt: new Date(record.createdAt)
+                        createdAt: new Date(new Date(record.createdAt) + " UTC")
                     } as Record))
                     return { payload: "Success", type: "CreateRecordSuccess" } as Action
                 }
@@ -74,12 +72,12 @@ const addRecordEpic: Epic = (action$: Observable<ReturnType<typeof createRecord>
 
 const updateRecordEpic: Epic = (action$: Observable<ReturnType<typeof updateRecord>>): any => {
     return action$.pipe(
-        ofType("UpdateRecord"),
+        ofType(updateRecord.type),
         mergeMap(action => from(graphqlRequest(updateRecordMutation, {
             record: action.payload
         } as UpdateRecordInputType)).pipe(
             map(response => {
-                if (response.data && response.data.editRecord) {
+                if (response?.data?.editRecord) {
                     store.dispatch(editRecord(action.payload))
                     return { payload: "Success", type: "UpdateRecordSuccess" }
                 }
@@ -91,12 +89,12 @@ const updateRecordEpic: Epic = (action$: Observable<ReturnType<typeof updateReco
 
 const deleteRecordEpic: Epic = (action$: Observable<ReturnType<typeof deleteRecord>>): any => {
     return action$.pipe(
-        ofType("DeleteRecord"),
+        ofType(deleteRecord.type),
         mergeMap(action => from(graphqlRequest(deleteRecordMutation, {
             id: action.payload
         } as DeleteRecordInputType)).pipe(
             map(response => {
-                if (response.data && response.data.deleteRecord) {
+                if (response?.data?.deleteRecord) {
                     store.dispatch(removeRecord(action.payload))
                     return { payload: "Success", type: "DeleteRecordSuccess" } as Action
                 }

@@ -1,5 +1,5 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
-import {from, map, mergeMap, Observable} from "rxjs";
+import {from, map, mergeMap, startWith,Observable, endWith} from "rxjs";
 import { graphqlRequest } from "../../api";
 import {
     AuthLoginInputType,
@@ -12,6 +12,7 @@ import {
     authorizeUserById,
     logout,
     setError,
+    setLoadingState,
     setUser
 } from "../../../../store/slice/authentication/authSlice";
 import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../../../../Cookie/Cookie";
@@ -25,39 +26,37 @@ import {AuthUserResponse} from "../../../../type/User/AuthUser";
 
 const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginAction>>): any => {
     return action$.pipe(
-        ofType("AuthLogin"),
+        ofType(authLoginAction.type),
         mergeMap(action => from(graphqlRequest(authLoginQuery, {
             email: action.payload.email,
             password: action.payload.password
         } as AuthLoginInputType)).pipe(
             map(response => {
-                if (response && response.data.authLogin && response.data.authLogin.accessToken && response.data.authLogin.refreshToken && !response.errors) {
+                if (response?.data?.authLogin?.accessToken && response?.data?.authLogin?.refreshToken && !response?.errors) {
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
                     const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
                     store.dispatch(authorizeUserById(userId))
                     return { payload: response, type: "AuthLoginSuccess" } as Action;
-                } else if (response && response.errors) {
+                } else if (response?.errors) {
                     store.dispatch(setError(parseError(response.errors[0].message)));
                     return { payload: response, type: "AuthLoginError" } as Action
                 }
-                store.dispatch(logout());
                 return { payload: response, type: "AuthLoginError" } as Action
             })
-        ))
+        )),
     )
 }
 
 const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAction>>): any => {
     return action$.pipe(
-        ofType("AuthLogout"),
+        ofType(authLogoutAction.type),
         mergeMap(action => from(graphqlRequest(authLogoutQuery, {
             userId: action.payload
         } as AuthLogoutInputType)).pipe(
             map(() => {
                 clearCookie(refreshTokenKey)
                 clearCookie(accessTokenKey)
-                store.dispatch(logout())
                 return { payload: "Success", type: "AuthLogoutSuccess" } as Action
             }),
         ))
@@ -66,21 +65,23 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
 
 const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUserById>>): any => {
     return action$.pipe(
-        ofType("AuthorizeUserById"),
+        ofType(authorizeUserById.type),
         mergeMap(action => from(graphqlRequest(getUserByIdQuery, {
             id: action.payload
         } as GetUserByIdQueryInputType)).pipe(
             map(response => {
-                if (response && response.data && response.data.getUserById) {
+                if (response?.data?.getUserById) {
                     const apiResponse = response.data.getUserById
                     const user = {
                         id: parseInt(apiResponse.id),
                         email: apiResponse.email ?? "",
                         firstName: apiResponse.firstName ?? "Unknown",
                         lastName: apiResponse.lastName ?? "User",
+                        isFullTimeEmployee: Boolean(JSON.parse(apiResponse.isFullTimeEmployee)),
                         weeklyWorkingTime: parseInt(apiResponse.weeklyWorkingTime ?? ''),
                         remainingVacationDays: parseInt(apiResponse.remainingVacationDays ?? ''),
-                        privilegesValue: parseInt(apiResponse.privilegesValue ?? '')
+                        privilegesValue: parseInt(apiResponse.privilegesValue ?? ''),
+                        vacationPermissionId: parseInt(apiResponse.vacationPermissionId??"")
                     } as User
                     store.dispatch(setUser(user))
                     return { payload: "Success", type: "AuthSetUserSuccess" } as Action

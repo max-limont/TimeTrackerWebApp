@@ -51,7 +51,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\api\epics\vacation\vacation.ts" />
     <TypeScriptCompile Include="ClientApp\src\graphqlQuery\calendar\calendarQueries.ts" />
+    <TypeScriptCompile Include="ClientApp\src\graphqlQuery\vacation\vacationQuery.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\actions\calendar\calendarActions.ts" />
     <TypeScriptCompile Include="ClientApp\src\type\DateInputType.ts" />
   </ItemGroup>

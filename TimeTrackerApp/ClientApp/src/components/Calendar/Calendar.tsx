@@ -1,16 +1,10 @@
-import { Controls } from "../Calendar/Controls/Controls";
 import { CalendarGrid } from "../Calendar/CalendarGrid/CalendarGrid";
-import { useAppDispatch } from "../../app/hooks";
-import { initCalendar } from "../../store/slice/calendar/calendarSlice";
+import {FC} from "react";
 
+export const Calendar: FC = () => {
 
-
-function Calendar() {
-    const dispatch = useAppDispatch();
-    dispatch(initCalendar());
     return (
-        <section className="calendar-container">
-            <Controls />
+        <section className={"calendar-container flex-container flex-column w-100"}>
             <CalendarGrid />
         </section>
     )

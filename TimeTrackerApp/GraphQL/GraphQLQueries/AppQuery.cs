@@ -5,19 +5,63 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using System.Collections.Generic;
 using System;
+using GraphQL.MicrosoftDI;
+using Microsoft.AspNetCore.Http;
+using TimeTrackerApp.GraphQL.GraphQLQueries.VacationLevelGraphql;
 using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
+using TimeTrackerApp.Helpers;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppQuery : ObjectGraphType
     {
-        public AppQuery(ICalendarRepository calendarRepository,IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRequestRepository vacationRequestRepository)
+        public AppQuery(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
         {
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
                .ResolveAsync(async context =>
                {
                    return await userRepository.FetchAllAsync();
+               })
+               .AuthorizeWithPolicy("LoggedIn");
+
+            Field<ListGraphType<UserType>, IEnumerable<User>>()
+               .Argument<NonNullGraphType<IntGraphType>, int>("from", "From row")
+               .Argument<NonNullGraphType<IntGraphType>, int>("contentPerPage", "Content per page")
+               .Argument<StringGraphType?, string?>("orderBy", "Order by")
+               .Argument<BooleanGraphType?, bool?>("isReverse", "Is reverse")
+               .Name("userFetchPageList")
+               .ResolveAsync(async context =>
+               {
+                   int from = context.GetArgument<int>("from");
+                   int contentPerPage = context.GetArgument<int>("contentPerPage");
+                   string? orderBy = context.GetArgument<string?>("orderBy");
+                   bool? isReverse = context.GetArgument<bool?>("isReverse");
+                   if (orderBy != null)
+                   {
+                       if (isReverse != null)
+                           return await userRepository.FetchPageListAsync(from, contentPerPage, orderBy, (bool)isReverse);
+                       return await userRepository.FetchPageListAsync(from, contentPerPage, orderBy);
+                   }
+                   return await userRepository.FetchPageListAsync(from, contentPerPage);
+               })
+               .AuthorizeWithPolicy("LoggedIn");
+
+            Field<ListGraphType<UserType>, IEnumerable<User>>()
+               .Argument<StringGraphType, string>("request", "Request")
+               .Name("userFetchSearchList")
+               .ResolveAsync(async context =>
+               {
+                   string request = context.GetArgument<string>("request");
+                   return await userRepository.FetchSearchListAsync(request);
+               })
+               .AuthorizeWithPolicy("LoggedIn");
+
+            Field<IntGraphType, int>()
+               .Name("userCount")
+               .ResolveAsync(async context =>
+               {
+                   return await userRepository.GetCountAsync();
                })
                .AuthorizeWithPolicy("LoggedIn");
 
@@ -68,32 +112,32 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return await recordRepository.FetchAllUserRecordsAsync(userId);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
-
-            Field<ListGraphType<VacationRequestType>, IEnumerable<VacationRequest>>()
+            
+            Field<ListGraphType<VacationType>, List<Vacation>>()
                 .Name("FetchAllVacationRequests")
                 .ResolveAsync(async context =>
                 {
-                    return await vacationRequestRepository.FetchAllAsync();
+                    return await vacationRepository.FetchAllAsync();
                 })
                 .AuthorizeWithPolicy("LoggedIn");
-
-            Field<VacationRequestType, VacationRequest>()
+            
+            Field<VacationType, Vacation>()
                 .Name("GetVacationRequestById")
-                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Vacation request id")
+                .Argument<NonNullGraphType<IdGraphType>>("Id", "Vacation request id")
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
-                    return await vacationRequestRepository.GetByIdAsync(id);
+                    return await vacationRepository.GetByIdAsync(id);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
-
-            Field<ListGraphType<VacationRequestType>, IEnumerable<VacationRequest>>()
+            
+            Field<ListGraphType<VacationType>, IEnumerable<Vacation>>()
                 .Name("FetchAllUserVacationRequests")
-                .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
+                .Argument<NonNullGraphType<IdGraphType>>("UserId", "User id")
                 .ResolveAsync(async context =>
                 {
                     int userId = context.GetArgument<int>("UserId");
-                    return await vacationRequestRepository.FetchAllUserVacationRequestsAsync(userId);
+                    return await vacationRepository.FetchAllUserVacationAsync(userId);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
 
@@ -125,32 +169,48 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 })
                 .AuthorizeWithPolicy("LoggedIn");
 
-            Field<ListGraphType<CalendarType>, List<Calendar>>()
-                .Name("getEvents")
-                .ResolveAsync(async context => await calendarRepository.GetAllEvents());
+            Field<ListGraphType<CalendarDayType>, IEnumerable<CalendarDay>>()
+                .Name("FetchAllCalendarDays")
+                .ResolveAsync(async context => {
+                    return await calendarRepository.FetchAllDaysAsync();
+                })
+                .AuthorizeWithPolicy("LoggedIn");
 
-
-            Field<ListGraphType<CalendarType>, IEnumerable<Calendar>>()
-                .Name("getRangeEvents")
-                .Argument<DateGraphType>("startDate", "start date")
-                .Argument<DateGraphType>("finishDate", "finish date")
+            Field<ListGraphType<CalendarDayType>, IEnumerable<CalendarDay>>()
+                .Name("FetchCalendarDaysRange")
+                .Argument<DateGraphType>("StartDate", "Start date")
+                .Argument<DateGraphType>("FinishDate", "Finish date")
                 .ResolveAsync(async context =>
                 {
-                    DateTime startDate = context.GetArgument<DateTime>("startDate"),
-                    finishDate = context.GetArgument<DateTime>("finishDate");
-                    return await calendarRepository.GetEventRange(startDate, finishDate);
-                });
+                    var startDate = context.GetArgument<DateTime>("StartDate");
+                    var finishDate = context.GetArgument<DateTime>("FinishDate");
+                    return await calendarRepository.FetchDaysRangeAsync(startDate, finishDate);
+                })
+                .AuthorizeWithPolicy("LoggedIn");
 
-
-            Field<CalendarType, Calendar>()
-                .Name("getEventById")
-                .Argument<NonNullGraphType<IdGraphType>>("eventId", "event id")
+            Field<CalendarDayType, CalendarDay>()
+                .Name("GetCalendarDayById")
+                .Argument<NonNullGraphType<IdGraphType>>("Id", "Day id")
                 .ResolveAsync(async context =>
                 {
-                    var id = context.GetArgument<int>("eventId");
-                    return await calendarRepository.GetEventById(id);
-                });
+                    var id = context.GetArgument<int>("Id");
+                    return await calendarRepository.GetDayByIdAsync(id);
+                })
+                .AuthorizeWithPolicy("LoggedIn");
 
+            Field<ListGraphType<VacationType>, List<Vacation>>()
+                .Name("GetRequestVaction")
+                .Argument<IntGraphType, int>("ReceiverId", "")
+                .ResolveAsync(async contex =>
+                {
+                    var id = contex.GetArgument<int>("ReceiverId");
+                    return await vacationRepository.GetRequestVacation(id);
+                })
+                .AuthorizeWithPolicy("LoggedIn"); ;
+                
+            Field<VacationLevelQueries>()
+                .Name("VacationLevelQueries")
+                .Resolve(_ => new { });
         }
     }
 }

@@ -47,7 +47,6 @@ export const recordToTimeTrackerListItem = (record: Record): TimeTrackerItem => 
         begin: record.createdAt.getTime(),
         duration: record.workingTime,
         end: record.createdAt.getTime() + record.workingTime,
-        comment: record.comment,
         isAutomaticallyCreated: record.isAutomaticallyCreated,
         editor: store.getState().rootReducer.userList.userList.find(user => user.id === record.editorId)
     }

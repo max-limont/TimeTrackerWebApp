@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from "react";
 import {AuthorizationUser, AuthUserResponse} from "../../type/User/AuthUser";
 import {useAppSelector} from "../../app/hooks";
 import {store} from "../../app/store";
-import {authLoginAction, authLogoutAction, authorizeUserById} from "../../store/slice/authentication/authSlice";
+import {authLoginAction, authLogoutAction, authorizeUserById, setUser} from "../../store/slice/authentication/authSlice";
 import {User} from "../../type/User/User";
 import {useLocation, useNavigate} from "react-router-dom";
 import {accessTokenKey, getCookie, refreshTokenKey} from "../../Cookie/Cookie";
@@ -38,13 +38,14 @@ export const AuthProvider: FC<any> = ({ children }) => {
     const [state, setState] = useState(initialAuthState)
     const navigate = useNavigate()
     const authUser = useAppSelector(state => state.rootReducer.auth.user)
-    const location = useLocation()
+    const location = useLocation(); 
 
     useEffect(() => {
         if (authUser) {
             if (location.pathname === '/login')
                 navigate('/', {replace: true})
             setState({...state, user: authUser})
+            setUser(authUser);
         } else {
             const refreshToken = getCookie(refreshTokenKey)
             if (refreshToken) {

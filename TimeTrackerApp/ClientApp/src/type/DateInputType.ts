@@ -1,4 +1,4 @@
-﻿export type DateInputType  = {
-    startDate:string,
-    finishDate:string
+﻿export type DateInputType = {
+    startDate: Date,
+    finishDate: Date
 }

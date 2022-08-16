@@ -1,0 +1,34 @@
+@import "variables";
+
+.pagination{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  margin: 50px 0;
+  .text{
+    opacity: 0.6;
+    font-size: 16px;
+  }
+  .page{
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: none;
+    background-color: $color-silver;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .page.active,
+  .page:hover {
+    background-color: $color-active;
+  }
+  .page.disabled {
+    background-color: transparent !important;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}

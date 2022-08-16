@@ -18,7 +18,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<Record> CreateAsync(Record record)
 		{
-			string query = @"INSERT INTO Records (WorkingTime, Comment, EmployeeId, EditorId, IsAutomaticallyCreated, CreatedAt) VALUES (@WorkingTime, @Comment, @EmployeeId, @EditorId, @IsAutomaticallyCreated, @CreatedAt)";
+			string query = @"INSERT INTO Records (WorkingTime, EmployeeId, EditorId, IsAutomaticallyCreated, CreatedAt) VALUES (@WorkingTime, @EmployeeId, @EditorId, @IsAutomaticallyCreated, @CreatedAt)";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -33,7 +33,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<Record> EditAsync(Record record)
 		{
-			string query = @"UPDATE Records SET WorkingTime = @WorkingTime, Comment = @Comment, EmployeeId = @EmployeeId, EditorId = @EditorId, IsAutomaticallyCreated = @IsAutomaticallyCreated, CreatedAt = @CreatedAt WHERE Id = @Id";
+			string query = @"UPDATE Records SET WorkingTime = @WorkingTime, EmployeeId = @EmployeeId, EditorId = @EditorId, IsAutomaticallyCreated = @IsAutomaticallyCreated, CreatedAt = @CreatedAt WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{

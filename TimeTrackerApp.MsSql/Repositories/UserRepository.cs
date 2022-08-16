@@ -38,8 +38,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> CreateAsync(User user)
 		{
-			string query = @"INSERT INTO Users (Email, Password, FirstName, LastName, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue) VALUES (@Email, @Password, @FirstName, @LastName, @WeeklyWorkingTime, @RemainingVacationDays, @PrivilegesValue)";
-
+			string query = @"INSERT INTO Users (Email, Password, FirstName, LastName, IsFullTimeEmployee, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue, VacationPermissionId) VALUES (@Email, @Password, @FirstName, @LastName, @IsFullTimeEmployee, @WeeklyWorkingTime, @RemainingVacationDays, @PrivilegesValue, @VacationPermissionId)";
 			using (var connection = new SqlConnection(connectionString))
 			{
 				user.Password = PasswordService.Encrypt(user.Password);
@@ -54,7 +53,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> EditAsync(User user)
 		{
-			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue WHERE Id = @Id";
+			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, IsFullTimeEmployee = @IsFullTimeEmployee, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue, VacationPermissionId = @VacationPermissionId WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -74,6 +73,40 @@ namespace TimeTrackerApp.MsSql.Repositories
 			using (var connection = new SqlConnection(connectionString))
 			{
 				return await connection.QueryAsync<User>(query);
+			}
+		}
+
+		public async Task<IEnumerable<User>> FetchPageListAsync(int from, int contentPerPage, string orderBy = "FirstName", bool isReverse = false)
+		{
+			string direction = isReverse ? "DESC" : "ASC";
+			string query = $"SELECT * FROM Users ORDER BY {orderBy} {direction} OFFSET {from} ROWS FETCH NEXT {contentPerPage} ROWS ONLY";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
+			}
+		}
+
+		public async Task<IEnumerable<User>> FetchSearchListAsync(string request)
+		{
+			request += "%"; 
+			string query = $"SELECT * FROM Users " +
+                $"WHERE (LastName LIKE '{request}') " +
+                $"OR (FirstName LIKE '{request}') " +
+                $"OR (Email LIKE '{request}')";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
+			}
+		}
+
+		public async Task<int> GetCountAsync()
+		{
+			string query = "SELECT COUNT(*) FROM Users";
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QuerySingleOrDefaultAsync<int>(query);
 			}
 		}
 

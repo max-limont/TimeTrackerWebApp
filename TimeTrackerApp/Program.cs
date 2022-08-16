@@ -32,25 +32,28 @@ builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new Au
 builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
-builder.Services.AddSingleton<IVacationRequestRepository>(provider => new VacationRequestRepository(connectionString));
+builder.Services.AddSingleton<IVacationRepository>(provider => new VacationRepository(connectionString));
+builder.Services.AddSingleton<IVacationLevelRepository>(provider => new VacationLevelRepository(connectionString));
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
-
+//
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()
 //         .WithGlobalConnectionString(connectionString)
-//         .ScanIn(typeof(InitMigrations).Assembly)
+//         /* typeof(migration) миграция яка буде використовуватисб ,
+//          также нужно в класе всегда помечать [migration(nummberId)] */
+//         .ScanIn(typeof(ChangeCalendarTimeTracker).Assembly)
 //         .For.All())
 //     .AddLogging(config=>config.AddFluentMigratorConsole());
 
 
 // Add services to the container.
 builder.Services.AddCors(
-    builder => {
+builder => {
         builder.AddPolicy("DefaultPolicy", option =>
         {
             option.AllowAnyMethod();
@@ -108,7 +111,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("DefaultPolicy");
 
-
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
@@ -137,6 +139,5 @@ app.UseSpa(spa =>
 // using var scope = app.Services.CreateScope();
 // var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
 // migrationService.MigrateUp();
-
 
 app.Run();
