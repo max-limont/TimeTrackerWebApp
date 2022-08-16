@@ -4,6 +4,7 @@ import { getAllVacationsLevel } from "../../../../graphqlQuery/vacationLevel/vac
 import { getAllVacationLevelTypeAction } from "../../../../store/actions/vacationLevel/vacationLevel";
 import { setVacationLevels } from "../../../../store/slice/vacationLevel/vacationLevelSlice";
 import { graphqlRequest } from "../../api";
+import {Action} from "react-epics";
 
 const getVacationLevelsEpic = (action$: any) => {
     return action$.pipe(
@@ -11,10 +12,10 @@ const getVacationLevelsEpic = (action$: any) => {
         mergeMap(() => from(graphqlRequest(getAllVacationsLevel))
             .pipe(
                 map(response => {
-                    if (response.errors == undefined) {
+                    if (!response?.errors) {
                         return setVacationLevels(response.data.vacationLevelQueries.getAllVacationsLevel);
                     }
-                    throw new Error();
+                    return {type: 'GetVacationLevelsError', payload: "Error" } as Action
                 }))));}
 
 export const vacationLevelEpic = combineEpics(getVacationLevelsEpic);

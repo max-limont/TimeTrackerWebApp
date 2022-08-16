@@ -1,6 +1,6 @@
 create database TimeTrackerDB
 use TimeTrackerDB
-drop database TimeTrackerDB
+drop table TimeTrackerDB
 
 create table [Users] 
 (
@@ -12,7 +12,8 @@ create table [Users]
 	[IsFullTimeEmployee] bit default 1, 
 	[WeeklyWorkingTime] int default 144000,
 	[RemainingVacationDays] int default 30,
-	[PrivilegesValue] int default 0
+	[PrivilegesValue] int default 0,
+	[VacationPermissionId] int default 1 
 )
 
 create table [Records]
