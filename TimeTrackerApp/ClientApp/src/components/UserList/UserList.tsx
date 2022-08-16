@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import User from "../../type/Models/User";
 import "./styles/style.scss"
 import {UserListPage} from "../../type/User/User";
@@ -29,6 +29,8 @@ const UserList = () => {
     })
 
     const [request, setSearch] = useState<string>("")
+
+    const navigate = useNavigate()
 
     const selectHandler = (settings: { orderBy: string, isReverse: boolean }) => {
         setState({...state, ...settings})
@@ -99,7 +101,7 @@ const UserList = () => {
                 userList
                     ? userList.map(
                     (item: User) =>
-                        <tr onClick={() => document.location = "user?id=" + item.id} key={item.id} className="link-btn userItem">
+                        <tr onClick={() => navigate("/user?id=" + item.id, )} key={item.id} className="link-btn userItem">
                             <td>{item.firstName} {item.lastName}</td>
                             <td>{item.email}</td>
                             <td>{item.weeklyWorkingTime}</td>
