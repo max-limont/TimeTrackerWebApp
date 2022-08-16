@@ -356,22 +356,44 @@ body {
         }
     }
 
+}
     .user-info {
         box-sizing: border-box;
         align-items: center;
-
         p {
-            font-size: 16px;
+            font-size: 25px;
         }
-
+        color: $color-dark;
         img {
             width: 32px;
             height: 32px;
             border-radius: 100%;
             margin-inline: 10px;
         }
+
+        a:link
+        {
+            text-decoration: #00ADB5 solid none;
+            color: $color-light;
+        }
+        a:hover
+        {
+            text-decoration: #00ADB5 solid none;
+            background-color: $color-light-dark;
+            color: $color-cyan;
+        }
+
+        a:visited
+        {
+            color: $color-light;
+        }
+        a:active
+        {
+            color: $color-cyan;
+        }
+
     }
-}
+
 
 section {
     header {
@@ -1078,4 +1100,8 @@ table {
     .button:not(:last-child) {
         margin-right: 5px;
     }
+}
+.user-title
+{
+ padding-top: 15px;
 }

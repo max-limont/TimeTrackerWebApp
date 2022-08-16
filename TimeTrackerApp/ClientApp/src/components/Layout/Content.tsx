@@ -4,6 +4,7 @@ import Calendar from "../Calendar/Calendar";
 import {Home} from "../TimeTracker/Home";
 import UserList from "../UserList/UserList";
 import {ProtectedComponent} from "../Auth/ProtectedComponent";
+import UserPage from "../UserPage/UserPage";
 
 export const Content: FC = () => {
 
@@ -13,6 +14,7 @@ export const Content: FC = () => {
                 <Route index element={<ProtectedComponent component={<Home />} />} />
                 <Route path={"/calendar"} element={<ProtectedComponent component={<Calendar />} />} />
                 <Route path={"/userList"} element={<ProtectedComponent component={<UserList />} />} />
+                <Route path={"/user-page"} element={<ProtectedComponent component={<UserPage />} />} />
             </Routes>
         </div>
     );
