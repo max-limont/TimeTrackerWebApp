@@ -1158,6 +1158,8 @@ table .bottom-table-row .icon {
 .list-vacation-container p {
     font-size: 20px;
     text-align: center;
+    padding: 5px;
+    margin: 5px;
     border-bottom: 2px solid #00ADB5;
 }
 
@@ -1224,6 +1226,14 @@ div.end-item-action{
       stroke-dasharray: 90, 150;
       stroke-dashoffset: -124;
     }
+  }
+
+  .custom-icon-green{
+    color: #16ec56;
+  }
+
+  .custom-icon-red{
+    color: #ff0000;
   }
   
 /*# sourceMappingURL=style.css.map */

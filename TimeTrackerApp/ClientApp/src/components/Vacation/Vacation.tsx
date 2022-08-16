@@ -4,7 +4,7 @@ import { removeVacation } from "../../store/slice/vacation/vacationSlice";
 import { CreateVacation } from "./CreateVacation";
 import { EditVacation } from "./EditVacation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faClock, faClose, faTimes, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faCheck, faClock, faClose, faTimes, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/useAuth";
 import { getVacationsByUserIdAction, removeVacationAction } from "../../store/actions/vacation/vacationActions";
 import { getAllVacationLevelAction } from "../../store/actions/vacationLevel/vacationLevel";
@@ -35,15 +35,14 @@ export function Vacation() {
             <div className="vacation-container">
                 <div className="control-panel vacation-control-panel">
                     <div>
-                        <button onClick={() => setCreateState(true)} className="button cyan-button">CreateVacation</button>
+                        <button onClick={() => setCreateState(true)} className="button cyan-button">Create Vacation Request</button>
                     </div>
                     <div>
                         {vacationLevel?.value ? vacationLevel.value > 1 ? <Link className="link" to="/manage-vacation"><button className="button cyan-button">Manage Requests Vacations</button></Link> : <></> : <></>}
                     </div>
                 </div>
                 <div className="list-vacation-container">
-                    <p>Your Vacations</p>
-
+                    <p style={{margin: "5px"}}>Your Vacations</p>
                     <div className="list-vacations">
                         {!(vacationsList.length == 0) ?
                             <>
@@ -58,10 +57,10 @@ export function Vacation() {
                                         <div key={i} className="vacation-item">
                                             <div>{item.startingTime}</div>
                                             <div>{item.endingTime}</div>
-                                            <div>{item.isAccepted ? <FontAwesomeIcon icon={faClose} className={"icon"} />
+                                            <div>{item.isAccepted ? <FontAwesomeIcon icon={faCheck} className={"custom-icon-green icon"} />
                                                 : item.isAccepted == null ?
                                                     <FontAwesomeIcon icon={faClock} className={"icon"} />
-                                                    : <FontAwesomeIcon icon={faBan} className={"icon"} />
+                                                    : <FontAwesomeIcon icon={faBan} className={"custom-icon-red icon"} />
                                             }</div>
                                             <div className={"end-item-action"} ><button onClick={() => {
                                                 setEditState(true);

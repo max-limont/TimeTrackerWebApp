@@ -34,7 +34,7 @@ export function ManageVacationRequest() {
                 <div className="control-panel vacation-control-panel">
                 </div>
                 <div className="list-vacation-container">
-                    <p>Manage Vacations Request</p>
+                    <p style={{margin: "5px"}}>Manage Vacations Request</p>
                     <div className="list-vacations">
                         {!(requestsVacation.length == 0) ?
                             <>
