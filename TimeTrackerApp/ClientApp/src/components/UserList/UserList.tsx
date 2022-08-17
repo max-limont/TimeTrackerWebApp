@@ -1,26 +1,27 @@
 import React, {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import {Link, useNavigate} from "react-router-dom";
-import {User} from "../../type/User/User";
-import {UserListPage} from "../../type/User/User";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {
-    fetchUserCountAction,
-    fetchUserListPageAction,
-    fetchUserListSearchRequestAction
-} from "../../store/actions/userList/userListActions";
+import {useNavigate} from "react-router-dom";
+import {User} from "../../types/user.types";
 import Select from "./Select";
 import ExportXlsx from "./ExportXlsx";
 import Pagination from "./Pagination";
 import {useAuth} from "../../hooks/useAuth";
+import {useAppSelector} from "../../hooks/useAppSelector";
+import {useDispatch} from "react-redux";
+import {UserListPage} from "../../types/userList.types";
+import {
+    fetchUserCount,
+    fetchUserListPage,
+    fetchUserListSearchRequest
+} from "../../store/userList/userList.slice";
 
 const UserList = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
     const auth = useAuth()
     const contentPerPage = 5
 
-    const dispatch = useAppDispatch()
+    const dispatch = useDispatch()
     const [state, setState] = useState<UserListPage>({
         from: 0,
         contentPerPage: contentPerPage,
@@ -52,16 +53,16 @@ const UserList = () => {
 
     useEffect(() => {
         if (auth.state?.user?.id) {
-            dispatch(fetchUserCountAction())
+            dispatch(fetchUserCount())
         }
     }, [auth.state?.user?.id])
 
     useEffect(() => {
         if (auth.state?.user?.id) {
             if (request.length)
-                dispatch(fetchUserListSearchRequestAction({request}))
+                dispatch(fetchUserListSearchRequest({request}))
             else
-                dispatch(fetchUserListPageAction(state))
+                dispatch(fetchUserListPage(state))
         }
     }, [request, state, auth.state?.user?.id])
 

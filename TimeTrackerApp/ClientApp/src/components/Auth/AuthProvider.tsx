@@ -1,12 +1,12 @@
 import React, {FC, useEffect, useState} from "react";
-import {AuthorizationUser, AuthUserResponse} from "../../type/User/AuthUser";
-import {useAppSelector} from "../../app/hooks";
-import {store} from "../../app/store";
-import {authLoginAction, authLogoutAction, authorizeUserById, setUser} from "../../store/slice/authentication/authSlice";
-import {User} from "../../type/User/User";
+import {AuthorizationUser, AuthUserResponse} from "../../types/auth.types";
+import {authLoginAction, authLogoutAction, authorizeUserById, setUser} from "../../store/auth/auth.slice";
+import {User} from "../../types/user.types";
 import {useLocation, useNavigate} from "react-router-dom";
-import {accessTokenKey, getCookie, refreshTokenKey} from "../../Cookie/Cookie";
-import {parseJwt} from "../../store/parserJWT/parserJWT";
+import {getCookie, refreshTokenKey} from "../../helpers/cookies";
+import {parseJwt} from "../../helpers/parseJwt";
+import {useAppSelector} from "../../hooks/useAppSelector";
+import {useDispatch} from "react-redux";
 
 const defaultSignIn = (credentials: AuthorizationUser, callback: any) => {}
 const defaultSignOut = (callback: any) => {}
@@ -36,9 +36,10 @@ export const authContext = React.createContext(initialAuthContextState);
 export const AuthProvider: FC<any> = ({ children }) => {
 
     const [state, setState] = useState(initialAuthState)
-    const navigate = useNavigate()
     const authUser = useAppSelector(state => state.rootReducer.auth.user)
-    const location = useLocation(); 
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (authUser) {
@@ -49,18 +50,17 @@ export const AuthProvider: FC<any> = ({ children }) => {
         } else {
             const refreshToken = getCookie(refreshTokenKey)
             if (refreshToken) {
-                store.dispatch(authorizeUserById(parseInt(parseJwt<AuthUserResponse>(refreshToken).UserId)))
+                dispatch(authorizeUserById(parseInt(parseJwt<AuthUserResponse>(refreshToken).UserId)))
             }
         }
     }, [authUser])
 
     const signIn = (credentials: AuthorizationUser, callback: any) => {
-        store.dispatch(authLoginAction(credentials))
-        callback()
-    }
+        dispatch(authLoginAction(credentials))
+        callback()    }
 
     const signOut = (callback: any) => {
-        store.dispatch(authLogoutAction(state.user!.id))
+        dispatch(authLogoutAction(state.user!.id))
         callback()
     }
 

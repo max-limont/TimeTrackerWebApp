@@ -1,11 +1,12 @@
 import {CSSProperties, FC, useEffect, useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {deleteRecord, updateRecord} from "../../store/slice/timeTracker/timeTrackerSlice";
+import {deleteRecord, updateRecord} from "../../store/timeTracker/timeTracker.slice";
 import {TimeTrackerDefaultPropsType} from "./Home";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleInfo, faPenClip, faGears} from "@fortawesome/free-solid-svg-icons";
-import {Record} from "../../type/TimeTracker/timeTracker.types";
+import {Record} from "../../types/timeTracker.types";
 import {useAuth} from "../../hooks/useAuth";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../hooks/useAppSelector";
 
 type TimeTrackerListPropsType = {
     defaultProps: TimeTrackerDefaultPropsType
@@ -22,7 +23,7 @@ const initialState: TimeTrackerListStateType = {
 export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
 
     const auth = useAuth()
-    const dispatch = useAppDispatch();
+    const dispatch = useDispatch();
     const [state, setState] = useState(initialState);
     const {records} = props.defaultProps
     const recordsInStore = useAppSelector(state => state.rootReducer.timeTracker.records)

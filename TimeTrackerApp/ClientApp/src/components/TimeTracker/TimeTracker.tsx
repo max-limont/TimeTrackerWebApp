@@ -2,8 +2,7 @@ import {FC, useEffect, useState} from "react";
 import {Timer} from "./Timer";
 import {TimeTrackerDefaultPropsType} from "./Home";
 import {useAuth} from "../../hooks/useAuth";
-import {compareDate} from "../../store/slice/calendar/calendarSlice";
-import {TimeTrackerItem} from "../../type/TimeTracker/timeTracker.types";
+import {compareDate} from "../../store/calendar/calendar.slice";
 
 type TimeTrackerPropsType = {
     defaultProps: TimeTrackerDefaultPropsType

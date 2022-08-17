@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AuthenticationIndex} from "./components/login/AuthenticationIndex";
+import { AuthenticationIndex} from "./components/Auth/AuthenticationIndex";
 import { Index } from "./components/Layout/Index";
 import {AuthProvider} from "./components/Auth/AuthProvider";
 

@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import * as XLSX from 'xlsx';
-import {graphqlRequest} from "../../app/api/api";
-import {getPaginatedUserList} from "../../graphqlQuery/userList/userListQuery";
+import {graphqlRequest} from "../../graphql/api";
+import {getPaginatedUserList} from "../../graphql/queries/userList.queries";
 
 interface Prop{
     count: number,
@@ -18,7 +18,6 @@ const ExportXlsx: FC<Prop> = ({count, orderBy, isReverse}) => {
             orderBy,
             isReverse
         })
-        console.log(data)
         const wb = XLSX.utils.book_new()
         const ws = XLSX.utils.json_to_sheet(data.data.userFetchPageList)
         XLSX.utils.book_append_sheet(wb, ws, "Users")

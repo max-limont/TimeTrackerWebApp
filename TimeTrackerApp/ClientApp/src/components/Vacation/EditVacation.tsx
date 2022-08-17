@@ -1,11 +1,12 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { removeVacationAction, updateVacationAction } from "../../store/actions/vacation/vacationActions";
-
+import React, { useState } from "react";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../hooks/useAppSelector";
+import {removeVacationAction, updateVacationAction} from "../../store/vacation/vacation.slice";
 
 export const  postFixDate = "T00:00:00+00:00";
+
 type Props = {
     stateForm: React.Dispatch<React.SetStateAction<boolean>>,
     visible: boolean,
@@ -14,12 +15,10 @@ type Props = {
 }
 
 export function EditVacation(obj: Props) {
-    const dispatch = useAppDispatch();
-    const { stateForm, visible, idVacation,sourceVacation } = obj;
+    const dispatch = useDispatch();
+    const { stateForm, visible, idVacation, sourceVacation } = obj;
     const setVisible = stateForm;
-    const [vacation, setVacation] = useState(
-        sourceVacation==undefined?useAppSelector(s => s.rootReducer.vacation.vacations.find(item => item.id == idVacation))
-        :useAppSelector(s => s.rootReducer.vacation.requestVacations.find(item => item.id == idVacation)));
+    const [vacation, setVacation] = useState(sourceVacation ? useAppSelector(state => state.rootReducer.vacation.vacations.find(item => item.id == idVacation)) : useAppSelector(s => s.rootReducer.vacation.requestVacations.find(item => item.id == idVacation)));
 
 
     function onFinish(e: React.FormEvent) {
@@ -59,15 +58,16 @@ export function EditVacation(obj: Props) {
                             </div>
                             <div className={"form-item w-100"}>
                                 <label>Comment</label>
-                                <textarea value={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }}></textarea>
+                                <textarea defaultValue={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }} />
                             </div>
                         </div>
                         <button type="submit" className={"button cyan-button"}>Edit</button>
                         <button className={"button red-button"} onClick={(e) => {
                             e.preventDefault();
                             dispatch(removeVacationAction(id))
-                        }
-                        }>Remove</button>
+                        }}>
+                            Remove
+                        </button>
                         <button type="reset" className={"button silver-button"}>Reset</button>
                     </form>
                 </div>

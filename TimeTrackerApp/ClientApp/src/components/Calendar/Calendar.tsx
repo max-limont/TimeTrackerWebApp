@@ -1,4 +1,4 @@
-import { CalendarGrid } from "../Calendar/CalendarGrid/CalendarGrid";
+import { CalendarGrid } from "./CalendarGrid";
 import {FC} from "react";
 
 export const Calendar: FC = () => {

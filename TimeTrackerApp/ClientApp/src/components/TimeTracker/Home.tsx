@@ -1,13 +1,13 @@
 import {FC, useEffect, useState} from "react";
 import {TimeTracker} from "./TimeTracker";
 import {TimeTrackerList} from "./TimeTrackerList";
-import {useAppDispatch} from "../../app/hooks";
-import {fetchAllUserRecords, recordToTimeTrackerListItem} from "../../store/slice/timeTracker/timeTrackerSlice";
-import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {TimeTrackerItem} from "../../type/TimeTracker/timeTracker.types"
+import {fetchAllUserRecords, recordToTimeTrackerListItem} from "../../store/timeTracker/timeTracker.slice";
+import {TimeTrackerItem} from "../../types/timeTracker.types"
 import {useAuth} from "../../hooks/useAuth";
 import {ContentStateType} from "../Layout/Content";
 import {Loading} from "../Layout/Loading";
+import {useAppSelector} from "../../hooks/useAppSelector";
+import {useDispatch} from "react-redux";
 
 export type TimeTrackerDefaultPropsType = {
     records: TimeTrackerItem[],
@@ -20,10 +20,10 @@ const initialState: ContentStateType = {
 
 export const Home: FC = () => {
 
-    const dispatch = useAppDispatch()
+    const dispatch = useDispatch()
     const [state, setState] = useState(initialState)
     const auth = useAuth()
-    let records = useTypedSelector(state => state.rootReducer.timeTracker.records)
+    let records = useAppSelector(state => state.rootReducer.timeTracker.records)
     let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record)).sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime());
     let lastRecord = timeTrackerListItems.filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined
 

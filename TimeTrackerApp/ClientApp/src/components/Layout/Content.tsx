@@ -6,7 +6,7 @@ import UserList from "../UserList/UserList";
 import {ProtectedComponent} from "../Auth/ProtectedComponent";
 import { Vacation } from "../Vacation/Vacation";
 import { ManageVacationRequest  } from "../Vacation/ManageVacations";
-import UserPage from "../UserPage/UserPage";
+import {UserPage} from "../UserPage/UserPage";
 
 export type ContentStateType = {
     showContent: boolean

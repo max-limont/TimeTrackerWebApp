@@ -1,9 +1,9 @@
 import {FC, useEffect, useState} from "react";
-import {Record} from "../../type/TimeTracker/timeTracker.types";
-import {createRecord} from "../../store/slice/timeTracker/timeTrackerSlice";
-import {useAppDispatch} from "../../app/hooks";
+import {Record} from "../../types/timeTracker.types";
+import {createRecord} from "../../store/timeTracker/timeTracker.slice";
 import {TimeTrackerDefaultPropsType} from "./Home";
 import {useAuth} from "../../hooks/useAuth";
+import {useDispatch} from "react-redux";
 
 type TimerStateType = {
     time: number,
@@ -23,7 +23,7 @@ export const Timer: FC<TimerPropsType> = (props) => {
 
     const auth = useAuth()
     const {lastRecord} = props.defaultProps
-    const dispatch = useAppDispatch()
+    const dispatch = useDispatch()
     const [state, setState] = useState(initialState);
 
     useEffect(() => {
