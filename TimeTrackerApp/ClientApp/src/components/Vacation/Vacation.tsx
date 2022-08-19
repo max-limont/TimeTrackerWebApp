@@ -20,6 +20,8 @@ export function Vacation() {
     const auth = useAuth();
     const vacationLevel = useAppSelector(state => state.rootReducer.vacationLevel.vacationLevels.find(x => x.id == auth.state?.user?.vacationPermissionId));
 
+    const [asd, setAssad] = useState(0);
+
     useEffect(() => {
         const id = auth.state?.user?.id;
         if (id){
@@ -28,14 +30,19 @@ export function Vacation() {
         }
     }, [auth.state?.user]);
 
+    const func = ()=>{
+        setAssad(asd+1);
+    }
+
     return (
         <>
+        {asd}
             {editState ? <EditVacation  stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
             {createState ? <CreateVacation stateForm={setCreateState} visible={createState} /> : <></>}
             <div className="vacation-container">
                 <div className="control-panel vacation-control-panel">
                     <div>
-                        <button onClick={() => setCreateState(true)} className="button cyan-button">Create Vacation Request</button>
+                        <button onClick={() => func()} className="button cyan-button">Create Vacation Request</button>
                     </div>
                     <div>
                         {vacationLevel?.value ? vacationLevel.value > 1 ? <Link className="link" to="/manage-vacation"><button className="button cyan-button">Manage Requests Vacations</button></Link> : <></> : <></>}
