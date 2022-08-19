@@ -52,19 +52,16 @@ const UserList = () => {
     ]
 
     useEffect(() => {
-        if (auth.state?.user?.id) {
+        if (auth.state?.isUserAuthenticated) {
             dispatch(fetchUserCount())
         }
-    }, [auth.state?.user?.id])
+    }, [auth])
 
     useEffect(() => {
-        if (auth.state?.user?.id) {
-            if (request.length)
-                dispatch(fetchUserListSearchRequest({request}))
-            else
-                dispatch(fetchUserListPage(state))
+        if (auth.state?.isUserAuthenticated) {
+            dispatch(request.length ? fetchUserListSearchRequest({request}) : fetchUserListPage(state))
         }
-    }, [request, state, auth.state?.user?.id])
+    }, [request, state, auth])
 
     return (
         <section className={"user-list flex-container flex-column w-100"}>

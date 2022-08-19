@@ -11,5 +11,6 @@ namespace TimeTrackerApp.Business.Repositories
 		Task<AuthenticationToken> EditAsync(AuthenticationToken authenticationToken);
 		Task<AuthenticationToken> RemoveAsync(int id);
 		Task<AuthenticationToken> RemoveByUserIdAsync(int userId);
+		Task<AuthenticationToken> UpdateByUserIdAsync(int userId, string token);
 	}
 }

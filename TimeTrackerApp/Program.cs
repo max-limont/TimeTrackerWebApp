@@ -111,10 +111,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("DefaultPolicy");
 
-app.UseAuthentication();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.UseDeveloperExceptionPage();
@@ -126,6 +125,7 @@ app.UseSpaStaticFiles();
 app.UseGraphQL<ISchema>();
 
 app.UseGraphQLAltair();
+app.UseExceptionHandler("/error");
 
 app.UseSpa(spa =>
 {

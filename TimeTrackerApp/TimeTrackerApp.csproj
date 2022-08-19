@@ -19,10 +19,10 @@
     <PackageReference Include="GraphQL.MicrosoftDI" Version="5.3.3" />
     <PackageReference Include="GraphQL.Server.Authorization.AspNetCore" Version="6.1.1" />
     <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="6.1.1" />
-    <PackageReference Include="GraphQL.Server.Ui.Altair" Version="6.1.1" />
+    <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.0.0" />
     <PackageReference Include="GraphQL.SystemTextJson" Version="5.3.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.8" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.7.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

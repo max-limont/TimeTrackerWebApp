@@ -50,7 +50,7 @@ export function CalendarGrid() {
 
     useEffect(() => {
         setState({...state, contentState: { showContent: false }})
-        if (auth.state?.user?.id) {
+        if (auth.state?.isUserAuthenticated) {
             /*
             dispatch(fetchCalendarDaysRange({
                 startDate: new Date(new Date(structuredClone(selectedMonth).setHours(0, 0, 0, 0)) + " UTC"),
@@ -59,7 +59,7 @@ export function CalendarGrid() {
             dispatch(fetchAllCalendarDays())
             setState({...state, contentState: { showContent: true }})
         }
-    }, [auth.state?.user?.id, selectedMonth])
+    }, [auth, selectedMonth])
 
     return state.contentState.showContent ? (
         <>
