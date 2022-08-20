@@ -897,8 +897,8 @@ section {
 
 table {
     th {
-        font-size: $font-size-default;
-        font-weight: bold;
+        font-size: 16px;
+        font-weight: 600;
         text-align: left;
         padding: 15px 10px 15px 10px;
     }
@@ -985,7 +985,7 @@ table {
         outline: none;
         border: none;
         border-radius: 2px;
-        padding: 7px 5px;
+        padding: 3px 5px;
         font-size: 16px;
         width: 100%;
         background: #E6E6E6;
@@ -1004,11 +1004,50 @@ table {
     padding: 15px 15px 0 15px;
 }
 
+.time-tracker-container {
+    .time-tracker-list-header {
+        display: flex;
+        background: $color-white;
+        justify-content: space-between;
+        border-radius: 2px;
+        align-items: center;
+        margin: 15px 15px -10px 15px;
+        padding-block: 2px;
+        box-shadow: 0 0 5px -4px $color-light-dark;
+
+        h3 {
+            font-weight: bold;
+            font-size: $font-size-default;
+        }
+
+        .month-picker {
+            border-radius: 2px;
+            background: $color-white;
+            padding: 5px 5px 5px 10px;
+            label {
+                margin-right: 10px;
+                font-weight: 600;
+            }
+            input {
+                min-width: 200px;
+                border: none;
+                outline: none;
+                padding: 5px 7px 5px 7px;
+                background: #F6F6F6;
+                border-radius: 2px;
+                font-family: 'Nunito', sans-serif;
+                font-size: 15px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
 .statistic-panel {
     background: $color-white;
     border-radius: 2px;
     box-shadow: 0 0 5px -4px $color-light-dark;
-    padding: 15px;
+    padding: 10px;
     color: $color-dark;
 
     > h3 {
@@ -1051,7 +1090,7 @@ table {
     background: $color-white;
     border-radius: 2px;
     box-shadow: 0 0 5px -4px $color-light-dark;
-    padding: 15px;
+    padding: 10px;
     color: $color-dark;
 
     > h3 {

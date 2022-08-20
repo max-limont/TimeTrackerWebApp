@@ -31,13 +31,13 @@ export const Home: FC = () => {
         if (auth.state?.user?.id) {
             dispatch(fetchAllUserRecords(auth.state?.user?.id))
         }
-    }, [auth.state?.user?.id])
+    }, [auth])
 
     useEffect(() => {
-        if (auth.state?.user?.id && (records || lastRecord)) {
+        if (auth.state?.user && (records || lastRecord)) {
             setState({...state, showContent: true})
         }
-    }, [auth.state?.user?.id, records])
+    }, [auth, records])
 
     return state.showContent ? (
         <div className={"flex-container flex-column w-100"}>

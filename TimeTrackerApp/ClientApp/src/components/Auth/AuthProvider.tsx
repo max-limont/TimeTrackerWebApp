@@ -67,23 +67,8 @@ export const AuthProvider: FC<any> = ({ children }) => {
             }
         } else {
             dispatch(authLogoutAction(getCookie(refreshTokenKey) ? parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId) : 0))
-        }
-
-        if (!authUser) {
-            /*if (localStorage.getItem("auth")) {
-                const userInStorage = JSON.parse(localStorage.getItem("auth")!)
-                const user = {
-                    id: parseInt(userInStorage.id),
-                    email: userInStorage.email ?? "",
-                    firstName: userInStorage.firstName ?? "Unknown",
-                    lastName: userInStorage.lastName ?? "User",
-                    isFullTimeEmployee: Boolean(JSON.parse(userInStorage.isFullTimeEmployee)),
-                    weeklyWorkingTime: parseInt(userInStorage.weeklyWorkingTime ?? ''),
-                    remainingVacationDays: parseInt(userInStorage.remainingVacationDays ?? ''),
-                    privilegesValue: parseInt(userInStorage.privilegesValue ?? ''),
-                    vacationPermissionId: parseInt(userInStorage.vacationPermissionId ?? '')
-                } as User
-                dispatch(setUser(user))*/
+            if (location.pathname !== '/login')
+                navigate('/login', {replace: true})
         }
 
     }, [authUser, accessToken, refreshToken])
