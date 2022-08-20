@@ -13,6 +13,12 @@ public class TeamRepository:ITeamRepository
     {
         connectionString = conn;
     }
+    public SqlConnection Connection {
+        get
+        {
+            return new SqlConnection(connectionString);
+        }
+    }
 
     public async  Task<List<Team>> GetTeams()
     {
@@ -42,9 +48,18 @@ public class TeamRepository:ITeamRepository
         } 
     }
 
-    public Task<Team>  UpdateTeam(Team team)
+    public async Task<Team>  UpdateTeam(Team team)
     {
-        throw new NotImplementedException();
+        string query = @"Update TeamTable Set NameTeam=@NameTeam where Id=@Id";
+        using (Connection)
+        {
+            int result = await Connection.ExecuteAsync(query, team);
+            if (result>0)
+            {
+                return team;
+            }
+            throw new Exception();
+        }
     }
 
     public async  Task<Team>  DeleteTeam(int id)
@@ -63,8 +78,18 @@ public class TeamRepository:ITeamRepository
         }
     }
 
-    public Task<Team>  CreateTeam(Team team)
+    public async Task<Team>  CreateTeam(Team team)
     {
-        throw new NotImplementedException();
+        string query = @"Insert Into TeamTable (NameTeam) Values (@NameTeam) Select @@IDENTITY";
+        
+        using(Connection)
+        {
+            int id = await Connection.QueryFirstAsync<int>(query, team);
+            if (id != 0)
+            {
+                return await GetTeamById(id);
+            }
+            throw new Exception();
+        }
     }
 }
