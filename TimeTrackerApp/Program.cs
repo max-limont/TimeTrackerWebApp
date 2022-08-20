@@ -22,6 +22,7 @@ using System;
 using System.Formats.Asn1;
 using System.Reflection;
 using FluentMigrator.Runner;
+using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.MsSql.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,25 +33,25 @@ builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new Au
 builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
-builder.Services.AddSingleton<IVacationRepository>(provider => new VacationRepository(connectionString));
+builder.Services.AddSingleton<IVacationRepository, VacationRepository>();
+builder.Services.AddSingleton<ITeamRepository>(provider => new TeamRepository(connectionString));
+builder.Services.AddSingleton<IVacationManagment>(provider => new VacationManagmentRepository(connectionString));
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
-
 builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
 
-builder.Services.AddFluentMigratorCore().
-    ConfigureRunner(config =>config.AddSqlServer()
-        .WithGlobalConnectionString(connectionString)
-        /* typeof(migration) миграция яка буде використовуватисб ,
-         также нужно в класе всегда помечать [migration(nummberId)] */
-        .ScanIn(typeof(DeleteTeamReference).Assembly)
-        .For.All())
-    .AddLogging(config=>config.AddFluentMigratorConsole());
-
+// builder.Services.AddFluentMigratorCore().
+//     ConfigureRunner(config =>config.AddSqlServer()
+//         .WithGlobalConnectionString(connectionString)
+//         /* typeof(migration) миграция яка буде використовуватисб ,
+//          также нужно в класе всегда помечать [migration(nummberId)] */
+//         .ScanIn(typeof(AddVacationManagmentTable).Assembly)
+//         .For.All())
+//     .AddLogging(config=>config.AddFluentMigratorConsole());
 
 // Add services to the container.
 builder.Services.AddCors(
@@ -137,8 +138,8 @@ app.UseSpa(spa =>
     }
 });
 
-using var scope = app.Services.CreateScope();
-var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
-migrationService.MigrateUp();
+// using var scope = app.Services.CreateScope();
+// var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
+// migrationService.MigrateUp();
 
 app.Run();
