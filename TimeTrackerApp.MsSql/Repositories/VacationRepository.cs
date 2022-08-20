@@ -18,7 +18,8 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<Vacation> CreateAsync(Vacation vacation)
 		{
-			string query = @"INSERT INTO Vacation (UserId, StartingTime, EndingTime, Comment) VALUES (@UserId, @StartingTime, @EndingTime, @Comment)";
+			string query = @"INSERT INTO Vacation (UserId, StartingTime, EndingTime, Comment) 
+              VALUES (@UserId, @StartingTime, @EndingTime, @Comment)";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -102,17 +103,23 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<List<Vacation>> GetRequestVacation(int receiverUserId)
 		{
-			string query = @$"
-			SELECT  * from Vacation as c Inner Join Users as d on c.UserId=d.Id and c.IsAccepted IS NULL  and UserId in
-            (Select b.id from Users as b where b.VacationPermissionId in (select id from VacationLevel as vl where vl.Value <
-            (Select Value From VacationLevel as vl2 Where vl2.Id = (Select VacationPermissionId from Users Where Id={receiverUserId}))))";
+			string query = @$"Select * from Vacation as v Inner Join Users as u 
+            on v.UserId = u.Id and u.Id in
+             (select UserId from TeamReference inner join  Users
+                 on TeamReference.UserId = Users.Id and
+                    TeamReference.TeamId in (select TeamId from TeamReference as v inner join Users
+                     TT on v.UserId = TT.Id and 
+                     v.UserId = {receiverUserId})) and u.Id in (
+                        Select b.Id from Users as b Inner JOin Role  as r
+                          on b.RoleId = r.Id and  r.Value<(select Value from Role as d Inner Join Users as h 
+                          on h.Id = {receiverUserId} and h.RoleId = d.Id))";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				var listVacation = await connection.QueryAsync<Vacation,User,Vacation>(query, (c, d) =>
+				var listVacation = await connection.QueryAsync<Vacation,User,Vacation>(query, (v, u) =>
 					{
-						c.User = d;
-						return c;
+						v.User = u;
+						return v;
 					},
 					splitOn: "Id");
 				
