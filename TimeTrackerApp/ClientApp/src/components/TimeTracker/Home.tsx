@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {TimeTracker} from "./TimeTracker";
 import {TimeTrackerList} from "./TimeTrackerList";
-import {fetchAllUserRecords, recordToTimeTrackerListItem} from "../../store/timeTracker/timeTracker.slice";
+import {recordToTimeTrackerListItem} from "../../store/timeTracker/timeTracker.slice";
 import {TimeTrackerItem} from "../../types/timeTracker.types"
 import {useAuth} from "../../hooks/useAuth";
 import {ContentStateType} from "../Layout/Content";
@@ -28,16 +28,10 @@ export const Home: FC = () => {
     let lastRecord = timeTrackerListItems.filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined
 
     useEffect(() => {
-        if (auth.state?.user?.id) {
-            dispatch(fetchAllUserRecords(auth.state?.user?.id))
-        }
-    }, [auth])
-
-    useEffect(() => {
         if (auth.state?.user && (records || lastRecord)) {
             setState({...state, showContent: true})
         }
-    }, [auth, records])
+    }, [auth])
 
     return state.showContent ? (
         <div className={"flex-container flex-column w-100"}>

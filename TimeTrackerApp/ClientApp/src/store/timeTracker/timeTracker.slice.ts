@@ -1,5 +1,5 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Record, TimeTrackerItem} from "../../types/timeTracker.types";
+import {FetchUserRecordsByMonthQueryInputType, Record, TimeTrackerItem} from "../../types/timeTracker.types";
 import {store} from "../store";
 
 type TimeTrackerState = {
@@ -33,6 +33,7 @@ export const timeTrackerSlice = createSlice({
 
 export const fetchAllRecords = createAction("FetchAllRecords")
 export const fetchAllUserRecords = createAction<number>("FetchAllUserRecords")
+export const fetchUserRecordsByMonth = createAction<FetchUserRecordsByMonthQueryInputType>("FetchUserRecordsByMonth")
 export const createRecord = createAction<Record>("CreateRecord")
 export const deleteRecord = createAction<number>("DeleteRecord")
 export const updateRecord = createAction<Record>("UpdateRecord")
