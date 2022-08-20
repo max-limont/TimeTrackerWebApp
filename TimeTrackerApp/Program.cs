@@ -33,7 +33,6 @@ builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepositor
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
 builder.Services.AddSingleton<IVacationRepository>(provider => new VacationRepository(connectionString));
-builder.Services.AddSingleton<IVacationLevelRepository>(provider => new VacationLevelRepository(connectionString));
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
@@ -48,7 +47,7 @@ builder.Services.AddFluentMigratorCore().
         .WithGlobalConnectionString(connectionString)
         /* typeof(migration) миграция яка буде використовуватисб ,
          также нужно в класе всегда помечать [migration(nummberId)] */
-        .ScanIn(typeof(TeamTable_RoleTable).Assembly)
+        .ScanIn(typeof(DeleteTeamReference).Assembly)
         .For.All())
     .AddLogging(config=>config.AddFluentMigratorConsole());
 

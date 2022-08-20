@@ -17,9 +17,10 @@ public class MyBackgroundTask:ScheduledProcessor
 
     public override async Task ProcessInScope(IServiceProvider scopeServiceProvider)
     {
+        Console.WriteLine(DateTime.Now);
         // var listModel =  await userRepository.FetchAllAsync();
         // listModel.Where(x=> x.)
     }
 
-    protected override string Schedule  => "* */24 * * *";
+    protected override string Schedule  => "* * * * *";
 }

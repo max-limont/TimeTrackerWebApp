@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System;
 using GraphQL.MicrosoftDI;
 using Microsoft.AspNetCore.Http;
-using TimeTrackerApp.GraphQL.GraphQLQueries.VacationLevelGraphql;
 using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
 using TimeTrackerApp.Helpers;
 
@@ -207,10 +206,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return await vacationRepository.GetRequestVacation(id);
                 })
                 .AuthorizeWithPolicy("LoggedIn"); ;
-                
-            Field<VacationLevelQueries>()
-                .Name("VacationLevelQueries")
-                .Resolve(_ => new { });
+       
         }
     }
 }
