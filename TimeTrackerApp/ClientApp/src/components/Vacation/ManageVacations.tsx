@@ -16,16 +16,13 @@ export function ManageVacationRequest() {
     const [id, setIdEdit] = useState(0);
     const requestsVacation = useAppSelector(state => state.rootReducer.vacation.requestVacations);
     const auth = useAuth();
-    const vacationLevel = useAppSelector(state => state.rootReducer.vacationLevel.vacationLevels.find(x => x.id == auth.state?.user?.vacationPermissionId));
     const navigate = useNavigate();
 
     useEffect(() => {
         if (auth.state?.user) {
             dispatch(getRequestVacationAction(auth.state?.user?.id));
         }
-        if (vacationLevel ? vacationLevel.value <= 1 : false) {
-            navigate("/vacation");
-        }
+       
     }, [auth.state?.user]);
     
     return (

@@ -11,20 +11,17 @@ import { userListEpics } from "./userList/userList.epics";
 import { timeTrackerEpics } from "./timeTracker/timeTracker.epics";
 import { vacationSlice } from './vacation/vacation.slice';
 import { vacationEpic } from './vacation/vacation.epics';
-import { vacationLevelSlice } from './vacationLevel/vacationLevel.slice';
-import { vacationLevelEpic } from './vacationLevel/vacationLevel.epics';
 
 const epicMiddleware = createEpicMiddleware();
 
-const rootEpic = combineEpics(authEpics, userEpics, calendarEpics, timeTrackerEpics, vacationEpic, userListEpics, vacationLevelEpic);
+const rootEpic = combineEpics(authEpics, userEpics, calendarEpics, timeTrackerEpics, vacationEpic, userListEpics);
 
 const rootReducer = combineReducers({
   calendar: calendarSlice.reducer,
   auth: authSlice.reducer,
   userList: userListSlice.reducer,
   timeTracker: timeTrackerSlice.reducer,
-  vacation: vacationSlice.reducer,
-  vacationLevel: vacationLevelSlice.reducer
+  vacation: vacationSlice.reducer
 })
 
 export const store = configureStore({

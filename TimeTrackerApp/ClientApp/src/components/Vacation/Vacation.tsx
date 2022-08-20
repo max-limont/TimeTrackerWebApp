@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {getVacationsByUserIdAction, removeVacationAction} from "../../store/vacation/vacation.slice";
-import {getAllVacationLevelAction} from "../../store/vacationLevel/vacationLevel.slice";
 
 
 export function Vacation() {
@@ -18,35 +17,26 @@ export function Vacation() {
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(state => state.rootReducer.vacation.vacations);
     const auth = useAuth();
-    const vacationLevel = useAppSelector(state => state.rootReducer.vacationLevel.vacationLevels.find(x => x.id == auth.state?.user?.vacationPermissionId));
-
-    const [asd, setAssad] = useState(0);
 
     useEffect(() => {
         const id = auth.state?.user?.id;
         if (id){
             dispatch(getVacationsByUserIdAction(id));
-            dispatch(getAllVacationLevelAction());
         }
     }, [auth.state?.user]);
 
-    const func = ()=>{
-        setAssad(asd+1);
-    }
+   
 
     return (
         <>
-        {asd}
             {editState ? <EditVacation  stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
             {createState ? <CreateVacation stateForm={setCreateState} visible={createState} /> : <></>}
             <div className="vacation-container">
                 <div className="control-panel vacation-control-panel">
                     <div>
-                        <button onClick={() => func()} className="button cyan-button">Create Vacation Request</button>
+                        <button onClick={() => setCreateState(true)} className="button cyan-button">Create Vacation Request</button>
                     </div>
-                    <div>
-                        {vacationLevel?.value ? vacationLevel.value > 1 ? <Link className="link" to="/manage-vacation"><button className="button cyan-button">Manage Requests Vacations</button></Link> : <></> : <></>}
-                    </div>
+                
                 </div>
                 <div className="list-vacation-container">
                     <p style={{margin: "5px"}}>Your Vacations</p>
