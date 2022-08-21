@@ -8,7 +8,7 @@ namespace TimeTrackerApp.MsSql.Repositories;
 public class VacationManagmentRepository:IVacationManagment
 {
     private string connectionString { get; set; }
-    public SqlConnection Connection {
+    private SqlConnection Connection {
         get
         {
             return new SqlConnection(connectionString);

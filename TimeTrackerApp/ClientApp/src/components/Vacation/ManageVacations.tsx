@@ -19,8 +19,8 @@ export function ManageVacationRequest() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (auth.state?.user) {
-            dispatch(getRequestVacationAction(auth.state?.user?.id));
+        if (auth.state?.user?.id) {
+             dispatch(getRequestVacationAction(auth.state?.user?.id));
         }
        
     }, [auth.state?.user]);
@@ -61,7 +61,7 @@ export function ManageVacationRequest() {
                                             <div>{item.startingTime}</div>
                                             <div>{item.endingTime}</div>
                                             <div>{moment.duration(moment(item.endingTime).diff(moment(item.startingTime))).asDays()}</div>
-                                            <div>{item.user?.firstName} {item.user?.lastName}</div>
+                                            <div style={{maxHeight: "34px"}}onClick={() => navigate("/user?id=" + item.id)} className="button cyan-button close">{item.user?.firstName} {item.user?.lastName}</div>
                                             <div className={"end-item-action"} >
                                                 <button className="button cyan-button close" onClick={() => {
                                                     setEditState(true);
@@ -69,7 +69,7 @@ export function ManageVacationRequest() {
                                                 }}>
                                                     <FontAwesomeIcon icon={faEdit} className={"icon"} />
                                                 </button>
-                                                <button className={"button orange-button close"} onClick={() =>
+                                                <button className={"button yellow-button close"} onClick={() =>
                                                     dispatch(updateVacationAction({...itemToUpdate, isAccepted: false }))}>
                                                     <FontAwesomeIcon icon={faXmark} className={"icon"} />
                                                 </button>

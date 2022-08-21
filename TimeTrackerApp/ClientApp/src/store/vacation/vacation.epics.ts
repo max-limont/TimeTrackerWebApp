@@ -62,13 +62,14 @@ const createVacationRequestEpic: Epic = (action$: Observable<ReturnType<typeof c
         )));
 }
 
-export const getVacationRequestEpic: Epic = (action$: Observable<ReturnType<typeof getRequestVacationAction>>): any => {
+export const getVacationRequestEpic = (action$: any) => {
     return action$.pipe(
         ofType(getRequestVacationAction.type),
-        mergeMap(action => from(graphqlRequest(getVacationRequestQuery, {
+        mergeMap((action:any)=> from(graphqlRequest(getVacationRequestQuery, {
             id: action.payload
         })).pipe(
             map(response => {
+                console.log(response);
                 if (!response?.errors) {
                     return setRequestVacation(formatDateToNormalFormat(response.data.getRequestVaction));
                 }

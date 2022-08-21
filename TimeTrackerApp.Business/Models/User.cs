@@ -16,5 +16,6 @@
 		public int PrivilegesValue { get; set; }
 		public int VacationPermissionId { get; set; }
 		public int? TeamId { get; set; }
+		public int? RoleId { get; set; }
 	}
 }

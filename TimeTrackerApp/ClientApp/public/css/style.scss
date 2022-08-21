@@ -64,6 +64,7 @@ $color-silver: #D6D6D6;
 $color-red: #F24C4C;
 $color-white: #FFFFFF;
 $color-yellow: #FFC107;
+$color-green: #091b0b;
 
 $font-size-default: 18px;
 $font-size-header: 26px;
@@ -525,6 +526,27 @@ section {
 
         &:not(.disabled):hover {
             background: $color-silver;
+            color: $color-dark;
+        }
+    }
+}
+.green-button {
+    background: color-green;
+    color: $color-dark;
+
+    &:not(.disabled):hover {
+        background: transparent;
+        color: $color-green;
+        border: 1px solid $color-green;
+    }
+
+    &.inverse {
+        background: transparent;
+        color: $color-green;
+        border: 1px solid $color-green;
+
+        &:not(.disabled):hover {
+            background: $color-green;
             color: $color-dark;
         }
     }

@@ -36,6 +36,7 @@ builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepos
 builder.Services.AddSingleton<IVacationRepository, VacationRepository>();
 builder.Services.AddSingleton<ITeamRepository>(provider => new TeamRepository(connectionString));
 builder.Services.AddSingleton<IVacationManagment>(provider => new VacationManagmentRepository(connectionString));
+builder.Services.AddSingleton<IRoleRepository>(provider => new RoleRepository(connectionString));
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
@@ -52,6 +53,7 @@ builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
 //         .ScanIn(typeof(AddVacationManagmentTable).Assembly)
 //         .For.All())
 //     .AddLogging(config=>config.AddFluentMigratorConsole());
+
 
 // Add services to the container.
 builder.Services.AddCors(

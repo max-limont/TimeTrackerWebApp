@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck, faClock, faClose, faTimes, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "../../hooks/useAppSelector";
-import {getVacationsByUserIdAction, removeVacationAction} from "../../store/vacation/vacation.slice";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { getVacationsByUserIdAction, removeVacationAction } from "../../store/vacation/vacation.slice";
+import { getRolesAction } from "../../store/role/role.slice";
 
 
 export function Vacation() {
@@ -20,26 +21,27 @@ export function Vacation() {
 
     useEffect(() => {
         const id = auth.state?.user?.id;
-        if (id){
+        console.log(auth.state?.user?.roleId);
+        if (id) {
             dispatch(getVacationsByUserIdAction(id));
+            dispatch(getRolesAction());
         }
     }, [auth.state?.user]);
 
-   
+
 
     return (
         <>
-            {editState ? <EditVacation  stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
+            {editState ? <EditVacation stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
             {createState ? <CreateVacation stateForm={setCreateState} visible={createState} /> : <></>}
             <div className="vacation-container">
                 <div className="control-panel vacation-control-panel">
                     <div>
                         <button onClick={() => setCreateState(true)} className="button cyan-button">Create Vacation Request</button>
                     </div>
-                
                 </div>
                 <div className="list-vacation-container">
-                    <p style={{margin: "5px"}}>Your Vacations</p>
+                    <p style={{ margin: "5px" }}>Your Vacations</p>
                     <div className="list-vacations">
                         {!(vacationsList.length == 0) ?
                             <>
@@ -56,7 +58,7 @@ export function Vacation() {
                                             <div>{item.endingTime}</div>
                                             <div>{item.isAccepted ? <FontAwesomeIcon icon={faCheck} className={"custom-icon-green icon"} />
                                                 : item.isAccepted == null ?
-                                                    <FontAwesomeIcon icon={faClock} className={"icon"} />
+                                                    <span className=" button yellow-button">wait for confirmation</span>
                                                     : <FontAwesomeIcon icon={faBan} className={"custom-icon-red icon"} />
                                             }</div>
                                             <div className={"end-item-action"} ><button onClick={() => {
@@ -64,15 +66,14 @@ export function Vacation() {
                                                 setIdEdit(item.id)
                                             }} className="button cyan-button">Edit</button>
                                                 <button className={"button red-button close"} onClick={() =>
-                                                     dispatch(removeVacationAction(item.id))} >
+                                                    dispatch(removeVacationAction(item.id))} >
                                                     <FontAwesomeIcon icon={faXmark} className={"icon"} />
                                                 </button>
                                             </div>
                                         </div>
                                     );
                                 })}
-                            </>
-                            : <div>You dont have vacations</div>}
+                            </> : <div>You dont have vacations</div>}
                     </div>
                 </div>
             </div>

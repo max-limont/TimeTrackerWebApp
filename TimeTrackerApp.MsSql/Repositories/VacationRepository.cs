@@ -126,7 +126,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<List<Vacation>> GetRequestVacation(int receiverUserId)
         {
-            string query = @$"Select * from Vacation as v inner join Users as u on v.UserId = u.Id
+            string query = @$"Select * from Vacation as v inner join Users as u on v.IsAccepted is null and  v.UserId = u.Id
             and u.Id in (Select UserId from VacationManagment where ManagerId={receiverUserId})";
             using (var connection = new SqlConnection(connectionString))
             {

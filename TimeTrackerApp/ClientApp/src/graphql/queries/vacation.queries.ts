@@ -57,7 +57,7 @@ export const updateVacationQuery = `
 
 export const getVacationRequestQuery = `
     query($id: Int!) {
-        getRequestVacation(receiverId: $id) {
+        getRequestVaction(receiverId: $id) {
             ${queryFragment},
             user {
                 id

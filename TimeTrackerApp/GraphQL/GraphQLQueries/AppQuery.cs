@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using GraphQL.MicrosoftDI;
 using Microsoft.AspNetCore.Http;
+using TimeTrackerApp.GraphQL.GraphQLQueries.RoleQueries;
 using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
 using TimeTrackerApp.Helpers;
 
@@ -205,7 +206,11 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var id = contex.GetArgument<int>("ReceiverId");
                     return await vacationRepository.GetRequestVacation(id);
                 })
-                .AuthorizeWithPolicy("LoggedIn"); ;
+                .AuthorizeWithPolicy("LoggedIn"); 
+            
+            Field<RoleQuery>()
+                .Name("RoleQuery")
+                .Resolve(_ => new { });
        
         }
     }
