@@ -7,6 +7,8 @@ namespace TimeTrackerApp.Business.Repositories
 		Task<IEnumerable<User>> FetchAllAsync();
 		Task<IEnumerable<User>> FetchPageListAsync(int from, int contentPerPage, string orderBy = "FirstName", bool isReverse = false);
 		Task<IEnumerable<User>> FetchSearchListAsync(string request);
+		Task<IEnumerable<User>> FetchFullTimeEmployeesAsync();
+		Task<IEnumerable<User>> FetchPartTimeEmployeesAsync();
 		Task<int> GetCountAsync();
 		Task<User> GetByIdAsync(int id);
 		Task<User> GetByEmailAsync(string email);

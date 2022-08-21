@@ -700,7 +700,8 @@ table .bottom-table-row {
     padding: 3px 5px;
     font-size: 16px;
     width: 100%;
-    background: #E6E6E6;
+    background: #F6F6F6;
+    cursor: pointer;
     box-shadow: inset 0 0 5px -5px #222831; }
   .time-tracker-table .bottom-table-row {
     padding-block: 20px; }
