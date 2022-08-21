@@ -8,5 +8,6 @@
 		public static readonly string JwtTokenAudience = "JWT_TOKEN_AUDIENCE";
 		public static readonly string DatabaseConnectionString = "MsSqlConnection";
 		public static readonly string DatabaseConnectionStringAzure = "MsSqlAzure";
+		public static readonly string AutoCreateRecordsTaskCron = "AutoCreateRecordsTaskCron";
 	}
 }
