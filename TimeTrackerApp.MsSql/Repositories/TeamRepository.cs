@@ -39,12 +39,15 @@ public class TeamRepository:ITeamRepository
         string query = $"select * from TeamTable where Id = {id}";
         using (var connection = new SqlConnection(connectionString))
         {
-            var team =  await connection.QueryFirstAsync<Team>(query);
-            if (team != null)
+            try
             {
+                var team = await connection.QueryFirstAsync<Team>(query);
                 return team;
             }
-            throw new Exception();
+            catch
+            {
+                return null;
+            }
         } 
     }
 

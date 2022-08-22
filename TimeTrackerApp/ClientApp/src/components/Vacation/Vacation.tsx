@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { getVacationsByUserIdAction, removeVacationAction } from "../../store/vacation/vacation.slice";
 import { getRolesAction } from "../../store/role/role.slice";
+import { fetchTeams } from "../../store/team/team.slice";
 
 
 export function Vacation() {
@@ -17,11 +18,13 @@ export function Vacation() {
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(state => state.rootReducer.vacation.vacations);
     const auth = useAuth();
-
+    const teams  = useAppSelector(state=>state.rootReducer.team.teams)
     useEffect(() => {
         const id = auth.state?.user?.id;
-        console.log(auth.state?.user?.roleId);
+        // console.log(auth.state?.user?.roleId);
+        console.log(teams);
         if (id) {
+            dispatch(fetchTeams());
             dispatch(getVacationsByUserIdAction(id));
             dispatch(getRolesAction());
         }

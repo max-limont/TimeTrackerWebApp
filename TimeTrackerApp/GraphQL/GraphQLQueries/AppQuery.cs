@@ -8,6 +8,7 @@ using System;
 using GraphQL.MicrosoftDI;
 using Microsoft.AspNetCore.Http;
 using TimeTrackerApp.GraphQL.GraphQLQueries.RoleQueries;
+using TimeTrackerApp.GraphQL.GraphQLQueries.TeamQueries;
 using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
 using TimeTrackerApp.Helpers;
 
@@ -211,7 +212,11 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
             Field<RoleQuery>()
                 .Name("RoleQuery")
                 .Resolve(_ => new { });
-       
+
+            Field<TeamQuery>()
+                .Name("TeamQuery")
+                .Resolve(_ => new { });
+
         }
     }
 }
