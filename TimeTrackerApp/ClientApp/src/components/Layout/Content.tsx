@@ -1,8 +1,8 @@
 import {FC} from "react";
 import { Route, Routes } from "react-router-dom";
-import Calendar from "../Calendar/Calendar";
+import {Calendar} from "../Calendar/Calendar";
 import {TimeTracker} from "../TimeTracker/TimeTracker";
-import UserList from "../UserList/UserList";
+import {UserList} from "../UserList/UserList";
 import {ProtectedComponent} from "../Auth/ProtectedComponent";
 import { Vacation } from "../Vacation/Vacation";
 import { ManageVacationRequest  } from "../Vacation/ManageVacations";
