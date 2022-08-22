@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FluentMigrator.Runner;
 using TimeTrackerApp.BackgroundTasks;
+using TimeTrackerApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,12 +37,17 @@ builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(co
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
 builder.Services.AddSingleton<IVacationRepository>(provider => new VacationRepository(connectionString));
 builder.Services.AddSingleton<IVacationLevelRepository>(provider => new VacationLevelRepository(connectionString));
+builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
+builder.Services.AddHostedService<BackgroundTaskService>();
+
+builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
+builder.Services.AddScoped<AutoCreateRecordsTask>();
 //
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()

@@ -6,16 +6,20 @@ using TimeTrackerApp.Business.Repositories;
 
 namespace TimeTrackerApp.BackgroundTasks
 {
-	public class AutoCreateRecordsTask : IJob
+	public class AutoCreateRecordsTask : IBackgroundTask
 	{
 		private readonly IUserRepository userRepository;
 		private readonly IRecordRepository recordRepository;
+		private readonly IBackgroundTaskRepository backgroundTaskRepository;
 
-		public AutoCreateRecordsTask(IUserRepository userRepository, IRecordRepository recordRepository)
+		public AutoCreateRecordsTask(IUserRepository userRepository, IRecordRepository recordRepository, IBackgroundTaskRepository backgroundTaskRepository)
 		{
 			this.userRepository = userRepository;
 			this.recordRepository = recordRepository;
+			this.backgroundTaskRepository = backgroundTaskRepository;
 		}
+
+		public string TaskType => GetType().Name;
 
 		public async Task Execute(IJobExecutionContext context)
 		{
@@ -32,7 +36,13 @@ namespace TimeTrackerApp.BackgroundTasks
 
 				try
 				{
+					var backgroundTask = new BackgroundTask()
+					{
+						Type = nameof(AutoCreateRecordsTask),
+						DateTime = DateTime.UtcNow,
+					};
 					await recordRepository.CreateAsync(record);
+					await backgroundTaskRepository.CreateAsync(backgroundTask);
 				}
 				catch (Exception exception)
 				{

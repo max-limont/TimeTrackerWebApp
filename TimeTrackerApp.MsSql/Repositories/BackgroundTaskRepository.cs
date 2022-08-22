@@ -111,5 +111,15 @@ namespace TimeTrackerApp.MsSql.Repositories
 				}
 			}
 		}
+
+		public async Task<BackgroundTask> GetLatestByTypeAsync(string type)
+		{
+			string query = @"SELECT TOP 1 * FROM BackgroundTasks WHERE Type = @Type ORDER BY DateTime DESC";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QuerySingleOrDefaultAsync<BackgroundTask>(query, new { Type = type });
+			}
+		}
 	}
 }
