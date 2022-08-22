@@ -36,6 +36,7 @@ export const store = configureStore({
   }).concat(epicMiddleware)
 });
 
+// @ts-ignore
 epicMiddleware.run(rootEpic);
 
 export const dispatchOut = store.dispatch;

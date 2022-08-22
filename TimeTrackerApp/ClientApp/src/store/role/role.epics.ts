@@ -4,9 +4,8 @@ import { getRolesAction, setRoles } from "./role.slice";
 import {combineEpics, Epic, ofType} from "redux-observable";
 import { graphqlRequest } from "../../graphql/api";
 import { getRolesQuery } from "../../graphql/queries/role.queries";
-import { Extension } from "typescript";
 
-const getRolesEpic = (action$:any): any => {
+const getRolesEpic:Epic = (action$: Observable<ReturnType<typeof getRolesAction>>): any => {
     return action$.pipe(
         ofType(getRolesAction.type),
         mergeMap(() => from(graphqlRequest(getRolesQuery)).pipe(

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { CreateVacation } from "./CreateVacation";
 import { EditVacation } from "./EditVacation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faCheck, faClock, faClose, faTimes, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { getVacationsByUserIdAction, removeVacationAction } from "../../store/vacation/vacation.slice";
@@ -56,10 +55,10 @@ export function Vacation() {
                                         <div key={i} className="vacation-item">
                                             <div>{item.startingTime}</div>
                                             <div>{item.endingTime}</div>
-                                            <div>{item.isAccepted ? <FontAwesomeIcon icon={faCheck} className={"custom-icon-green icon"} />
+                                            <div>{item.isAccepted ? <span className={" button green-button"} >Aceppted</span>
                                                 : item.isAccepted == null ?
-                                                    <span className=" button yellow-button">wait for confirmation</span>
-                                                    : <FontAwesomeIcon icon={faBan} className={"custom-icon-red icon"} />
+                                                    <span className=" button yellow-button">Wait for confirmation</span>
+                                                    : <span  className={"button red-button"} >Canceled</span>
                                             }</div>
                                             <div className={"end-item-action"} ><button onClick={() => {
                                                 setEditState(true);
