@@ -5,7 +5,13 @@ import {AuthRefreshInputType, AuthUserResponse} from "../types/auth.types";
 import {store} from "../store/store";
 import {authLogoutAction} from "../store/auth/auth.slice";
 
-const apiUrl = "http://localhost:5000/graphql";
+const graphql = "/graphql"
+const localApiUrl = "http://localhost:5000";
+const clientUrl = "http://localhost:3000";
+const siteUrl = "https://timetrackerwebapp1.azurewebsites.net";
+
+
+
 
 const getAuthorizationHeader = (): string => {
     const accessToken = getCookie(accessTokenKey);
@@ -13,7 +19,8 @@ const getAuthorizationHeader = (): string => {
 }
 
 export const request = async (query: string, variables?: any) => {
-    return await fetch(apiUrl, {
+    const currentUrl = window.location.origin;
+    return await fetch(currentUrl==siteUrl?siteUrl+graphql:localApiUrl+graphql,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
