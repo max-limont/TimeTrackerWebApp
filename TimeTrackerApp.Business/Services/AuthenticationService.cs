@@ -1,6 +1,4 @@
-
 using TimeTrackerApp.Business.Models;
-
 using TimeTrackerApp.Business.Repositories;
 
 namespace TimeTrackerApp.Business.Services
@@ -68,8 +66,13 @@ namespace TimeTrackerApp.Business.Services
             }
         }
 
-        public async Task<AuthenticationResponse> Refresh(int userId, string refreshToken)
+        public async Task<AuthenticationResponse> Refresh(int userId, string accessToken, string refreshToken)
 		{
+            if (JwtTokenService.VaildateJwtToken(accessToken))
+			{
+                return new AuthenticationResponse(accessToken, refreshToken);
+			}
+
             try
 			{
                 var user = await userRepository.GetByIdAsync(userId);
@@ -83,16 +86,15 @@ namespace TimeTrackerApp.Business.Services
                         UserId = user.Id,
                         Token = newRefreshToken,
                     };
-                    await authenticationTokenRepository.RemoveByUserIdAsync(userId);
-                    await authenticationTokenRepository.CreateAsync(userRefreshTokenDb);
+                    await authenticationTokenRepository.UpdateByUserIdAsync(userId, newRefreshToken);
                     return new AuthenticationResponse(newAccessToken, newRefreshToken);
 				}
                 throw new Exception("Refresh tokens are different!");
-			}
+            }
             catch (Exception exception)
 			{
                 throw new Exception(exception.Message);
 			}
-		}
+        }
 	}
 }

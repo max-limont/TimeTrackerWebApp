@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faGear,
@@ -10,15 +10,9 @@ import {
     faAngleLeft,
     faAngleRight,
     faAddressBook,
-    faInbox,
     faEnvelopeOpenText,
-    faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import { parseJwt } from "../../store/parserJWT/parserJWT";
-import { AuthUserResponse } from "../../type/User/AuthUser";
-import { getCookie, refreshTokenKey } from "../../Cookie/Cookie";
 import {useAuth} from "../../hooks/useAuth";
 
 
@@ -89,12 +83,6 @@ export const Menu: FC = () => {
                                 <Link to={"/manage-vacation"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faEnvelopeOpenText} className={"icon"} />
                                     <span>Vacation requests</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to={"/messages"} replace className={"flex-container"}>
-                                    <FontAwesomeIcon icon={faEnvelope} className={"icon"} />
-                                    <span>Messages</span>
                                 </Link>
                             </li>
                         </ul>

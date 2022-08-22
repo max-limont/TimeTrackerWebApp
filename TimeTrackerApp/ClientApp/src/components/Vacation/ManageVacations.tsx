@@ -1,21 +1,22 @@
-import { faCheck, faDeleteLeft, faEdit, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faEdit, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useAuth } from "../../hooks/useAuth";
-import { getRequestVacationAction, removeVacationAction, updateVacationAction } from "../../store/actions/vacation/vacationActions";
 import { EditVacation, postFixDate } from "./EditVacation";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../hooks/useAppSelector";
+import {getRequestVacationAction, updateVacationAction} from "../../store/vacation/vacation.slice";
 
 
 export function ManageVacationRequest() {
-    const dispatch = useAppDispatch();
+    const dispatch = useDispatch();
     const [editState, setEditState] = useState(false);
     const [id, setIdEdit] = useState(0);
-    const requestsVacation = useAppSelector(s => s.rootReducer.vacation.requestVacations);
+    const requestsVacation = useAppSelector(state => state.rootReducer.vacation.requestVacations);
     const auth = useAuth();
-    const vacationLevel = useAppSelector(s => s.rootReducer.vacationLevel.vacationLevels.find(x => x.id == auth.state?.user?.vacationPermissionId));
+    const vacationLevel = useAppSelector(state => state.rootReducer.vacationLevel.vacationLevels.find(x => x.id == auth.state?.user?.vacationPermissionId));
     const navigate = useNavigate();
 
     useEffect(() => {

@@ -2,11 +2,11 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import React, { useState } from "react";
-import { useAppDispatch } from "../../app/hooks";
 import { useAuth } from "../../hooks/useAuth";
-import { createVacationAction } from "../../store/actions/vacation/vacationActions";
-import { CreateVacationType, VacationType } from "../../type/Vacation/VacationsTypes";
+import { CreateVacationType } from "../../types/vacation.types";
 import { postFixDate } from "./EditVacation";
+import {useDispatch} from "react-redux";
+import {createVacationAction} from "../../store/vacation/vacation.slice";
 
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
 }
 
 export function CreateVacation(obj: Props) {
-    const dispatch = useAppDispatch();
+    const dispatch = useDispatch();
     const setState = obj.stateForm;
     const { visible } = obj;
     const auth = useAuth();
@@ -35,7 +35,9 @@ export function CreateVacation(obj: Props) {
         }));
         setState(false);
     }
+
     const { startingTime, endingTime, comment } = vacation
+
     return (
         <div className={`form-event-container dark-background ${!visible && "hidden"}`}>
             <div className={"form-event"}>
@@ -53,17 +55,17 @@ export function CreateVacation(obj: Props) {
                         </div>
                         <div className={"form-item w-100"}>
                             <label>Ending Time</label>
-                            <input value={endingTime} type="date" onChange={(e) => setVacation({ ...vacation, endingTime: e.target.value })} />
+                            <input value={endingTime} type="date" onChange={event => setVacation({...vacation, endingTime: event.target.value})} />
                         </div>
                         <div className={"form-item w-100"}>
                             <label>Comment</label>
-                            <textarea  className="text-area-form" value={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }}></textarea>
+                            <textarea className="text-area-form" defaultValue={comment} onChange={event => setVacation({...vacation, comment: event.target.value})} />
                         </div>
-                    </div >
+                    </div>
                     <button type="submit" className={"button cyan-button"}>Add</button>
                     <button type="reset" className={"button red-button"}>Reset</button>
-
                 </form>
             </div>
-        </div>);
+        </div>
+    )
 }

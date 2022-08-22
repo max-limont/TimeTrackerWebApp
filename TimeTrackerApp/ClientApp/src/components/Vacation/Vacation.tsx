@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { removeVacation } from "../../store/slice/vacation/vacationSlice";
 import { CreateVacation } from "./CreateVacation";
 import { EditVacation } from "./EditVacation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck, faClock, faClose, faTimes, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/useAuth";
-import { getVacationsByUserIdAction, removeVacationAction } from "../../store/actions/vacation/vacationActions";
-import { getAllVacationLevelAction } from "../../store/actions/vacationLevel/vacationLevel";
 import { Link } from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../hooks/useAppSelector";
+import {getVacationsByUserIdAction, removeVacationAction} from "../../store/vacation/vacation.slice";
+import {getAllVacationLevelAction} from "../../store/vacationLevel/vacationLevel.slice";
 
 
 export function Vacation() {
-    const dispatch = useAppDispatch();
+    const dispatch = useDispatch();
     const [createState, setCreateState] = useState(false);
     const [editState, setEditState] = useState(false);
     const [id, setIdEdit] = useState(0);
-    const vacationsList = useAppSelector(s => s.rootReducer.vacation.vacations);
+    const vacationsList = useAppSelector(state => state.rootReducer.vacation.vacations);
     const auth = useAuth();
-    const vacationLevel = useAppSelector(s => s.rootReducer.vacationLevel.vacationLevels.find(x => x.id == auth.state?.user?.vacationPermissionId));
+    const vacationLevel = useAppSelector(state => state.rootReducer.vacationLevel.vacationLevels.find(x => x.id == auth.state?.user?.vacationPermissionId));
 
     useEffect(() => {
         const id = auth.state?.user?.id;

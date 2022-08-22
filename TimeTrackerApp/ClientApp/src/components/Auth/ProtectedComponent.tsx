@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {Navigate } from "react-router-dom";
-import {getCookie, refreshTokenKey} from "../../Cookie/Cookie";
+import {getCookie, refreshTokenKey} from "../../helpers/cookies";
 
 type ProtectedComponentPropsType = {
     component: any
