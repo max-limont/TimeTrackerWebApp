@@ -1,7 +1,6 @@
 import {FC, useEffect, useState} from "react";
 import {Record} from "../../types/timeTracker.types";
 import {createRecord} from "../../store/timeTracker/timeTracker.slice";
-import {TimeTrackerDefaultPropsType} from "./Home";
 import {useAuth} from "../../hooks/useAuth";
 import {useDispatch} from "react-redux";
 
@@ -10,35 +9,27 @@ type TimerStateType = {
     enabled: boolean
 }
 
-type TimerPropsType = {
-    defaultProps: TimeTrackerDefaultPropsType
-}
-
 const initialState: TimerStateType = {
     time: 0,
     enabled: false
 }
 
-export const Timer: FC<TimerPropsType> = (props) => {
+export const Timer: FC = () => {
 
     const auth = useAuth()
-    const {lastRecord} = props.defaultProps
     const dispatch = useDispatch()
     const [state, setState] = useState(initialState);
 
     useEffect(() => {
+        if (auth.state?.user) {
+            setState({...initialState, time: auth.state.user.isFullTimeEmployee ? 8 * 60 * 60 * 1000 : state.time})
+        }
         const timerStartTime = window.localStorage.getItem("timerStartTime");
         setState(initialState)
         if (timerStartTime) {
             setState({...state, enabled: true, time: new Date().getTime() - parseInt(timerStartTime)})
         }
-    }, [window.onload])
-
-    useEffect(() => {
-        if (auth.state?.user?.id) {
-            setState({...initialState, time: auth.state.user.isFullTimeEmployee ? 8 * 60 * 60 * 1000 : state.time})
-        }
-    }, [auth.state?.user?.id])
+    }, [auth])
 
     useEffect(() => {
         let interval = undefined as any;
@@ -59,18 +50,6 @@ export const Timer: FC<TimerPropsType> = (props) => {
 
     const timerTick = () => setState({...state, time: state.time + 1000})
 
-    const automaticallyAccrueWorkingTime = () => {
-        if (auth.state?.user?.id) {
-            const record: Record = {
-                employeeId: auth.state.user.id,
-                isAutomaticallyCreated: true,
-                createdAt: new Date(),
-                workingTime: state.time
-            }
-            dispatch(createRecord(record))
-        }
-    }
-
     const timerStop = () => {
         if (auth.state?.user?.id) {
             const record: Record = {
@@ -86,7 +65,7 @@ export const Timer: FC<TimerPropsType> = (props) => {
     }
 
     return (
-        <div className={"timer-panel w-100"}>
+        <div className={"timer-panel"}>
             <h3>Timer: </h3>
             <div className={"timer"}>
                 <div className={"hours"}>
@@ -103,15 +82,10 @@ export const Timer: FC<TimerPropsType> = (props) => {
                 </div>
             </div>
             <div className={"flex-container justify-content-center"}>
-                { !auth.state?.user?.isFullTimeEmployee ?
-                    !state.enabled ?
-                        <a className={"button cyan-button"} onClick={() => timerStart()}>Start</a>
-                        :
-                        <a className={"button red-button"} onClick={() => timerStop()}>Stop</a>
-                    : !lastRecord ?
-                        <a className={"button cyan-button full-timer-employee-button"} onClick={() => automaticallyAccrueWorkingTime()}>Automatically accrue working time</a>
+                { !state.enabled ?
+                    <a className={"button cyan-button"} onClick={() => timerStart()}>Start</a>
                     :
-                        <a className={"button cyan-button full-timer-employee-button disabled"}>Automatically accrue working time</a>
+                    <a className={"button red-button"} onClick={() => timerStop()}>Stop</a>
                 }
             </div>
         </div>

@@ -962,8 +962,6 @@ table {
         padding-block: 10px;
     }
 
-    min-width: 1500px;
-
     .date, .begin, .end, .duration {
         width: 200px;
     }
@@ -987,7 +985,7 @@ table {
         border-radius: 2px;
         padding: 3px 5px;
         font-size: 16px;
-        width: 100%;
+        width: calc(100% - 15px);
         background: #F6F6F6;
         cursor: pointer;
         box-shadow: inset 0 0 5px -5px $color-dark;
@@ -1000,45 +998,62 @@ table {
 
 .time-tracker-statistic {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(700px, 100%), 1fr));
     grid-gap: 15px;
     padding: 15px 15px 0 15px;
+
+    &:not(.full-time) {
+        grid-template-columns: repeat(auto-fill, minmax(min(700px, 100%), 1fr));
+    }
+
+    &.full-time {
+        grid-template-columns: 1fr;
+    }
 }
 
 .time-tracker-container {
     .time-tracker-list-header {
         display: flex;
-        background: $color-white;
-        justify-content: space-between;
-        border-radius: 2px;
         align-items: center;
-        margin: 15px 15px -10px 15px;
-        padding-block: 2px;
-        box-shadow: 0 0 5px -4px $color-light-dark;
+        border-radius: 2px;
+        background: #F6F6F6;
 
-        h3 {
+        > h3 {
             font-weight: bold;
-            font-size: $font-size-default;
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 2px;
         }
 
         .month-picker {
+            display: flex;
+            align-items: stretch;
             border-radius: 2px;
-            background: $color-white;
-            padding: 5px 5px 5px 10px;
+            padding: 10px;
             label {
                 margin-right: 10px;
                 font-weight: 600;
             }
             input {
                 min-width: 200px;
-                border: none;
                 outline: none;
-                padding: 5px 7px 5px 7px;
-                background: #F6F6F6;
-                border-radius: 2px;
+                padding: 5px 10px;
+                background: white;
+                border-block: 1px solid $color-light-dark;
+                border-inline: none;
                 font-family: 'Nunito', sans-serif;
                 font-size: 15px;
                 cursor: pointer;
+            }
+            .button {
+                padding-inline: 15px;
+            }
+            .button:last-of-type {
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+            }
+            .button:first-of-type {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
             }
         }
     }
@@ -1054,6 +1069,10 @@ table {
     > h3 {
         font-weight: bold;
         font-size: 20px;
+        background: #F6F6F6;
+        padding: 10px;
+        margin: -10px -10px 0 -10px;
+        border-radius: 2px;
     }
 
     .statistic-panel-list {
@@ -1097,6 +1116,10 @@ table {
     > h3 {
         font-weight: bold;
         font-size: 20px;
+        background: #F6F6F6;
+        padding: 10px;
+        margin: -10px -10px 0 -10px;
+        border-radius: 2px;
     }
 
     .button {

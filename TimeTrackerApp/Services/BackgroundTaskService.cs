@@ -40,7 +40,6 @@ namespace TimeTrackerApp.Services
 							var numberOfTasksToExecute = timeHasPassedSinceLastExecution == -1 ? 1 : timeHasPassedSinceLastExecution / 60 / 60 / 24;
 							foreach (var task in backgroundTasks)
 							{
-								
 								if (task.TaskType == type)
 								{
 									await task.Execute(null);

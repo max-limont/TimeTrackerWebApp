@@ -1,15 +1,14 @@
-import {CSSProperties, FC, useEffect, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {deleteRecord, fetchUserRecordsByMonth, updateRecord} from "../../store/timeTracker/timeTracker.slice";
-import {TimeTrackerDefaultPropsType} from "./Home";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleInfo, faPenClip, faGears} from "@fortawesome/free-solid-svg-icons";
-import {Record} from "../../types/timeTracker.types";
+import {faCircleInfo, faPenClip, faGears, faAngleLeft, faAngleRight} from "@fortawesome/free-solid-svg-icons";
+import {Record, TimeTrackerItem} from "../../types/timeTracker.types";
 import {useAuth} from "../../hooks/useAuth";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/useAppSelector";
 
 type TimeTrackerListPropsType = {
-    defaultProps: TimeTrackerDefaultPropsType
+    records: TimeTrackerItem[]
 }
 
 type TimeTrackerListStateType = {
@@ -27,18 +26,19 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
     const auth = useAuth()
     const dispatch = useDispatch();
     const [state, setState] = useState(initialState);
-    const {records} = props.defaultProps
+    const {records} = props
     const recordsInStore = useAppSelector(state => state.rootReducer.timeTracker.records)
     const timeFormatter = Intl.DateTimeFormat('default', {hour: '2-digit', minute: 'numeric', second: 'numeric'})
-    let componentStyle: CSSProperties = {maxWidth: window.innerWidth - 310};
 
     useEffect(() => {
         if (auth.state?.user?.id && state.selectedMonth) {
             dispatch(fetchUserRecordsByMonth({userId: auth.state.user.id, monthNumber: state.selectedMonth.getMonth() + 1}))
         }
+        if (state.recordIsBeingEdited)
+            window.onclick = mouseListener
     }, [auth, state])
 
-    let mouseListener = (event: Event) => {
+    const mouseListener = (event: Event) => {
         const element = event.target as Element
         if (!element.classList.contains('time-picker-input') && !element.classList.contains('save-record')) {
             setState({...state, recordIsBeingEdited: null})
@@ -72,20 +72,23 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
         dispatch(deleteRecord(recordId));
     }
 
-    useEffect(() => {
-        if (state.recordIsBeingEdited)
-            window.onclick = mouseListener
-    }, [state.recordIsBeingEdited])
-
     return (
         <>
-            <div className={'time-tracker-list-header'}>
-                <div className={'month-picker flex-container align-items-center'}>
-                    <label>Month: </label>
-                    <input type={"month"} defaultValue={state.selectedMonth ? `${state.selectedMonth.getFullYear()}-${state.selectedMonth.getMonth() + 1 < 10 ? '0' : ''}${state.selectedMonth.getMonth() + 1}` : ''} onChange={event => setState({...state, selectedMonth: event.target.value ? new Date(event.target.value) : undefined})}/>
+            <div className={"time-tracker-list flex-container flex-column position-relative"}>
+                <div className={'time-tracker-list-header'}>
+                    <h3>
+                        Time tracks:
+                    </h3>
+                    <div className={'month-picker flex-container align-items-center'}>
+                        <a className={"button dark-button"} onClick={() => setState({...state, selectedMonth: new Date(state.selectedMonth?.setMonth(state.selectedMonth?.getMonth() - 1) ?? 0)})}>
+                            <FontAwesomeIcon icon={faAngleLeft} className={"icon"}/>
+                        </a>
+                        <input type={"month"} value={state.selectedMonth ? `${state.selectedMonth.getFullYear()}-${state.selectedMonth.getMonth() + 1 < 10 ? '0' : ''}${state.selectedMonth.getMonth() + 1}` : ''} onChange={event => setState({...state, selectedMonth: event.target.value ? new Date(event.target.value) : undefined})}/>
+                        <a className={"button dark-button"} onClick={() => setState({...state, selectedMonth: new Date(state.selectedMonth?.setMonth(state.selectedMonth?.getMonth() + 1) ?? 0)})}>
+                            <FontAwesomeIcon icon={faAngleRight} className={"icon"}/>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div className={"time-tracker-list flex-container flex-column position-relative"} style={componentStyle}>
                 <table className={"time-tracker-table"}>
                     <thead>
                     <tr>
@@ -143,7 +146,7 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
                                                type={'time'}
                                                step={1}
                                                defaultValue={timeFormatter.format(state.recordIsBeingEdited!.createdAt.getTime() + state.recordIsBeingEdited!.workingTime)}
-                                               onChange={event => setState({...state, recordIsBeingEdited: {...state.recordIsBeingEdited, workingTime: convertStringToTime(event.target.value) - convertStringToTime(state.recordIsBeingEdited!.createdAt.toLocaleTimeString())} as Record})}
+                                               onChange={event => setState({...state, recordIsBeingEdited: {...state.recordIsBeingEdited, workingTime: Math.max(1000, convertStringToTime(event.target.value) - convertStringToTime(state.recordIsBeingEdited!.createdAt.toLocaleTimeString()))} as Record})}
                                         />
                                         :
                                         new Date(record.begin + record.duration).toLocaleTimeString()

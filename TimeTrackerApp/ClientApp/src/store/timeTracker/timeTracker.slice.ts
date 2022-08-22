@@ -3,11 +3,13 @@ import {FetchUserRecordsByMonthQueryInputType, Record, TimeTrackerItem} from "..
 import {store} from "../store";
 
 type TimeTrackerState = {
-    records: Record[]
+    records: Record[],
+    currentWeekWorkingTime: number
 }
 
 const initialState: TimeTrackerState = {
-    records: []
+    records: [],
+    currentWeekWorkingTime: 0
 }
 
 export const timeTrackerSlice = createSlice({
@@ -25,7 +27,10 @@ export const timeTrackerSlice = createSlice({
         },
         removeRecord: (state: TimeTrackerState, action: PayloadAction<number>) => {
             return {...state, records: state.records.filter(record => record.id !== action.payload)}
-        }
+        },
+        setCurrentWeekWorkingTime: (state: TimeTrackerState, action: PayloadAction<number>) => {
+            return {...state, currentWeekWorkingTime: action.payload}
+        },
     }
 })
 
@@ -34,11 +39,12 @@ export const timeTrackerSlice = createSlice({
 export const fetchAllRecords = createAction("FetchAllRecords")
 export const fetchAllUserRecords = createAction<number>("FetchAllUserRecords")
 export const fetchUserRecordsByMonth = createAction<FetchUserRecordsByMonthQueryInputType>("FetchUserRecordsByMonth")
+export const updateCurrentWeekWorkingTime = createAction<FetchUserRecordsByMonthQueryInputType>("UpdateCurrentWeekWorkingTime")
 export const createRecord = createAction<Record>("CreateRecord")
 export const deleteRecord = createAction<number>("DeleteRecord")
 export const updateRecord = createAction<Record>("UpdateRecord")
 
-export const {setRecords, addRecord, editRecord, removeRecord} = timeTrackerSlice.actions;
+export const {setRecords, setCurrentWeekWorkingTime, addRecord, editRecord, removeRecord} = timeTrackerSlice.actions;
 export const timeTrackerReducer = timeTrackerSlice.reducer;
 
 export const recordToTimeTrackerListItem = (record: Record): TimeTrackerItem => {
