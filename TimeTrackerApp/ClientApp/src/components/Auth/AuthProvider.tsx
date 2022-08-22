@@ -49,7 +49,7 @@ export const AuthProvider: FC<any> = ({ children }) => {
             setUser(authUser);
         } else {
             const refreshToken = getCookie(refreshTokenKey)
-            if (refreshToken) {
+            if (refreshToken && refreshToken !== 'null') {
                 dispatch(authorizeUserById(parseInt(parseJwt<AuthUserResponse>(refreshToken).UserId)))
             }
         }

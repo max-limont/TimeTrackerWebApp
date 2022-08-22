@@ -29,3 +29,21 @@ export const getUserByIdQuery = `
         }
     }
 `
+
+export const createUserQuery = `
+    mutation ($userInput: UserInputType!) {
+      createUser(user: $userInput) {
+        id
+        email
+        password
+        firstName
+        lastName
+      }
+    }
+`
+
+export const isUserExistQuery = `
+    query ($email: String!) {
+      IsUserEmailExist(email: $email)
+    }
+`

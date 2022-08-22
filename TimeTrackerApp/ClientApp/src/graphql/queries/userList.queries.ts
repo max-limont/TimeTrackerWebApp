@@ -12,7 +12,7 @@ export const getPaginatedUserList = `
 `
 
 export const getSearchResponse = `
-    query ($request: String) {
+    query ($request: String!) {
         userFetchSearchList(request: $request) {
             id,
             email,

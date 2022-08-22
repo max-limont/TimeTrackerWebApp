@@ -26,7 +26,7 @@ using TimeTrackerApp.MsSql.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string connectionString = builder.Configuration.GetConnectionString(Constants.DatabaseConnectionString);
+string connectionString = builder.Configuration.GetConnectionString(Constants.DatabaseConnectionStringAzure);
 
 builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new AuthenticationTokenRepository(connectionString));
 builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
