@@ -196,13 +196,21 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var userId = context.GetArgument<int>("UserId");
                     var accessToken = context.GetArgument<string>("AccessToken");
                     var refreshToken = context.GetArgument<string>("RefreshToken");
-                    var authenticationServiceResponse = await authenticationService.Refresh(userId, refreshToken);
-                    var authenticationServiceApiResponse = new AuthResponse()
+                    try
                     {
-                        AccessToken = authenticationServiceResponse.AccessToken,
-                        RefreshToken = authenticationServiceResponse.RefreshToken
-                    };
-                    return authenticationServiceApiResponse;
+                        var authenticationServiceResponse = await authenticationService.Refresh(userId, accessToken, refreshToken);
+                        var authenticationServiceApiResponse = new AuthResponse()
+                        {
+                            AccessToken = authenticationServiceResponse.AccessToken,
+                            RefreshToken = authenticationServiceResponse.RefreshToken
+                        };
+                        return authenticationServiceApiResponse;
+                    } 
+                    catch (Exception exception)
+					{
+                        context.Errors.Add(new ExecutionError(exception.Message));
+                        return new AuthResponse();
+					}
                 });
 
             Field<CalendarDayType, CalendarDay>()

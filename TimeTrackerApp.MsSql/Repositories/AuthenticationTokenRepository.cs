@@ -131,5 +131,27 @@ namespace TimeTrackerApp.MsSql.Repositories
 				}
 			}
 		}
+
+		public async Task<AuthenticationToken> UpdateByUserIdAsync(int userId, string token)
+		{
+			string query = @"UPDATE AuthenticationTokens SET Token = @Token WHERE UserId = @UserId";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				int affectedRows = await connection.ExecuteAsync(query, new { Token = token, UserId = userId });
+				if (affectedRows > 0)
+				{
+					try
+					{
+						return await GetByUserIdAsync(userId);
+					} 
+					catch (Exception exception)
+					{
+						throw new Exception(exception.Message);
+					}
+				}
+				throw new Exception("Authentication token with this user id updating error!");
+			}
+		}
 	}
 }

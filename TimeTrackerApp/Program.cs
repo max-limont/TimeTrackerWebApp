@@ -34,7 +34,6 @@ builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(co
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
 builder.Services.AddSingleton<IVacationRepository>(provider => new VacationRepository(connectionString));
 
-
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
@@ -112,10 +111,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("DefaultPolicy");
 
-app.UseAuthentication();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.UseDeveloperExceptionPage();
@@ -127,6 +125,7 @@ app.UseSpaStaticFiles();
 app.UseGraphQL<ISchema>();
 
 app.UseGraphQLAltair();
+app.UseExceptionHandler("/error");
 
 app.UseSpa(spa =>
 {

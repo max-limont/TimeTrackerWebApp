@@ -10,7 +10,7 @@ namespace TimeTrackerApp.Helpers
 	{
 		public ClaimsPrincipal User { get; set; } 
 		public GraphQLUserContext(ClaimsPrincipal user)
-		{	
+		{
 			User = user;
 		}
 	}
