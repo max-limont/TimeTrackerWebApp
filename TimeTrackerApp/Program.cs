@@ -43,7 +43,7 @@ builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAutho
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
-builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
+// builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
 
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()
