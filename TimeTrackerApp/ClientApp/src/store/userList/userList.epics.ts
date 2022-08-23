@@ -8,6 +8,7 @@ import {
     setUserListCount
 } from "./userList.slice";
 import {graphqlRequest} from "../../graphql/api";
+import {Action} from "react-epics";
 
 const fetchUserListPageEpic: Epic = (action$: Observable<ReturnType<typeof fetchUserListPage>>): any => {
     return action$.pipe(
@@ -19,7 +20,10 @@ const fetchUserListPageEpic: Epic = (action$: Observable<ReturnType<typeof fetch
             isReverse: action.payload.isReverse
         })).pipe(
             map(response => {
-                return setUserList(response.data.userFetchPageList);
+                if (response?.data?.userFetchPageList) {
+                    return setUserList(response.data.userFetchPageList);
+                }
+                return {type: 'FetchUserListPageError', payload: 'Error'} as Action
             })
         ))
     )
@@ -30,7 +34,10 @@ const fetchUserCountEpic: Epic = (action$: Observable<ReturnType<typeof fetchUse
         ofType(fetchUserCount.type),
         mergeMap(action => from(graphqlRequest(getUserCount)).pipe(
             map(response => {
-                return setUserListCount(response.data.userCount);
+                if (response?.data?.userCount) {
+                    return setUserListCount(response.data.userCount);
+                }
+                return {type: 'FetchUserCountError', payload: 'Error'} as Action
             })
         ))
     )
@@ -41,7 +48,10 @@ const fetchUserListSearchResponseEpic: Epic = (action$: Observable<ReturnType<ty
         ofType(fetchUserListSearchRequest.type),
         mergeMap(action => from(graphqlRequest(getSearchResponse, {request: action.payload.request})).pipe(
             map(response => {
-                return setUserList(response.data.userFetchSearchList);
+                if (response.data.userFetchSearchList) {
+                    return setUserList(response.data.userFetchSearchList);
+                }
+                return {type: 'FetchUserListSearchResponseError', payload: 'Error'} as Action
             })
         ))
     )

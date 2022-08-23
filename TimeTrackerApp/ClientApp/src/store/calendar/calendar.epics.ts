@@ -20,7 +20,6 @@ import {
     FetchCalendarDaysRangeInputType, RemoveCalendarDayInputType
 } from "../../types/calendar.types";
 import {graphqlRequest} from "../../graphql/api";
-import {store} from "../store";
 import {Action} from "react-epics";
 
 const fetchAllCalendarDaysEpic: Epic = (action$: Observable<ReturnType<typeof fetchAllCalendarDays>>): any => {
@@ -37,8 +36,7 @@ const fetchAllCalendarDaysEpic: Epic = (action$: Observable<ReturnType<typeof fe
                         dayTypeId: parseInt(day?.dayTypeId),
                         endDate: day?.endDate ? new Date(day.endDate) : null
                     }) as CalendarTypes)
-                    store.dispatch(setDays(calendarDays))
-                    return {type: "FetchAllCalendarDaysSuccess", payload: "Success"} as Action
+                    return setDays(calendarDays)
                 }
                 return {type: "FetchAllCalendarDaysError", payload: "Error"} as Action
             })
@@ -64,8 +62,7 @@ const fetchCalendarDaysRangeEpic: Epic = (action$: Observable<ReturnType<typeof 
                         dayTypeId: parseInt(day?.dayTypeId),
                         endDate: day?.endDate ? new Date(day.endDate) : null
                     }) as CalendarTypes)
-                    store.dispatch(setDays(calendarDays))
-                    return {type: "FetchCalendarDaysRangeSuccess", payload: "Success"} as Action
+                    return setDays(calendarDays)
                 }
                 return {type: "FetchCalendarDaysRangeError", payload: "Error"} as Action
             })
@@ -90,8 +87,7 @@ const createCalendarDayEpic: Epic = (action$: Observable<ReturnType<typeof creat
                         dayTypeId: parseInt(day?.dayTypeId),
                         endDate: day?.endDate ? new Date(day.endDate) : null
                     }
-                    store.dispatch(createDay(calendarDay));
-                    return {type: "CreateCalendarDaySuccess", payload: "Success"} as Action
+                    return createDay(calendarDay)
                 }
                 return {type: "CreateCalendarDayError", payload: "Error"} as Action
             })
@@ -107,8 +103,7 @@ const editCalendarDayEpic: Epic = (action$: Observable<ReturnType<typeof editCal
         } as EditCalendarDayInputType)).pipe(
             map(response => {
                 if (response?.data?.editCalendarDay) {
-                    store.dispatch(editDay(action.payload))
-                    return {type: "EditCalendarDaySuccess", payload: "Success"} as Action
+                    return editDay(action.payload)
                 }
                 return {type: "EditCalendarDayError", payload: "Error"} as Action
             })
@@ -124,8 +119,7 @@ const removeCalendarDayEpic: Epic = (action$: Observable<ReturnType<typeof remov
         } as RemoveCalendarDayInputType)).pipe(
             map(response => {
                 if (response?.data?.removeCalendarDay) {
-                    store.dispatch(removeDay(action.payload))
-                    return {type: "RemoveCalendarDaySuccess", payload: "Success"} as Action
+                    return removeDay(action.payload)
                 }
                 return {type: "RemoveCalendarDayError", payload: "Error"} as Action
             })

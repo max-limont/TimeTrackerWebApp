@@ -6,6 +6,7 @@ namespace TimeTrackerApp.Business.Repositories
 	{
 		Task<IEnumerable<Record>> FetchAllAsync();
 		Task<IEnumerable<Record>> FetchAllUserRecordsAsync(int userId);
+		Task<IEnumerable<Record>> FetchUserRecordsByMonthAsync(int userId, int monthNumber);
 		Task<Record> GetByIdAsync(int id);
 		Task<Record> CreateAsync(Record record);
 		Task<Record> EditAsync(Record record);

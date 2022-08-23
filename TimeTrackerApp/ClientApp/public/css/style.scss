@@ -443,6 +443,51 @@ section {
     }
 }
 
+.light-dark-button {
+    background: $color-light-dark;
+    color: $color-light;
+
+    &:not(.disabled):hover {
+        background: transparent;
+        color: $color-light-dark;
+        border: 1px solid $color-light-dark;
+    }
+
+    &.inverse {
+        background: transparent;
+        color: $color-light-dark;
+        border: 1px solid $color-light;
+
+        &:not(.disabled):hover {
+            background: $color-light-dark;
+            color: $color-light-dark;
+        }
+    }
+}
+
+.white-button {
+    background: $color-white;
+    color: $color-dark;
+
+    &:not(.disabled):hover {
+        background: transparent;
+        color: $color-white;
+        border: 1px solid $color-white;
+    }
+
+    &.inverse {
+        background: transparent;
+        color: $color-white;
+        border: 1px solid $color-white;
+
+        &:not(.disabled):hover {
+            background: $color-white;
+            color: $color-dark;
+        }
+    }
+}
+
+
 .dark-button {
     background: $color-dark;
     color: $color-light;
@@ -919,8 +964,8 @@ section {
 
 table {
     th {
-        font-size: $font-size-default;
-        font-weight: bold;
+        font-size: 16px;
+        font-weight: 600;
         text-align: left;
         padding: 15px 10px 15px 10px;
     }
@@ -984,8 +1029,6 @@ table {
         padding-block: 10px;
     }
 
-    min-width: 1500px;
-
     .date, .begin, .end, .duration {
         width: 200px;
     }
@@ -1004,14 +1047,18 @@ table {
 
     .time-picker-input {
         font-family: 'Nunito', serif;
-        outline: none;
         border: none;
         border-radius: 2px;
-        padding: 7px 5px;
+        padding: 3px 5px;
         font-size: 16px;
-        width: 100%;
-        background: #E6E6E6;
+        width: calc(100% - 15px);
+        outline: 1px solid $color-dark;
+        cursor: pointer;
         box-shadow: inset 0 0 5px -5px $color-dark;
+    }
+
+    tr:nth-of-type(2n + 1) .time-picker-input{
+        background: #F6F6F6;
     }
 
     .bottom-table-row {
@@ -1021,21 +1068,81 @@ table {
 
 .time-tracker-statistic {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(700px, 100%), 1fr));
     grid-gap: 15px;
     padding: 15px 15px 0 15px;
+
+    &:not(.full-time) {
+        grid-template-columns: repeat(auto-fill, minmax(min(700px, 100%), 1fr));
+    }
+
+    &.full-time {
+        grid-template-columns: 1fr;
+    }
+}
+
+.time-tracker-container {
+    .time-tracker-list-header {
+        display: flex;
+        align-items: center;
+        border-radius: 2px;
+        background: #F6F6F6;
+
+        > h3 {
+            font-weight: bold;
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 2px;
+        }
+
+        .month-picker {
+            display: flex;
+            align-items: stretch;
+            border-radius: 2px;
+            padding: 10px;
+            label {
+                margin-right: 10px;
+                font-weight: 600;
+            }
+            input {
+                min-width: 200px;
+                outline: none;
+                padding: 5px 10px;
+                background: white;
+                border-block: 1px solid $color-light-dark;
+                border-inline: none;
+                font-family: 'Nunito', sans-serif;
+                font-size: 15px;
+                cursor: pointer;
+            }
+            .button {
+                padding-inline: 15px;
+            }
+            .button:last-of-type {
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+            }
+            .button:first-of-type {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+        }
+    }
 }
 
 .statistic-panel {
     background: $color-white;
     border-radius: 2px;
     box-shadow: 0 0 5px -4px $color-light-dark;
-    padding: 15px;
+    padding: 10px;
     color: $color-dark;
 
     > h3 {
         font-weight: bold;
         font-size: 20px;
+        background: #F6F6F6;
+        padding: 10px;
+        margin: -10px -10px 0 -10px;
+        border-radius: 2px;
     }
 
     .statistic-panel-list {
@@ -1073,12 +1180,16 @@ table {
     background: $color-white;
     border-radius: 2px;
     box-shadow: 0 0 5px -4px $color-light-dark;
-    padding: 15px;
+    padding: 10px;
     color: $color-dark;
 
     > h3 {
         font-weight: bold;
         font-size: 20px;
+        background: #F6F6F6;
+        padding: 10px;
+        margin: -10px -10px 0 -10px;
+        border-radius: 2px;
     }
 
     .button {
@@ -1226,12 +1337,13 @@ table {
     box-shadow: 0 0 5px -4px $color-light-dark;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
+    padding: 5px;
 }
 
 .search-form {
-    max-width: 600px;
+    max-width: 550px;
     width: 100%;
+    padding: 5px;
     label {
         min-width: 100px;
     }
@@ -1241,6 +1353,7 @@ table {
         background: #F6F6F6;
         box-shadow: inset 0 0 5px -5px $color-dark;
         max-width: 500px;
+        padding-block: 8px;
         width: 100%;
     }
 
@@ -1264,27 +1377,34 @@ table {
 
 .user-list-controls-group {
 
+    padding: 5px;
+
     .button:not(:last-child) {
         margin-right: 5px;
     }
 
-    .selectWrapper {
+    .select-wrapper {
         margin-left: 10px;
-        margin-right: 30px;
+        margin-right: 10px;
         position: relative;
 
-        .selectBtn {
+        .select-button {
             background: #F6F6F6;
             border: none;
             outline: none;
             box-shadow: inset 0 0 5px -4px $color-light-dark;
-            padding: 8px 10px;
+            padding: 7px 10px;
             min-width: 290px;
             text-align: left;
             border-radius: 2px;
+            cursor: pointer;
             font-family: 'Nunito', sans-serif;
             font-size: 15px;
             font-weight: 600;
+        }
+
+        .icon {
+            margin-inline: -20px 20px;
         }
 
         ul {
@@ -1404,4 +1524,30 @@ div.end-item-action {
 }
 .custom-icon-red {
     color: #ff0000;
+}
+
+.pagination {
+    margin: 0 15px 15px 15px;
+    display: flex;
+    justify-content: center;
+
+    button {
+        border: none;
+        outline: none;
+        background: $color-white;
+        box-shadow: 0 0 5px -4px $color-light-dark;
+        margin: 2px;
+        border-radius: 2px;
+        padding: 10px 15px 10px 15px;
+        cursor: pointer;
+
+        .icon {
+            min-width: 10px;
+        }
+
+        &:hover, &.active {
+            background: $color-light-dark;
+            color: $color-light;
+        }
+    }
 }

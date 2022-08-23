@@ -9,4 +9,3 @@ export const Calendar: FC = () => {
         </section>
     )
 }
-export default Calendar;

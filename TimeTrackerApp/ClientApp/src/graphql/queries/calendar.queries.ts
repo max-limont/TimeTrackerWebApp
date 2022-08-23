@@ -1,6 +1,4 @@
-﻿import {CalendarTypes, CreateCalendarDayType} from "../../types/calendar.types";
-
-const CalendarDayFragment = `
+﻿const CalendarDayFragment = `
     id,
     date,
     dayTypeId,

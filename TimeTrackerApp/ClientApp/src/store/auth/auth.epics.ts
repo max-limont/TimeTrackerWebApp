@@ -3,16 +3,15 @@ import {from, map, mergeMap, Observable} from "rxjs";
 import { graphqlRequest } from "../../graphql/api";
 import {
     authLoginQuery,
-    authLogoutQuery,
+    authLogoutQuery, authRefreshQuery,
 } from "../../graphql/queries/auth.queries";
 import {
     authLoginAction, authLogoutAction,
-    authorizeUserById,
+    authorizeUserById, authRefreshAction, logout,
     setError,
     setUser
 } from "./auth.slice";
 import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../../helpers/cookies";
-import {store} from "../store";
 import {parseError} from "../../helpers/parseError";
 import {Action} from "react-epics";
 import {getUserByIdQuery} from "../../graphql/queries/user.queries";
@@ -32,15 +31,27 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
                     const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
-                    store.dispatch(authorizeUserById(userId))
-                    return { payload: response, type: "AuthLoginSuccess" } as Action;
-                } else if (response?.errors) {
-                    store.dispatch(setError(parseError(response.errors[0].message)));
-                    return { payload: response, type: "AuthLoginError" } as Action
+                    return authorizeUserById(userId)
                 }
-                return { payload: response, type: "AuthLoginError" } as Action
+                return setError(parseError("Wrong email or password!"))
             })
         )),
+    )
+};
+
+const authRefreshEpic: Epic = (action$: Observable<ReturnType<typeof authRefreshAction>>): any => {
+    return action$.pipe(
+        ofType(authRefreshAction.type),
+        mergeMap(action => from(graphqlRequest(authRefreshQuery, action.payload)).pipe(
+            map(response => {
+                if (response?.data?.authRefresh?.accessToken && response?.data?.authRefresh?.refreshToken) {
+                    setCookie({key: refreshTokenKey, value: response.data.authRefresh.refreshToken, lifetime: 30 * 24 * 60 * 60})
+                    setCookie({key: accessTokenKey, value: response.data.authRefresh.accessToken, lifetime: 2 * 60})
+                    return authorizeUserById(parseInt(parseJwt<AuthUserResponse>(response.data.authRefresh.refreshToken).UserId));
+                }
+                return authLogoutAction(parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId))
+            })
+        ))
     )
 }
 
@@ -53,11 +64,11 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
             map(() => {
                 clearCookie(refreshTokenKey)
                 clearCookie(accessTokenKey)
-                return { payload: "Success", type: "AuthLogoutSuccess" } as Action
-            }),
+                return logout()
+            })
         ))
     )
-}
+};
 
 const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUserById>>): any => {
     return action$.pipe(
@@ -81,13 +92,12 @@ const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUs
                         teamId: parseInt(apiResponse.teamId),
                         roleId: parseInt(apiResponse.roleId)
                     } as User
-                    store.dispatch(setUser(user))
-                    return { payload: "Success", type: "AuthSetUserSuccess" } as Action
+                    return setUser(user)
                 }
                 return { payload: "Error", type: "AuthSetUserError"} as Action
             })
         ))
     )
-}
+};
 
-export const authEpics = combineEpics(authLogoutEpic, authLoginEpic, authSetUserEpic);
+export const authEpics = combineEpics(authLogoutEpic, authRefreshEpic, authLoginEpic, authSetUserEpic);
