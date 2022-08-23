@@ -52,3 +52,9 @@ create table [Calendar]
 	[DayTypeId] int 
 )
 
+create table [BackgroundTasks] 
+(
+	[Id] INT PRIMARY KEY IDENTITY(1, 1),
+	[Type] NVARCHAR(64) NOT NULL,
+	[DateTime] DATETIME NOT NULL
+)

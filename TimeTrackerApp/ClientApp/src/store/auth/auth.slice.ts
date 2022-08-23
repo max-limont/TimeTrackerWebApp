@@ -19,11 +19,9 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state: AuthStateType, action: PayloadAction<User>) => {
-            localStorage.setItem("auth", JSON.stringify(action.payload))
             return {...state, user: action.payload}
         },
         logout: (state: AuthStateType) => {
-            localStorage.removeItem("auth")
             return {...state, user: null}
         },
         setLoadingState:  (state, action: PayloadAction<boolean>) => {

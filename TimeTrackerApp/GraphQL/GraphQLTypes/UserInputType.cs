@@ -17,6 +17,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
             Field<IntGraphType, int?>().Name("RemainingVacationDays").Resolve(context => context.Source.RemainingVacationDays);
             Field<IntGraphType, int?>().Name("PrivilegesValue").Resolve(context => context.Source.PrivilegesValue);
             Field<IntGraphType, int?>("VacationPermissionId").Resolve(context => context.Source.VacationPermissionId);
+            Field(x => x.TeamId, nullable: true);
+            Field(x => x.RoleId, nullable: true);
         }
     }
 }

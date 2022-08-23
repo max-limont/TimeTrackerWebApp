@@ -158,5 +158,25 @@ namespace TimeTrackerApp.MsSql.Repositories
 				}
 			}
 		}
+
+		public async Task<IEnumerable<User>> FetchFullTimeEmployeesAsync()
+		{
+			string query = "SELECT * FROM Users WHERE IsFullTimeEmployee = 1";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
+			}
+		}
+
+		public async Task<IEnumerable<User>> FetchPartTimeEmployeesAsync()
+		{
+			string query = "SELECT * FROM Users WHERE IsFullTimeEmployee = 0";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
+			}
+		}
 	}
 }

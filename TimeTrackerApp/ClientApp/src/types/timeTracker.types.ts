@@ -23,6 +23,11 @@ export type FetchAllUserRecordsInputType = {
     userId: number
 }
 
+export type FetchUserRecordsByMonthQueryInputType = {
+    userId: number,
+    monthNumber: number
+}
+
 export type CreateRecordInputType = {
     record: Record
 }

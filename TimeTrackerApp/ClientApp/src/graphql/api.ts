@@ -1,11 +1,16 @@
 import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../helpers/cookies";
 import { parseJwt } from "../helpers/parseJwt";
-import { authRefreshQuery } from "./queries/auth.queries";
 import {AuthRefreshInputType, AuthUserResponse} from "../types/auth.types";
 import {store} from "../store/store";
-import {authLogoutAction, authRefreshAction} from "../store/auth/auth.slice";
+import {authRefreshAction} from "../store/auth/auth.slice";
 
-const apiUrl = "http://localhost:5000/graphql";
+const graphql = "/graphql"
+const localApiUrl = "http://localhost:5000";
+const clientUrl = "http://localhost:3000";
+const siteUrl = "https://timetrackerwebapp1.azurewebsites.net";
+
+
+
 
 const getAuthorizationHeader = (): string => {
     const accessToken = getCookie(accessTokenKey);
@@ -13,7 +18,8 @@ const getAuthorizationHeader = (): string => {
 }
 
 export const request = async (query: string, variables?: any) => {
-    return await fetch(apiUrl, {
+    const currentUrl = window.location.origin;
+    return await fetch(currentUrl==siteUrl?siteUrl+graphql:localApiUrl+graphql,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -32,7 +38,7 @@ export const graphqlRequest = async (query: string, variables?: any) => {
     const responseBody = await response.json()
     if (responseBody?.errors?.find((error: any) => error?.extensions?.number === "authorization")) {
         try {
-            const refreshTokenInCookies = getCookie(refreshTokenKey);
+            const refreshTokenInCookies = getCookie(refreshTokenKey) ?? '';
             const accessTokenInCookies = getCookie(accessTokenKey) ?? '';
             if (refreshTokenInCookies) {
                 const authenticatedUserId = parseInt(parseJwt<AuthUserResponse>(refreshTokenInCookies).UserId)
@@ -46,15 +52,6 @@ export const graphqlRequest = async (query: string, variables?: any) => {
                 store.dispatch(authRefreshAction(authRefreshQueryVariables))
                 return await request(query, variables).then(async response => await response.json())
             }
-
-            /*const refreshResponse = await request(authRefreshQuery, authRefreshQueryVariables);
-            const refreshResponseBody = await refreshResponse.json();
-            if (!refreshResponse.ok || !refreshResponseBody?.data?.authRefresh?.accessToken || !refreshResponseBody?.data?.authRefresh?.refreshToken) {
-                console.log(refreshResponseBody)
-                //store.dispatch(authLogoutAction(authenticatedUserId))
-                //location.replace('/login')
-            }*/
-
         } catch (error) {
             location.replace('/login')
         }

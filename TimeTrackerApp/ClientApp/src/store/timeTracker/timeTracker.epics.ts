@@ -3,23 +3,23 @@ import {
     addRecord, editRecord,
     createRecord, deleteRecord,
     fetchAllUserRecords, removeRecord,
-    setRecords, updateRecord,
+    setRecords, updateRecord, fetchUserRecordsByMonth, updateCurrentWeekWorkingTime, setCurrentWeekWorkingTime,
 } from "./timeTracker.slice";
 import {from, map, mergeMap, Observable} from "rxjs";
 import {graphqlRequest} from "../../graphql/api";
 import {
     createRecordMutation, deleteRecordMutation,
-    fetchAllUserRecordsQuery, updateRecordMutation
+    fetchAllUserRecordsQuery, fetchUserRecordsByMonthQuery, updateRecordMutation
 } from "../../graphql/queries/timeTracker.queries";
 import {
     CreateRecordInputType, DeleteRecordInputType,
-    FetchAllUserRecordsInputType,
+    FetchAllUserRecordsInputType, FetchUserRecordsByMonthQueryInputType,
     Record,
     UpdateRecordInputType
 } from "../../types/timeTracker.types";
 import {Action} from "react-epics";
 
-const setRecordsEpic: Epic = (action$: Observable<ReturnType<typeof fetchAllUserRecords>>): any => {
+const fetchAllUserRecordsEpic: Epic = (action$: Observable<ReturnType<typeof fetchAllUserRecords>>): any => {
     return action$.pipe(
         ofType(fetchAllUserRecords.type),
         mergeMap(action => from(graphqlRequest(fetchAllUserRecordsQuery, {
@@ -40,6 +40,55 @@ const setRecordsEpic: Epic = (action$: Observable<ReturnType<typeof fetchAllUser
                     return setRecords(records)
                 }
                 return { payload: "Error", type: "FetchAllUserRecordsError" } as Action
+            })
+        ))
+    )
+}
+
+const fetchUserRecordsByMonthEpic: Epic = (action$: Observable<ReturnType<typeof fetchUserRecordsByMonth>>): any => {
+    return action$.pipe(
+        ofType(fetchUserRecordsByMonth.type),
+        mergeMap(action => from(graphqlRequest(fetchUserRecordsByMonthQuery, action.payload)).pipe(
+            map(response => {
+                if (response?.data?.fetchUserRecordsByMonth) {
+                    const records = response.data.fetchUserRecordsByMonth.map((record: any) => {
+                        return {
+                            id: parseInt(record.id),
+                            workingTime: parseInt(record.workingTime),
+                            employeeId: parseInt(record.employeeId),
+                            isAutomaticallyCreated: Boolean(JSON.parse(record.isAutomaticallyCreated)),
+                            editorId: parseInt(record.editorId),
+                            createdAt: new Date(new Date(record.createdAt) + " UTC")
+                        } as Record;
+                    }) as Record[]
+                    return setRecords(records)
+                }
+                return { payload: "Error", type: "FetchUserRecordsByMonthError" } as Action
+            })
+        ))
+    )
+}
+
+const updateCurrentWeekWorkingTimeEpic: Epic = (action$: Observable<ReturnType<typeof updateCurrentWeekWorkingTime>>): any => {
+    return action$.pipe(
+        ofType(updateCurrentWeekWorkingTime.type),
+        mergeMap(action => from(graphqlRequest(fetchUserRecordsByMonthQuery, action.payload)).pipe(
+            map(response => {
+                if (response?.data?.fetchUserRecordsByMonth) {
+                    const records = response.data.fetchUserRecordsByMonth.map((record: any) => {
+                        return {
+                            id: parseInt(record.id),
+                            workingTime: parseInt(record.workingTime),
+                            employeeId: parseInt(record.employeeId),
+                            isAutomaticallyCreated: Boolean(JSON.parse(record.isAutomaticallyCreated)),
+                            editorId: parseInt(record.editorId),
+                            createdAt: new Date(new Date(record.createdAt) + " UTC")
+                        } as Record;
+                    }) as Record[]
+                    const weeklyWorkingTime = records.filter(record => record.createdAt.getTime() >= new Date().setDate(new Date(new Date().getDate() - new Date().getDay() + 1).setHours(0, 0, 0, 0))).reduce((time, record) => time + record.workingTime, 0)
+                    return setCurrentWeekWorkingTime(weeklyWorkingTime)
+                }
+                return {type: "UpdateCurrentWeekWorkingTimeError", payload: "Error"} as Action
             })
         ))
     )
@@ -102,4 +151,4 @@ const deleteRecordEpic: Epic = (action$: Observable<ReturnType<typeof deleteReco
     )
 }
 
-export const timeTrackerEpics = combineEpics(setRecordsEpic, addRecordEpic, deleteRecordEpic, updateRecordEpic)
+export const timeTrackerEpics = combineEpics(fetchAllUserRecordsEpic, addRecordEpic, deleteRecordEpic, updateRecordEpic, fetchUserRecordsByMonthEpic, updateCurrentWeekWorkingTimeEpic)
