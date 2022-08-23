@@ -15,7 +15,7 @@ import {
     fetchUserListPage,
     fetchUserListSearchRequest
 } from "../../store/userList/userList.slice";
-import AddUserForm from "./AddUserForm";
+import AddUserForm from "../AddUser/AddUserForm";
 
 const UserList = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
@@ -69,7 +69,6 @@ const UserList = () => {
 
     return (
         <section className={"user-list flex-container flex-column w-100"}>
-            <AddUserForm/>
             <div className={"user-list-controls flex-container"}>
                 <form className={"search-form flex-container align-items-center w-100"}>
                     <div className={'form-group w-100'}>

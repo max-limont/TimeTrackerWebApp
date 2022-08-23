@@ -6,7 +6,7 @@ import {useAuth} from "../../hooks/useAuth";
 import {setError} from "../../store/auth/auth.slice";
 import {graphqlRequest} from "../../graphql/api";
 import {createUserQuery, isUserExistQuery} from "../../graphql/queries/user.queries";
-import "./styles/addUser.scss"
+import "../UserList/styles/addUser.scss"
 
 interface UserData {
     email: string,
@@ -86,6 +86,14 @@ const AddUserForm = () => {
                             onChange={event => setRepeatPassword(event.target.value)}
                             type="password"/>
                     </div>
+                    <div className={"form-item w-100"}>
+                        <label htmlFor={"isPartTime"}>Part-time: </label>
+                        <input
+                            id={"isPartTime"}
+                            onChange={event => setRepeatPassword(event.target.value)}
+                            type="checkbox"/>
+                    </div>
+
                     <div className={"form-item w-100"}>
                         <button onClick={async (e) => {
                             e.preventDefault()
