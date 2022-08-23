@@ -78,26 +78,22 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<User>> FetchPageListAsync(int from, int contentPerPage, string orderBy = "FirstName", bool isReverse = false)
 		{
-			string direction = isReverse ? "DESC" : "ASC";
-			string query = $"SELECT * FROM Users ORDER BY {orderBy} {direction} OFFSET {from} ROWS FETCH NEXT {contentPerPage} ROWS ONLY";
+			orderBy += isReverse ? " DESC" : " ASC";
+			string query = $"SELECT * FROM Users ORDER BY {orderBy} OFFSET @From ROWS FETCH NEXT @ContentPerPage ROWS ONLY";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				return await connection.QueryAsync<User>(query);
+				return await connection.QueryAsync<User>(query, new { From = from, ContentPerPage = contentPerPage });
 			}
 		}
 
 		public async Task<IEnumerable<User>> FetchSearchListAsync(string request)
 		{
-			request += "%"; 
-			string query = $"SELECT * FROM Users " +
-                $"WHERE (LastName LIKE '{request}') " +
-                $"OR (FirstName LIKE '{request}') " +
-                $"OR (Email LIKE '{request}')";
+			string query = @"SELECT * FROM Users WHERE (LastName LIKE '@Request%') OR (FirstName LIKE '@Request%') OR (Email LIKE '@Request%')";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				return await connection.QueryAsync<User>(query);
+				return await connection.QueryAsync<User>(query, new { Request = request });
 			}
 		}
 
@@ -160,6 +156,26 @@ namespace TimeTrackerApp.MsSql.Repositories
 				{
 					throw new Exception(exception.Message);
 				}
+			}
+		}
+
+		public async Task<IEnumerable<User>> FetchFullTimeEmployeesAsync()
+		{
+			string query = "SELECT * FROM Users WHERE IsFullTimeEmployee = 1";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
+			}
+		}
+
+		public async Task<IEnumerable<User>> FetchPartTimeEmployeesAsync()
+		{
+			string query = "SELECT * FROM Users WHERE IsFullTimeEmployee = 0";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
 			}
 		}
 	}

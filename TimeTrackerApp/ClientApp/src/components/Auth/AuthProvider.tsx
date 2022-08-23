@@ -3,7 +3,7 @@ import {AuthorizationUser, AuthUserResponse} from "../../types/auth.types";
 import {authLoginAction, authLogoutAction, authorizeUserById, setUser} from "../../store/auth/auth.slice";
 import {User} from "../../types/user.types";
 import {useLocation, useNavigate} from "react-router-dom";
-import {getCookie, refreshTokenKey} from "../../helpers/cookies";
+import {accessTokenKey, getCookie, refreshTokenKey} from "../../helpers/cookies";
 import {parseJwt} from "../../helpers/parseJwt";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {useDispatch} from "react-redux";
@@ -13,6 +13,9 @@ const defaultSignOut = (callback: any) => {}
 
 export type AuthStateType = {
     user?: User | null
+    isUserAuthenticated: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
 }
 
 export type AuthProviderStateType = {
@@ -22,7 +25,10 @@ export type AuthProviderStateType = {
 }
 
 const initialAuthState: AuthStateType = {
-    user: null
+    user: null,
+    isUserAuthenticated: false,
+    accessToken: undefined,
+    refreshToken: undefined
 }
 
 const initialAuthContextState: AuthProviderStateType = {
@@ -37,27 +43,40 @@ export const AuthProvider: FC<any> = ({ children }) => {
 
     const [state, setState] = useState(initialAuthState)
     const authUser = useAppSelector(state => state.rootReducer.auth.user)
-    const location = useLocation();
-    const dispatch = useDispatch();
+    const location = useLocation()
+    const dispatch = useDispatch()
     const navigate = useNavigate()
+    const accessToken = getCookie(accessTokenKey)
+    const refreshToken = getCookie(refreshTokenKey)
 
     useEffect(() => {
+
+        if (accessToken) {
+            setState({...state, accessToken: accessToken, refreshToken: refreshToken})
+        }
+
         if (authUser) {
+            setState({...state, user: authUser, isUserAuthenticated: true})
             if (location.pathname === '/login')
                 navigate('/', {replace: true})
-            setState({...state, user: authUser})
-            setUser(authUser);
-        } else {
-            const refreshToken = getCookie(refreshTokenKey)
-            if (refreshToken && refreshToken !== 'null') {
+        }
+
+        if (refreshToken) {
+            if (!authUser) {
                 dispatch(authorizeUserById(parseInt(parseJwt<AuthUserResponse>(refreshToken).UserId)))
             }
+        } else {
+            dispatch(authLogoutAction(getCookie(refreshTokenKey) ? parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId) : 0))
+            if (location.pathname !== '/login')
+                navigate('/login', {replace: true})
         }
-    }, [authUser])
+
+    }, [authUser, accessToken, refreshToken])
 
     const signIn = (credentials: AuthorizationUser, callback: any) => {
         dispatch(authLoginAction(credentials))
-        callback()    }
+        callback()
+    }
 
     const signOut = (callback: any) => {
         dispatch(authLogoutAction(state.user!.id))

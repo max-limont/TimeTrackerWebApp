@@ -1,26 +1,26 @@
-import React, {useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import {User} from "../../types/user.types";
-import Select from "./Select";
+import {Select} from "./Select";
 import ExportXlsx from "./ExportXlsx";
 import Pagination from "./Pagination";
 import {useAuth} from "../../hooks/useAuth";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {useDispatch} from "react-redux";
 import {UserListPage} from "../../types/userList.types";
+
 import {
     fetchUserCount,
     fetchUserListPage,
     fetchUserListSearchRequest
 } from "../../store/userList/userList.slice";
-import AddUserForm from "../AddUser/AddUserForm";
 
-const UserList = () => {
+export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
     const auth = useAuth()
-    const contentPerPage = 5
+    const contentPerPage = 1
 
     const dispatch = useDispatch()
     const [state, setState] = useState<UserListPage>({
@@ -53,42 +53,33 @@ const UserList = () => {
     ]
 
     useEffect(() => {
-        if (auth.state?.user?.id) {
+        if (auth.state?.isUserAuthenticated) {
             dispatch(fetchUserCount())
         }
-    }, [auth.state?.user?.id])
+    }, [auth])
 
     useEffect(() => {
-        if (auth.state?.user?.id) {
-            if (request.length)
-                dispatch(fetchUserListSearchRequest({request}))
-            else
-                dispatch(fetchUserListPage(state))
+        if (auth.state?.isUserAuthenticated) {
+            dispatch(request.length ? fetchUserListSearchRequest({request}) : fetchUserListPage(state))
         }
-    }, [request, state, auth.state?.user?.id])
+    }, [request, state, auth])
 
     return (
         <section className={"user-list flex-container flex-column w-100"}>
-            <div className={"user-list-controls flex-container"}>
+            <div className={"user-list-controls flex-container flex-wrap"}>
                 <form className={"search-form flex-container align-items-center w-100"}>
                     <div className={'form-group w-100'}>
                         <div className={"form-item w-100"}>
                             <label>Search users: </label>
-                            <input type={"text"} onChange={(event => setSearch(event.target.value))} />
+                            <input type={"text"} onChange={event => setSearch(event.target.value)} />
                             <FontAwesomeIcon icon={faMagnifyingGlass} className={"icon"}/>
                         </div>
                     </div>
                 </form>
                 <div className={"user-list-controls-group flex-container align-items-center"}>
-                    {
-                        request.length
-                            ? null
-                            : <>
-                                <span>Sort by:</span>
-                                <Select options={selectOptions} selectHandler={selectHandler}/>
-                                <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
-                            </>
-                    }
+                    <span>Sort by:</span>
+                    <Select options={selectOptions} selectHandler={selectHandler}/>
+                    <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
                     <a className="link-btn addUser button cyan-button">Create user</a>
                 </div>
             </div>
@@ -101,17 +92,14 @@ const UserList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {
-                        userList
-                            ? userList.map(
-                            (item: User) =>
-                                <tr onClick={() => navigate("/user?id=" + item.id, )} key={item.id} className="link-btn userItem">
-                                    <td>{item.firstName} {item.lastName}</td>
-                                    <td>{item.email}</td>
-                                    <td>{item.weeklyWorkingTime}</td>
-                                </tr>
-                            )
-                            : null
+                    { userList &&
+                        userList.map((item: User) => (
+                            <tr onClick={() => navigate("/user?id=" + item.id, )} key={item.id} className="link-btn userItem">
+                                <td>{item.firstName} {item.lastName}</td>
+                                <td>{item.email}</td>
+                                <td>{item.weeklyWorkingTime}</td>
+                            </tr>
+                        ))
                     }
                 </tbody>
             </table>
@@ -121,5 +109,3 @@ const UserList = () => {
         </section>
     )
 }
-
-export default UserList

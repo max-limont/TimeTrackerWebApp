@@ -66,6 +66,16 @@ namespace TimeTrackerApp.MsSql.Repositories
 			}
 		}
 
+		public async Task<IEnumerable<Record>> FetchUserRecordsByMonthAsync(int userId, int monthNumber)
+		{
+			string query = @"SELECT * FROM Records WHERE EmployeeId = @EmployeeId AND MONTH(CreatedAt) = @Month";
+			
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<Record>(query, new { EmployeeId = userId, Month = monthNumber });
+			}
+		}
+
 		public async Task<Record> GetByIdAsync(int id)
 		{
 			string query = @"SELECT * FROM Records WHERE Id = @Id";

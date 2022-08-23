@@ -1,61 +1,40 @@
 import React, {FC, useEffect} from 'react';
 import usePagination from "../../hooks/usePagination";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faAngleLeft, faAngleRight} from "@fortawesome/free-solid-svg-icons";
 
-
-const Pagination: FC<{
+type PaginationPropsType = {
     contentPerPage: number,
     count: number,
     setFirstContentIndex(index: number): void
-}> = ({contentPerPage, count, setFirstContentIndex}) => {
-    const {
-        firstContentIndex,
-        nextPage,
-        prevPage,
-        page,
-        setPage,
-        totalPages,
-    } = usePagination({
-        contentPerPage,
-        count,
-    })
+}
+
+const Pagination: FC<PaginationPropsType> = (props) => {
+
+    const { contentPerPage, count, setFirstContentIndex } = props
+    const { firstContentIndex, nextPage, prevPage, page, setPage, totalPages } = usePagination({contentPerPage, count})
 
     useEffect(()=>{
         setFirstContentIndex(firstContentIndex)
     }, [firstContentIndex])
 
-    return <>
-        {
-            totalPages > 1
-            ? <div className="pagination">
-                <p className="text">
-                    {page}/{totalPages}
-                </p>
-                <button onClick={() => {
-                    prevPage()
-                }} className="page">
-                    &larr;
-                </button>
-                {/* @ts-ignore */}
-                {[...Array(totalPages).keys()].map((el) => (
-                    <button
-                        onClick={() => {
-                            setPage(el + 1)
-                        }}
-                        key={el}
-                        className={`page ${page === el + 1 ? "active" : ""}`}
-                    >
-                        {el + 1}
+    return totalPages > 1 ? (
+        <div className="pagination">
+            <button onClick={() => prevPage()} className="page">
+                <FontAwesomeIcon icon={faAngleLeft} className={'icon'} />
+            </button>
+            {
+                Array.from(Array(totalPages).keys()).map(index => (
+                    <button onClick={() => setPage(index + 1)} key={index + 1} className={`button page ${page === index + 1 ? "active" : ""}`}>
+                        {index + 1}
                     </button>
-                ))}
-                <button onClick={() => {
-                    nextPage()
-                }} className="page">
-                    &rarr;
-                </button>
-            </div>
-            : null
-        }
-    </>
-};
+                ))
+            }
+            <button onClick={() => nextPage()} className={"page"}>
+                <FontAwesomeIcon icon={faAngleRight} className={'icon'} />
+            </button>
+        </div>
+    ) : <></>
+}
 
 export default Pagination;

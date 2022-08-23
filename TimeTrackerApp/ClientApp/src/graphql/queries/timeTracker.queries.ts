@@ -1,8 +1,19 @@
-import {Record} from "../../types/timeTracker.types";
-
 export const fetchAllUserRecordsQuery = `
     query FetchAllUserRecords($userId: ID!) {
         fetchAllUserRecords(userId: $userId) {
+            id
+            workingTime
+            employeeId
+            editorId
+            isAutomaticallyCreated
+            createdAt
+        }
+    }
+`
+
+export const fetchUserRecordsByMonthQuery = `
+    query FetchUserRecordsByMonth($userId: ID!, $monthNumber: Int!) {
+        fetchUserRecordsByMonth(userId: $userId, monthNumber: $monthNumber) {
             id
             workingTime
             employeeId

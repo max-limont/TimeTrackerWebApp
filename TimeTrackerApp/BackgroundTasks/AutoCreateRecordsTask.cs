@@ -1,0 +1,54 @@
+﻿using Quartz;
+using System;
+using System.Threading.Tasks;
+using TimeTrackerApp.Business.Models;
+using TimeTrackerApp.Business.Repositories;
+
+namespace TimeTrackerApp.BackgroundTasks
+{
+	public class AutoCreateRecordsTask : IBackgroundTask
+	{
+		private readonly IUserRepository userRepository;
+		private readonly IRecordRepository recordRepository;
+		private readonly IBackgroundTaskRepository backgroundTaskRepository;
+
+		public AutoCreateRecordsTask(IUserRepository userRepository, IRecordRepository recordRepository, IBackgroundTaskRepository backgroundTaskRepository)
+		{
+			this.userRepository = userRepository;
+			this.recordRepository = recordRepository;
+			this.backgroundTaskRepository = backgroundTaskRepository;
+		}
+
+		public string TaskType => GetType().Name;
+
+		public async Task Execute(IJobExecutionContext context)
+		{
+			var fullTimeEmployees = await userRepository.FetchFullTimeEmployeesAsync();
+			foreach (var employee in fullTimeEmployees)
+			{
+				var record = new Record()
+				{
+					IsAutomaticallyCreated = true,
+					CreatedAt = DateTime.UtcNow,
+					WorkingTime = employee.WeeklyWorkingTime / 5 * 60 * 1000,
+					EmployeeId = employee.Id,
+				};
+
+				try
+				{
+					var backgroundTask = new BackgroundTask()
+					{
+						Type = nameof(AutoCreateRecordsTask),
+						DateTime = DateTime.UtcNow,
+					};
+					await recordRepository.CreateAsync(record);
+					await backgroundTaskRepository.CreateAsync(backgroundTask);
+				}
+				catch (Exception exception)
+				{
+					Console.WriteLine(exception.Message);
+				}
+			}
+		}
+	}
+}
