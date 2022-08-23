@@ -6,6 +6,7 @@ import {GetUserByIdQueryInputType, User} from "../../types/user.types";
 import {Epic} from "redux-observable";
 import {getUserById} from "./user.slice";
 import { setUser } from "./user.slice";
+import {Action} from "react-epics";
 
 
 const getUserByIdEpic = (action$:any) => {
@@ -29,6 +30,7 @@ const getUserByIdEpic = (action$:any) => {
                     } as User
                     return setUser(user);
                 }
+                return {type: "GetUserByIdError", payload: "Error"} as Action
             })
         )));
 }
