@@ -316,10 +316,10 @@ section > header {
   .light-dark-button.inverse {
     background: transparent;
     color: #393E46;
-    border: 1px solid #EEEEEE; }
+    border: 1px solid #393E46; }
     .light-dark-button.inverse:not(.disabled):hover {
       background: #393E46;
-      color: #393E46; }
+      color: #EEEEEE; }
 
 .white-button {
   background: #FFFFFF;
@@ -786,7 +786,8 @@ table .bottom-table-row {
   border-radius: 2px;
   box-shadow: 0 0 5px -4px #393E46;
   padding: 10px;
-  color: #222831; }
+  color: #222831;
+  position: relative; }
   .statistic-panel > h3 {
     font-weight: bold;
     font-size: 20px;
@@ -814,6 +815,35 @@ table .bottom-table-row {
       font-weight: 700;
       font-size: 30px;
       margin-top: 10px; }
+  .statistic-panel .chart-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px; }
+  .statistic-panel .chart-titles {
+    margin-top: 10px; }
+    .statistic-panel .chart-titles label {
+      display: inline-flex;
+      justify-content: center;
+      text-align: center; }
+  .statistic-panel .chart {
+    display: inline-flex;
+    align-items: flex-end;
+    position: relative;
+    z-index: 3; }
+    .statistic-panel .chart .chart-item {
+      border-radius: 2px; }
+    .statistic-panel .chart .max-value-line, .statistic-panel .chart .min-value-line {
+      display: inline-flex;
+      width: 100%;
+      z-index: 1;
+      height: 2px;
+      position: absolute;
+      top: 0; }
+    .statistic-panel .chart .min-value-line {
+      background: black; }
+    .statistic-panel .chart .max-value-line {
+      background: red; }
 
 .timer-panel {
   display: inline-flex;

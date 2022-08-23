@@ -455,11 +455,11 @@ section {
     &.inverse {
         background: transparent;
         color: $color-light-dark;
-        border: 1px solid $color-light;
+        border: 1px solid $color-light-dark;
 
         &:not(.disabled):hover {
             background: $color-light-dark;
-            color: $color-light-dark;
+            color: $color-light;
         }
     }
 }
@@ -1113,6 +1113,7 @@ table {
     box-shadow: 0 0 5px -4px $color-light-dark;
     padding: 10px;
     color: $color-dark;
+    position: relative;
 
     > h3 {
         font-weight: bold;
@@ -1148,6 +1149,49 @@ table {
             font-weight: 700;
             font-size: 30px;
             margin-top: 10px;
+        }
+    }
+
+    .chart-wrapper {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .chart-titles {
+        margin-top: 10px;
+
+        label {
+            display: inline-flex;
+            justify-content: center;
+            text-align: center;
+        }
+    }
+
+    .chart {
+        display: inline-flex;
+        align-items: flex-end;
+        position: relative;
+        z-index: 3;
+
+        .chart-item {
+            border-radius: 2px;
+        }
+
+        .max-value-line, .min-value-line {
+            display: inline-flex;
+            width: 100%;
+            z-index: 1;
+            height: 2px;
+            position: absolute;
+            top: 0;
+        }
+        .min-value-line {
+            background: black;
+        }
+        .max-value-line {
+            background: red;
         }
     }
 }
@@ -1529,3 +1573,5 @@ div.end-item-action {
         }
     }
 }
+
+
