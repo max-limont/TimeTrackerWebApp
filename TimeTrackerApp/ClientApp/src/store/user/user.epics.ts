@@ -1,18 +1,18 @@
 import { combineEpics, ofType } from "redux-observable";
 import {from, map, mergeMap, Observable} from "rxjs";
 import { graphqlRequest } from "../../graphql/api";
-import { setUser } from "../auth/auth.slice";
 import {getUserByIdQuery} from "../../graphql/queries/user.queries";
 import {GetUserByIdQueryInputType, User} from "../../types/user.types";
 import {Epic} from "redux-observable";
 import {getUserById} from "./user.slice";
+import { setUser } from "./user.slice";
 
 
-const getUserByIdEpic: Epic = (action$: Observable<ReturnType<typeof getUserById>>): any => {
+const getUserByIdEpic = (action$:any) => {
     return action$.pipe(
         ofType(getUserById.type),
-        mergeMap(action => from(graphqlRequest(getUserByIdQuery, {
-            id: action.payload.id
+        mergeMap((action :any) => from(graphqlRequest(getUserByIdQuery, {
+            id: action.payload
         } as GetUserByIdQueryInputType)).pipe(
             map(response => {
                 if (response?.data?.getUserById) {

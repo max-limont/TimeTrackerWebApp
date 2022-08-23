@@ -13,6 +13,7 @@ import { vacationSlice } from './vacation/vacation.slice';
 import { vacationEpic } from './vacation/vacation.epics';
 import { vacationLevelSlice } from './vacationLevel/vacationLevel.slice';
 import { vacationLevelEpic } from './vacationLevel/vacationLevel.epics';
+import {userSlice} from "./user/user.slice";
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -24,7 +25,9 @@ const rootReducer = combineReducers({
   userList: userListSlice.reducer,
   timeTracker: timeTrackerSlice.reducer,
   vacation: vacationSlice.reducer,
-  vacationLevel: vacationLevelSlice.reducer
+  vacationLevel: vacationLevelSlice.reducer,
+  user: userSlice.reducer
+
 })
 
 export const store = configureStore({

@@ -101,7 +101,7 @@ const UserList = () => {
                         userList
                             ? userList.map(
                             (item: User) =>
-                                <tr onClick={() => navigate("/user?id=" + item.id, )} key={item.id} className="link-btn userItem">
+                                <tr onClick={() => navigate("/user/id=" + item.id, )} key={item.id} className="link-btn userItem">
                                     <td>{item.firstName} {item.lastName}</td>
                                     <td>{item.email}</td>
                                     <td>{item.weeklyWorkingTime}</td>
