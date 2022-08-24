@@ -5,14 +5,7 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
 using System;
-<<<<<<< HEAD
 using TimeTrackerApp.GraphQL.GraphQLQueries.RoleQueries;
-using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
-||||||| 6066c48
-using TimeTrackerApp.GraphQL.GraphQLQueries.VacationLevelGraphql;
-using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
-=======
->>>>>>> TimeTrackerV2
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
