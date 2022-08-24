@@ -5,17 +5,12 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using System.Collections.Generic;
 using System;
-using GraphQL.MicrosoftDI;
-using Microsoft.AspNetCore.Http;
-using TimeTrackerApp.GraphQL.GraphQLQueries.VacationLevelGraphql;
-using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
-using TimeTrackerApp.Helpers;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppQuery : ObjectGraphType
     {
-        public AppQuery(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
+        public AppQuery(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, IVacationLevelRepository vacationLevelRepository)
         {
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
@@ -229,11 +224,25 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var id = contex.GetArgument<int>("ReceiverId");
                     return await vacationRepository.GetRequestVacation(id);
                 })
-                .AuthorizeWithPolicy("LoggedIn"); ;
-                
-            Field<VacationLevelQueries>()
-                .Name("VacationLevelQueries")
-                .Resolve(_ => new { });
+                .AuthorizeWithPolicy("LoggedIn");
+
+            Field<ListGraphType<VacationLevelType>, List<VacationLevel>>()
+                .Name("GetAllVacationsLevel")
+                .ResolveAsync(async context =>
+                {
+                    return await vacationLevelRepository.GetVacationLevels();
+                })
+                .AuthorizeWithPolicy("LoggedIn");
+
+            Field<VacationLevelType, VacationLevel>()
+                .Name("GetVacationLevelById")
+                .Argument<IntGraphType, int>("Id", "Id to find vacation level")
+                .ResolveAsync(async context =>
+                {
+                    var id = context.GetArgument<int>("Id");
+                    return await vacationLevelRepository.GetVacationLevelById(id);
+                })
+                .AuthorizeWithPolicy("LoggedIn");
         }
     }
 }

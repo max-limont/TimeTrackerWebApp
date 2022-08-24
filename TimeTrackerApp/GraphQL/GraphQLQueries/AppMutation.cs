@@ -4,17 +4,13 @@ using TimeTrackerApp.GraphQL.GraphQLTypes;
 using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Http;
 using System;
-using TimeTrackerApp.GraphQL.GraphQLQueries.VacationLevelGraphql;
-using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
+        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, IVacationLevelRepository vacationLevelRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
@@ -260,10 +256,37 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var state = _.GetArgument<bool>("StateAccepted");
                     return await vacationRepository.ChangeAcceptedState(id, state);
                 });
-            
-            Field<VacationLevelMutations>()
-                .Name("VacationLevelMutation")
-                .Resolve(_ => new { });
+
+            Field<VacationLevelType, VacationLevel>()
+                .Name("CreateVacationLevel")
+                .Argument<VacationLevelInputType, VacationLevel>("VacationLevel", "Vacation level argumment")
+                .ResolveAsync(async context =>
+                {
+                    var model = context.GetArgument<VacationLevel>("VacationLevel");
+                    return await vacationLevelRepository.CreateVacationLevel(model);
+                })
+                .AuthorizeWithPolicy("LoggedIn");
+
+            Field<VacationLevelType, VacationLevel>()
+                .Name("UpdateVacationLevel")
+                .Argument<VacationLevelInputType, Vacation>("VacationLevel", "Vacation level argumment")
+                .ResolveAsync(async context =>
+                {
+                    var model = context.GetArgument<VacationLevel>("VacationLevel");
+                    return await vacationLevelRepository.UpdateVacationLevel(model);
+                })
+                .AuthorizeWithPolicy("LoggedIn");
+
+
+            Field<VacationLevelType, VacationLevel>()
+                .Name("DeleleVacationLevel")
+                .Argument<IntGraphType, int>("Id", "Id for delete")
+                .ResolveAsync(async context =>
+                {
+                    var id = context.GetArgument<int>("Id");
+                    return await vacationLevelRepository.RemoveVacationLevel(id);
+                })
+                .AuthorizeWithPolicy("LoggedIn");
         }
     }
 }

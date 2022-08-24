@@ -1,13 +1,14 @@
 ﻿using GraphQL.Types;
-using TimeTrackerApp.Business.Models;
 using System;
+using TimeTrackerApp.Business.Models;
 
-namespace TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes
+namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
-    public class CalendarDayInputType : InputObjectGraphType<CalendarDay>
+    public class CalendarDayUpdateType : InputObjectGraphType<CalendarDay>
     {
-        public CalendarDayInputType()
+        public CalendarDayUpdateType()
         {
+            Field<NonNullGraphType<IdGraphType>, int>().Name("Id").Resolve(context => context.Source.Id);
             Field<NonNullGraphType<StringGraphType>, string>().Name("Title").Resolve(context => context.Source.Title);
             Field<NonNullGraphType<DateTimeGraphType>, DateTime>().Name("Date").Resolve(context => context.Source.Date);
             Field<IntGraphType, int?>().Name("DayTypeId").Resolve(context => context.Source.DayTypeId);
