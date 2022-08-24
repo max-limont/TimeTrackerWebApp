@@ -3,7 +3,10 @@ import {Timer} from "./Timer";
 import {useAuth} from "../../hooks/useAuth";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {useDispatch} from "react-redux";
-import {updateCurrentWeekWorkingTime} from "../../store/timeTracker/timeTracker.slice";
+import {
+    fetchUserLastWeekTimeTrackerStatistics,
+    updateCurrentWeekWorkingTime
+} from "../../store/timeTracker/timeTracker.slice";
 import {Statistic, StatisticPropsType} from "./Statistic";
 
 const statisticData: StatisticPropsType = {
@@ -47,6 +50,7 @@ export const TimeTrackerPanels: FC = () => {
     const auth = useAuth()
     const dispatch = useDispatch();
     const records = useAppSelector(state => state.rootReducer.timeTracker.records)
+    const lastWeekStatistics = useAppSelector(state => state.rootReducer.timeTracker.lastWeekStatistics)
     const timeWorkedInThisWeek = useAppSelector(state => state.rootReducer.timeTracker.currentWeekWorkingTime)
     const timeToBeWorkedInThisWeek = (auth.state?.user?.weeklyWorkingTime ?? 0) * 60 * 1000
     const numberFormatter = Intl.NumberFormat('uk', {minimumIntegerDigits: 2})
@@ -54,6 +58,8 @@ export const TimeTrackerPanels: FC = () => {
     useEffect(() => {
         if (auth.state?.user?.id) {
             dispatch(updateCurrentWeekWorkingTime({userId: auth.state.user.id, monthNumber: new Date().getMonth() + 1}))
+            dispatch(fetchUserLastWeekTimeTrackerStatistics({userId: auth.state.user.id}))
+            console.log(lastWeekStatistics)
         }
     }, [auth, records])
 
