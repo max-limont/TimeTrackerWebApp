@@ -49,7 +49,7 @@ const authRefreshEpic: Epic = (action$: Observable<ReturnType<typeof authRefresh
                     setCookie({key: accessTokenKey, value: response.data.authRefresh.accessToken, lifetime: 2 * 60})
                     return authorizeUserById(parseInt(parseJwt<AuthUserResponse>(response.data.authRefresh.refreshToken).UserId));
                 }
-                return authLogoutAction(parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId))
+                return authLogoutAction(getCookie(refreshTokenKey) ? parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId) : 0)
             })
         ))
     )
