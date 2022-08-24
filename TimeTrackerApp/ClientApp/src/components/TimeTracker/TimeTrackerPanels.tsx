@@ -8,33 +8,36 @@ import {Statistic, StatisticPropsType} from "./Statistic";
 
 const statisticData: StatisticPropsType = {
     metadata: {
-        maxValue: 8 * 60 * 60 * 1000,
-        minValue: -3 * 60 * 60 * 1000,
+        maxValue: 8,
+        minValue: 0,
         gap: 50,
         itemWidth: 50,
-        width: 400,
-        height: 200
+        width: 500,
+        height: 200,
+        scale: {
+            step: 1
+        }
     },
     data: [
         {
             title: "Mon",
-            value: 60 * 60 * 1000
+            value: 1
         },
         {
             title: "Tue",
-            value: -3 * 60 * 60 * 1000
+            value: 8
         },
         {
             title: "Wed",
-            value: 4 * 60 * 60 * 1000
+            value: 4
         },
         {
             title: "Thu",
-            value: 6 * 60 * 60 * 1000
+            value: 6
         },
         {
             title: "Fri",
-            value: 10 * 60 * 60 * 1000
+            value: 10
         }
     ]
 }
@@ -66,22 +69,20 @@ export const TimeTrackerPanels: FC = () => {
             <Timer />
             <div className={"statistic-panel flex-container flex-column"}>
                 <h3>This week activity:</h3>
-                <div className={"statistic-panel-list"}>
-                    <div>
-                        <h4>Time worked</h4>
-                        <span>
-                            { getFormattedTime(timeWorkedInThisWeek) }
-                        </span>
+                <div className={'statistic-panel-container flex-container justify-content-center align-items-center'}>
+                    <div className={'statistic-panel-list flex-container flex-column'}>
+                        <div>
+                            <h4>Time worked</h4>
+                            <span>{getFormattedTime(timeWorkedInThisWeek)}</span>
+                        </div>
+                        <div>
+                            <h4>Time left to work</h4>
+                            <span>{getFormattedTime(Math.max(0, timeToBeWorkedInThisWeek - timeWorkedInThisWeek))}</span>
+                        </div>
                     </div>
-                    <div>
-                        <h4>Time to work</h4>
-                        <span>
-                            { getFormattedTime(timeToBeWorkedInThisWeek) }
-                        </span>
-                    </div>
+                    <Statistic data={statisticData.data} metadata={statisticData.metadata} />
                 </div>
             </div>
         </div>
     ) : <></>
-    // <Statistic data={statisticData.data} metadata={statisticData.metadata} />
 }

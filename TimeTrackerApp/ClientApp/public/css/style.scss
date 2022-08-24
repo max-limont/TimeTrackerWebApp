@@ -62,6 +62,7 @@ $color-cyan: #00ADB5;
 $color-light: #EEEEEE;
 $color-silver: #D6D6D6;
 $color-red: #F24C4C;
+$color-green: #33B249;
 $color-white: #FFFFFF;
 $color-yellow: #FFC107;
 
@@ -1076,7 +1077,8 @@ table {
             display: flex;
             align-items: stretch;
             border-radius: 2px;
-            padding: 10px;
+            background: $color-white;
+            margin: 5px;
             label {
                 margin-right: 10px;
                 font-weight: 600;
@@ -1085,15 +1087,19 @@ table {
                 min-width: 200px;
                 outline: none;
                 padding: 5px 10px;
-                background: white;
+                background: $color-white;
                 border-block: 1px solid $color-light-dark;
                 border-inline: none;
                 font-family: 'Nunito', sans-serif;
                 font-size: 15px;
                 cursor: pointer;
+                text-align: center;
             }
             .button {
                 padding-inline: 15px;
+                &:not(:hover) {
+                    background: $color-white;
+                }
             }
             .button:last-of-type {
                 border-bottom-left-radius: 0;
@@ -1122,14 +1128,10 @@ table {
         padding: 10px;
         margin: -10px -10px 0 -10px;
         border-radius: 2px;
+        margin-bottom: 10px;
     }
 
     .statistic-panel-list {
-        margin-top: 30px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        flex-wrap: wrap;
-        align-items: stretch;
 
         > div {
             display: inline-flex;
@@ -1156,16 +1158,36 @@ table {
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        padding: 10px;
+        padding: 20px 10px 10px 10px;
+        width: auto;
+        .scale {
+            margin-right: 10px;
+            flex-direction: column-reverse;
+            justify-content: space-between;
+
+            label {
+                width: 30px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: right;
+                font-size: 12px;
+                height: 15px;
+                color: $color-light-dark;
+                margin-bottom: -8px;
+                margin-top: -7px;
+            }
+        }
     }
 
     .chart-titles {
         margin-top: 10px;
+        margin-left: 40px;
 
         label {
             display: inline-flex;
             justify-content: center;
             text-align: center;
+            color: $color-light-dark;
         }
     }
 
@@ -1175,8 +1197,31 @@ table {
         position: relative;
         z-index: 3;
 
+
         .chart-item {
             border-radius: 2px;
+            display: inline-flex;
+
+            .value {
+                background: rgba(0, 0, 0, 0.5);
+                color: $color-light;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                padding: 2px 10px;
+                border-radius: 2px;
+                font-size: 12px;
+                position: relative;
+            }
+
+            &.positive {
+                align-items: flex-start;
+            }
+
+            &.negative {
+                align-items: flex-end;
+            }
         }
 
         .max-value-line, .min-value-line {
@@ -1188,10 +1233,12 @@ table {
             top: 0;
         }
         .min-value-line {
-            background: black;
+            background: gray;
+            border-radius: 2px;
         }
         .max-value-line {
-            background: red;
+            background: $color-light-dark;
+            border-radius: 2px;
         }
     }
 }
@@ -1226,6 +1273,8 @@ table {
 
 .timer {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
 
     > div {

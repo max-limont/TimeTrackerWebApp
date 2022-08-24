@@ -14,7 +14,10 @@ export type StatisticPropsType = {
         itemWidth: number,
         width: number
         height: number
-    }
+        scale: {
+            step: number
+        }
+    },
     data: StatisticDataType[]
 }
 
@@ -22,19 +25,25 @@ export type StatisticStateType = {
     chartWidth: number,
     chartHeight: number,
     chartMaxValue: number,
-    chartMinValue: number
+    chartMinValue: number,
+    scale: {
+        values: string[]
+    }
 }
 
 const initialState: StatisticStateType = {
     chartWidth: 0,
     chartHeight: 0,
     chartMaxValue: 0,
-    chartMinValue: 0
+    chartMinValue: 0,
+    scale: {
+        values: []
+    }
 }
 
 export const Statistic: FC<StatisticPropsType> = (props) => {
 
-    const { metadata, data } = props
+    const {metadata, data} = props
     const [state, setState] = useState({...initialState, chartHeight: metadata.height, chartWidth: metadata.width, chartMaxValue: metadata.maxValue, chartMinValue: metadata.minValue});
 
     const resizeChart = () => {
@@ -43,49 +52,65 @@ export const Statistic: FC<StatisticPropsType> = (props) => {
             minValue = Math.min(minValue, item.value)
             maxValue = Math.max(maxValue, item.value)
         })
-        console.log((metadata.maxValue - metadata.minValue) / (maxValue - minValue === 0 ? 1e20 : maxValue - minValue))
+        let scaleValues: string[] = []
+        for (let i = minValue; i <= maxValue; i += metadata.scale.step) {
+            scaleValues = [...scaleValues, i.toString()]
+        }
         setState({
             ...state,
             chartWidth: Math.min(document.getElementsByClassName('statistic-panel')[0].clientWidth - 45 ?? metadata.width, metadata.width),
-            chartHeight: metadata.height * Math.max(1, (maxValue - minValue === 0 ? 1e20 : maxValue - minValue) / (metadata.maxValue - metadata.minValue)),
+            chartHeight: metadata.height,
             chartMaxValue: maxValue,
-            chartMinValue: minValue
+            chartMinValue: minValue,
+            scale: {
+                values: scaleValues
+            }
         })
     }
 
     useEffect(() => {
         window.addEventListener('resize', () => resizeChart(), false)
         resizeChart()
-    }, [])
-
-    console.log(state.chartHeight)
+    }, [data, metadata])
 
     return (
         <div className={'chart-wrapper flex-container flex-column'}>
-            <div className={'chart'} style={{height: state.chartHeight}}>
-                {
-                    data.map((item, index) => (
-                        <div className={'chart-item'} key={index} style={{
-                            background: item.color ?? '#00ADB5',
-                            width: (state.chartWidth - metadata.gap * (data.length - 1)) / data.length,
-                            height: metadata.height * Math.abs(item.value) / (metadata.maxValue - metadata.minValue),
-                            marginRight: index === data.length - 1 ? 0 : metadata.gap,
-                            marginBottom: item.value > 0 ? -state.chartMinValue / (metadata.maxValue - metadata.minValue) * metadata.height : 0
-                        }}>
-                        </div>
-                    ))
-                }
-                <div className={'max-value-line'} style={{
-                    top: Math.abs(metadata.maxValue - state.chartMaxValue) / (metadata.maxValue - metadata.minValue) * metadata.height
-                }} />
-                <div className={'min-value-line'} style={{
-                    top: state.chartHeight + state.chartMinValue / (metadata.maxValue - metadata.minValue) * metadata.height
-                }} />
+            <div className={'chart-container flex-container'}>
+                <div className={'scale flex-container'}>
+                    {
+                        state.scale.values.map((value, index) => (
+                            <label key={index}>{value}</label>
+                        ))
+                    }
+                </div>
+                <div className={'chart'} style={{height: state.chartHeight}}>
+                    {
+                        data.map((item, index) => (
+                            <div className={`chart-item ${item.value > 0 ? 'positive' : 'negative'}`} key={index} style={{
+                                background: item.value >= metadata.maxValue ? '#33B249' : '#00ADB5',
+                                width: (state.chartWidth - metadata.gap * (data.length - 1)) / data.length,
+                                height: state.chartHeight * Math.abs(item.value) / (state.chartMaxValue - state.chartMinValue),
+                                marginRight: index === data.length - 1 ? 0 : metadata.gap,
+                                marginBottom: item.value > 0 ? -state.chartMinValue / (state.chartMaxValue - state.chartMinValue) * state.chartHeight : -2
+                            }}>
+                                <div className={'value'}>
+                                    {item.value}
+                                </div>
+                            </div>
+                        ))
+                    }
+                    <div className={'max-value-line'} style={{
+                        top: Math.abs(metadata.maxValue - state.chartMaxValue) / (state.chartMaxValue - state.chartMinValue) * state.chartHeight
+                    }} />
+                    <div className={'min-value-line'} style={{
+                        top: state.chartHeight + state.chartMinValue / (state.chartMaxValue - state.chartMinValue) * state.chartHeight
+                    }} />
+                </div>
             </div>
             <div className={'chart-titles'}>
                 {
                     data.map((item, index) => (
-                        <label style={{
+                        <label key={index} style={{
                             width: (state.chartWidth - metadata.gap * (data.length - 1)) / data.length,
                             marginRight: index === data.length - 1 ? 0 : metadata.gap,
                         }}>
