@@ -1,15 +1,23 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {FetchUserRecordsByMonthQueryInputType, Record, TimeTrackerItem} from "../../types/timeTracker.types";
+import {
+    FetchUserLastWeekTimeTrackerStatisticsQueryType,
+    FetchUserRecordsByMonthQueryInputType,
+    Record,
+    TimeTrackerDailyStatistics,
+    TimeTrackerItem
+} from "../../types/timeTracker.types";
 import {store} from "../store";
 
 type TimeTrackerState = {
     records: Record[],
-    currentWeekWorkingTime: number
+    currentWeekWorkingTime: number,
+    lastWeekStatistics: TimeTrackerDailyStatistics[]
 }
 
 const initialState: TimeTrackerState = {
     records: [],
-    currentWeekWorkingTime: 0
+    currentWeekWorkingTime: 0,
+    lastWeekStatistics: []
 }
 
 export const timeTrackerSlice = createSlice({
@@ -31,6 +39,9 @@ export const timeTrackerSlice = createSlice({
         setCurrentWeekWorkingTime: (state: TimeTrackerState, action: PayloadAction<number>) => {
             return {...state, currentWeekWorkingTime: action.payload}
         },
+        setLastWeekStatistics: (state: TimeTrackerState, action: PayloadAction<TimeTrackerDailyStatistics[]>) => {
+            return {...state, lastWeekStatistics: action.payload}
+        }
     }
 })
 
@@ -40,11 +51,12 @@ export const fetchAllRecords = createAction("FetchAllRecords")
 export const fetchAllUserRecords = createAction<number>("FetchAllUserRecords")
 export const fetchUserRecordsByMonth = createAction<FetchUserRecordsByMonthQueryInputType>("FetchUserRecordsByMonth")
 export const updateCurrentWeekWorkingTime = createAction<FetchUserRecordsByMonthQueryInputType>("UpdateCurrentWeekWorkingTime")
+export const fetchUserLastWeekTimeTrackerStatistics = createAction<FetchUserLastWeekTimeTrackerStatisticsQueryType>("FetchUserLastWeekTimeTrackerStatistics")
 export const createRecord = createAction<Record>("CreateRecord")
 export const deleteRecord = createAction<number>("DeleteRecord")
 export const updateRecord = createAction<Record>("UpdateRecord")
 
-export const {setRecords, setCurrentWeekWorkingTime, addRecord, editRecord, removeRecord} = timeTrackerSlice.actions;
+export const {setRecords, setCurrentWeekWorkingTime, setLastWeekStatistics, addRecord, editRecord, removeRecord} = timeTrackerSlice.actions;
 export const timeTrackerReducer = timeTrackerSlice.reducer;
 
 export const recordToTimeTrackerListItem = (record: Record): TimeTrackerItem => {

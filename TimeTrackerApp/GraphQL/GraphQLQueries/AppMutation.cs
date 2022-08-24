@@ -4,17 +4,21 @@ using TimeTrackerApp.GraphQL.GraphQLTypes;
 using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Http;
 using System;
+<<<<<<< HEAD
 using TimeTrackerApp.GraphQL.GraphQLQueries.RoleQueries;
 using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
+||||||| 6066c48
+using TimeTrackerApp.GraphQL.GraphQLQueries.VacationLevelGraphql;
+using TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes;
+=======
+>>>>>>> TimeTrackerV2
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
+        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, IVacationLevelRepository vacationLevelRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
@@ -264,7 +268,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
             Field<RoleMutation>()
                 .Name("RoleMutation")
                 .Resolve(_ => new { });
-           
         }
     }
 }

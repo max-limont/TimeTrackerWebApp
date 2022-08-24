@@ -2,7 +2,7 @@
 using TimeTrackerApp.Business.Models;
 using System;
 
-namespace TimeTrackerApp.GraphQL.GraphQLTypes.CalendarTypes
+namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
     public class CalendarDayType : ObjectGraphType<CalendarDay>
     {

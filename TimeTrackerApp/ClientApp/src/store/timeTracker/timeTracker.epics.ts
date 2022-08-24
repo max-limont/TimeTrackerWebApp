@@ -1,20 +1,32 @@
 import {combineEpics, Epic, ofType} from "redux-observable";
 import {
-    addRecord, editRecord,
-    createRecord, deleteRecord,
-    fetchAllUserRecords, removeRecord,
-    setRecords, updateRecord, fetchUserRecordsByMonth, updateCurrentWeekWorkingTime, setCurrentWeekWorkingTime,
+    addRecord,
+    editRecord,
+    createRecord,
+    deleteRecord,
+    fetchAllUserRecords,
+    removeRecord,
+    setRecords,
+    updateRecord,
+    fetchUserRecordsByMonth,
+    updateCurrentWeekWorkingTime,
+    setCurrentWeekWorkingTime,
+    fetchUserLastWeekTimeTrackerStatistics, setLastWeekStatistics,
 } from "./timeTracker.slice";
 import {from, map, mergeMap, Observable} from "rxjs";
 import {graphqlRequest} from "../../graphql/api";
 import {
-    createRecordMutation, deleteRecordMutation,
-    fetchAllUserRecordsQuery, fetchUserRecordsByMonthQuery, updateRecordMutation
+    createRecordMutation,
+    deleteRecordMutation,
+    fetchAllUserRecordsQuery,
+    fetchUserLastWeekTimeTrackerStatisticsQuery,
+    fetchUserRecordsByMonthQuery,
+    updateRecordMutation
 } from "../../graphql/queries/timeTracker.queries";
 import {
     CreateRecordInputType, DeleteRecordInputType,
     FetchAllUserRecordsInputType, FetchUserRecordsByMonthQueryInputType,
-    Record,
+    Record, TimeTrackerDailyStatistics,
     UpdateRecordInputType
 } from "../../types/timeTracker.types";
 import {Action} from "react-epics";
@@ -64,6 +76,25 @@ const fetchUserRecordsByMonthEpic: Epic = (action$: Observable<ReturnType<typeof
                     return setRecords(records)
                 }
                 return { payload: "Error", type: "FetchUserRecordsByMonthError" } as Action
+            })
+        ))
+    )
+}
+
+const fetchUserLastWeekTimeTrackerStatisticsEpic: Epic = (action$: Observable<ReturnType<typeof fetchUserLastWeekTimeTrackerStatistics>>): any => {
+    return action$.pipe(
+        ofType(fetchUserLastWeekTimeTrackerStatistics.type),
+        mergeMap(action => from(graphqlRequest(fetchUserLastWeekTimeTrackerStatisticsQuery, action.payload)).pipe(
+            map(response => {
+                if (response?.data?.fetchUserLastWeekTimeTrackerStatistics) {
+                    const apiResponse = response.data.fetchUserLastWeekTimeTrackerStatistics;
+                    const statistics: TimeTrackerDailyStatistics[] = apiResponse.map((response: any) => ({
+                        totalWorkingTime: parseInt(response.totalWorkingTime),
+                        date: new Date(response.date ?? '')
+                    }) as TimeTrackerDailyStatistics)
+                    return setLastWeekStatistics(statistics)
+                }
+                return {type: "FetchUserLastWeekTimeTrackerStatistics", payload: "Error"} as Action
             })
         ))
     )
@@ -151,4 +182,4 @@ const deleteRecordEpic: Epic = (action$: Observable<ReturnType<typeof deleteReco
     )
 }
 
-export const timeTrackerEpics = combineEpics(fetchAllUserRecordsEpic, addRecordEpic, deleteRecordEpic, updateRecordEpic, fetchUserRecordsByMonthEpic, updateCurrentWeekWorkingTimeEpic)
+export const timeTrackerEpics = combineEpics(fetchAllUserRecordsEpic, fetchUserLastWeekTimeTrackerStatisticsEpic, addRecordEpic, deleteRecordEpic, updateRecordEpic, fetchUserRecordsByMonthEpic, updateCurrentWeekWorkingTimeEpic)

@@ -62,6 +62,7 @@ $color-cyan: #00ADB5;
 $color-light: #EEEEEE;
 $color-silver: #D6D6D6;
 $color-red: #F24C4C;
+$color-green: #33B249;
 $color-white: #FFFFFF;
 $color-yellow: #FFC107;
 $color-green: #091b0b;
@@ -576,7 +577,7 @@ section {
     }
 }
 .green-button {
-    background: color-green;
+    background: $color-green;
     color: $color-dark;
 
     &:not(.disabled):hover {
@@ -1098,7 +1099,8 @@ table {
             display: flex;
             align-items: stretch;
             border-radius: 2px;
-            padding: 10px;
+            background: $color-white;
+            margin: 5px;
             label {
                 margin-right: 10px;
                 font-weight: 600;
@@ -1107,15 +1109,19 @@ table {
                 min-width: 200px;
                 outline: none;
                 padding: 5px 10px;
-                background: white;
+                background: $color-white;
                 border-block: 1px solid $color-light-dark;
                 border-inline: none;
                 font-family: 'Nunito', sans-serif;
                 font-size: 15px;
                 cursor: pointer;
+                text-align: center;
             }
             .button {
                 padding-inline: 15px;
+                &:not(:hover) {
+                    background: $color-white;
+                }
             }
             .button:last-of-type {
                 border-bottom-left-radius: 0;
@@ -1144,19 +1150,15 @@ table {
         padding: 10px;
         margin: -10px -10px 0 -10px;
         border-radius: 2px;
+        margin-bottom: 10px;
     }
 
     .statistic-panel-list {
-        margin-top: 30px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        flex-wrap: wrap;
-        align-items: stretch;
 
         > div {
             display: inline-flex;
             flex-direction: column;
-            padding-block: 0 30px;
+            margin: 10px 20px 10px 10px;
         }
 
         h4 {
@@ -1169,52 +1171,104 @@ table {
         span {
             color: $color-light-dark;
             font-weight: 700;
-            font-size: 30px;
-            margin-top: 10px;
+            font-size: 20px;
         }
     }
 
     .chart-wrapper {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        padding: 10px;
+        border: 1px solid #E6E6E6;
+        margin-left: 15px;
+        border-radius: 2px;
     }
+}
 
-    .chart-titles {
-        margin-top: 10px;
+.chart-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 10px 10px 10px;
+    width: auto;
+    .scale {
+        margin-right: 10px;
+        width: 30px;
+        flex-direction: column-reverse;
+        position: relative;
 
         label {
+            width: 30px;
+            position: absolute;
+            display: inline-flex;
+            align-items: center;
+            justify-content: right;
+            font-size: 12px;
+            height: 15px;
+            color: $color-light-dark;
+            margin-bottom: -8px;
+            margin-top: -7px;
+        }
+    }
+}
+
+.chart-titles {
+    margin-top: 10px;
+    margin-left: 40px;
+
+    label {
+        display: inline-flex;
+        justify-content: center;
+        text-align: center;
+        color: $color-light-dark;
+    }
+}
+
+.chart {
+    display: inline-flex;
+    align-items: flex-end;
+    position: relative;
+    z-index: 3;
+
+    .chart-item {
+        border-radius: 2px;
+        display: inline-flex;
+
+        .value {
+            background: rgba(0, 0, 0, 0.5);
+            color: $color-light;
             display: inline-flex;
             justify-content: center;
-            text-align: center;
+            align-items: center;
+            width: 100%;
+            padding: 2px 10px;
+            border-radius: 2px;
+            font-size: 12px;
+            position: relative;
+            z-index: 9;
+        }
+
+        &.positive {
+            align-items: flex-start;
+        }
+
+        &.negative {
+            align-items: flex-end;
         }
     }
 
-    .chart {
+    .max-value-line, .min-value-line {
         display: inline-flex;
-        align-items: flex-end;
-        position: relative;
-        z-index: 3;
-
-        .chart-item {
-            border-radius: 2px;
-        }
-
-        .max-value-line, .min-value-line {
-            display: inline-flex;
-            width: 100%;
-            z-index: 1;
-            height: 2px;
-            position: absolute;
-            top: 0;
-        }
-        .min-value-line {
-            background: black;
-        }
-        .max-value-line {
-            background: red;
-        }
+        width: 100%;
+        z-index: 1;
+        height: 1px;
+        position: absolute;
+        top: 0;
+    }
+    .min-value-line {
+        background: gray;
+        border-radius: 2px;
+    }
+    .max-value-line {
+        background: $color-light-dark;
+        border-radius: 2px;
     }
 }
 
@@ -1248,6 +1302,8 @@ table {
 
 .timer {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
 
     > div {
@@ -1371,7 +1427,7 @@ table {
 }
 
 .user-title {
-     padding-top: 15px;
+    padding-top: 15px;
 }
 
 .user-list-controls {
