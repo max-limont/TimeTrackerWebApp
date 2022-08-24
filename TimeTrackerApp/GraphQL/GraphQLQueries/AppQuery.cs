@@ -124,6 +124,17 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return await recordRepository.FetchUserRecordsByMonthAsync(userId, monthNumber);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
+
+            Field<ListGraphType<RecordType>, IEnumerable<Record>>()
+                .Name("FetchUserRecordsByDate")
+                .Argument<NonNullGraphType<IdGraphType>, int>("UserId", "User id")
+                .Argument<NonNullGraphType<DateTimeGraphType>, DateTime>("Date", "Date of work")
+                .ResolveAsync(async context =>
+                {
+                    var userId = context.GetArgument<int>("UserId");
+                    var date = context.GetArgument<DateTime>("Date");
+                    return await recordRepository.FetchUserRecordsByDateAsync(userId, date);
+                });
             
             Field<ListGraphType<VacationType>, IEnumerable<Vacation>>()
                 .Name("FetchAllVacationRequests")
