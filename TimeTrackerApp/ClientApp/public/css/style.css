@@ -803,7 +803,7 @@ table .bottom-table-row {
   .statistic-panel .statistic-panel-list > div {
     display: inline-flex;
     flex-direction: column;
-    padding-block: 0 30px; }
+    margin: 10px 20px 10px 10px; }
   .statistic-panel .statistic-panel-list h4 {
     text-transform: uppercase;
     font-weight: 600;
@@ -812,72 +812,81 @@ table .bottom-table-row {
   .statistic-panel .statistic-panel-list span {
     color: #393E46;
     font-weight: 700;
-    font-size: 30px;
-    margin-top: 10px; }
+    font-size: 20px; }
   .statistic-panel .chart-wrapper {
+    border: 1px solid #E6E6E6;
+    margin-left: 15px;
+    border-radius: 2px; }
+
+.chart-wrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 10px 10px 10px;
+  width: auto; }
+  .chart-wrapper .scale {
+    margin-right: 10px;
+    width: 30px;
+    flex-direction: column-reverse;
+    position: relative; }
+    .chart-wrapper .scale label {
+      width: 30px;
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      justify-content: right;
+      font-size: 12px;
+      height: 15px;
+      color: #393E46;
+      margin-bottom: -8px;
+      margin-top: -7px; }
+
+.chart-titles {
+  margin-top: 10px;
+  margin-left: 40px; }
+  .chart-titles label {
     display: inline-flex;
     justify-content: center;
-    align-items: center;
-    padding: 20px 10px 10px 10px;
-    width: auto; }
-    .statistic-panel .chart-wrapper .scale {
-      margin-right: 10px;
-      flex-direction: column-reverse;
-      justify-content: space-between; }
-      .statistic-panel .chart-wrapper .scale label {
-        width: 30px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: right;
-        font-size: 12px;
-        height: 15px;
-        color: #393E46;
-        margin-bottom: -8px;
-        margin-top: -7px; }
-  .statistic-panel .chart-titles {
-    margin-top: 10px;
-    margin-left: 40px; }
-    .statistic-panel .chart-titles label {
+    text-align: center;
+    color: #393E46; }
+
+.chart {
+  display: inline-flex;
+  align-items: flex-end;
+  position: relative;
+  z-index: 3; }
+  .chart .chart-item {
+    border-radius: 2px;
+    display: inline-flex; }
+    .chart .chart-item .value {
+      background: rgba(0, 0, 0, 0.5);
+      color: #EEEEEE;
       display: inline-flex;
       justify-content: center;
-      text-align: center;
-      color: #393E46; }
-  .statistic-panel .chart {
-    display: inline-flex;
-    align-items: flex-end;
-    position: relative;
-    z-index: 3; }
-    .statistic-panel .chart .chart-item {
-      border-radius: 2px;
-      display: inline-flex; }
-      .statistic-panel .chart .chart-item .value {
-        background: rgba(0, 0, 0, 0.5);
-        color: #EEEEEE;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        padding: 2px 10px;
-        border-radius: 2px;
-        font-size: 12px;
-        position: relative; }
-      .statistic-panel .chart .chart-item.positive {
-        align-items: flex-start; }
-      .statistic-panel .chart .chart-item.negative {
-        align-items: flex-end; }
-    .statistic-panel .chart .max-value-line, .statistic-panel .chart .min-value-line {
-      display: inline-flex;
+      align-items: center;
       width: 100%;
-      z-index: 1;
-      height: 2px;
-      position: absolute;
-      top: 0; }
-    .statistic-panel .chart .min-value-line {
-      background: gray;
-      border-radius: 2px; }
-    .statistic-panel .chart .max-value-line {
-      background: #393E46;
-      border-radius: 2px; }
+      padding: 2px 10px;
+      border-radius: 2px;
+      font-size: 12px;
+      position: relative;
+      z-index: 9; }
+    .chart .chart-item.positive {
+      align-items: flex-start; }
+    .chart .chart-item.negative {
+      align-items: flex-end; }
+  .chart .max-value-line, .chart .min-value-line {
+    display: inline-flex;
+    width: 100%;
+    z-index: 1;
+    height: 1px;
+    position: absolute;
+    top: 0; }
+  .chart .min-value-line {
+    background: gray;
+    border-radius: 2px; }
+  .chart .max-value-line {
+    background: #393E46;
+    border-radius: 2px; }
 
 .timer-panel {
   display: inline-flex;

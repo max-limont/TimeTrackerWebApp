@@ -11,7 +11,6 @@ export type StatisticPropsType = {
         maxValue: number,
         minValue: number,
         gap: number,
-        itemWidth: number,
         width: number
         height: number
         scale: {
@@ -27,7 +26,7 @@ export type StatisticStateType = {
     chartMaxValue: number,
     chartMinValue: number,
     scale: {
-        values: string[]
+        values: number[]
     }
 }
 
@@ -41,7 +40,18 @@ const initialState: StatisticStateType = {
     }
 }
 
-export const Statistic: FC<StatisticPropsType> = (props) => {
+export const defaultMetadata = {
+    maxValue: 1e-16 + 1,
+    minValue: 1e-16 - 1,
+    gap: 0,
+    width: 0,
+    height: 0,
+    scale: {
+        step: 1
+    }
+}
+
+export const Statistics: FC<StatisticPropsType> = (props) => {
 
     const {metadata, data} = props
     const [state, setState] = useState({...initialState, chartHeight: metadata.height, chartWidth: metadata.width, chartMaxValue: metadata.maxValue, chartMinValue: metadata.minValue});
@@ -52,9 +62,9 @@ export const Statistic: FC<StatisticPropsType> = (props) => {
             minValue = Math.min(minValue, item.value)
             maxValue = Math.max(maxValue, item.value)
         })
-        let scaleValues: string[] = []
+        let scaleValues: number[] = []
         for (let i = minValue; i <= maxValue; i += metadata.scale.step) {
-            scaleValues = [...scaleValues, i.toString()]
+            scaleValues = [...scaleValues, i]
         }
         setState({
             ...state,
@@ -79,7 +89,11 @@ export const Statistic: FC<StatisticPropsType> = (props) => {
                 <div className={'scale flex-container'}>
                     {
                         state.scale.values.map((value, index) => (
-                            <label key={index}>{value}</label>
+                            <label key={index} style={{
+                                bottom: (value - state.chartMinValue) / (state.chartMaxValue - state.chartMinValue) * state.chartHeight
+                            }}>
+                                {value}
+                            </label>
                         ))
                     }
                 </div>
@@ -87,11 +101,11 @@ export const Statistic: FC<StatisticPropsType> = (props) => {
                     {
                         data.map((item, index) => (
                             <div className={`chart-item ${item.value > 0 ? 'positive' : 'negative'}`} key={index} style={{
-                                background: item.value >= metadata.maxValue ? '#33B249' : '#00ADB5',
+                                background: item.value >= metadata.maxValue ? '#33B249' : item.value >= metadata.maxValue / 2 ? '#FFC107' : '#F24C4C',
                                 width: (state.chartWidth - metadata.gap * (data.length - 1)) / data.length,
                                 height: state.chartHeight * Math.abs(item.value) / (state.chartMaxValue - state.chartMinValue),
                                 marginRight: index === data.length - 1 ? 0 : metadata.gap,
-                                marginBottom: item.value > 0 ? -state.chartMinValue / (state.chartMaxValue - state.chartMinValue) * state.chartHeight : -2
+                                marginBottom: item.value >= 0 ? -state.chartMinValue / (state.chartMaxValue - state.chartMinValue) * state.chartHeight : -2
                             }}>
                                 <div className={'value'}>
                                     {item.value}
