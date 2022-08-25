@@ -9,7 +9,7 @@ export type  VacationType = {
     isAccepted: boolean | null,
     user: User | null,
     approveUsers: User[] | null,
-    vacationResponses: VacationResponse[] | null
+    vacationResponse: VacationResponse | null
 };
 
 export type VacationResponse = {

@@ -23,15 +23,15 @@ export const getVacationsByUserIdQuery = `
                 firstName,
                 id,
                 lastName
-              }
-              ,
-              vacationResponses{
+              },
+              vacationResponse{
                 comment,
                 user{
                   id,
                   firstName,
                   lastName
                 }
+            }
         }
     }
 `

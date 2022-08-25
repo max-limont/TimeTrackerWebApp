@@ -5,28 +5,106 @@
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
     margin: 0;
     padding: 0;
     border: 0;
     font: inherit;
     vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
     display: block;
 }
 
@@ -35,16 +113,20 @@ body {
     overflow-x: hidden;
 }
 
-ol, ul {
+ol,
+ul {
     list-style: none;
 }
 
-blockquote, q {
+blockquote,
+q {
     quotes: none;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
     content: '';
 }
 
@@ -52,6 +134,7 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
 // ----------------------------------
 
 
@@ -316,6 +399,7 @@ body {
         .logo {
             justify-content: center;
             padding: 0;
+
             .icon {
                 margin: 0;
                 padding: 15px;
@@ -353,7 +437,7 @@ body {
         a:not(:last-child)::after {
             content: '|';
             margin-inline: 10px;
-            color: $color-light !important;
+            color: $color-light  !important;
         }
     }
 
@@ -361,7 +445,7 @@ body {
         box-sizing: border-box;
         align-items: center;
 
-        > a {
+        >a {
             color: $color-light;
             text-decoration: none;
         }
@@ -373,8 +457,7 @@ body {
             margin-inline: 10px;
         }
 
-        a:hover
-        {
+        a:hover {
             color: $color-cyan;
         }
     }
@@ -382,7 +465,7 @@ body {
 
 
 section {
-    > header {
+    >header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -411,7 +494,8 @@ section {
     text-align: center;
     justify-content: center;
     align-items: center;
-    font-family: 'Nunito', serif;
+    font-family: 'Nunito',
+    serif;
     padding: 8px 20px;
     border-radius: 2px;
     font-weight: 600;
@@ -575,6 +659,7 @@ section {
         }
     }
 }
+
 .green-button {
     background: color-green;
     color: $color-dark;
@@ -625,7 +710,7 @@ section {
     color: white;
     grid-template-columns: repeat(7, 1fr);
 
-    > div {
+    >div {
         color: $color-dark;
         background-color: $color-white;
         padding: 20px 10px 20px 10px;
@@ -642,18 +727,22 @@ section {
     display: flex;
     padding-block: 10px;
     border-bottom: 1px solid #F6F6F6;
+
     header {
         width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .button {
             padding: 10px 15px 10px 15px;
         }
     }
+
     h2 {
         font-size: $font-size-header;
         font-weight: 200;
+
         span {
             margin-left: 10px;
         }
@@ -688,11 +777,14 @@ section {
         right: 0;
         bottom: 0;
     }
+
     &.disabled {
         background: lightgray;
-        .day-number > p {
+
+        .day-number>p {
             background: gray;
         }
+
         .day-data {
             opacity: 0.5;
         }
@@ -726,9 +818,9 @@ section {
 }
 
 .unselected-month {
-    > p {
+    >p {
         color: darkgray;
-        background-color: $color-silver !important;
+        background-color: $color-silver  !important;
     }
 }
 
@@ -760,7 +852,9 @@ section {
         border-bottom: 1px solid #E6E6E6;
     }
 
-    input, textarea, select {
+    input,
+    textarea,
+    select {
         background: #F6F6F6;
         box-shadow: inset 0 0 5px -5px $color-dark;
     }
@@ -781,7 +875,7 @@ section {
     }
 }
 
-.day-number.current-day > p {
+.day-number.current-day>p {
     background-color: $color-red;
 }
 
@@ -790,7 +884,7 @@ section {
     justify-content: flex-end;
     margin-bottom: 10px;
 
-    > p {
+    >p {
         padding: 5px;
         border-radius: 2px;
         background-color: $color-light-dark;
@@ -809,11 +903,12 @@ section {
 .calendar-container {
 
     user-select: none;
+
     .button {
         margin: 2px;
     }
 
-    > header {
+    >header {
         padding: 15px;
     }
 }
@@ -887,7 +982,8 @@ section {
             margin-right: 5px;
         }
 
-        input, textarea {
+        input,
+        textarea {
             font-family: 'Nunito', serif;
             outline: none;
             border: none;
@@ -975,7 +1071,7 @@ table {
         font-weight: 300;
     }
 
-    thead > tr:last-child {
+    thead>tr:last-child {
         border-bottom: 1px solid #E6E6E6;
     }
 
@@ -1029,11 +1125,15 @@ table {
         padding-block: 10px;
     }
 
-    .date, .begin, .end, .duration {
+    .date,
+    .begin,
+    .end,
+    .duration {
         width: 200px;
     }
 
-    .creation-type, .last-edited-by {
+    .creation-type,
+    .last-edited-by {
         width: 300px;
     }
 
@@ -1057,7 +1157,7 @@ table {
         box-shadow: inset 0 0 5px -5px $color-dark;
     }
 
-    tr:nth-of-type(2n + 1) .time-picker-input{
+    tr:nth-of-type(2n + 1) .time-picker-input {
         background: #F6F6F6;
     }
 
@@ -1087,7 +1187,7 @@ table {
         border-radius: 2px;
         background: #F6F6F6;
 
-        > h3 {
+        >h3 {
             font-weight: bold;
             font-size: 20px;
             padding: 10px;
@@ -1099,10 +1199,12 @@ table {
             align-items: stretch;
             border-radius: 2px;
             padding: 10px;
+
             label {
                 margin-right: 10px;
                 font-weight: 600;
             }
+
             input {
                 min-width: 200px;
                 outline: none;
@@ -1114,13 +1216,16 @@ table {
                 font-size: 15px;
                 cursor: pointer;
             }
+
             .button {
                 padding-inline: 15px;
             }
+
             .button:last-of-type {
                 border-bottom-left-radius: 0;
                 border-top-left-radius: 0;
             }
+
             .button:first-of-type {
                 border-top-right-radius: 0;
                 border-bottom-right-radius: 0;
@@ -1136,7 +1241,7 @@ table {
     padding: 10px;
     color: $color-dark;
 
-    > h3 {
+    >h3 {
         font-weight: bold;
         font-size: 20px;
         background: #F6F6F6;
@@ -1152,7 +1257,7 @@ table {
         flex-wrap: wrap;
         align-items: stretch;
 
-        > div {
+        >div {
             display: inline-flex;
             flex-direction: column;
             padding-block: 0 30px;
@@ -1183,7 +1288,7 @@ table {
     padding: 10px;
     color: $color-dark;
 
-    > h3 {
+    >h3 {
         font-weight: bold;
         font-size: 20px;
         background: #F6F6F6;
@@ -1206,7 +1311,7 @@ table {
     display: inline-flex;
     width: 100%;
 
-    > div {
+    >div {
         display: inline-flex;
         width: calc(100% / 3);
         flex-direction: column;
@@ -1214,13 +1319,13 @@ table {
         justify-content: center;
         position: relative;
 
-        > h3 {
+        >h3 {
             text-transform: uppercase;
             color: #AAAAAA;
             font-weight: 600;
         }
 
-        > span {
+        >span {
             font-size: 100px;
             font-weight: 100;
             padding: 30px 0 10px 0;
@@ -1305,7 +1410,8 @@ table {
         font-weight: 500;
     }
 
-    input, textarea {
+    input,
+    textarea {
         background: #F6F6F6;
         box-shadow: inset 0 0 5px -5px $color-dark;
     }
@@ -1327,7 +1433,7 @@ table {
 }
 
 .user-title {
-     padding-top: 15px;
+    padding-top: 15px;
 }
 
 .user-list-controls {
@@ -1344,6 +1450,7 @@ table {
     max-width: 550px;
     width: 100%;
     padding: 5px;
+
     label {
         min-width: 100px;
     }
@@ -1437,39 +1544,48 @@ table {
         transform: rotate(360deg);
     }
 }
+
 @keyframes dash {
     0% {
         stroke-dasharray: 1, 150;
         stroke-dashoffset: 0;
     }
+
     50% {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -35;
     }
+
     100% {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -124;
     }
 }
+
 .vacation-container {
     width: 100%;
     padding: 5px;
 }
+
 .vacation-control-panel {
     justify-content: space-between;
 }
+
 .vacation-item {
     display: flex;
     align-items: center;
     text-align: center;
     justify-content: space-between;
     padding: 3px;
+
     >div {
         flex-basis: 200px;
     }
 }
+
 .list-vacation-container {
     margin: 15px;
+
     p {
         font-size: 20px;
         text-align: center;
@@ -1478,20 +1594,24 @@ table {
         border-bottom: 2px solid #00ADB5;
     }
 }
+
 .link {
     text-decoration: none;
 }
+
 div.end-item-action {
     flex-basis: 250px;
     display: flex;
     text-align: center;
     justify-content: center;
 }
+
 .end-item-action {
     >* {
         margin-right: 2px;
     }
 }
+
 .spinner-container {
     position: absolute;
     box-shadow: 0 0 20px -10px #222831;
@@ -1504,6 +1624,7 @@ div.end-item-action {
     left: 50%;
     margin: -50px 0 0 -50px;
 }
+
 .spinner {
     animation: rotate 2s linear infinite;
     z-index: 2;
@@ -1513,15 +1634,18 @@ div.end-item-action {
     margin: -25px 0 0 -25px;
     width: 50px;
     height: 50px;
+
     .path {
         stroke: rgb(126, 176, 241);
         stroke-linecap: round;
         animation: dash 1.5s ease-in-out infinite;
     }
 }
+
 .custom-icon-green {
     color: #16ec56;
 }
+
 .custom-icon-red {
     color: #ff0000;
 }
@@ -1545,9 +1669,24 @@ div.end-item-action {
             min-width: 10px;
         }
 
-        &:hover, &.active {
+        &:hover,
+        &.active {
             background: $color-light-dark;
             color: $color-light;
         }
     }
+}
+
+.response-container {
+    position: relative
+}
+
+.response-box {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    background: rgb(126, 176, 241);
+    z-index: 10;
+    text-align: center;
 }

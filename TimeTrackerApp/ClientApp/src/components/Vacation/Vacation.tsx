@@ -14,6 +14,8 @@ export function Vacation() {
     const dispatch = useDispatch();
     const [createState, setCreateState] = useState(false);
     const [editState, setEditState] = useState(false);
+    const [visibleApprovers, setApprovers] = useState(false);
+    const [visibleResponse, setResponse] = useState(false);
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(state => state.rootReducer.vacation.vacations);
     const auth = useAuth();
@@ -21,11 +23,10 @@ export function Vacation() {
         const id = auth.state?.user?.id;
         // console.log(auth.state?.user?.roleId);
         if (id) {
-            dispatch(getVacationsByUserIdAction(id))
+            dispatch(getVacationsByUserIdAction(id));
         }
     }, [auth.state?.user]);
-
-
+    console.log(vacationsList);
 
     return (
         <>
@@ -48,16 +49,44 @@ export function Vacation() {
                                     <div>IsAccepted</div>
                                     <div className={"end-item-action"}>Actions</div>
                                 </div>
+
                                 {vacationsList.map((item, i) => {
+                                    const vacationResponse = () => {
+                                        return (
+                                            <><div className="response-box">
+                                                 <div>
+                                                    {item.vacationResponse?.user.firstName}
+                                                    {item.vacationResponse?.user.lastName}
+                                                </div>
+                                                <div>
+                                                    <p>Comment</p>
+                                                    {item.vacationResponse?.comment}
+                                                </div>
+                                            </div>
+                                            </>);
+                                    };
+                                    if (item.vacationResponse) {
+
+                                    }
                                     return (
+
                                         <div key={i} className="vacation-item">
                                             <div>{item.startingTime}</div>
                                             <div>{item.endingTime}</div>
-                                            <div>{item.isAccepted ? <span className={" button green-button"} >Aceppted</span>
+                                            <div>{item.isAccepted ? <>
+                                                <span className={" button green-button"} >Aceppted
+                                                </span>
+                                                <span  className="response-container">
+                                                        <button onClick={()=>setResponse(!visibleResponse)}>?</button>
+                                                        {visibleResponse ? vacationResponse() : <></>}
+                                                    </span>
+                                            </>
                                                 : item.isAccepted == null ?
                                                     <span className=" button yellow-button">Wait for confirmation</span>
-                                                    : <span  className={"button red-button"} >Canceled</span>
-                                            }</div>
+                                                    : <span className={"button red-button"} >Canceled</span>
+                                            }
+
+                                            </div>
                                             <div className={"end-item-action"} ><button onClick={() => {
                                                 setEditState(true);
                                                 setIdEdit(item.id)
