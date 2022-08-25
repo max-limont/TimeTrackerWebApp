@@ -5,7 +5,7 @@ import {
     GetSickLeaveByIdInputType,
     RemoveSickLeaveQueryInputType,
     SickLeave,
-    SickLeaveInputType
+    SickLeaveInputType, SickLeaveStatuses
 } from "../../types/sickLeave.types";
 
 export type SickLeaveStateType = {
@@ -45,3 +45,15 @@ export const removeSickLeave = createAction<RemoveSickLeaveQueryInputType>("Remo
 
 export const {setSickLeaves, addSickLeave, editSickLeave, deleteSickLeave} = sickLeaveSlice.actions
 export const sickLeaveReducer = sickLeaveSlice.reducer
+
+export const parseObjectToSickLeave = (object: any): SickLeave => {
+    return {
+        id: parseInt(object.id),
+        startDate: new Date(object.startDate),
+        endDate: new Date(object.endDate),
+        employeeId: parseInt(object.employeeId),
+        approverId: object.approverId ? parseInt(object.approverId) : null,
+        status: parseInt(object.status),
+        creationDateTime: new Date(object.creationDateTime)
+    } as SickLeave
+}

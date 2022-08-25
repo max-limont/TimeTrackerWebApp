@@ -16,10 +16,11 @@ import { roleSlice } from './role/role.slice';
 import { teamEpic } from './team/team.epic';
 import { teamSlice } from './team/team.slice';
 import {sickLeaveSlice} from "./sickLeave/sickLeave.slice";
+import {sickLeaveEpics} from "./sickLeave/sickLeave.epics";
 
 const epicMiddleware = createEpicMiddleware();
 
-const rootEpic = combineEpics(authEpics, userEpics, calendarEpics, timeTrackerEpics, vacationEpic,teamEpic, userListEpics,roleEpic);
+const rootEpic = combineEpics(authEpics, userEpics, calendarEpics, timeTrackerEpics, vacationEpic, teamEpic, userListEpics, roleEpic, sickLeaveEpics);
 
 const rootReducer = combineReducers({
   calendar: calendarSlice.reducer,
