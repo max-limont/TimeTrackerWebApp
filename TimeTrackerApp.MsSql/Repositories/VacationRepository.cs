@@ -11,25 +11,24 @@ namespace TimeTrackerApp.MsSql.Repositories
     {
         private readonly string connectionString;
         private IVacationManagment VacationManagment { get; set; }
+        private IVacationResponse vacationResponse { get; set; }
 
-        public VacationRepository(IConfiguration configuration,IVacationManagment vacationManagment)
+        public VacationRepository(IConfiguration configuration,IVacationManagment vacationManagment,IVacationResponse vacationResponse)
         {
             this.connectionString = configuration.GetConnectionString("MsSqlAzure");
             VacationManagment = vacationManagment;
+            this.vacationResponse = vacationResponse;
         }
 
         public async Task<Vacation> CreateAsync(Vacation vacation)
         {
             string query = @"INSERT INTO Vacation (UserId, StartingTime, EndingTime, Comment) 
-              VALUES (@UserId, @StartingTime, @EndingTime, @Comment); 
-               Insert Into VacationManagment (UserId, ManagerId) Values (@UserId,1)";
+              VALUES (@UserId, @StartingTime, @EndingTime, @Comment)";
             /*1 в запросе должен быть юзер который по дефолту будеть иметь доступ*/
 
             using (var connection = new SqlConnection(connectionString))
             {
-                string queryFetchManageUsers = @$"select  h.Id from Users as h inner join Role as r  on h.RoleId = r.Id
-               and r.Value>(select value from Role inner join Users U on Role.Id = U.RoleId and U.Id={vacation.UserId})";
-
+                string queryFetchManageUsers = @$"";
                 int affectedRows = await connection.ExecuteAsync(query, vacation);
                 var managersId = await connection.QueryAsync<int>(queryFetchManageUsers);
 
@@ -101,10 +100,25 @@ namespace TimeTrackerApp.MsSql.Repositories
         public async Task<IEnumerable<Vacation>> FetchAllUserVacationAsync(int userId)
         {
             string query = @"SELECT * FROM Vacation WHERE UserId = @UserId";
-
+            string getVacationApprovers = @$"select * from Users as u Inner join VacationManagment 
+                        as v on u.Id = v.ManagerId and v.UserId = {userId}";
             using (var connection = new SqlConnection(connectionString))
             {
-                return await connection.QueryAsync<Vacation>(query, new { UserId = userId });
+                var vacations = await connection.QueryAsync<Vacation>(query, new { UserId = userId });
+                var approvers = await connection.QueryAsync<User>(getVacationApprovers);
+                if (vacations != null)
+                {
+                    foreach (var vacation in vacations)
+                    {
+                        vacation.ApproveUsers = approvers.ToList();
+                        if (vacation.IsAccepted != null)
+                        {
+                            vacation.VacationResponses =  await vacationResponse.GetVacationResponsesByVacationId(vacation.Id);
+                        }
+                    }
+                    return vacations;
+                }
+                throw new Exception();
             }
         }
 
@@ -126,8 +140,9 @@ namespace TimeTrackerApp.MsSql.Repositories
 
         public async Task<List<Vacation>> GetRequestVacation(int receiverUserId)
         {
-            string query = @$"Select * from Vacation as v inner join Users as u on v.IsAccepted is null and  v.UserId = u.Id
+            string query = @$"Select * from Vacation as v inner join Users as u on   v.UserId = u.Id
             and u.Id in (Select UserId from VacationManagment where ManagerId={receiverUserId})";
+            
             using (var connection = new SqlConnection(connectionString))
             {
                 var listVacation = await connection.QueryAsync<Vacation, User, Vacation>(query, (v, u) =>

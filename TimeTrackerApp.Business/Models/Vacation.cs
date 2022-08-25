@@ -9,5 +9,7 @@
 		public string? Comment { get; set; } = string.Empty;
 		public bool? IsAccepted { get; set; }
 		public User? User { get; set; }
+		public List<User>? ApproveUsers { get; set; }
+		public List<VacationResponse>? VacationResponses { get; set; }
 	}
 }

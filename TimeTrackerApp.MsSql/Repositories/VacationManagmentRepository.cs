@@ -30,7 +30,6 @@ public class VacationManagmentRepository:IVacationManagment
             {
                 return model;
             }
-
             throw new Exception();
         }
     }
@@ -46,7 +45,6 @@ public class VacationManagmentRepository:IVacationManagment
                 return model;
             }
         }
-
         throw new Exception();
     }
 
@@ -61,7 +59,6 @@ public class VacationManagmentRepository:IVacationManagment
             {
                 return model;
             }
-
             throw new Exception();
         }
     }
