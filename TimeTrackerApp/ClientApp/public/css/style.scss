@@ -147,7 +147,7 @@ $color-silver: #D6D6D6;
 $color-red: #F24C4C;
 $color-white: #FFFFFF;
 $color-yellow: #FFC107;
-$color-green: #091b0b;
+$color-green: #08ad1b;
 
 $font-size-default: 18px;
 $font-size-header: 26px;
@@ -523,6 +523,29 @@ section {
         &:not(.disabled):hover {
             background: $color-cyan;
             color: $color-light;
+        }
+    }
+}
+
+
+.green-button {
+    background: $color-green;
+    color: $color-dark;
+
+    &:not(.disabled):hover {
+        background: transparent;
+        color: $color-green;
+        border: 1px solid $color-green;
+    }
+
+    &.inverse {
+        background: transparent;
+        color: $color-green;
+        border: 1px solid $color-cyan;
+
+        &:not(.disabled):hover {
+            background: $color-green;
+            color: $color-dark;
         }
     }
 }
@@ -1678,15 +1701,23 @@ div.end-item-action {
 }
 
 .response-container {
-    position: relative
+    position: relative;
+    button.action-button{
+       
+    }
 }
 
 .response-box {
     position: absolute;
+    top: -5px;
+    left: 103%;
     display: flex;
     flex-direction: column;
     padding: 15px;
-    background: rgb(126, 176, 241);
+    border-radius: 8px;
+    border: 2px solid rgb(126, 176, 241);
+    background: white;
     z-index: 10;
     text-align: center;
 }
+

@@ -54,9 +54,9 @@ export function Vacation() {
                                     const vacationResponse = () => {
                                         return (
                                             <><div className="response-box">
-                                                 <div>
-                                                    {item.vacationResponse?.user.firstName}
-                                                    {item.vacationResponse?.user.lastName}
+                                                <div>
+                                                    {item.vacationResponse?.user?.firstName}
+                                                    {item.vacationResponse?.user?.lastName}
                                                 </div>
                                                 <div>
                                                     <p>Comment</p>
@@ -76,10 +76,11 @@ export function Vacation() {
                                             <div>{item.isAccepted ? <>
                                                 <span className={" button green-button"} >Aceppted
                                                 </span>
-                                                <span  className="response-container">
-                                                        <button onClick={()=>setResponse(!visibleResponse)}>?</button>
-                                                        {visibleResponse ? vacationResponse() : <></>}
-                                                    </span>
+                                                <span className="response-container">
+                                                    <button className="button cyan-button action-button"
+                                                        onClick={() => setResponse(!visibleResponse)}>{">"}</button>
+                                                    {visibleResponse ? vacationResponse() : <></>}
+                                                </span>
                                             </>
                                                 : item.isAccepted == null ?
                                                     <span className=" button yellow-button">Wait for confirmation</span>
@@ -87,10 +88,11 @@ export function Vacation() {
                                             }
 
                                             </div>
-                                            <div className={"end-item-action"} ><button onClick={() => {
-                                                setEditState(true);
-                                                setIdEdit(item.id)
-                                            }} className="button cyan-button">Edit</button>
+                                            <div className={"end-item-action"} >
+                                                {item.isAccepted == null ? <button onClick={() => {
+                                                    setEditState(true);
+                                                    setIdEdit(item.id);
+                                                }} className="button cyan-button">Edit</button> : <></>}
                                                 <button className={"button red-button close"} onClick={() =>
                                                     dispatch(removeVacationAction(item.id))} >
                                                     <FontAwesomeIcon icon={faXmark} className={"icon"} />

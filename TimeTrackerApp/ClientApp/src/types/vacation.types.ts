@@ -17,7 +17,7 @@ export type VacationResponse = {
     userId: number,
     comment: string,
     vacationId: number,
-    user: User
+    user: User|null
 };
 
 export type CreateVacationType = {

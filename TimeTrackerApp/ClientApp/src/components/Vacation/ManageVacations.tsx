@@ -8,11 +8,13 @@ import { EditVacation, postFixDate } from "./EditVacation";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {getRequestVacationAction, updateVacationAction} from "../../store/vacation/vacation.slice";
+import { GiveResponse } from "./GiveResponse";
 
 
 export function ManageVacationRequest() {
     const dispatch = useDispatch();
     const [editState, setEditState] = useState(false);
+    const [responseState, setResponse] = useState(false);
     const [id, setIdEdit] = useState(0);
     const requestsVacation = useAppSelector(state => state.rootReducer.vacation.requestVacations);
     const auth = useAuth();
@@ -23,10 +25,12 @@ export function ManageVacationRequest() {
              dispatch(getRequestVacationAction(auth.state?.user?.id));
         }
        
-    }, [auth.state?.user]);
+    }, [auth.state?.user?.id]);
     
     return (
         <>
+
+            {responseState ? <GiveResponse stateForm={setResponse} visible={responseState} idVacation={id} /> : <></>}
             {editState ? <EditVacation sourceVacation={2} stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
             <div className="vacation-container">
                 <div className="control-panel vacation-control-panel">
@@ -69,14 +73,11 @@ export function ManageVacationRequest() {
                                                 }}>
                                                     <FontAwesomeIcon icon={faEdit} className={"icon"} />
                                                 </button>
-                                                <button className={"button yellow-button close"} onClick={() =>
-                                                    dispatch(updateVacationAction({...itemToUpdate, isAccepted: false }))}>
-                                                    <FontAwesomeIcon icon={faXmark} className={"icon"} />
-                                                </button>
-                                                <button className="button green-button close" onClick={() => {
-                                                    dispatch(updateVacationAction({...itemToUpdate, isAccepted: true }));
+                                                <button className="button cyan-button close" onClick={()=>{
+                                                      setResponse(true);
+                                                      setIdEdit(item.id);
                                                 }}>
-                                                    <FontAwesomeIcon icon={faCheck} className={"icon"} />
+                                                    Give Response
                                                 </button>
                                                 <button className="button red-button close" onClick={() => {
                                                 }}>
