@@ -164,7 +164,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 					}
                     return result;
                 })
-                .AuthorizeWithPolicy("LoggenIn");
+                .AuthorizeWithPolicy("LoggedIn");
 
             Field<ListGraphType<VacationType>, IEnumerable<Vacation>>()
                 .Name("FetchAllVacationRequests")
