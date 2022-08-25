@@ -33,7 +33,7 @@ create table [Vacation]
 	[StartingTime] date not null,
 	[EndingTime] date not null,
 	[Comment] text,
-    [IsAccepted] bit ,
+    [IsAccepted] bit,
 )
 
 create table [AuthenticationTokens] 
@@ -54,7 +54,25 @@ create table [Calendar]
 
 create table [BackgroundTasks] 
 (
-	[Id] INT PRIMARY KEY IDENTITY(1, 1),
-	[Type] NVARCHAR(64) NOT NULL,
-	[DateTime] DATETIME NOT NULL
+	[Id] int primary key identity(1, 1),
+	[Type] nvarchar(64) not null,
+	[DateTime] datetime not null
+)
+
+create table [UserManagement] 
+(
+	[Id] int primary key identity(1, 1),
+	[EmployeeId] int not null foreign key references [Users]([Id]),
+	[ManagerId] int not null foreign key references [Users]([Id])
+)
+
+create table [SickLeaves] 
+(
+	[Id] int primary key identity(1, 1),
+	[StartDate] date not null,
+	[EndDate] date not null,
+	[EmployeeId] int not null foreign key references [Users]([Id]),
+	[ApproverId] int foreign key references [Users]([Id]),
+	[Status] int not null default 1,
+	[CreationDateTime] datetime not null default getdate(),
 )

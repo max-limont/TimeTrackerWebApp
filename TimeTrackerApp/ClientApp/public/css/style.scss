@@ -65,7 +65,6 @@ $color-red: #F24C4C;
 $color-green: #33B249;
 $color-white: #FFFFFF;
 $color-yellow: #FFC107;
-$color-green: #091b0b;
 
 $font-size-default: 18px;
 $font-size-header: 26px;
@@ -1652,4 +1651,41 @@ div.end-item-action {
     }
 }
 
+.sick-leaves-list {
+    background: $color-white;
+    border-radius: 2px;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+    margin: 15px;
 
+    table {
+        td {
+            padding: 10px;
+        }
+
+        .button:not(:last-of-type) {
+            margin-right: 5px;
+        }
+
+        .status {
+            padding: 5px 10px 5px 10px;
+            border-radius: 2px;
+
+            &.expired {
+                color: $color-dark;
+                background: $color-silver;
+            }
+            &.under-review {
+                color: $color-light;
+                background: $color-cyan;
+            }
+            &.approved {
+                color: $color-light;
+                background: $color-green;
+            }
+            &.rejected {
+                color: $color-light;
+                background: $color-red;
+            }
+        }
+    }
+}

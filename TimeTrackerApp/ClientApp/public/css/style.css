@@ -397,18 +397,18 @@ section > header {
       color: #222831; }
 
 .green-button {
-  background: #091b0b;
+  background: #33B249;
   color: #222831; }
   .green-button:not(.disabled):hover {
     background: transparent;
-    color: #091b0b;
-    border: 1px solid #091b0b; }
+    color: #33B249;
+    border: 1px solid #33B249; }
   .green-button.inverse {
     background: transparent;
-    color: #091b0b;
-    border: 1px solid #091b0b; }
+    color: #33B249;
+    border: 1px solid #33B249; }
     .green-button.inverse:not(.disabled):hover {
-      background: #091b0b;
+      background: #33B249;
       color: #222831; }
 
 ::-webkit-scrollbar {
@@ -1194,5 +1194,30 @@ div.end-item-action {
     .pagination button:hover, .pagination button.active {
       background: #393E46;
       color: #EEEEEE; }
+
+.sick-leaves-list {
+  background: #FFFFFF;
+  border-radius: 2px;
+  box-shadow: 0 0 5px -4px #393E46;
+  margin: 15px; }
+  .sick-leaves-list table td {
+    padding: 10px; }
+  .sick-leaves-list table .button:not(:last-of-type) {
+    margin-right: 5px; }
+  .sick-leaves-list table .status {
+    padding: 5px 10px 5px 10px;
+    border-radius: 2px; }
+    .sick-leaves-list table .status.expired {
+      color: #222831;
+      background: #D6D6D6; }
+    .sick-leaves-list table .status.under-review {
+      color: #EEEEEE;
+      background: #00ADB5; }
+    .sick-leaves-list table .status.approved {
+      color: #EEEEEE;
+      background: #33B249; }
+    .sick-leaves-list table .status.rejected {
+      color: #EEEEEE;
+      background: #F24C4C; }
 
 /*# sourceMappingURL=style.css.map */
