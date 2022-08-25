@@ -45,8 +45,6 @@ export const timeTrackerSlice = createSlice({
     }
 })
 
-
-
 export const fetchAllRecords = createAction("FetchAllRecords")
 export const fetchAllUserRecords = createAction<number>("FetchAllUserRecords")
 export const fetchUserRecordsByMonth = createAction<FetchUserRecordsByMonthQueryInputType>("FetchUserRecordsByMonth")
