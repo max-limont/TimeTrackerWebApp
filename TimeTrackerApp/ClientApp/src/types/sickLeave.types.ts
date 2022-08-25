@@ -24,3 +24,19 @@ export type SickLeaveInputType = {
     status?: SickLeaveStatuses | null,
     creationDateTime?: Date | null
 }
+
+export type FetchAllSickLeavesByEmployeeIdQueryInputType = {
+    employeeId: number
+}
+
+export type FetchAllSickLeavesForManagerByManagerIdQueryInputType = {
+    managerId: number
+}
+
+export type GetSickLeaveByIdInputType = {
+    id: number
+}
+
+export type RemoveSickLeaveQueryInputType = {
+    id: number
+}
