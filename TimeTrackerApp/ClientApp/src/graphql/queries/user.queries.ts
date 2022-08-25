@@ -26,8 +26,6 @@ export const getUserByIdQuery = `
             remainingVacationDays
             privilegesValue
             vacationPermissionId,
-            teamId,
-            roleId
         }
     }
 `

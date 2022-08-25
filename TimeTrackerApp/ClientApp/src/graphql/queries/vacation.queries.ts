@@ -18,7 +18,20 @@ export const getAllVacationsQuery = `
 export const getVacationsByUserIdQuery = `
     query ($userId: ID!) {
         fetchAllUserVacationRequests(userId: $userId) {
-            ${queryFragment}
+            ${queryFragment},
+            approvers{
+                firstName,
+                id,
+                lastName
+              }
+              ,
+              vacationResponses{
+                comment,
+                user{
+                  id,
+                  firstName,
+                  lastName
+                }
         }
     }
 `

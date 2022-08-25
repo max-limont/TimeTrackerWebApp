@@ -39,6 +39,7 @@ const getVacationsByUserIdEpic: Epic = (action$: Observable<ReturnType<typeof ge
             userId: action.payload
         })).pipe(
             map(response => {
+                console.log(response);
                 return setVacation(formatDateToNormalFormat(response.data.fetchAllUserVacationRequests));
             })
         ))
@@ -52,6 +53,7 @@ const createVacationRequestEpic: Epic = (action$: Observable<ReturnType<typeof c
             model: action.payload
         })).pipe(
             map(response => {
+                console.log(response);
                 const model: VacationType = response.data.createVacationRequest;
                 return addVacation({
                     ...model,

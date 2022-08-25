@@ -27,9 +27,11 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
             password: action.payload.password
         } as AuthLoginInputType)).pipe(
             map(response => {
+                console.log(response);
                 if (response?.data?.authLogin?.accessToken && response?.data?.authLogin?.refreshToken && !response?.errors) {
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
+                    console.log(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
                     const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
                     return authorizeUserById(userId)
                 }
