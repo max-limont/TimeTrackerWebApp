@@ -9,7 +9,7 @@ namespace TimeTrackerApp.Business.Models
 		public DateTime EndDate { get; set; }
 		public int EmployeeId { get; set; }
 		public int? ApproverId { get; set; }
-		public SickLeaveStatuses Status { get; set; }
-		public DateTime CreatedAt { get; set; }
+		public SickLeaveStatuses Status { get; set; } = SickLeaveStatuses.UnderReview;
+		public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
 	}
 }

@@ -42,6 +42,7 @@ builder.Services.AddSingleton<ITeamRepository>(provider => new TeamRepository(co
 builder.Services.AddSingleton<IVacationManagment>(provider => new VacationManagmentRepository(connectionString));
 builder.Services.AddSingleton<IRoleRepository>(provider => new RoleRepository(connectionString));
 builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
+builder.Services.AddSingleton<ISickLeaveRepository>(provider => new SickLeaveRepository(connectionString));
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());

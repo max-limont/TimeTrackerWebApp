@@ -11,7 +11,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
+        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
@@ -256,6 +256,33 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var id = _.GetArgument<int>("Id");
                     var state = _.GetArgument<bool>("StateAccepted");
                     return await vacationRepository.ChangeAcceptedState(id, state);
+                });
+
+            Field<SickLeaveType, SickLeave>()
+                .Name("CreateSickLeave")
+                .Argument<NonNullGraphType<SickLeaveInputType>, SickLeave>("SickLeave", "Sick leave")
+                .ResolveAsync(async context =>
+                {
+                    var sickLeave = context.GetArgument<SickLeave>("SickLeave");
+                    return await sickLeaveRepository.CreateAsync(sickLeave);
+                });
+
+            Field<SickLeaveType, SickLeave>()
+                .Name("EditSickLeave")
+                .Argument<NonNullGraphType<SickLeaveInputType>, SickLeave>("SickLeave", "Sick leave")
+                .ResolveAsync(async context =>
+                {
+                    var sickLeave = context.GetArgument<SickLeave>("SickLeave");
+                    return await sickLeaveRepository.EditAsync(sickLeave);
+                });
+
+            Field<SickLeaveType, SickLeave>()
+                .Name("RemoveSickLeave")
+                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Sick leave id")
+                .ResolveAsync(async context =>
+                {
+                    var id = context.GetArgument<int>("Id");
+                    return await sickLeaveRepository.RemoveAsync(id);
                 });
             
             Field<RoleMutation>()

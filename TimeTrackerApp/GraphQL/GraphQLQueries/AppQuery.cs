@@ -16,7 +16,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppQuery : ObjectGraphType
     {
-        public AppQuery(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
+        public AppQuery(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
         {
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
@@ -259,7 +259,41 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var id = contex.GetArgument<int>("ReceiverId");
                     return await vacationRepository.GetRequestVacation(id);
                 })
-                .AuthorizeWithPolicy("LoggedIn"); 
+                .AuthorizeWithPolicy("LoggedIn");
+
+            Field<ListGraphType<SickLeaveType>, IEnumerable<SickLeave>>()
+                .Name("FetchAllSickLeaves")
+                .ResolveAsync(async context =>
+                {
+                    return await sickLeaveRepository.FetchAllAsync();
+                });
+
+            Field<ListGraphType<SickLeaveType>, IEnumerable<SickLeave>>()
+                .Name("FetchAllSickLeavesByEmployeeId")
+                .Argument<NonNullGraphType<IdGraphType>, int>("EmployeeId", "Employee id")
+                .ResolveAsync(async context =>
+                {
+                    var employeeId = context.GetArgument<int>("EmployeeId");
+                    return await sickLeaveRepository.FetchAllByEmployeeIdAsync(employeeId);
+                });
+
+            Field<ListGraphType<SickLeaveType>, IEnumerable<SickLeave>>()
+                .Name("FetchAllSickLeavesForManagerByManagerId")
+                .Argument<NonNullGraphType<IdGraphType>, int>("ManagerId", "Manager id")
+                .ResolveAsync(async context =>
+                {
+                    var managerId = context.GetArgument<int>("ManagerId");
+                    return await sickLeaveRepository.FetchAllForManagerByManagerIdAsync(managerId);
+                });
+
+            Field<SickLeaveType, SickLeave>()
+                .Name("GetSickLeaveById")
+                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Sick leave id")
+                .ResolveAsync(async context =>
+                {
+                    var id = context.GetArgument<int>("Id");
+                    return await sickLeaveRepository.GetByIdAsync(id);
+                });
             
             Field<RoleQuery>()
                 .Name("RoleQuery")

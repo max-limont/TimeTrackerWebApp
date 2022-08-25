@@ -21,6 +21,6 @@ export type SickLeaveInputType = {
     endDate: Date,
     employeeId: number,
     approverId?: number | null,
-    status: SickLeaveStatuses,
+    status?: SickLeaveStatuses | null,
     creationDateTime?: Date | null
 }

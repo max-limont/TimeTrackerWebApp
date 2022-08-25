@@ -16,7 +16,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<SickLeave> CreateAsync(SickLeave sickLeave)
 		{
-			string query = @"INSERT INTO SickLeaves(StartDate, EndDate, EmployeeId, ApproverId, Status, CreatedAt) VALUES (@StartDate, @EndDate, @EmployeeId, @ApproverId, @Status, @CreatedAt) SELECT @@IDENTITY";
+			string query = @"INSERT INTO SickLeaves(StartDate, EndDate, EmployeeId, ApproverId, Status, CreationDateTime) VALUES (@StartDate, @EndDate, @EmployeeId, @ApproverId, @Status, @CreationDateTime) SELECT @@IDENTITY";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -38,7 +38,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<SickLeave> EditAsync(SickLeave sickLeave)
 		{
-			string query = @"UPDATE SickLeaves SET StartDate = @StartDate, EndDate = @EndDate, EmployeeId = @EmployeeId, ApproverId = @ApproverId, Status = @Status, CreatedAt = @CreatedAt";
+			string query = @"UPDATE SickLeaves SET StartDate = @StartDate, EndDate = @EndDate, EmployeeId = @EmployeeId, ApproverId = @ApproverId, Status = @Status, CreationDateTime = @CreationDateTime WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{

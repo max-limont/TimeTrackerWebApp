@@ -14,8 +14,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
 			Field<NonNullGraphType<DateTimeGraphType>, DateTime>().Name("EndDate").Resolve(context => context.Source.EndDate);
 			Field<NonNullGraphType<IdGraphType>, int>().Name("EmployeeId").Resolve(context => context.Source.EmployeeId);
 			Field<IdGraphType, int?>().Name("ApproverId").Resolve(context => context.Source.ApproverId);
-			Field<NonNullGraphType<IntGraphType>, SickLeaveStatuses>().Name("Status").Resolve(context => context.Source.Status);
-			Field<DateTimeGraphType, DateTime>().Name("CreatedAt").Resolve(context => context.Source.CreatedAt);
+			Field<IntGraphType, int?>().Name("Status").Resolve(context => (int)context.Source.Status);
+			Field<DateTimeGraphType, DateTime>().Name("CreationDateTime").Resolve(context => context.Source.CreationDateTime);
 		}
 	}
 }
