@@ -11,7 +11,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, IVacationLevelRepository vacationLevelRepository)
+        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
