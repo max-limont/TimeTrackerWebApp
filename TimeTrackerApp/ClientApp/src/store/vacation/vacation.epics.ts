@@ -1,7 +1,7 @@
 import {combineEpics, Epic, ofType} from "redux-observable";
 import { from, map, mergeMap, Observable } from "rxjs";
 import { graphqlRequest } from "../../graphql/api";
-import { createVacationQuery, getVacationRequestQuery, getVacationsByUserIdQuery, removeVacationQuery, updateVacationQuery } from "../../graphql/queries/vacation.queries";
+import { createResponseQuery, createVacationQuery, getVacationRequestQuery, getVacationsByUserIdQuery, removeVacationQuery, updateVacationQuery } from "../../graphql/queries/vacation.queries";
 import {
     addVacation,
     removeRequestVacation,
@@ -14,7 +14,8 @@ import {
     createVacationAction,
     getRequestVacationAction,
     removeVacationAction,
-    updateVacationAction
+    updateVacationAction,
+    createResponseAction
 } from "./vacation.slice";
 import moment from "moment";
 import { VacationType } from "../../types/vacation.types";
@@ -134,7 +135,22 @@ export const updateVacationEpic: Epic = (action$: Observable<ReturnType<typeof u
     )
 };
 
-export const vacationEpic = combineEpics(getVacationsByUserIdEpic, updateVacationEpic, createVacationRequestEpic, getVacationRequestEpic, removeVacationEpic);
+
+const createResponseEpic: Epic = (action$: Observable<ReturnType<typeof createResponseAction>>):any=>{
+return action$.pipe(
+    ofType(createResponseAction.type),
+    mergeMap((action:any)=>from(graphqlRequest(createResponseQuery,{
+        state: action.payload.stateAccepte,
+        response: action.payload.response
+    })).pipe(
+        map(response=>{
+            console.log(response);
+        })
+    ))
+)
+}
+
+export const vacationEpic = combineEpics(getVacationsByUserIdEpic, updateVacationEpic,createResponseEpic,createVacationRequestEpic, getVacationRequestEpic, removeVacationEpic);
 
 
 

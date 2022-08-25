@@ -82,3 +82,11 @@ export const getVacationRequestQuery = `
     }
 `
 
+export const createResponseQuery=`
+query($state:Boolean,$response:VacationResponseInputType ){
+    ChangeAcceptedState(response: $response, stateAccepted: $state){
+        id,
+        isAccepted,
+        userId,
+    }
+}`
