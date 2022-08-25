@@ -6,7 +6,7 @@ namespace TimeTrackerApp.Business.Repositories
 	{
 		Task<List<Vacation>> FetchAllAsync();
 		Task<IEnumerable<Vacation>> FetchAllUserVacationAsync(int userId); 
-		Task<Vacation> ChangeAcceptedState(int id, bool stateAccept);
+		Task<Vacation> ChangeAcceptedState(VacationResponse vacation, bool stateAccept);
 		Task<Vacation> GetByIdAsync(int id);
 		Task<Vacation> CreateAsync(Vacation vacation);
 		Task<Vacation> EditAsync(Vacation vacation);

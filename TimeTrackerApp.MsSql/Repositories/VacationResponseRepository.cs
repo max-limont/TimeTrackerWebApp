@@ -10,6 +10,7 @@ namespace TimeTrackerApp.MsSql.Repositories;
 public class VacationResponseRepository:IVacationResponse
 {
     private string connectionString { get; set; }
+
     private SqlConnection Connection {
         get
         {
@@ -17,7 +18,7 @@ public class VacationResponseRepository:IVacationResponse
         }
     }
     
-    public VacationResponseRepository(IConfiguration configuration, IVacationRepository vacationRepository)
+    public VacationResponseRepository(IConfiguration configuration)
     {
         connectionString = configuration.GetConnectionString("MsSqlAzure");
     } 
@@ -45,21 +46,26 @@ public class VacationResponseRepository:IVacationResponse
         throw new NotImplementedException();
     }
 
-    public async Task<List<VacationResponse>> GetVacationResponsesByVacationId(int vacationId)
+    public async Task<VacationResponse> GetVacationResponseByVacationId(int vacationId)
     {
         string query = @$"Select * from VacationResponse as v INNER JOIN Users U on U.Id = v.UserId and v.VacationId = {vacationId}";
         using (Connection)
         {
-            var vacationResponses = await Connection.QueryAsync<VacationResponse>(query);
-            if (vacationResponses != null)
+            var vacationResponse = await Connection.QueryAsync<VacationResponse,User,VacationResponse>(query,
+                (v, u) =>
+                {
+                    v.User = u;
+                    return v;
+                }, splitOn:"Id");
+            if (vacationResponse != null)
             {
-                return vacationResponses.ToList();
+                return vacationResponse.First();
             }
             throw new Exception();
         }
     }
 
-    public async Task<VacationResponse> CreateVacationResponse(VacationResponse vacationResponse, bool stateVacation)
+    public async Task<VacationResponse> CreateVacationResponse(VacationResponse vacationResponse)
     {
         string query = @"Insert Into VacationResponse (VacationId, Comment, UserId) 
               Values (@VacationId, @Comment,@UserId) select  @@IDENTITY";

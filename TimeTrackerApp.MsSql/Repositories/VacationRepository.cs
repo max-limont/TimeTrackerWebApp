@@ -82,26 +82,29 @@ namespace TimeTrackerApp.MsSql.Repositories
             }
         }
 
-        public async Task<Vacation> ChangeAcceptedState(int id, bool stateAccept)
+        public async Task<Vacation> ChangeAcceptedState(VacationResponse response,bool stateAccept)
         {
             string query = @"Update Vacation set IsAccepted=@StateAccepted Where Id=@Id";
             using (var connection = new SqlConnection(connectionString))
             {
-                int result = await connection.ExecuteAsync(query, new { Id = id, StateAccept = stateAccept });
+                int result = await connection.ExecuteAsync(query, new { Id = response.Id, StateAccept = stateAccept });
                 if (result == 0)
                 {
                     throw new Exception();
                 }
-
-                return await GetByIdAsync(id);
+ 
+                var model =  await vacationResponse.CreateVacationResponse(response);
+                return await GetByIdAsync(response.VacationId);
             }
         }
 
         public async Task<IEnumerable<Vacation>> FetchAllUserVacationAsync(int userId)
         {
             string query = @"SELECT * FROM Vacation WHERE UserId = @UserId";
+            
             string getVacationApprovers = @$"select * from Users as u Inner join VacationManagment 
                         as v on u.Id = v.ManagerId and v.UserId = {userId}";
+            
             using (var connection = new SqlConnection(connectionString))
             {
                 var vacations = await connection.QueryAsync<Vacation>(query, new { UserId = userId });
@@ -113,7 +116,7 @@ namespace TimeTrackerApp.MsSql.Repositories
                         vacation.ApproveUsers = approvers.ToList();
                         if (vacation.IsAccepted != null)
                         {
-                            vacation.VacationResponses =  await vacationResponse.GetVacationResponsesByVacationId(vacation.Id);
+                            vacation.VacationResponse =  await vacationResponse.GetVacationResponseByVacationId(vacation.Id);
                         }
                     }
                     return vacations;

@@ -251,13 +251,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 
             Field<VacationType, Vacation>()
                 .Name("ChangeAcceptedState")
-                .Argument<IntGraphType, int>("Id", "id user")
+                .Argument<VacationResponseInputType, VacationResponse>("response", "response ")
                 .Argument<BooleanGraphType, bool>("StateAccepted", "new state Accepted")
                 .ResolveAsync(async _ =>
                 {
-                    var id = _.GetArgument<int>("Id");
+                    var response = _.GetArgument<VacationResponse>("response");
                     var state = _.GetArgument<bool>("StateAccepted");
-                    return await vacationRepository.ChangeAcceptedState(id, state);
+                    return await vacationRepository.ChangeAcceptedState(response, state);
                 });
             
            

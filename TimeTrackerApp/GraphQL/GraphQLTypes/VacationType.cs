@@ -16,7 +16,9 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
             Field(x => x.UserId,nullable: false);
             Field(x => x.IsAccepted,nullable:true);
             Field<UserType, User>().Name("User").Resolve(context=>context.Source.User);
-            Field<ListGraphType<UserType>, List<User>>().Name("User").Resolve(context=>context.Source.ApproveUsers);
+            Field<ListGraphType<UserType>, List<User>>().Name("approvers").Resolve(context=>context.Source.ApproveUsers);
+            Field<VacationResponseType, VacationResponse>().Name("vacationResponse")
+                .Resolve(x => x.Source.VacationResponse);
         }
     }
 }

@@ -48,10 +48,10 @@ builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAutho
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
-// builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
-builder.Services.AddHostedService<BackgroundTaskService>();
-builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
-builder.Services.AddScoped<AutoCreateRecordsTask>();
+// // builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
+// builder.Services.AddHostedService<BackgroundTaskService>();
+// builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
+// builder.Services.AddScoped<AutoCreateRecordsTask>();
 
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()
@@ -156,8 +156,8 @@ app.UseSpa(spa =>
     }
 });
 
-using var scope = app.Services.CreateScope();
-var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
-migrationService.MigrateUp();
+// using var scope = app.Services.CreateScope();
+// var migrationService = app.Services.GetRequiredService<IMigrationRunner>();
+// migrationService.MigrateUp();
 
 app.Run();
