@@ -26,6 +26,14 @@ export type CreateVacationType = {
     endingTime: string,
     comment: string
 }
+export type EditVacationType = {
+    id: number,
+    userId: number,
+    startingTime: string,
+    endingTime: string,
+    comment: string,
+    isAccepted: boolean
+}
 
 export type VacationLevelType = {
     id: number,

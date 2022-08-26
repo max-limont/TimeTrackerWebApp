@@ -47,13 +47,26 @@ export const getVacationByIdQuery = `
 export const createVacationQuery = `
     mutation ($model: VacationInputType!) {
         createVacationRequest(vacationRequest: $model) {
-            ${queryFragment}
+            ${queryFragment},
+            approvers{
+                firstName,
+                id,
+                lastName
+              },
+              vacationResponse{
+                comment,
+                user{
+                  id,
+                  firstName,
+                  lastName
+                }
+            }
         }
     }
 `;
 
 export const removeVacationQuery = ` 
-    mutation ($id: ID!) {
+    mutation ($id: Int!) {
         deleteVacationRequest(id: $id) {
             ${queryFragment}
         }
@@ -63,7 +76,26 @@ export const removeVacationQuery = `
 export const updateVacationQuery = `
     mutation ($model: VacationInputType!) {
         editVacationRequest(vacationRequest: $model) {
-            ${queryFragment}
+            ${queryFragment},
+            user{
+                id
+                email
+                firstName
+                lastName
+            },
+            approvers{
+                firstName,
+                id,
+                lastName
+              },
+              vacationResponse{
+                comment,
+                user{
+                  id,
+                  firstName,
+                  lastName
+                }
+            }
         }
     }
 `

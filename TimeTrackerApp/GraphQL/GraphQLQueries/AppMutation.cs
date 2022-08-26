@@ -102,11 +102,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
             
             Field<VacationType, Vacation>()
                 .Name("DeleteVacationRequest")
-                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Vacation request")
+                .Argument<IntGraphType, int>("Id", "Vacation request")
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
-                    return await vacationRepository.RemoveAsync(id);
+                    var model =  await vacationRepository.RemoveAsync(id);
+
+                    return model;
                 });
 
             Field<AuthTokenType, AuthenticationToken>()

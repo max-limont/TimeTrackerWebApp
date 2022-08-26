@@ -46,22 +46,20 @@ public class VacationResponseRepository:IVacationResponse
         throw new NotImplementedException();
     }
 
-    public async Task<VacationResponse> GetVacationResponseByVacationId(int vacationId)
+    public async Task<VacationResponse?> GetVacationResponseByVacationId(int vacationId)
     {
         string query = @$"Select * from VacationResponse as v INNER JOIN Users U on U.Id = v.UserId and v.VacationId = {vacationId}";
         using (Connection)
         {
+            
             var vacationResponse = await Connection.QueryAsync<VacationResponse,User,VacationResponse>(query,
                 (v, u) =>
                 {
                     v.User = u;
                     return v;
                 }, splitOn:"Id");
-            if (vacationResponse != null)
-            {
-                return vacationResponse.First();
-            }
-            throw new Exception();
+
+            return vacationResponse.FirstOrDefault();
         }
     }
 

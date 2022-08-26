@@ -41,9 +41,7 @@ export function ManageVacationRequest() {
                         {!(requestsVacation.length == 0) ?
                             <>
                                 <div className="vacation-item" style={{ textAlign: "center" }}>
-                                    <div style={{
-                                        flexBasis: "20px"
-                                    }}>№</div>
+                                   
                                     <div>Starting Time</div>
                                     <div>Ending Time</div>
                                     <div>Count Day</div>
@@ -59,15 +57,12 @@ export function ManageVacationRequest() {
                                     if (item.isAccepted == null) {
                                         return (
                                             <div key={i} className="vacation-item">
-                                                <div style={{
-                                                    flexBasis: "20px"
-                                                }}>{i + 1}</div>
                                                 <div>{item.startingTime}</div>
                                                 <div>{item.endingTime}</div>
                                                 <div>{moment.duration(moment(item.endingTime).diff(moment(item.startingTime))).asDays()}</div>
-                                                <div style={{ maxHeight: "34px" }} onClick={() => navigate("/user?id=" + item.id)} className="button cyan-button close">{item.user?.firstName} {item.user?.lastName}</div>
+                                                <div style={{whiteSpace: "nowrap" }} onClick={() => navigate("/user?id=" + item.id)} className="button cyan-button close">{item.user?.firstName} {item.user?.lastName}</div>
                                                 <div className={"end-item-action"} >
-                                                    <button className="button cyan-button close" onClick={() => {
+                                                    <button className="button silver-button close" onClick={() => {
                                                         setEditState(true);
                                                         setIdEdit(item.id);
                                                     }}>

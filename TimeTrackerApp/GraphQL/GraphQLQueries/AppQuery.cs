@@ -138,7 +138,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
-                    return await vacationRepository.GetByIdAsync(id);
+                    return await vacationRepository.GetVacationByIdAsync(id);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
             

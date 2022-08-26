@@ -30,7 +30,7 @@ export function Vacation() {
 
     return (
         <>
-            {editState ? <EditVacation stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
+            {editState ? <EditVacation sourceVacation={undefined}  stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
             {createState ? <CreateVacation stateForm={setCreateState} visible={createState} /> : <></>}
             <div className="vacation-container">
                 <div className="control-panel vacation-control-panel">

@@ -1,5 +1,5 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {CreateVacationType, VacationResponse, VacationType} from "../../types/vacation.types";
+import {CreateVacationType, EditVacationType, VacationResponse, VacationType} from "../../types/vacation.types";
 
 interface vacationState{
   vacations: VacationType[],
@@ -54,4 +54,4 @@ export const createResponseAction = createAction<{stateAccepte: boolean, respons
 export const getVacationByIdAction = createAction<number>("createVacation");
 export const createVacationAction = createAction<CreateVacationType>("getRequestVacation");
 export const removeVacationAction = createAction<number>("removeVacation");
-export const updateVacationAction = createAction<VacationType>("updateVacation");
+export const updateVacationAction = createAction<EditVacationType>("updateVacation");

@@ -89,6 +89,7 @@ export const removeVacationEpic: Epic = (action$: Observable<ReturnType<typeof r
             id: action.payload
         })).pipe(
             map(response => {
+                console.log(response);
                 if (!response?.errors) {
                     const userId = store.getState().rootReducer.auth.user?.id ?? 0;
                     const dataResponse: VacationType = response.data.deleteVacationRequest;
@@ -97,7 +98,7 @@ export const removeVacationEpic: Epic = (action$: Observable<ReturnType<typeof r
                     }
                     return removeRequestVacation(dataResponse.id)
                 }
-                throw new Error();
+                throw new Error("error to delete vacation");
             })
         )))
 };
@@ -106,12 +107,12 @@ export const updateVacationEpic: Epic = (action$: Observable<ReturnType<typeof u
     return action$.pipe(
         ofType(updateVacationAction.type),
         mergeMap(action => {
-            let updateVacationModel: any = action.payload;
-            delete updateVacationModel.user;
+            console.log(action.payload);
             return from(graphqlRequest(updateVacationQuery, {
-                model: updateVacationModel
+                model: action.payload
             })).pipe(
                 map(response => {
+                    console.log(response)
                     if (!response?.errors) {
                         const userId = store.getState().rootReducer.auth.user?.id ?? 0;
                         const dataResponse: VacationType = response.data.editVacationRequest;
@@ -137,7 +138,6 @@ export const updateVacationEpic: Epic = (action$: Observable<ReturnType<typeof u
 
 
 const createResponseEpic: Epic = (action$: Observable<ReturnType<typeof createResponseAction>>):any=>{
-    console.log(123);
 return action$.pipe(
     ofType(createResponseAction.type),
     mergeMap((action:any)=>from(graphqlRequest(createResponseQuery,{
@@ -147,7 +147,6 @@ return action$.pipe(
         map(response=>{
             console.log(response);
             if(!response?.errors){
-                
                  return updateRequestVacation({...response.data.changeAcceptedState,
                     endingTime: moment(response.data.changeAcceptedState.endingTime).format("yyyy-MM-DD"),
                     startingTime: moment(response.data.changeAcceptedState.startingTime).format("yyyy-MM-DD")

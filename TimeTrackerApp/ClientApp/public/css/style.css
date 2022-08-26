@@ -1444,7 +1444,7 @@ table .bottom-table-row .icon {
 }
 
 div.end-item-action {
-  flex-basis: 250px;
+  flex-basis: 300px;
   display: flex;
   text-align: center;
   justify-content: center;
