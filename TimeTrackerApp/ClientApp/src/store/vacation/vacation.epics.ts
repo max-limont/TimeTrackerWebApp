@@ -137,6 +137,7 @@ export const updateVacationEpic: Epic = (action$: Observable<ReturnType<typeof u
 
 
 const createResponseEpic: Epic = (action$: Observable<ReturnType<typeof createResponseAction>>):any=>{
+    console.log(123);
 return action$.pipe(
     ofType(createResponseAction.type),
     mergeMap((action:any)=>from(graphqlRequest(createResponseQuery,{
@@ -145,6 +146,14 @@ return action$.pipe(
     })).pipe(
         map(response=>{
             console.log(response);
+            if(!response?.errors){
+                
+                 return updateRequestVacation({...response.data.changeAcceptedState,
+                    endingTime: moment(response.data.changeAcceptedState.endingTime).format("yyyy-MM-DD"),
+                    startingTime: moment(response.data.changeAcceptedState.startingTime).format("yyyy-MM-DD")
+                });
+            }
+            throw new Error("error to change status vacation request")
         })
     ))
 )

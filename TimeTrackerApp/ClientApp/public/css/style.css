@@ -1523,6 +1523,9 @@ div.end-item-action {
   position: absolute;
   top: -5px;
   left: 103%;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
   display: flex;
   flex-direction: column;
   padding: 15px;

@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { EditVacation, postFixDate } from "./EditVacation";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "../../hooks/useAppSelector";
-import {getRequestVacationAction, updateVacationAction} from "../../store/vacation/vacation.slice";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { getRequestVacationAction, updateVacationAction } from "../../store/vacation/vacation.slice";
 import { GiveResponse } from "./GiveResponse";
 
 
@@ -22,11 +22,11 @@ export function ManageVacationRequest() {
 
     useEffect(() => {
         if (auth.state?.user?.id) {
-             dispatch(getRequestVacationAction(auth.state?.user?.id));
+            dispatch(getRequestVacationAction(auth.state?.user?.id));
         }
-       
+
     }, [auth.state?.user?.id]);
-    
+
     return (
         <>
 
@@ -36,7 +36,7 @@ export function ManageVacationRequest() {
                 <div className="control-panel vacation-control-panel">
                 </div>
                 <div className="list-vacation-container">
-                    <p style={{margin: "5px"}}>Manage Vacations Request</p>
+                    <p style={{ margin: "5px" }}>Manage Vacations Request</p>
                     <div className="list-vacations">
                         {!(requestsVacation.length == 0) ?
                             <>
@@ -51,42 +51,46 @@ export function ManageVacationRequest() {
                                     <div className={"end-item-action"}>Actions</div>
                                 </div>
                                 {requestsVacation.map((item, i) => {
-                                    const itemToUpdate= {
+                                    const itemToUpdate = {
                                         ...item,
                                         startingTime: item.startingTime + postFixDate,
-                                        endingTime: item.endingTime + postFixDate,
-                                        
+                                        endingTime: item.endingTime + postFixDate
                                     };
-                                    return (
-                                        <div key={i} className="vacation-item">
-                                            <div style={{
-                                                flexBasis: "20px"
-                                            }}>{i + 1}</div>
-                                            <div>{item.startingTime}</div>
-                                            <div>{item.endingTime}</div>
-                                            <div>{moment.duration(moment(item.endingTime).diff(moment(item.startingTime))).asDays()}</div>
-                                            <div style={{maxHeight: "34px"}}onClick={() => navigate("/user?id=" + item.id)} className="button cyan-button close">{item.user?.firstName} {item.user?.lastName}</div>
-                                            <div className={"end-item-action"} >
-                                                <button className="button cyan-button close" onClick={() => {
-                                                    setEditState(true);
-                                                    setIdEdit(item.id);
-                                                }}>
-                                                    <FontAwesomeIcon icon={faEdit} className={"icon"} />
-                                                </button>
-                                                <button className="button cyan-button close" onClick={()=>{
-                                                      setResponse(true);
-                                                      setIdEdit(item.id);
-                                                }}>
-                                                    Give Response
-                                                </button>
-                                                <button className="button red-button close" onClick={() => {
-                                                }}>
-                                                    <FontAwesomeIcon icon={faTrash} className={"icon"} />
-                                                </button>
+                                    if (item.isAccepted == null) {
+                                        return (
+                                            <div key={i} className="vacation-item">
+                                                <div style={{
+                                                    flexBasis: "20px"
+                                                }}>{i + 1}</div>
+                                                <div>{item.startingTime}</div>
+                                                <div>{item.endingTime}</div>
+                                                <div>{moment.duration(moment(item.endingTime).diff(moment(item.startingTime))).asDays()}</div>
+                                                <div style={{ maxHeight: "34px" }} onClick={() => navigate("/user?id=" + item.id)} className="button cyan-button close">{item.user?.firstName} {item.user?.lastName}</div>
+                                                <div className={"end-item-action"} >
+                                                    <button className="button cyan-button close" onClick={() => {
+                                                        setEditState(true);
+                                                        setIdEdit(item.id);
+                                                    }}>
+                                                        <FontAwesomeIcon icon={faEdit} className={"icon"} />
+                                                    </button>
+                                                    <button className="button cyan-button close" onClick={() => {
+                                                        setResponse(true);
+                                                        setIdEdit(item.id);
+                                                    }}>
+                                                        Give Response
+                                                    </button>
+                                                    <button className="button red-button close" onClick={() => {
+                                                    }}>
+                                                        <FontAwesomeIcon icon={faTrash} className={"icon"} />
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
-                                })}
+                                        );
+                                    }
+                                    return (<></>);
+                                }
+
+                                )}
                             </>
                             : <div>You dont have any vacations</div>}
                     </div>

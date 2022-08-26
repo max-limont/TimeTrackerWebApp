@@ -55,8 +55,7 @@ export function Vacation() {
                                         return (
                                             <><div className="response-box">
                                                 <div>
-                                                    {item.vacationResponse?.user?.firstName}
-                                                    {item.vacationResponse?.user?.lastName}
+                                                    {item.vacationResponse?.user?.firstName}{" "}{item.vacationResponse?.user?.lastName}
                                                 </div>
                                                 <div>
                                                     <p>Comment</p>
@@ -89,14 +88,15 @@ export function Vacation() {
 
                                             </div>
                                             <div className={"end-item-action"} >
-                                                {item.isAccepted == null ? <button onClick={() => {
-                                                    setEditState(true);
-                                                    setIdEdit(item.id);
-                                                }} className="button cyan-button">Edit</button> : <></>}
-                                                <button className={"button red-button close"} onClick={() =>
-                                                    dispatch(removeVacationAction(item.id))} >
-                                                    <FontAwesomeIcon icon={faXmark} className={"icon"} />
-                                                </button>
+                                                {item.isAccepted == null ? <>
+                                                    <button onClick={() => {
+                                                        setEditState(true);
+                                                        setIdEdit(item.id);
+                                                    }} className="button cyan-button">Edit</button>
+                                                    <button className={"button red-button close"} onClick={() => dispatch(removeVacationAction(item.id))}>
+                                                        <FontAwesomeIcon icon={faXmark} className={"icon"} />
+                                                    </button></>
+                                                    : <button  className="button cyan-button">You have not any action</button>}
                                             </div>
                                         </div>
                                     );

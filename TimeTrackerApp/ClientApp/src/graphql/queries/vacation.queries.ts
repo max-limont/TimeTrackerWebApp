@@ -83,10 +83,27 @@ export const getVacationRequestQuery = `
 `
 
 export const createResponseQuery=`
-query($state:Boolean,$response:VacationResponseInputType ){
-    ChangeAcceptedState(response: $response, stateAccepted: $state){
-        id,
-        isAccepted,
-        userId,
+mutation($state:Boolean,$response:VacationResponseInputType ){
+    changeAcceptedState(response: $response, stateAccepted: $state){
+        ${queryFragment},
+        user{
+            id
+            email
+            firstName
+            lastName
+        }
+        approvers{
+            firstName,
+            id,
+            lastName
+          },
+          vacationResponse{
+            comment,
+            user{
+              id,
+              firstName,
+              lastName
+            }
+        }
     }
 }`
