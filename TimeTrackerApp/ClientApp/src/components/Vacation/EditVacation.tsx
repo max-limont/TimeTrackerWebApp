@@ -69,12 +69,6 @@ export function EditVacation(obj: Props) {
                             </div>
                         </div>
                         <button type="submit" className={"button cyan-button"}>Edit</button>
-                        <button className={"button red-button"} onClick={(e) => {
-                            e.preventDefault();
-                            dispatch(removeVacationAction(id));
-                        }}>
-                            Remove
-                        </button>
                         <button type="reset" className={"button silver-button"}>Reset</button>
                     </form>
                 </div>

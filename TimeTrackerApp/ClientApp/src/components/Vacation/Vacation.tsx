@@ -2,20 +2,58 @@ import React, { useEffect, useState } from "react";
 import { CreateVacation } from "./CreateVacation";
 import { EditVacation } from "./EditVacation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faL, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { getVacationsByUserIdAction, removeVacationAction } from "../../store/vacation/vacation.slice";
+import { User } from "../../types/user.types";
 
 
+
+type Props = {
+    approver: User,
+    comment: string
+}
+
+function ShowComment(prop: Props) {
+    const { approver, comment } = prop;
+    const [visibleResponse, setResponse] = useState(false);
+
+
+    return (
+        <>
+            {visibleResponse ?
+                    <div className={`form-event-container dark-background ${!visibleResponse && "hidden"}`}>
+                        <div className={"form-event"}>
+                            <div className={"form-header"}>
+                                <h2>   {approver.firstName}{" "}{approver.lastName}</h2>
+                                <button className={"button red-button close"} onClick={() => {
+                                    setResponse(!visibleResponse);
+                                }}>
+                                    <FontAwesomeIcon icon={faXmark} className={"icon"} />
+                                </button>
+                            </div>
+                                <div className={"form-group"}>
+                                <div>Comment</div>
+                                    <div className={"form-item w-100"}>
+                                        <div>{comment} </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div> : <button onClick={() => {
+                    setResponse(!visibleResponse)
+                }}></button>}
+
+        </>
+    );
+}
 
 export function Vacation() {
     const dispatch = useDispatch();
     const [createState, setCreateState] = useState(false);
     const [editState, setEditState] = useState(false);
     const [visibleApprovers, setApprovers] = useState(false);
-    const [visibleResponse, setResponse] = useState(false);
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(state => state.rootReducer.vacation.vacations);
     const auth = useAuth();
@@ -30,7 +68,7 @@ export function Vacation() {
 
     return (
         <>
-            {editState ? <EditVacation sourceVacation={undefined}  stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
+            {editState ? <EditVacation sourceVacation={undefined} stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
             {createState ? <CreateVacation stateForm={setCreateState} visible={createState} /> : <></>}
             <div className="vacation-container">
                 <div className="control-panel vacation-control-panel">
@@ -51,34 +89,19 @@ export function Vacation() {
                                 </div>
 
                                 {vacationsList.map((item, i) => {
-                                    const vacationResponse = () => {
-                                        return (
-                                            <><div className="response-box">
-                                                <div>
-                                                    {item.vacationResponse?.user?.firstName}{" "}{item.vacationResponse?.user?.lastName}
-                                                </div>
-                                                <div>
-                                                    <p>Comment</p>
-                                                    {item.vacationResponse?.comment}
-                                                </div>
-                                            </div>
-                                            </>);
-                                    };
-                                    if (item.vacationResponse) {
-
-                                    }
                                     return (
 
                                         <div key={i} className="vacation-item">
                                             <div>{item.startingTime}</div>
                                             <div>{item.endingTime}</div>
                                             <div>{item.isAccepted ? <>
-                                                <span className={" button green-button"} >Aceppted
+                                                <span className={" button green-button-no-action"} >Aceppted
                                                 </span>
                                                 <span className="response-container">
-                                                    <button className="button cyan-button action-button"
-                                                        onClick={() => setResponse(!visibleResponse)}>{">"}</button>
-                                                    {visibleResponse ? vacationResponse() : <></>}
+                                                    {item.vacationResponse ?
+                                                        <ShowComment approver={item.vacationResponse?.user} comment={item.vacationResponse.comment} />
+                                                        : <></>
+                                                    }
                                                 </span>
                                             </>
                                                 : item.isAccepted == null ?
@@ -88,15 +111,22 @@ export function Vacation() {
 
                                             </div>
                                             <div className={"end-item-action"} >
-                                                {item.isAccepted == null ? <>
-                                                    <button onClick={() => {
-                                                        setEditState(true);
-                                                        setIdEdit(item.id);
-                                                    }} className="button cyan-button">Edit</button>
-                                                    <button className={"button red-button close"} onClick={() => dispatch(removeVacationAction(item.id))}>
-                                                        <FontAwesomeIcon icon={faXmark} className={"icon"} />
-                                                    </button></>
-                                                    : <button  className="button cyan-button">You have not any action</button>}
+                                                {item.isAccepted == true ?
+                                                    <button className="button cyan-button">You have not any action</button>
+                                                    :
+                                                    <>
+                                                        {item.isAccepted == null ?
+                                                            <>
+                                                                <button onClick={() => { setEditState(true); setIdEdit(item.id); }} className="button cyan-button">Edit</button>
+                                                                <button className={"button red-button close"} onClick={() => dispatch(removeVacationAction(item.id))}>
+                                                                    Delete Request
+                                                                </button>
+                                                            </> :
+                                                            <button className={"button red-button close"} onClick={() => dispatch(removeVacationAction(item.id))}>
+                                                                Delete Request
+                                                            </button>}
+                                                    </>
+                                                }
                                             </div>
                                         </div>
                                     );

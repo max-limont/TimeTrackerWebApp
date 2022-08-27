@@ -682,10 +682,14 @@ section {
         }
     }
 }
+.green-button-no-action{
+    background-color: $color-green;
+    color: $color-white;
+}
 
 .green-button {
-    background: color-green;
-    color: $color-dark;
+    background: $color-green;
+    color: $color-white;
 
     &:not(.disabled):hover {
         background: transparent;
@@ -700,7 +704,7 @@ section {
 
         &:not(.disabled):hover {
             background: $color-green;
-            color: $color-dark;
+            color: $color-white;
         }
     }
 }
@@ -1602,7 +1606,7 @@ table {
     padding: 3px;
 
     >div {
-        flex-basis: 200px;
+        flex-basis: 250px;
     }
 }
 
@@ -1702,9 +1706,7 @@ div.end-item-action {
 
 .response-container {
     position: relative;
-    button.action-button{
-       
-    }
+ 
 }
 
 .response-box {
