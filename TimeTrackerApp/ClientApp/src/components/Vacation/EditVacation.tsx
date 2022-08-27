@@ -63,10 +63,12 @@ export function EditVacation(obj: Props) {
                                 <label>Type Day</label>
                                 <input type="date" value={endingTime} onChange={(e) => setVacation({ ...vacation, endingTime: e.target.value })} />
                             </div>
+                            
                             <div className={"form-item w-100"}>
                                 <label>Comment</label>
-                                <textarea defaultValue={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }} />
-                            </div>
+                                {!sourceVacation? <textarea defaultValue={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }} />
+                            : <label>{comment!==""?comment:"Here isnt comment"}</label>}
+                                </div>
                         </div>
                         <button type="submit" className={"button cyan-button"}>Edit</button>
                         <button type="reset" className={"button silver-button"}>Reset</button>

@@ -1,14 +1,20 @@
 import {faCheck, faComment, faEdit, faTrash, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import moment from "moment";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../hooks/useAuth";
 import {EditVacation, postFixDate} from "./EditVacation";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/useAppSelector";
-import {getRequestVacationAction, updateVacationAction} from "../../store/vacation/vacation.slice";
+import {
+    getRequestVacationAction,
+    removeVacationAction,
+    updateVacationAction
+} from "../../store/vacation/vacation.slice";
 import {GiveResponse} from "./GiveResponse";
+import {User} from "../../types/user.types";
+import {ShowComment} from "./Vacation";
 
 
 export function ManageVacationRequest() {
@@ -46,7 +52,7 @@ export function ManageVacationRequest() {
                                     <div>Starting Time</div>
                                     <div>Ending Time</div>
                                     <div>Count Day</div>
-                                    <div style={{minWidth: "150px"}}>User</div>
+                                    <div className={"end-item-action"}>User</div>
                                     <div className={"end-item-action"}>Actions</div>
                                 </div>
                                 {requestsVacation.map((item, i) => {
@@ -61,15 +67,13 @@ export function ManageVacationRequest() {
                                                 <div>{item.startingTime}</div>
                                                 <div>{item.endingTime}</div>
                                                 <div>{moment.duration(moment(item.endingTime).diff(moment(item.startingTime))).asDays()}</div>
-                                                <div style={{minWidth: "200px" ,display: "flex"}}>
-                                                    <div style={{whiteSpace: "nowrap"}}
+                                                <div className={"end-item-action"}>
+                                                    <div style={{flexGrow: "1",whiteSpace: "nowrap"}}
                                                          onClick={() => navigate("/user?id=" + item.id)}
                                                          className="button cyan-button close">
                                                         {item.user?.firstName} {item.user?.lastName}
                                                     </div>
-                                                    <button className="button silver-button close">
-                                                        <FontAwesomeIcon icon={faComment} className={"icon"}/>
-                                                    </button>
+                                                    {item.comment===""? <ShowComment approver={null}   comment={item.comment}/>:<></>}
                                                 </div>
                                                 <div className={"end-item-action"}>
                                                     <button className="button silver-button close" onClick={() => {
@@ -81,11 +85,8 @@ export function ManageVacationRequest() {
                                                     <button className="button cyan-button close" onClick={() => {
                                                         setResponse(true);
                                                         setIdEdit(item.id);
-                                                    }}>
-                                                        Give Response
-                                                    </button>
-                                                    <button className="button red-button close" onClick={() => {
-                                                    }}>
+                                                    }}>Give Response</button>
+                                                    <button className="button red-button close" onClick={() => {dispatch(removeVacationAction(item.id))}}>
                                                         <FontAwesomeIcon icon={faTrash} className={"icon"}/>
                                                     </button>
                                                 </div>
