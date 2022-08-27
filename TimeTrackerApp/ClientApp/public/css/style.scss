@@ -577,7 +577,7 @@ section {
 }
 .green-button {
     background: $color-green;
-    color: $color-dark;
+    color: $color-light;
 
     &:not(.disabled):hover {
         background: transparent;
@@ -592,7 +592,7 @@ section {
 
         &:not(.disabled):hover {
             background: $color-green;
-            color: $color-dark;
+            color: $color-light;
         }
     }
 }
@@ -850,8 +850,8 @@ section {
 
 .form-header {
     h2 {
-        font-size: $font-size-header;
-        font-weight: 600;
+        font-size: 22px;
+        font-weight: 400;
     }
 
     .close {
@@ -1000,7 +1000,7 @@ table {
 
 .creation-type-label {
     display: inline-flex;
-    padding: 10px;
+    padding: 5px 10px;
     border-radius: 2px;
     box-shadow: 0 0 5px -4px $color-dark;
     font-weight: 500;
@@ -1659,16 +1659,23 @@ div.end-item-action {
 
     table {
         td {
-            padding: 10px;
+            padding: 15px 10px;
+            vertical-align: middle;
         }
 
         .button:not(:last-of-type) {
             margin-right: 5px;
         }
 
+        .button {
+            display: inline;
+            padding: 7px 20px 7px 20px;
+        }
+
         .status {
             padding: 5px 10px 5px 10px;
             border-radius: 2px;
+            display: inline-flex;
 
             &.expired {
                 color: $color-dark;
@@ -1686,6 +1693,68 @@ div.end-item-action {
                 color: $color-light;
                 background: $color-red;
             }
+        }
+    }
+}
+
+.sick-leave-form {
+    position: absolute;
+    z-index: 999;
+    background: $color-white;
+    padding: 15px;
+    border-radius: 2px;
+    box-shadow: 0 0 20px -10px $color-dark;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .form-header {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #E6E6E6;
+    }
+
+    .form-item {
+        padding: 10px 0 10px 0;
+    }
+
+    label {
+        margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+        background: #F6F6F6;
+        box-shadow: inset 0 0 5px -5px $color-dark;
+    }
+
+    .buttons {
+        padding-top: 10px;
+    }
+}
+
+.sick-leaves-panel {
+    justify-content: space-between;
+    background: $color-white;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+    border-radius: 2px;
+    margin: 15px 15px 0 15px;
+    padding: 10px;
+
+    nav {
+        display: flex;
+        align-items: center;
+        a:not(:last-of-type) {
+            margin-right: 5px;
+        }
+        a:hover, a.active {
+            background: $color-light-dark;
+            color: $color-light;
+        }
+        a {
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 2px;
+            background: #F6F6F6;
         }
     }
 }

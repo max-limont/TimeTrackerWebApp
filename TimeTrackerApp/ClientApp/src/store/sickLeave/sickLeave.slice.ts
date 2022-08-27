@@ -1,12 +1,14 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
+    CreateSickLeaveMutationInputType,
     FetchAllSickLeavesByEmployeeIdQueryInputType,
     FetchAllSickLeavesForManagerByManagerIdQueryInputType,
     GetSickLeaveByIdInputType,
-    RemoveSickLeaveQueryInputType,
+    RemoveSickLeaveMutationInputType,
     SickLeave,
-    SickLeaveInputType, SickLeaveStatuses
+    UpdateSickLeaveMutationInputType
 } from "../../types/sickLeave.types";
+import {parseObjectToUser} from "../user/user.slice";
 
 export type SickLeaveStateType = {
     sickLeaves: SickLeave[]
@@ -39,9 +41,9 @@ export const fetchAllSickLeaves = createAction("FetchAllSickLeaves")
 export const fetchAllSickLeavesByEmployeeId = createAction<FetchAllSickLeavesByEmployeeIdQueryInputType>("FetchAllSickLeavesByEmployeeId")
 export const fetchAllSickLeavesForManagerByManagerId = createAction<FetchAllSickLeavesForManagerByManagerIdQueryInputType>("FetchAllSickLeavesForManagerByManagerId")
 export const getSickLeaveById = createAction<GetSickLeaveByIdInputType>("GetSickLeaveById")
-export const createSickLeave = createAction<SickLeaveInputType>("CreateSickLeave")
-export const updateSickLeave = createAction<SickLeaveInputType>("UpdateSickLeave")
-export const removeSickLeave = createAction<RemoveSickLeaveQueryInputType>("RemoveSickLeave")
+export const createSickLeave = createAction<CreateSickLeaveMutationInputType>("CreateSickLeave")
+export const updateSickLeave = createAction<UpdateSickLeaveMutationInputType>("UpdateSickLeave")
+export const removeSickLeave = createAction<RemoveSickLeaveMutationInputType>("RemoveSickLeave")
 
 export const {setSickLeaves, addSickLeave, editSickLeave, deleteSickLeave} = sickLeaveSlice.actions
 export const sickLeaveReducer = sickLeaveSlice.reducer
@@ -54,6 +56,7 @@ export const parseObjectToSickLeave = (object: any): SickLeave => {
         employeeId: parseInt(object.employeeId),
         approverId: object.approverId ? parseInt(object.approverId) : null,
         status: parseInt(object.status),
-        creationDateTime: new Date(object.creationDateTime)
+        creationDateTime: new Date(new Date(object.creationDateTime) + "UTC"),
+        approver: object.approver ? parseObjectToUser(object.approver) : null
     } as SickLeave
 }

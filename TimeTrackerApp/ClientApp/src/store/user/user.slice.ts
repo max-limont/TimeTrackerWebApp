@@ -20,5 +20,20 @@ export const userSlice = createSlice({
 })
 
 export const getUserById = createAction<GetUserByIdQueryInputType>("GetUserById")
-
 export const {setUser} = userSlice.actions
+
+export const parseObjectToUser = (object: any): User => {
+    return {
+        id: parseInt(object.id),
+        email: object.email ?? "",
+        firstName: object.firstName ?? "Unknown",
+        lastName: object.lastName ?? "User",
+        isFullTimeEmployee: Boolean(JSON.parse(object.isFullTimeEmployee)),
+        weeklyWorkingTime: parseInt(object.weeklyWorkingTime ?? ''),
+        remainingVacationDays: parseInt(object.remainingVacationDays ?? ''),
+        privilegesValue: parseInt(object.privilegesValue ?? ''),
+        vacationPermissionId: parseInt(object.vacationPermissionId??""),
+        teamId: parseInt(object.teamId),
+        roleId: parseInt(object.roleId)
+    } as User
+}

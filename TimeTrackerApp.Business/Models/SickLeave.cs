@@ -11,5 +11,7 @@ namespace TimeTrackerApp.Business.Models
 		public int? ApproverId { get; set; }
 		public SickLeaveStatuses Status { get; set; } = SickLeaveStatuses.UnderReview;
 		public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
+
+		public User? Approver { get; set; } = null;
 	}
 }

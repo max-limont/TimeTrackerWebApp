@@ -2,12 +2,13 @@
 using System;
 using TimeTrackerApp.Business.Enums;
 using TimeTrackerApp.Business.Models;
+using TimeTrackerApp.Business.Repositories;
 
 namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {
 	public class SickLeaveType : ObjectGraphType<SickLeave>
 	{
-		public SickLeaveType()
+		public SickLeaveType(IUserRepository userRepository)
 		{
 			Field<NonNullGraphType<IdGraphType>, int>().Name("Id").Resolve(context => context.Source.Id);
 			Field<NonNullGraphType<DateTimeGraphType>, DateTime>().Name("StartDate").Resolve(context => context.Source.StartDate);
@@ -16,6 +17,16 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
 			Field<IdGraphType, int?>().Name("ApproverId").Resolve(context => context.Source.ApproverId);
 			Field<IntGraphType, int?>().Name("Status").Resolve(context => (int)context.Source.Status);
 			Field<DateTimeGraphType, DateTime>().Name("CreationDateTime").Resolve(context => context.Source.CreationDateTime);
+			Field<UserType, User>().Name("Approver").ResolveAsync(async context => {
+				try
+				{
+					return await userRepository.GetByIdAsync(context.Source.ApproverId ?? 0);
+				}
+				catch
+				{
+					return null;
+				}
+			});
 		}
 	}
 }

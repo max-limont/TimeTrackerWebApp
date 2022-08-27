@@ -1,12 +1,17 @@
 export const getPaginatedUserList = `
     query ($from: Int!, $contentPerPage: Int!, $orderBy: String, $isReverse: Boolean) {
         userFetchPageList(from: $from, contentPerPage: $contentPerPage, orderBy: $orderBy, isReverse: $isReverse) {
-            id,
-            email,
-            firstName,
-            lastName,
-            weeklyWorkingTime,
-            remainingVacationDays,
+            id
+            email
+            firstName
+            lastName
+            isFullTimeEmployee
+            weeklyWorkingTime
+            remainingVacationDays
+            privilegesValue
+            vacationPermissionId,
+            teamId,
+            roleId
        }
     }
 `
@@ -14,12 +19,17 @@ export const getPaginatedUserList = `
 export const getSearchResponse = `
     query ($request: String) {
         userFetchSearchList(request: $request) {
-            id,
-            email,
-            firstName,
-            lastName,
-            weeklyWorkingTime,
-            remainingVacationDays,
+            id
+            email
+            firstName
+            lastName
+            isFullTimeEmployee
+            weeklyWorkingTime
+            remainingVacationDays
+            privilegesValue
+            vacationPermissionId,
+            teamId,
+            roleId
        }
     }
 `

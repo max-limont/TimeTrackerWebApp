@@ -8,6 +8,19 @@ export const fetchAllSickLeavesQuery = `
             approverId
             status
             creationDateTime
+            approver {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
         }
     }
 `
@@ -22,6 +35,19 @@ export const fetchAllSickLeavesByEmployeeIdQuery = `
             approverId
             status
             creationDateTime
+            approver {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
         }
     }
 `
@@ -36,6 +62,19 @@ export const fetchAllSickLeavesForManagerByManagerIdQuery = `
             approverId
             status
             creationDateTime
+            approver {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
         }
     }
 `
@@ -50,6 +89,19 @@ export const getSickLeaveByIdQuery = `
             approverId
             status
             creationDateTime
+            approver {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
         }
     }
 `
@@ -64,6 +116,19 @@ export const createSickLeaveMutation = `
             approverId
             status
             creationDateTime
+            approver {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
         }
     }
 `
@@ -78,6 +143,19 @@ export const updateSickLeaveMutation = `
             approverId
             status
             creationDateTime
+            approver {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
         }
     }
 `
@@ -92,6 +170,19 @@ export const removeSickLeaveMutation = `
             approverId
             status
             creationDateTime
+            approver {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
         }
     }
 `

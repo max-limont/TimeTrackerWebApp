@@ -53,7 +53,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<SickLeave>> FetchAllAsync()
 		{
-			string query = @"SELECT * FROM SickLeaves";
+			string query = @"SELECT * FROM SickLeaves ORDER BY CreationDateTime DESC";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -63,7 +63,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<SickLeave>> FetchAllByEmployeeIdAsync(int employeeId)
 		{
-			string query = @"SELECT * FROM SickLeaves WHERE EmployeeId = @EmployeeId";
+			string query = @"SELECT * FROM SickLeaves WHERE EmployeeId = @EmployeeId ORDER BY CreationDateTime DESC";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -73,7 +73,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<SickLeave>> FetchAllForManagerByManagerIdAsync(int managerId)
 		{
-			string query = @"SELECT * FROM SickLeaves, UserManagement WHERE SickLeaves.EmployeeId = UserManagement.EmployeeId AND UserManagement.ManagerId = @ManagerId ORDER BY CASE Status WHEN 1 THEN 1 ELSE 2 END";
+			string query = @"SELECT * FROM SickLeaves, UserManagement WHERE SickLeaves.EmployeeId = UserManagement.EmployeeId AND UserManagement.ManagerId = @ManagerId ORDER BY CreationDateTime DESC";
 
 			using (var connection = new SqlConnection(connectionString))
 			{

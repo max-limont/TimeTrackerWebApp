@@ -1,3 +1,5 @@
+import {User} from "./user.types";
+
 export type SickLeave = {
     id: number,
     startDate: Date,
@@ -6,13 +8,7 @@ export type SickLeave = {
     approverId: number,
     status: SickLeaveStatuses,
     creationDateTime: Date,
-}
-
-export enum SickLeaveStatuses {
-    Expired,
-    UnderReview,
-    Approved,
-    Rejected
+    approver?: User | null
 }
 
 export type SickLeaveInputType = {
@@ -22,7 +18,19 @@ export type SickLeaveInputType = {
     employeeId: number,
     approverId?: number | null,
     status?: SickLeaveStatuses | null,
-    creationDateTime?: Date | null
+    creationDateTime?: Date | null,
+}
+
+export enum SickLeaveStatuses {
+    Expired,
+    UnderReview,
+    Approved,
+    Rejected
+}
+
+export type SickLeaveStatusDataType = {
+    className: string,
+    value: string
 }
 
 export type FetchAllSickLeavesByEmployeeIdQueryInputType = {
@@ -37,6 +45,14 @@ export type GetSickLeaveByIdInputType = {
     id: number
 }
 
-export type RemoveSickLeaveQueryInputType = {
+export type CreateSickLeaveMutationInputType = {
+    sickLeave: SickLeaveInputType
+}
+
+export type UpdateSickLeaveMutationInputType = {
+    sickLeave: SickLeaveInputType
+}
+
+export type RemoveSickLeaveMutationInputType = {
     id: number
 }

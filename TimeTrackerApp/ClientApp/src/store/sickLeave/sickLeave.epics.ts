@@ -101,7 +101,7 @@ export const updateSickLeaveEpic: Epic = (action$: Observable<ReturnType<typeof 
             map(response => {
                 if (response?.data?.editSickLeave) {
                     const sickLeave = parseObjectToSickLeave(response.data.editSickLeave)
-                    return editSickLeave(sickLeave)
+                    return editSickLeave({...sickLeave, creationDateTime: new Date(sickLeave.creationDateTime.getTime() + sickLeave.creationDateTime.getTimezoneOffset() * 60 * 1000)})
                 }
                 return {type: "UpdateSickLeaveError", payload: "Error"} as Action
             })

@@ -15,9 +15,10 @@ import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from
 import {parseError} from "../../helpers/parseError";
 import {Action} from "react-epics";
 import {getUserByIdQuery} from "../../graphql/queries/user.queries";
-import {GetUserByIdQueryInputType, User} from "../../types/user.types";
+import {GetUserByIdQueryInputType} from "../../types/user.types";
 import {parseJwt} from "../../helpers/parseJwt";
 import {AuthLoginInputType, AuthLogoutInputType, AuthUserResponse} from "../../types/auth.types";
+import {parseObjectToUser} from "../user/user.slice";
 
 const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginAction>>): any => {
     return action$.pipe(
@@ -78,20 +79,7 @@ const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUs
         } as GetUserByIdQueryInputType)).pipe(
             map(response => {
                 if (response?.data?.getUserById) {
-                    const apiResponse = response.data.getUserById
-                    const user = {
-                        id: parseInt(apiResponse.id),
-                        email: apiResponse.email ?? "",
-                        firstName: apiResponse.firstName ?? "Unknown",
-                        lastName: apiResponse.lastName ?? "User",
-                        isFullTimeEmployee: Boolean(JSON.parse(apiResponse.isFullTimeEmployee)),
-                        weeklyWorkingTime: parseInt(apiResponse.weeklyWorkingTime ?? ''),
-                        remainingVacationDays: parseInt(apiResponse.remainingVacationDays ?? ''),
-                        privilegesValue: parseInt(apiResponse.privilegesValue ?? ''),
-                        vacationPermissionId: parseInt(apiResponse.vacationPermissionId??""),
-                        teamId: parseInt(apiResponse.teamId),
-                        roleId: parseInt(apiResponse.roleId)
-                    } as User
+                    const user = parseObjectToUser(response.data.getUserById)
                     return setUser(user)
                 }
                 return { payload: "Error", type: "AuthSetUserError"} as Action

@@ -2,6 +2,7 @@
 using System;
 using TimeTrackerApp.Business.Enums;
 using TimeTrackerApp.Business.Models;
+using TimeTrackerApp.Business.Repositories;
 
 namespace TimeTrackerApp.GraphQL.GraphQLTypes
 {

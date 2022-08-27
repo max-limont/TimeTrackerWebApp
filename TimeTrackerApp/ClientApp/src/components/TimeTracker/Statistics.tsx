@@ -79,8 +79,11 @@ export const Statistics: FC<StatisticPropsType> = (props) => {
     }
 
     useEffect(() => {
-        window.addEventListener('resize', () => resizeChart(), false)
-        resizeChart()
+        const charts = document.getElementsByClassName('chart')
+        if (charts.length > 0) {
+            window.addEventListener('resize', () => resizeChart(), false)
+            resizeChart()
+        }
     }, [data, metadata])
 
     return (
