@@ -117,7 +117,7 @@ export const getVacationRequestQuery = `
 export const getApproversByUserId = ` 
 query($userId: Int!){
 getApprovers(userId: $userId){
-id, 
+            id, 
             email ,
             firstName,
             lastName,

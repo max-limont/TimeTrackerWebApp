@@ -33,7 +33,7 @@ namespace TimeTrackerApp.MsSql.Repositories
                 int id = await connection.QueryFirstAsync<int>(query, vacation);
                 if (id != 0)
                 {
-                    var userManagers = await VacationManagment.GetByUserIdVacationManagent(vacation.UserId);
+                    var userManagers = await VacationManagment.GetByUserIdVacationManagment(vacation.UserId);
                     if (userManagers == null)
                     {
                         var defaultManagersId = await connection.QueryAsync<int>(queryFetchManagersUser);

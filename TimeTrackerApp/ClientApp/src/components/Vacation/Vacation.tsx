@@ -39,7 +39,7 @@ export function ShowComment(prop: Props) {
                                     : <></>}
                                 <button className={"button red-button close"} onClick={() => {
                                     setResponse(!visibleResponse);
-                                    }}>
+                                }}>
                                     <FontAwesomeIcon icon={faXmark} className={"icon"}/>
                                 </button>
                             </div>
@@ -65,7 +65,7 @@ export function Vacation() {
     const dispatch = useDispatch();
     const [createState, setCreateState] = useState(false);
     const [editState, setEditState] = useState(false);
-    const approvers = useAppSelector(s=>s.rootReducer.vacation.approvers);
+    const approvers = useAppSelector(s => s.rootReducer.vacation.approvers);
     const [visibleApprovers, setApprovers] = useState(false);
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(state => state.rootReducer.vacation.vacations);
@@ -78,11 +78,10 @@ export function Vacation() {
             dispatch(fetchApproversAction(id));
         }
     }, [auth.state?.user]);
-    
-    console.log(approvers);
 
     return (
         <>
+
             {editState ? <EditVacation sourceVacation={undefined} stateForm={setEditState} visible={editState}
                                        idVacation={id}/> : <></>}
             {createState ? <CreateVacation stateForm={setCreateState} visible={createState}/> : <></>}
@@ -93,9 +92,36 @@ export function Vacation() {
                             Request
                         </button>
                     </div>
+                    <div>
+                        <div className={"container-approver"}>
+                            <div className={"list-appovers"}>
+                                {visibleApprovers ?
+                                    <>
+                                        <div className={"item header-name"}>
+                                            <div>Manager</div>
+                                            <div>Email</div>
+                                        </div>
+                                        {approvers.map(x =>
+                                            <div key={x.id} className={"item "}>
+                                                <div>{x.firstName}{" "}{x.lastName}</div>
+                                                <div> {x.email}</div>
+                                            </div>)}
+                                    </>
+                                    : <></>
+                                }
+                            </div>
+                        </div>
+                        <button onClick={() => setApprovers(!visibleApprovers)} className="button cyan-button">Check
+                            Approvers
+                        </button>
+                    </div>
                 </div>
+
                 <div className="list-vacation-container">
-                    <p style={{margin: "5px"}}>Your Vacations</p>
+                    <p style={{margin: "5px", display: "flex"}}>
+                        Your Vacations
+
+                    </p>
                     <div className="list-vacations">
                         {!(vacationsList.length == 0) ?
                             <>
@@ -115,7 +141,6 @@ export function Vacation() {
                                                             : <></>}
                                                     </span>);
                                     return (
-
                                         <div key={i} className="vacation-item">
                                             <div>{item.startingTime}</div>
                                             <div>{item.endingTime}</div>

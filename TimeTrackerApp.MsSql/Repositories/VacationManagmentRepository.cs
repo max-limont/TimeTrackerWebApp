@@ -29,13 +29,13 @@ public class VacationManagmentRepository : IVacationManagment
         }
     }
 
-    public async Task<VacationManagment?> GetByUserIdVacationManagent(int userId)
+    public async Task<List<VacationManagment>> GetByUserIdVacationManagment(int userId)
     {
         string query = @$"Select * from VacationManagment where UserId ={userId}";
         using (Connection)
         {
-            var model = await Connection.QueryFirstOrDefaultAsync<VacationManagment>(query);
-            return model;
+            var model = await Connection.QueryAsync<VacationManagment>(query);
+            return model.ToList();
         }
     }
 

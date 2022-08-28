@@ -1400,7 +1400,33 @@ table .bottom-table-row .icon {
   padding: 3px;
 }
 .vacation-item > div {
-  flex-basis: 150px;
+  flex-basis: 250px;
+}
+
+.container-approver {
+  position: relative;
+}
+
+.list-appovers {
+  z-index: 10;
+  display: flex;
+  background-color: #222831;
+  right: 100%;
+  width: 450px;
+  position: absolute;
+  color: #EEEEEE;
+  border-radius: 3px;
+  flex-direction: column;
+}
+.list-appovers .item.header-name > div {
+  border-bottom: 1px solid #00ADB5;
+}
+.list-appovers .item {
+  padding: 10px 15px;
+  display: flex;
+}
+.list-appovers .item > div {
+  flex-basis: 225px;
 }
 
 .list-vacation-container {
