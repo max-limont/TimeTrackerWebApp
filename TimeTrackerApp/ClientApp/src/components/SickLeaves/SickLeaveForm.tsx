@@ -3,12 +3,13 @@ import {SickLeave, SickLeaveInputType} from "../../types/sickLeave.types";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import {useDispatch} from "react-redux";
-import {createSickLeave, updateSickLeave} from "../../store/sickLeave/sickLeave.slice";
+import {createSickLeave, updateSickLeave, updateSickLeaveRequest} from "../../store/sickLeave/sickLeave.slice";
 import {useAuth} from "../../hooks/useAuth";
 
 export enum SickLeaveFormActions {
     Create,
-    Edit
+    Edit,
+    EditRequest
 }
 
 export type SickLeaveFormPropsType = {
@@ -95,6 +96,20 @@ export const SickLeaveForm: FC<SickLeaveFormPropsType> = (props) => {
                             status: data.status
                         }
                         dispatch(updateSickLeave({sickLeave: sickLeave}))
+                    }
+                    break;
+                case SickLeaveFormActions.EditRequest:
+                    if (data && state.data.startDate && state.data.endDate) {
+                        const sickLeave: SickLeaveInputType = {
+                            id: data.id,
+                            startDate: state.data.startDate,
+                            endDate: state.data.endDate,
+                            creationDateTime: data.creationDateTime,
+                            approverId: data.approverId,
+                            employeeId: data.employeeId,
+                            status: data.status
+                        }
+                        dispatch(updateSickLeaveRequest({sickLeave: sickLeave}))
                     }
                     break;
             }

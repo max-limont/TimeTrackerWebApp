@@ -73,7 +73,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<SickLeave>> FetchAllForManagerByManagerIdAsync(int managerId)
 		{
-			string query = @"SELECT * FROM SickLeaves, UserManagement WHERE SickLeaves.EmployeeId = UserManagement.EmployeeId AND UserManagement.ManagerId = @ManagerId ORDER BY CreationDateTime DESC";
+			string query = @"SELECT SickLeaves.* FROM SickLeaves LEFT JOIN UserManagement ON SickLeaves.EmployeeId = UserManagement.EmployeeId WHERE UserManagement.ManagerId = @ManagerId ORDER BY SickLeaves.CreationDateTime DESC";
 
 			using (var connection = new SqlConnection(connectionString))
 			{

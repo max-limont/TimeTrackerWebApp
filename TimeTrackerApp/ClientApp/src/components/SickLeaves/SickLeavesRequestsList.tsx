@@ -1,12 +1,15 @@
 import {FC, useEffect, useState} from "react";
-import {useAppSelector} from "../../hooks/useAppSelector";
+import {SickLeaveForm, SickLeaveFormActions} from "./SickLeaveForm";
+import {SickLeave, SickLeaveStatusDataType, SickLeaveStatuses} from "../../types/sickLeave.types";
 import {useAuth} from "../../hooks/useAuth";
 import {useDispatch} from "react-redux";
-import {fetchAllSickLeavesByEmployeeId, removeSickLeave} from "../../store/sickLeave/sickLeave.slice";
-import {SickLeave, SickLeaveStatusDataType, SickLeaveStatuses} from "../../types/sickLeave.types";
-import {SickLeaveForm, SickLeaveFormActions} from "./SickLeaveForm";
+import {useAppSelector} from "../../hooks/useAppSelector";
+import {
+    fetchAllSickLeavesForManagerByManagerId,
+    updateSickLeaveRequest
+} from "../../store/sickLeave/sickLeave.slice";
 
-export type SickLeavesListStateType = {
+export type SickLeavesRequestsListStateType = {
     sickLeaveForm: {
         isVisible: boolean,
         action: SickLeaveFormActions,
@@ -19,7 +22,7 @@ export type SickLeavesListStateType = {
     sickLeavesList: SickLeave[]
 }
 
-const initialState: SickLeavesListStateType = {
+const initialState: SickLeavesRequestsListStateType = {
     sickLeaveForm: {
         isVisible: false,
         action: SickLeaveFormActions.Create,
@@ -46,11 +49,11 @@ const initialState: SickLeavesListStateType = {
     sickLeavesList: []
 }
 
-export const SickLeavesList: FC = () => {
+export const SickLeavesRequestsList: FC = () => {
 
     const auth = useAuth()
     const dispatch = useDispatch()
-    const sickLeaves = useAppSelector(state => state.rootReducer.sickLeave.sickLeaves)
+    const sickLeaves = useAppSelector(state => state.rootReducer.sickLeave.sickLeavesRequests)
     const [state, setState] = useState(initialState)
 
     const getStatusDataFromSickLeave = (status: SickLeaveStatuses): SickLeaveStatusDataType => {
@@ -90,7 +93,7 @@ export const SickLeavesList: FC = () => {
 
     useEffect(() => {
         if (auth.state?.user) {
-            dispatch(fetchAllSickLeavesByEmployeeId({employeeId: auth.state.user.id}))
+            dispatch(fetchAllSickLeavesForManagerByManagerId({managerId: auth.state.user.id}))
         }
     }, [auth])
 
@@ -116,28 +119,24 @@ export const SickLeavesList: FC = () => {
                             ))
                         }
                     </nav>
-                    <a className={'button cyan-button'} onClick={() => {
-                        setState({...state, sickLeaveForm: {...state, action: SickLeaveFormActions.Create, isVisible: true}})
-                        document.getElementsByTagName('body')[0].style.overflow = 'hidden';
-                    }}>
-                        Create sick leave
-                    </a>
                 </div>
                 <div className={'sick-leaves-list flex-container flex-column'}>
                     <table className={'sick-leaves-list-table'}>
                         <thead>
                         <tr>
+                            <th>Employee</th>
                             <th>Start date</th>
                             <th>End date</th>
                             <th>Status</th>
                             <th>Created at</th>
-                            <th style={{width: 200}}>Actions</th>
+                            <th style={{width: 300}}>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         {
                             state.sickLeavesList.map(sickLeave => (
                                 <tr key={sickLeave.id}>
+                                    <td>{sickLeave.employee.firstName} {sickLeave.employee.lastName}</td>
                                     <td>{sickLeave.startDate.toLocaleDateString()}</td>
                                     <td>{sickLeave.endDate.toLocaleDateString()}</td>
                                     <td>
@@ -152,11 +151,35 @@ export const SickLeavesList: FC = () => {
                                     <td>
                                         { sickLeave.status === SickLeaveStatuses.UnderReview &&
                                             <>
+                                                <a className={'button green-button'} onClick={() => dispatch(updateSickLeaveRequest({sickLeave: {
+                                                        id: sickLeave.id,
+                                                        employeeId: sickLeave.employeeId,
+                                                        startDate: sickLeave.startDate,
+                                                        endDate: sickLeave.endDate,
+                                                        creationDateTime: sickLeave.creationDateTime,
+                                                        approverId: auth.state?.user?.id,
+                                                        status: SickLeaveStatuses.Approved
+                                                    }
+                                                }))}>
+                                                    Approve
+                                                </a>
+                                                <a className={'button red-button'} onClick={() => dispatch(updateSickLeaveRequest({
+                                                    sickLeave: {
+                                                        id: sickLeave.id,
+                                                        employeeId: sickLeave.employeeId,
+                                                        startDate: sickLeave.startDate,
+                                                        endDate: sickLeave.endDate,
+                                                        creationDateTime: sickLeave.creationDateTime,
+                                                        approverId: auth.state?.user?.id,
+                                                        status: SickLeaveStatuses.Rejected
+                                                    }
+                                                }))}>
+                                                    Reject
+                                                </a>
                                                 <a className={'button yellow-button'} onClick={() => {
-                                                    setState({...state, sickLeaveForm: {...state, action: SickLeaveFormActions.Edit, isVisible: true, data: sickLeave}})
+                                                    setState({...state, sickLeaveForm: {...state, action: SickLeaveFormActions.EditRequest, isVisible: true, data: sickLeave}})
                                                     document.getElementsByTagName('body')[0].style.overflow = 'hidden';
                                                 }}>Edit</a>
-                                                <a className={'button red-button'} onClick={() => dispatch(removeSickLeave({id: sickLeave.id}))}>Remove</a>
                                             </>
                                         }
                                     </td>

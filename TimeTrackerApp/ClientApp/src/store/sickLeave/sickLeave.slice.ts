@@ -11,11 +11,13 @@ import {
 import {parseObjectToUser} from "../user/user.slice";
 
 export type SickLeaveStateType = {
-    sickLeaves: SickLeave[]
+    sickLeaves: SickLeave[],
+    sickLeavesRequests: SickLeave[]
 }
 
 const initialState: SickLeaveStateType = {
-    sickLeaves: []
+    sickLeaves: [],
+    sickLeavesRequests: []
 }
 
 export const sickLeaveSlice = createSlice({
@@ -31,8 +33,14 @@ export const sickLeaveSlice = createSlice({
         editSickLeave: (state, action: PayloadAction<SickLeave>) => {
             return {...state, sickLeaves: state.sickLeaves.map(sickLeave => sickLeave.id === action.payload.id ? action.payload : sickLeave)}
         },
+        editSickLeaveRequest: (state, action: PayloadAction<SickLeave>) => {
+            return {...state, sickLeavesRequests: state.sickLeavesRequests.map(sickLeave => sickLeave.id === action.payload.id ? action.payload : sickLeave)}
+        },
         deleteSickLeave: (state, action: PayloadAction<number>) => {
             return {...state, sickLeaves: state.sickLeaves.filter(sickLeave => sickLeave.id !== action.payload)}
+        },
+        setSickLeavesRequests: (state, action: PayloadAction<SickLeave[]>) => {
+            return {...state, sickLeavesRequests: action.payload}
         }
     }
 })
@@ -44,8 +52,9 @@ export const getSickLeaveById = createAction<GetSickLeaveByIdInputType>("GetSick
 export const createSickLeave = createAction<CreateSickLeaveMutationInputType>("CreateSickLeave")
 export const updateSickLeave = createAction<UpdateSickLeaveMutationInputType>("UpdateSickLeave")
 export const removeSickLeave = createAction<RemoveSickLeaveMutationInputType>("RemoveSickLeave")
+export const updateSickLeaveRequest = createAction<UpdateSickLeaveMutationInputType>("UpdateSickLeaveRequest")
 
-export const {setSickLeaves, addSickLeave, editSickLeave, deleteSickLeave} = sickLeaveSlice.actions
+export const {setSickLeaves, setSickLeavesRequests, addSickLeave, editSickLeave, editSickLeaveRequest, deleteSickLeave} = sickLeaveSlice.actions
 export const sickLeaveReducer = sickLeaveSlice.reducer
 
 export const parseObjectToSickLeave = (object: any): SickLeave => {
@@ -57,6 +66,7 @@ export const parseObjectToSickLeave = (object: any): SickLeave => {
         approverId: object.approverId ? parseInt(object.approverId) : null,
         status: parseInt(object.status),
         creationDateTime: new Date(new Date(object.creationDateTime) + "UTC"),
+        employee: parseObjectToUser(object.employee),
         approver: object.approver ? parseObjectToUser(object.approver) : null
     } as SickLeave
 }

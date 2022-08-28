@@ -2,11 +2,11 @@ import {combineEpics, Epic, ofType} from "redux-observable";
 import {from, map, mergeMap, Observable} from "rxjs";
 import {
     addSickLeave,
-    createSickLeave, deleteSickLeave, editSickLeave,
+    createSickLeave, deleteSickLeave, editSickLeave, editSickLeaveRequest,
     fetchAllSickLeaves,
     fetchAllSickLeavesByEmployeeId, fetchAllSickLeavesForManagerByManagerId, getSickLeaveById,
     parseObjectToSickLeave, removeSickLeave,
-    setSickLeaves, updateSickLeave
+    setSickLeaves, setSickLeavesRequests, updateSickLeave, updateSickLeaveRequest
 } from "./sickLeave.slice";
 import {graphqlRequest} from "../../graphql/api";
 import {
@@ -57,7 +57,7 @@ export const fetchAllSickLeavesForManagerByManagerIdEpic: Epic = (action$: Obser
                 if (response?.data?.fetchAllSickLeavesForManagerByManagerId) {
                     const apiResponse = response.data.fetchAllSickLeavesForManagerByManagerId
                     const sickLeaves = apiResponse.map((sickLeave: any) => parseObjectToSickLeave(sickLeave))
-                    return setSickLeaves(sickLeaves)
+                    return setSickLeavesRequests(sickLeaves)
                 }
                 return {type: "FetchAllSickLeavesForManagerByManagerIdError", payload: "Error"} as Action
             })
@@ -109,6 +109,21 @@ export const updateSickLeaveEpic: Epic = (action$: Observable<ReturnType<typeof 
     )
 }
 
+export const updateSickLeaveRequestEpic: Epic = (action$: Observable<ReturnType<typeof updateSickLeaveRequest>>): any => {
+    return action$.pipe(
+        ofType(updateSickLeaveRequest.type),
+        mergeMap(action => from(graphqlRequest(updateSickLeaveMutation, action.payload)).pipe(
+            map(response => {
+                if (response?.data?.editSickLeave) {
+                    const sickLeave = parseObjectToSickLeave(response.data.editSickLeave)
+                    return editSickLeaveRequest({...sickLeave, creationDateTime: new Date(sickLeave.creationDateTime.getTime() + sickLeave.creationDateTime.getTimezoneOffset() * 60 * 1000)})
+                }
+                return {type: "UpdateSickLeaveRequestError", payload: "Error"} as Action
+            })
+        ))
+    )
+}
+
 export const removeSickLeaveEpic: Epic = (action$: Observable<ReturnType<typeof removeSickLeave>>): any => {
     return action$.pipe(
         ofType(removeSickLeave.type),
@@ -124,4 +139,4 @@ export const removeSickLeaveEpic: Epic = (action$: Observable<ReturnType<typeof 
     )
 }
 
-export const sickLeaveEpics = combineEpics(fetchAllSickLeavesEpic, fetchAllSickLeavesByEmployeeIdEpic, fetchAllSickLeavesForManagerByManagerIdEpic, getSickLeaveByIdEpic, createSickLeaveEpic, updateSickLeaveEpic, removeSickLeaveEpic)
+export const sickLeaveEpics = combineEpics(fetchAllSickLeavesEpic, fetchAllSickLeavesByEmployeeIdEpic, fetchAllSickLeavesForManagerByManagerIdEpic, getSickLeaveByIdEpic, createSickLeaveEpic, updateSickLeaveEpic, updateSickLeaveRequestEpic, removeSickLeaveEpic)

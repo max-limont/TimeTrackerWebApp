@@ -8,6 +8,7 @@ export type SickLeave = {
     approverId: number,
     status: SickLeaveStatuses,
     creationDateTime: Date,
+    employee: User
     approver?: User | null
 }
 

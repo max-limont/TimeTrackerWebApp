@@ -8,6 +8,19 @@ export const fetchAllSickLeavesQuery = `
             approverId
             status
             creationDateTime
+            employee {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
             approver {
                 id
                 email
@@ -35,6 +48,19 @@ export const fetchAllSickLeavesByEmployeeIdQuery = `
             approverId
             status
             creationDateTime
+            employee {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
             approver {
                 id
                 email
@@ -62,6 +88,19 @@ export const fetchAllSickLeavesForManagerByManagerIdQuery = `
             approverId
             status
             creationDateTime
+            employee {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
             approver {
                 id
                 email
@@ -89,6 +128,19 @@ export const getSickLeaveByIdQuery = `
             approverId
             status
             creationDateTime
+            employee {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
             approver {
                 id
                 email
@@ -116,6 +168,19 @@ export const createSickLeaveMutation = `
             approverId
             status
             creationDateTime
+            employee {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
             approver {
                 id
                 email
@@ -143,6 +208,19 @@ export const updateSickLeaveMutation = `
             approverId
             status
             creationDateTime
+            employee {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
             approver {
                 id
                 email
@@ -170,6 +248,19 @@ export const removeSickLeaveMutation = `
             approverId
             status
             creationDateTime
+            employee {
+                id
+                email
+                firstName
+                lastName
+                isFullTimeEmployee
+                weeklyWorkingTime
+                remainingVacationDays
+                privilegesValue
+                vacationPermissionId,
+                teamId,
+                roleId
+            }
             approver {
                 id
                 email

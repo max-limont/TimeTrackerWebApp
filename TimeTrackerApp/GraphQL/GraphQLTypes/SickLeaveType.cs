@@ -17,6 +17,16 @@ namespace TimeTrackerApp.GraphQL.GraphQLTypes
 			Field<IdGraphType, int?>().Name("ApproverId").Resolve(context => context.Source.ApproverId);
 			Field<IntGraphType, int?>().Name("Status").Resolve(context => (int)context.Source.Status);
 			Field<DateTimeGraphType, DateTime>().Name("CreationDateTime").Resolve(context => context.Source.CreationDateTime);
+			Field<UserType, User>().Name("Employee").ResolveAsync(async context => {
+				try
+				{
+					return await userRepository.GetByIdAsync(context.Source.EmployeeId);
+				}
+				catch
+				{
+					return null;
+				}
+			});
 			Field<UserType, User>().Name("Approver").ResolveAsync(async context => {
 				try
 				{

@@ -67,13 +67,13 @@ export const Menu: FC = () => {
                             <li>
                                 <Link to={"/vacation"} className={"flex-container"}>
                                     <FontAwesomeIcon icon={faUmbrellaBeach} className={"icon"} />
-                                    <span>Vacations</span>
+                                    <span>My vacations</span>
                                 </Link>
                             </li>
                             <li>
                                 <Link to={"/sick-leaves"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faLaptopMedical} className={"icon"} />
-                                    <span>Sick leaves</span>
+                                    <span>My sick leaves</span>
                                 </Link>
                             </li>
                         </ul>
