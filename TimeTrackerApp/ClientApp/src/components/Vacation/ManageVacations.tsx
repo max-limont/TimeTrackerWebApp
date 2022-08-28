@@ -52,7 +52,7 @@ export function ManageVacationRequest() {
                                     <div>Starting Time</div>
                                     <div>Ending Time</div>
                                     <div>Count Day</div>
-                                    <div className={"end-item-action"}>User</div>
+                                    <div className={"end-item-action"} style={{flexBasis: "250px"}}>User</div>
                                     <div className={"end-item-action"}>Actions</div>
                                 </div>
                                 {requestsVacation.map((item, i) => {
@@ -67,13 +67,13 @@ export function ManageVacationRequest() {
                                                 <div>{item.startingTime}</div>
                                                 <div>{item.endingTime}</div>
                                                 <div>{moment.duration(moment(item.endingTime).diff(moment(item.startingTime))).asDays()}</div>
-                                                <div className={"end-item-action"}>
+                                                <div className={"end-item-action"} style={{flexBasis: "250px"}}>
                                                     <div style={{flexGrow: "1",whiteSpace: "nowrap"}}
                                                          onClick={() => navigate("/user?id=" + item.id)}
                                                          className="button cyan-button close">
                                                         {item.user?.firstName} {item.user?.lastName}
                                                     </div>
-                                                    {item.comment===""? <ShowComment approver={null}   comment={item.comment}/>:<></>}
+                                                    {item.comment!==""? <ShowComment approver={null}   comment={item.comment}/>:<></>}
                                                 </div>
                                                 <div className={"end-item-action"}>
                                                     <button className="button silver-button close" onClick={() => {

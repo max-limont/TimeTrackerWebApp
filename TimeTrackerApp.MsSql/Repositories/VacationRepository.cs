@@ -30,19 +30,23 @@ namespace TimeTrackerApp.MsSql.Repositories
             {
                 string queryFetchManagersUser = @$"Select UserId from VacationManager";
                 int id  = await connection.QueryFirstAsync<int>(query, vacation);
-                var defaultManagersId = await connection.QueryAsync<int>(queryFetchManagersUser);
-
+                 var userManagers =
+                    await connection.QueryFirstOrDefaultAsync<VacationManagment>(
+                        $"select * from  VacationManagment where UserId={vacation.UserId}");
                 if (id != 0)
                 {
-                    // foreach (var modelId in defaultManagersId)
-                    // {
-                    //     var model =  VacationManagment.CreateVacationManagment(new VacationManagment
-                    //      {
-                    //         UserId= vacation.UserId,
-                    //         ManagerId = modelId
-                    //     });
-                    // }
-                    
+                    if (userManagers == null)
+                    {
+                        var defaultManagersId = await connection.QueryAsync<int>(queryFetchManagersUser);
+                        foreach (var managerId in defaultManagersId)
+                        {
+                            VacationManagment.CreateVacationManagment(new VacationManagment()
+                            {
+                                ManagerId= managerId,
+                                UserId = vacation.UserId
+                            });
+                        }
+                    }
                     return await GetVacationByIdAsync(id);
                 }
 
