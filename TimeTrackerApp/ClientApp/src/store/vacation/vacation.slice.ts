@@ -1,20 +1,23 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {User} from "../../types/user.types";
 import {CreateVacationType, EditVacationType, VacationResponse, VacationType} from "../../types/vacation.types";
 
-interface vacationState{
-  vacations: VacationType[],
-  requestVacations: VacationType[]
+interface vacationState {
+    vacations: VacationType[],
+    requestVacations: VacationType[],
+    approvers: User[]
 }
 
-const initialState:vacationState={
+const initialState: vacationState = {
     vacations: [],
-    requestVacations: []
+    requestVacations: [],
+    approvers: []
 }
 
 export const vacationSlice = createSlice({
     name: "vacationSlice",
     initialState: initialState,
-    reducers:{
+    reducers: {
         setVacation: (state, action: PayloadAction<VacationType[]>) => {
             return {...state, vacations: action.payload};
         },
@@ -30,27 +33,40 @@ export const vacationSlice = createSlice({
             vacations[i] = action.payload;
             return {...state, vacations: vacations}
         },
-        setRequestVacation:  (state, action: PayloadAction<VacationType[]>) => {
-            return {...state, requestVacations: action.payload}
+        setRequestVacation: (state, action: PayloadAction<VacationType[]>) => {
+            return {...state, requestVacations: action.payload};
         },
         removeRequestVacation: (state, action: PayloadAction<number>) => {
-            return {...state, requestVacations: state.requestVacations.filter(item=> item.id !== action.payload)}
+            return {...state, requestVacations: state.requestVacations.filter(item => item.id !== action.payload)};
         },
         updateRequestVacation: (state, action: PayloadAction<VacationType>) => {
             const i = state.requestVacations.findIndex(item => item.id == action.payload.id);
             let vacations = state.requestVacations.slice();
             vacations[i] = action.payload;
-            return {...state, requestVacations: vacations}
+            return {...state, requestVacations: vacations};
         },
+        setApprovers: (state, action: PayloadAction<User[]>) => {
+            return {...state, approvers: action.payload};
+        }
     }
 });
 
-export const {removeVacation, addVacation, setVacation, updateVacation, updateRequestVacation, setRequestVacation, removeRequestVacation} = vacationSlice.actions;
+export const {
+    removeVacation,
+    addVacation,
+    setVacation,
+    updateVacation,
+    updateRequestVacation,
+    setApprovers,
+    setRequestVacation,
+    removeRequestVacation
+} = vacationSlice.actions;
 
+export const fetchApproversAction = createAction<number>("fetchApprovers");
 export const getRequestVacationAction = createAction<number>("getAllVacations");
 export const getAllVacationsAction = createAction("getVacationsByUserId");
 export const getVacationsByUserIdAction = createAction<number>("getVacationById");
-export const createResponseAction = createAction<{stateAccepte: boolean, response: VacationResponse}>("createResponse");
+export const createResponseAction = createAction<{ stateAccepte: boolean, response: VacationResponse }>("createResponse");
 export const getVacationByIdAction = createAction<number>("createVacation");
 export const createVacationAction = createAction<CreateVacationType>("getRequestVacation");
 export const removeVacationAction = createAction<number>("removeVacation");

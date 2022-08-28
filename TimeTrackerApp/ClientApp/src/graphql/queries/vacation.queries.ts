@@ -114,7 +114,17 @@ export const getVacationRequestQuery = `
     }
 `
 
-export const createResponseQuery=`
+export const getApproversByUserId = ` 
+query($userId: Int!){
+getApprovers(userId: $userId){
+id, 
+            email ,
+            firstName,
+            lastName,
+}
+}`
+
+export const createResponseQuery = `
 mutation($state:Boolean,$response:VacationResponseInputType ){
     changeAcceptedState(response: $response, stateAccepted: $state){
         ${queryFragment},

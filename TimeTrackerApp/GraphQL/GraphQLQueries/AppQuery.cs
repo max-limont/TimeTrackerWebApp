@@ -217,9 +217,14 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var id = contex.GetArgument<int>("ReceiverId");
                     return await vacationRepository.GetRequestVacation(id);
                 })
-                .AuthorizeWithPolicy("LoggedIn"); 
-            
-         
+                .AuthorizeWithPolicy("LoggedIn");
+            Field<ListGraphType<UserType>, List<User>>()
+                .Name("GetApprovers")
+                .Argument<IntGraphType, int>("userId", "user id")
+                .ResolveAsync(async context =>
+                {
+                    return await vacationRepository.GetVacationApprovers(context.GetArgument<int>("userId"));
+                });
 
         }
     }

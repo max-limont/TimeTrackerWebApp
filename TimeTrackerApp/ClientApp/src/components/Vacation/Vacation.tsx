@@ -6,7 +6,11 @@ import {faComment, faL, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {useAuth} from "../../hooks/useAuth";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/useAppSelector";
-import {getVacationsByUserIdAction, removeVacationAction} from "../../store/vacation/vacation.slice";
+import {
+    fetchApproversAction,
+    getVacationsByUserIdAction,
+    removeVacationAction
+} from "../../store/vacation/vacation.slice";
 import {User} from "../../types/user.types";
 
 
@@ -35,7 +39,7 @@ export function ShowComment(prop: Props) {
                                     : <></>}
                                 <button className={"button red-button close"} onClick={() => {
                                     setResponse(!visibleResponse);
-                                }}>
+                                    }}>
                                     <FontAwesomeIcon icon={faXmark} className={"icon"}/>
                                 </button>
                             </div>
@@ -61,6 +65,7 @@ export function Vacation() {
     const dispatch = useDispatch();
     const [createState, setCreateState] = useState(false);
     const [editState, setEditState] = useState(false);
+    const approvers = useAppSelector(s=>s.rootReducer.vacation.approvers);
     const [visibleApprovers, setApprovers] = useState(false);
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(state => state.rootReducer.vacation.vacations);
@@ -70,9 +75,11 @@ export function Vacation() {
         // console.log(auth.state?.user?.roleId);
         if (id) {
             dispatch(getVacationsByUserIdAction(id));
+            dispatch(fetchApproversAction(id));
         }
     }, [auth.state?.user]);
-    console.log(vacationsList);
+    
+    console.log(approvers);
 
     return (
         <>

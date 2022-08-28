@@ -97,7 +97,7 @@ namespace TimeTrackerApp.MsSql.Repositories
             }
         }
 
-        private async Task<List<User>?> GetVacationApprovers(int userId)
+        public async Task<List<User>?> GetVacationApprovers(int userId)
         {
             string getVacationApprovers = @$"select * from Users as u Inner join VacationManagment 
                         as v on u.Id = v.ManagerId and v.UserId = {userId}";
