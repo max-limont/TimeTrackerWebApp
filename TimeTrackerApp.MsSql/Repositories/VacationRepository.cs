@@ -13,7 +13,8 @@ namespace TimeTrackerApp.MsSql.Repositories
         private IVacationManagment VacationManagment { get; set; }
         private IVacationResponse vacationResponse { get; set; }
 
-        public VacationRepository(IConfiguration configuration,IVacationManagment vacationManagment,IVacationResponse vacationResponse)
+        public VacationRepository(IConfiguration configuration, IVacationManagment vacationManagment,
+            IVacationResponse vacationResponse)
         {
             this.connectionString = configuration.GetConnectionString("MsSqlAzure");
             VacationManagment = vacationManagment;
@@ -29,24 +30,23 @@ namespace TimeTrackerApp.MsSql.Repositories
             using (var connection = new SqlConnection(connectionString))
             {
                 string queryFetchManagersUser = @$"Select UserId from VacationManager";
-                int id  = await connection.QueryFirstAsync<int>(query, vacation);
-                 var userManagers =
-                    await connection.QueryFirstOrDefaultAsync<VacationManagment>(
-                        $"select * from  VacationManagment where UserId={vacation.UserId}");
+                int id = await connection.QueryFirstAsync<int>(query, vacation);
                 if (id != 0)
                 {
+                    var userManagers = await VacationManagment.GetByUserIdVacationManagent(vacation.UserId);
                     if (userManagers == null)
                     {
                         var defaultManagersId = await connection.QueryAsync<int>(queryFetchManagersUser);
                         foreach (var managerId in defaultManagersId)
                         {
-                            VacationManagment.CreateVacationManagment(new VacationManagment()
+                            var model = await VacationManagment.CreateVacationManagment(new VacationManagment()
                             {
-                                ManagerId= managerId,
+                                ManagerId = managerId,
                                 UserId = vacation.UserId
                             });
                         }
                     }
+
                     return await GetVacationByIdAsync(id);
                 }
 
@@ -79,19 +79,20 @@ namespace TimeTrackerApp.MsSql.Repositories
                 return (await connection.QueryAsync<Vacation>(query)).ToList();
             }
         }
-        
-        public async Task<Vacation> ChangeAcceptedState(VacationResponse response,bool stateAccept)
+
+        public async Task<Vacation> ChangeAcceptedState(VacationResponse response, bool stateAccept)
         {
             string query = @"Update Vacation set IsAccepted=@StateAccepted Where Id=@Id";
             using (var connection = new SqlConnection(connectionString))
             {
-                int result = await connection.ExecuteAsync(query, new { Id = response.VacationId, StateAccepted = stateAccept });
+                int result = await connection.ExecuteAsync(query,
+                    new { Id = response.VacationId, StateAccepted = stateAccept });
                 if (result == 0)
                 {
                     throw new Exception();
                 }
- 
-                var model =  await vacationResponse.CreateVacationResponse(response);
+
+                var model = await vacationResponse.CreateVacationResponse(response);
                 return await GetVacationByIdAsync(response.VacationId);
             }
         }
@@ -122,11 +123,14 @@ namespace TimeTrackerApp.MsSql.Repositories
                         vacation.ApproveUsers = approvers.ToList();
                         if (vacation.IsAccepted != null)
                         {
-                            vacation.VacationResponse =  await vacationResponse.GetVacationResponseByVacationId(vacation.Id);
+                            vacation.VacationResponse =
+                                await vacationResponse.GetVacationResponseByVacationId(vacation.Id);
                         }
                     }
+
                     return vacations;
                 }
+
                 throw new Exception();
             }
         }
@@ -137,7 +141,7 @@ namespace TimeTrackerApp.MsSql.Repositories
             and v.Id={id}";
             using (var connection = new SqlConnection(connectionString))
             {
-                var vacations = await connection.QueryAsync<Vacation, User,Vacation>(query,
+                var vacations = await connection.QueryAsync<Vacation, User, Vacation>(query,
                     (v, u) =>
                     {
                         v.User = u;
@@ -150,6 +154,7 @@ namespace TimeTrackerApp.MsSql.Repositories
                     vacation.VacationResponse = await vacationResponse.GetVacationResponseByVacationId(vacation.Id);
                     return vacation;
                 }
+
                 throw new Exception("This vacation was not found");
             }
         }
@@ -158,7 +163,7 @@ namespace TimeTrackerApp.MsSql.Repositories
         {
             string query = @$"Select * from Vacation as v inner join Users as u on   v.UserId = u.Id
             and u.Id in (Select UserId from VacationManagment where ManagerId={receiverUserId}) and v.IsAccepted is null";
-            
+
             using (var connection = new SqlConnection(connectionString))
             {
                 var listVacation = await connection.QueryAsync<Vacation, User, Vacation>(query, (v, u) =>
@@ -172,6 +177,7 @@ namespace TimeTrackerApp.MsSql.Repositories
                 {
                     return listVacation.ToList();
                 }
+
                 throw new Exception("error to fetch");
             }
         }
@@ -182,15 +188,14 @@ namespace TimeTrackerApp.MsSql.Repositories
 
             using (var connection = new SqlConnection(connectionString))
             {
-               
-                    var vacationRequest = await GetVacationByIdAsync(id);
-                    int affectedRows = await connection.ExecuteAsync(query, new { Id = id });
-                    if (affectedRows > 0)
-                    {
-                        return vacationRequest;
-                    }
-                    throw new Exception("Vacation request removal error!");
+                var vacationRequest = await GetVacationByIdAsync(id);
+                int affectedRows = await connection.ExecuteAsync(query, new { Id = id });
+                if (affectedRows > 0)
+                {
+                    return vacationRequest;
+                }
 
+                throw new Exception("Vacation request removal error!");
             }
         }
     }
