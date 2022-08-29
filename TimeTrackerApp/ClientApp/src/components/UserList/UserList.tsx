@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {User} from "../../types/user.types";
 import {Select} from "./Select";
 import ExportXlsx from "./ExportXlsx";
@@ -80,7 +80,7 @@ export const UserList: FC = () => {
                     <span>Sort by:</span>
                     <Select options={selectOptions} selectHandler={selectHandler}/>
                     <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
-                    <a className="link-btn addUser button cyan-button">Create user</a>
+                    <Link to={"/user-create"} className="link-btn addUser button cyan-button">Create user</Link>
                 </div>
             </div>
             <table className={"user-list-list"}>

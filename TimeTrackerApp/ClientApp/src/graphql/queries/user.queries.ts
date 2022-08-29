@@ -43,7 +43,7 @@ export const createUserQuery = `
 `
 
 export const isUserExistQuery = `
-    query ($email: String!) {
-      IsUserEmailExist(email: $email)
+    query IsExistEmail($email: String!) {
+       isUserEmailExist(email: $email)
     }
 `

@@ -1,12 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Message, MessageTypes} from "../Layout/Message";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "../../hooks/useAppSelector";
 import {useAuth} from "../../hooks/useAuth";
-import {setError} from "../../store/auth/auth.slice";
 import {graphqlRequest} from "../../graphql/api";
 import {createUserQuery, isUserExistQuery} from "../../graphql/queries/user.queries";
-import "../UserList/styles/addUser.scss"
+import {useNavigate} from "react-router-dom";
 
 interface UserData {
     email: string,
@@ -33,8 +29,7 @@ const AddUserForm = () => {
     const [user, setUser] = useState<UserData>(UserDataInit)
     const [checkInputs, setCheckInputs] = useState<InputsCheck>({email: false, password: false})
     const [repeatPassword, setRepeatPassword] = useState<string>("")
-    const auth = useAuth();
-
+    const navigate = useNavigate()
 
     return (
         <div className={"flex-container flex-column"}>
@@ -52,6 +47,7 @@ const AddUserForm = () => {
                             })}
                             type="email"/>
                     </div>
+                    <span style={{color: "red"}}>message</span>
                     <div className={"form-item w-100"}>
                         <input
                             placeholder={'First Name'}
@@ -86,12 +82,14 @@ const AddUserForm = () => {
                             onChange={event => setRepeatPassword(event.target.value)}
                             type="password"/>
                     </div>
+                    <span style={{color: "red"}}>message</span>
                     <div className={"form-item w-100"}>
-                        <label htmlFor={"isPartTime"}>Part-time: </label>
-                        <input
-                            id={"isPartTime"}
-                            onChange={event => setRepeatPassword(event.target.value)}
-                            type="checkbox"/>
+                            <label htmlFor={"isPartTime"}>Part-time: </label>
+                            <input
+                                style={{width: "auto"}}
+                                id={"isPartTime"}
+                                onChange={event => setUser({...user, isFullTimeEmployee: !event.target.checked})}
+                                type="checkbox"/>
                     </div>
 
                     <div className={"form-item w-100"}>
@@ -99,15 +97,24 @@ const AddUserForm = () => {
                             e.preventDefault()
                             const checks = {
                                 password: user.password != repeatPassword,
-                                email: (await graphqlRequest(isUserExistQuery, {value: user.email})).data.IsUserEmailExist
+                                email: (await graphqlRequest(isUserExistQuery, {email: user.email})).data.IsUserEmailExist
                             }
                             setCheckInputs(checks)
                             if (!checks.email && !checks.password) {
-                                await graphqlRequest(createUserQuery, {user})
+                                await graphqlRequest(createUserQuery, {
+                                    user:{
+                                        email: user.email,
+                                        password: user.password,
+                                        firstName: user.firstName,
+                                        lastName: user.lastName,
+                                        isFullTimeEmployee: user.isFullTimeEmployee
+                                    }
+                                })
+                                // navigate("/user-list", {replace: true})
                             }
                         }}
                                 className={"button dark-button w-100"}>
-                            Add
+                            Create
                         </button>
                     </div>
                 </div>
