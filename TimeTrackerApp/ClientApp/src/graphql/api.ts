@@ -1,10 +1,11 @@
-import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from "../helpers/cookies";
+import {accessTokenKey, clearCookie, getCookie, refreshTokenKey} from "../helpers/cookies";
 import { parseJwt } from "../helpers/parseJwt";
 import {AuthRefreshInputType, AuthUserResponse} from "../types/auth.types";
 import {store} from "../store/store";
 import {authRefreshAction} from "../store/auth/auth.slice";
 
-const apiUrl = "http://localhost:5000/graphql";
+const developmentApiUrl = "http://localhost:5000/graphql";
+const productionApiUrl = "https://timetrackerwebapp1.azurewebsites.net/graphql";
 
 const getAuthorizationHeader = (): string => {
     const accessToken = getCookie(accessTokenKey);
@@ -12,7 +13,7 @@ const getAuthorizationHeader = (): string => {
 }
 
 export const request = async (query: string, variables?: any) => {
-    return await fetch(apiUrl, {
+    return await fetch(`${window.location.origin}/graphql` === productionApiUrl ? productionApiUrl : developmentApiUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

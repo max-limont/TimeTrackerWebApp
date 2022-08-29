@@ -60,15 +60,16 @@ const createVacationRequestEpic: Epic = (action$: Observable<ReturnType<typeof c
                 });
             })
         )));
-}
+};
 
-export const getVacationRequestEpic: Epic = (action$: Observable<ReturnType<typeof getRequestVacationAction>>): any => {
+export const getVacationRequestEpic = (action$:Observable<ReturnType<typeof getRequestVacationAction>>) => {
     return action$.pipe(
         ofType(getRequestVacationAction.type),
-        mergeMap(action => from(graphqlRequest(getVacationRequestQuery, {
+        mergeMap((action:PayloadAction<number>)=> from(graphqlRequest(getVacationRequestQuery, {
             id: action.payload
         })).pipe(
             map(response => {
+                console.log(response);
                 if (!response?.errors) {
                     return setRequestVacation(formatDateToNormalFormat(response.data.getRequestVaction));
                 }
@@ -76,7 +77,7 @@ export const getVacationRequestEpic: Epic = (action$: Observable<ReturnType<type
             })
         ))
     )
-}
+};
 
 export const removeVacationEpic: Epic = (action$: Observable<ReturnType<typeof removeVacationAction>>): any => {
     return action$.pipe(
@@ -129,7 +130,7 @@ export const updateVacationEpic: Epic = (action$: Observable<ReturnType<typeof u
             )}
         )
     )
-}
+};
 
 export const vacationEpic = combineEpics(getVacationsByUserIdEpic, updateVacationEpic, createVacationRequestEpic, getVacationRequestEpic, removeVacationEpic);
 

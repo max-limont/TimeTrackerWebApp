@@ -37,7 +37,7 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
             })
         )),
     )
-}
+};
 
 const authRefreshEpic: Epic = (action$: Observable<ReturnType<typeof authRefreshAction>>): any => {
     return action$.pipe(
@@ -68,7 +68,7 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
             })
         ))
     )
-}
+};
 
 const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUser>>): any => {
     return action$.pipe(
@@ -88,7 +88,9 @@ const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUs
                         weeklyWorkingTime: parseInt(apiResponse.weeklyWorkingTime ?? ''),
                         remainingVacationDays: parseInt(apiResponse.remainingVacationDays ?? ''),
                         privilegesValue: parseInt(apiResponse.privilegesValue ?? ''),
-                        vacationPermissionId: parseInt(apiResponse.vacationPermissionId ?? '')
+                        vacationPermissionId: parseInt(apiResponse.vacationPermissionId??""),
+                        teamId: parseInt(apiResponse.teamId),
+                        roleId: parseInt(apiResponse.roleId)
                     } as User
                     return setUser(user)
                 }
@@ -96,7 +98,6 @@ const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUs
             })
         ))
     )
-}
-
+};
 
 export const authEpics = combineEpics(authLogoutEpic, authRefreshEpic, authLoginEpic, authSetUserEpic);

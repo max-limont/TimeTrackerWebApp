@@ -80,11 +80,11 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
                         Time tracks:
                     </h3>
                     <div className={'month-picker flex-container align-items-center'}>
-                        <a className={"button dark-button"} onClick={() => setState({...state, selectedMonth: new Date(state.selectedMonth?.setMonth(state.selectedMonth?.getMonth() - 1) ?? 0)})}>
+                        <a className={"button light-dark-button inverse"} onClick={() => setState({...state, selectedMonth: new Date(state.selectedMonth?.setMonth(state.selectedMonth?.getMonth() - 1) ?? 0)})}>
                             <FontAwesomeIcon icon={faAngleLeft} className={"icon"}/>
                         </a>
                         <input type={"month"} value={state.selectedMonth ? `${state.selectedMonth.getFullYear()}-${state.selectedMonth.getMonth() + 1 < 10 ? '0' : ''}${state.selectedMonth.getMonth() + 1}` : ''} onChange={event => setState({...state, selectedMonth: event.target.value ? new Date(event.target.value) : undefined})}/>
-                        <a className={"button dark-button"} onClick={() => setState({...state, selectedMonth: new Date(state.selectedMonth?.setMonth(state.selectedMonth?.getMonth() + 1) ?? 0)})}>
+                        <a className={"button light-dark-button inverse"} onClick={() => setState({...state, selectedMonth: new Date(state.selectedMonth?.setMonth(state.selectedMonth?.getMonth() + 1) ?? 0)})}>
                             <FontAwesomeIcon icon={faAngleRight} className={"icon"}/>
                         </a>
                     </div>

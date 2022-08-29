@@ -1,7 +1,7 @@
 import { combineEpics, ofType } from "redux-observable";
 import {from, map, mergeMap, Observable} from "rxjs";
 import { graphqlRequest } from "../../graphql/api";
-import { setUser } from "../auth/auth.slice";
+import { setUser } from "./user.slice";
 import {getUserByIdQuery} from "../../graphql/queries/user.queries";
 import {GetUserByIdQueryInputType, User} from "../../types/user.types";
 import {Epic} from "redux-observable";

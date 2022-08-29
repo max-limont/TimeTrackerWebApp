@@ -8,7 +8,9 @@ export type User = {
     weeklyWorkingTime: number,
     remainingVacationDays: number,
     privilegesValue: number
-    vacationPermissionId: number
+    vacationPermissionId: number,
+    teamId: number,
+    roleId: number
 }
 
 export type GetUserByIdQueryInputType = {
