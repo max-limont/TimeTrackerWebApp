@@ -266,7 +266,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .ResolveAsync(async context =>
                 {
                     return await sickLeaveRepository.FetchAllAsync();
-                });
+                })
+                .AuthorizeWithPolicy("LoggedIn"); ;
 
             Field<ListGraphType<SickLeaveType>, IEnumerable<SickLeave>>()
                 .Name("FetchAllSickLeavesByEmployeeId")
@@ -275,7 +276,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 {
                     var employeeId = context.GetArgument<int>("EmployeeId");
                     return await sickLeaveRepository.FetchAllByEmployeeIdAsync(employeeId);
-                });
+                })
+                .AuthorizeWithPolicy("LoggedIn"); ;
 
             Field<ListGraphType<SickLeaveType>, IEnumerable<SickLeave>>()
                 .Name("FetchAllSickLeavesForManagerByManagerId")
@@ -284,7 +286,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 {
                     var managerId = context.GetArgument<int>("ManagerId");
                     return await sickLeaveRepository.FetchAllForManagerByManagerIdAsync(managerId);
-                });
+                })
+                .AuthorizeWithPolicy("LoggedIn");
 
             Field<SickLeaveType, SickLeave>()
                 .Name("GetSickLeaveById")
@@ -293,7 +296,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 {
                     var id = context.GetArgument<int>("Id");
                     return await sickLeaveRepository.GetByIdAsync(id);
-                });
+                })
+                .AuthorizeWithPolicy("LoggedIn"); ;
             
             Field<RoleQuery>()
                 .Name("RoleQuery")
