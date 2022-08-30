@@ -97,10 +97,10 @@ namespace TimeTrackerApp.MsSql.Repositories
             }
         }
 
-        public async Task<List<User>?> GetVacationApprovers(int userId)
+        public async Task<List<User>> GetVacationApprovers(int userId)
         {
-            string getVacationApprovers = @$"select * from Users as u Inner join VacationManagment 
-                        as v on u.Id = v.ManagerId and v.UserId = {userId}";
+            string getVacationApprovers = @$"select * from Users as u Inner join UserManagment 
+                        as v on u.Id = v.ManagerId and v.EmployeeId = {userId}";
 
             using (var connection = new SqlConnection(connectionString))
             {
@@ -162,7 +162,7 @@ namespace TimeTrackerApp.MsSql.Repositories
         public async Task<List<Vacation>> GetRequestVacation(int receiverUserId)
         {
             string query = @$"Select * from Vacation as v inner join Users as u on   v.UserId = u.Id
-            and u.Id in (Select UserId from VacationManagment where ManagerId={receiverUserId}) and v.IsAccepted is null";
+            and u.Id in (Select EmployeeId from UserManagment where ManagerId={receiverUserId}) and v.IsAccepted is null";
 
             using (var connection = new SqlConnection(connectionString))
             {

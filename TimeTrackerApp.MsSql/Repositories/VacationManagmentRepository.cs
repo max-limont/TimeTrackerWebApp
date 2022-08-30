@@ -31,7 +31,7 @@ public class VacationManagmentRepository : IVacationManagment
 
     public async Task<List<VacationManagment>> GetByUserIdVacationManagment(int userId)
     {
-        string query = @$"Select * from UserManagment where UserId ={userId}";
+        string query = @$"Select * from UserManagment where EmployeeId ={userId}";
         using (Connection)
         {
             var model = await Connection.QueryAsync<VacationManagment>(query);

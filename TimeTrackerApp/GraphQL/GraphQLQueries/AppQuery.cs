@@ -218,6 +218,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     return await vacationRepository.GetRequestVacation(id);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
+            
+            
             Field<ListGraphType<UserType>, List<User>>()
                 .Name("GetApprovers")
                 .Argument<IntGraphType, int>("userId", "user id")
