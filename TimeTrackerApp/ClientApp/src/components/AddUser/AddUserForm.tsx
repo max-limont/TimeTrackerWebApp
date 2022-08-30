@@ -1,35 +1,44 @@
 import React, {useEffect, useState} from 'react';
 import {useAuth} from "../../hooks/useAuth";
 import {graphqlRequest} from "../../graphql/api";
-import {createUserQuery, isUserExistQuery} from "../../graphql/queries/user.queries";
 import {useNavigate} from "react-router-dom";
-
-interface UserData {
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-    isFullTimeEmployee: boolean
-}
+import {useDispatch} from "react-redux";
+import {createUserAction} from "../../store/userList/userList.slice";
+// import {UserCreateData} from "../../types/user.types";
+import {useAppSelector} from "../../hooks/useAppSelector";
+import {User} from "../../types/user.types";
 
 interface InputsCheck {
     email: boolean,
     password: boolean
 }
 
-const UserDataInit = {
+const UserDataInit: User = {
+    id: 0,
     email: "",
     password: "",
     firstName: "",
     lastName: "",
-    isFullTimeEmployee: true
+    isFullTimeEmployee: true,
+    weeklyWorkingTime: 2400,
+    remainingVacationDays: 30,
+    privilegesValue: 0
 }
 
 const AddUserForm = () => {
-    const [user, setUser] = useState<UserData>(UserDataInit)
+    const {createdUser} = useAppSelector(state => state.rootReducer.userList)
+    const [user, setUser] = useState<User>(UserDataInit)
     const [checkInputs, setCheckInputs] = useState<InputsCheck>({email: false, password: false})
     const [repeatPassword, setRepeatPassword] = useState<string>("")
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        if (!user.isFullTimeEmployee)
+            setUser({...user, weeklyWorkingTime: UserDataInit.weeklyWorkingTime / 2})
+        else
+            setUser({...user, weeklyWorkingTime: UserDataInit.weeklyWorkingTime})
+    }, [user.isFullTimeEmployee])
 
     return (
         <div className={"flex-container flex-column"}>
@@ -47,7 +56,11 @@ const AddUserForm = () => {
                             })}
                             type="email"/>
                     </div>
-                    <span style={{color: "red"}}>message</span>
+                    {
+                        checkInputs.email
+                            ? <span style={{color: "red"}}>This email already exist!</span>
+                            : null
+                    }
                     <div className={"form-item w-100"}>
                         <input
                             placeholder={'First Name'}
@@ -69,7 +82,7 @@ const AddUserForm = () => {
                     <div className={"form-item w-100"}>
                         <input
                             placeholder={'Password'}
-                            value={user.password}
+                            value={String(user.password)}
                             onChange={event => setUser({
                                 ...user, password: event.target.value
                             })}
@@ -82,36 +95,57 @@ const AddUserForm = () => {
                             onChange={event => setRepeatPassword(event.target.value)}
                             type="password"/>
                     </div>
-                    <span style={{color: "red"}}>message</span>
+                    {
+                        checkInputs.password
+                            ? <span style={{color: "red"}}>Passwords do not match!</span>
+                            : null
+                    }
                     <div className={"form-item w-100"}>
-                            <label htmlFor={"isPartTime"}>Part-time: </label>
-                            <input
-                                style={{width: "auto"}}
-                                id={"isPartTime"}
-                                onChange={event => setUser({...user, isFullTimeEmployee: !event.target.checked})}
-                                type="checkbox"/>
+                        <label htmlFor={"remainingVacationDays"}>Remaining Vacation Days: </label>
+                        <input
+                            style={{width: "auto"}}
+                            id={"remainingVacationDays"}
+                            value={user.remainingVacationDays}
+                            onChange={event => setUser({...user, remainingVacationDays: parseInt(event.target.value)})}
+                            type="number"/>
                     </div>
+                    <div className={"form-item w-100"}>
+                        <label htmlFor={"isPartTime"}>Part-time: </label>
+                        <input
+                            style={{width: "auto"}}
+                            id={"isPartTime"}
+                            onChange={event => setUser({
+                                ...user,
+                                isFullTimeEmployee: !event.target.checked
+                            })}
+                            type="checkbox"/>
+                    </div>
+
+                    {
+                        !user.isFullTimeEmployee
+                            ? <div className={"form-item w-100"}>
+                                <label htmlFor={"isPartTime"}>Target of weekly working time (minutes): </label>
+                                <input
+                                    style={{width: "auto"}}
+                                    id={"isPartTime"}
+                                    value={user.weeklyWorkingTime}
+                                    onChange={event => setUser({...user, weeklyWorkingTime: parseInt(event.target.value)})}
+                                    type="number"/>
+                            </div>
+                            : null
+                    }
 
                     <div className={"form-item w-100"}>
                         <button onClick={async (e) => {
                             e.preventDefault()
-                            const checks = {
-                                password: user.password != repeatPassword,
-                                email: (await graphqlRequest(isUserExistQuery, {email: user.email})).data.IsUserEmailExist
-                            }
-                            setCheckInputs(checks)
-                            if (!checks.email && !checks.password) {
-                                await graphqlRequest(createUserQuery, {
-                                    user:{
-                                        email: user.email,
-                                        password: user.password,
-                                        firstName: user.firstName,
-                                        lastName: user.lastName,
-                                        isFullTimeEmployee: user.isFullTimeEmployee
-                                    }
-                                })
-                                // navigate("/user-list", {replace: true})
-                            }
+                            const isPasswordError = user.password != repeatPassword
+                            setCheckInputs({...checkInputs, password: isPasswordError})
+                            if (isPasswordError)
+                                return
+                            dispatch(createUserAction(user))
+                            setCheckInputs({...checkInputs, email: createdUser != null})
+                            if (createdUser != null)
+                                navigate("/user-list", {replace: true})
                         }}
                                 className={"button dark-button w-100"}>
                             Create

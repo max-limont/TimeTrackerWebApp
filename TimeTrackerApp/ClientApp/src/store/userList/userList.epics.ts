@@ -1,14 +1,17 @@
-import { combineEpics, Epic, ofType } from "redux-observable";
+import {combineEpics, Epic, ofType} from "redux-observable";
 import {from, map, mergeMap, Observable} from "rxjs";
 import {getPaginatedUserList, getSearchResponse, getUserCount} from "../../graphql/queries/userList.queries";
 import {
+    insertCreatedUser,
+    createUserAction,
     fetchUserCount,
     fetchUserListPage, fetchUserListSearchRequest,
     setUserList,
-    setUserListCount
+    setUserListCount, deleteUserAction, deleteUser
 } from "./userList.slice";
 import {graphqlRequest} from "../../graphql/api";
 import {Action} from "react-epics";
+import {createUserQuery, deleteUserQuery} from "../../graphql/queries/user.queries";
 
 const fetchUserListPageEpic: Epic = (action$: Observable<ReturnType<typeof fetchUserListPage>>): any => {
     return action$.pipe(
@@ -57,5 +60,41 @@ const fetchUserListSearchResponseEpic: Epic = (action$: Observable<ReturnType<ty
     )
 }
 
-export const userListEpics = combineEpics(fetchUserListPageEpic, fetchUserCountEpic, fetchUserListSearchResponseEpic);
+const createUserEpic: Epic = (action$: Observable<ReturnType<typeof createUserAction>>): any => {
+    return action$.pipe(
+        ofType(createUserAction.type),
+        mergeMap(action => from(graphqlRequest(createUserQuery, {userInput: action.payload})).pipe(
+            map(response => {
+                console.log(response)
+                if (response.data.createUser) {
+                    return insertCreatedUser(response.data.createUser)
+                }
+                return {type: 'CreateUserError', payload: 'Error'} as Action
+            })
+        ))
+    )
+}
+
+const deleteUserEpic: Epic = (action$: Observable<ReturnType<typeof deleteUserAction>>): any => {
+    return action$.pipe(
+        ofType(deleteUserAction.type),
+        mergeMap(action => from(graphqlRequest(deleteUserQuery, {id: action.payload})).pipe(
+            map(response => {
+                console.log(response)
+                if (response.data.deleteUser) {
+                    return deleteUser(response.data.deleteUser)
+                }
+                return {type: 'CreateUserError', payload: 'Error'} as Action
+            })
+        ))
+    )
+}
+
+export const userListEpics = combineEpics(
+    fetchUserListPageEpic,
+    fetchUserCountEpic,
+    fetchUserListSearchResponseEpic,
+    createUserEpic,
+    deleteUserEpic
+);
 

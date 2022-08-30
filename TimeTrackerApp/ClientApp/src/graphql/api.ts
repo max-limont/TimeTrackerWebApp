@@ -24,7 +24,7 @@ export const request = async (query: string, variables?: any) => {
 }
 
 export const graphqlRequest = async (query: string, variables?: any) => {
-    console.warn(variables)
+    // console.warn(variables)
     const response = await request(query, variables)
     if (response.ok)
         return await response.json()

@@ -12,6 +12,7 @@ import {useDispatch} from "react-redux";
 import {UserListPage} from "../../types/userList.types";
 
 import {
+    deleteUserAction,
     fetchUserCount,
     fetchUserListPage,
     fetchUserListSearchRequest
@@ -20,7 +21,7 @@ import {
 export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
     const auth = useAuth();
-    const contentPerPage = 2;
+    const contentPerPage = 10;
 
     const dispatch = useDispatch()
     const [state, setState] = useState<UserListPage>({
@@ -89,15 +90,21 @@ export const UserList: FC = () => {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Weekly Working Time</th>
+                        <th/>
                     </tr>
                 </thead>
                 <tbody>
                     { userList &&
                         userList.map((item: User) => (
-                            <tr onClick={() => navigate("/user?id=" + item.id, )} key={item.id} className="link-btn userItem">
-                                <td>{item.firstName} {item.lastName}</td>
-                                <td>{item.email}</td>
-                                <td>{item.weeklyWorkingTime}</td>
+                            <tr key={item.id} className="link-btn userItem">
+                                <td onClick={() => navigate("/user?id=" + item.id, )}>{item.firstName} {item.lastName}</td>
+                                <td onClick={() => navigate("/user?id=" + item.id, )}>{item.email}</td>
+                                <td onClick={() => navigate("/user?id=" + item.id, )}>{item.weeklyWorkingTime}</td>
+                                <td><button onClick={e => {
+                                    e.preventDefault()
+                                    dispatch(deleteUserAction(item.id))
+                                    // window.location.reload()
+                                }}>Delete</button></td>
                             </tr>
                         ))
                     }

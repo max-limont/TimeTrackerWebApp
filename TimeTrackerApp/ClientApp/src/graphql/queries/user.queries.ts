@@ -25,9 +25,6 @@ export const getUserByIdQuery = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
-            vacationPermissionId,
-            teamId,
-            roleId
         }
     }
 `
@@ -35,17 +32,29 @@ export const getUserByIdQuery = `
 export const createUserQuery = `
     mutation ($userInput: UserInputType!) {
       createUser(user: $userInput) {
-        id
-        email
-        password
-        firstName
-        lastName
+            id
+            email
+            password
+            firstName
+            lastName
+            isFullTimeEmployee
+            weeklyWorkingTime
+            privilegesValue 
       }
     }
 `
 
-export const isUserExistQuery = `
-    query IsExistEmail($email: String!) {
-       isUserEmailExist(email: $email)
+export const deleteUserQuery = `
+    mutation($id: ID!){
+        deleteUser(id: $id){
+            id
+            email
+            password
+            firstName
+            lastName
+            isFullTimeEmployee
+            weeklyWorkingTime
+            privilegesValue 
+        }
     }
 `
