@@ -5,28 +5,106 @@
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
     margin: 0;
     padding: 0;
     border: 0;
     font: inherit;
     vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
     display: block;
 }
 
@@ -35,16 +113,20 @@ body {
     overflow-x: hidden;
 }
 
-ol, ul {
+ol,
+ul {
     list-style: none;
 }
 
-blockquote, q {
+blockquote,
+q {
     quotes: none;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
     content: '';
 }
 
@@ -52,6 +134,7 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
 // ----------------------------------
 
 
@@ -316,6 +399,7 @@ body {
         .logo {
             justify-content: center;
             padding: 0;
+
             .icon {
                 margin: 0;
                 padding: 15px;
@@ -353,7 +437,7 @@ body {
         a:not(:last-child)::after {
             content: '|';
             margin-inline: 10px;
-            color: $color-light !important;
+            color: $color-light  !important;
         }
     }
 
@@ -361,7 +445,7 @@ body {
         box-sizing: border-box;
         align-items: center;
 
-        > a {
+        >a {
             color: $color-light;
             text-decoration: none;
         }
@@ -373,8 +457,7 @@ body {
             margin-inline: 10px;
         }
 
-        a:hover
-        {
+        a:hover {
             color: $color-cyan;
         }
     }
@@ -382,7 +465,7 @@ body {
 
 
 section {
-    > header {
+    >header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -411,7 +494,8 @@ section {
     text-align: center;
     justify-content: center;
     align-items: center;
-    font-family: 'Nunito', serif;
+    font-family: 'Nunito',
+    serif;
     padding: 8px 20px;
     border-radius: 2px;
     font-weight: 600;
@@ -439,6 +523,29 @@ section {
         &:not(.disabled):hover {
             background: $color-cyan;
             color: $color-light;
+        }
+    }
+}
+
+
+.green-button {
+    background: $color-green;
+    color: $color-dark;
+
+    &:not(.disabled):hover {
+        background: transparent;
+        color: $color-green;
+        border: 1px solid $color-green;
+    }
+
+    &.inverse {
+        background: transparent;
+        color: $color-green;
+        border: 1px solid $color-cyan;
+
+        &:not(.disabled):hover {
+            background: $color-green;
+            color: $color-dark;
         }
     }
 }
@@ -575,9 +682,14 @@ section {
         }
     }
 }
+.green-button-no-action{
+    background-color: $color-green;
+    color: $color-white;
+}
+
 .green-button {
     background: $color-green;
-    color: $color-dark;
+    color: $color-light;
 
     &:not(.disabled):hover {
         background: transparent;
@@ -592,7 +704,7 @@ section {
 
         &:not(.disabled):hover {
             background: $color-green;
-            color: $color-dark;
+            color: $color-light;
         }
     }
 }
@@ -625,7 +737,7 @@ section {
     color: white;
     grid-template-columns: repeat(7, 1fr);
 
-    > div {
+    >div {
         color: $color-dark;
         background-color: $color-white;
         padding: 20px 10px 20px 10px;
@@ -642,18 +754,22 @@ section {
     display: flex;
     padding-block: 10px;
     border-bottom: 1px solid #F6F6F6;
+
     header {
         width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .button {
             padding: 10px 15px 10px 15px;
         }
     }
+
     h2 {
         font-size: $font-size-header;
         font-weight: 200;
+
         span {
             margin-left: 10px;
         }
@@ -688,11 +804,14 @@ section {
         right: 0;
         bottom: 0;
     }
+
     &.disabled {
         background: lightgray;
-        .day-number > p {
+
+        .day-number>p {
             background: gray;
         }
+
         .day-data {
             opacity: 0.5;
         }
@@ -726,9 +845,9 @@ section {
 }
 
 .unselected-month {
-    > p {
+    >p {
         color: darkgray;
-        background-color: $color-silver !important;
+        background-color: $color-silver  !important;
     }
 }
 
@@ -760,7 +879,9 @@ section {
         border-bottom: 1px solid #E6E6E6;
     }
 
-    input, textarea, select {
+    input,
+    textarea,
+    select {
         background: #F6F6F6;
         box-shadow: inset 0 0 5px -5px $color-dark;
     }
@@ -781,7 +902,7 @@ section {
     }
 }
 
-.day-number.current-day > p {
+.day-number.current-day>p {
     background-color: $color-red;
 }
 
@@ -790,7 +911,7 @@ section {
     justify-content: flex-end;
     margin-bottom: 10px;
 
-    > p {
+    >p {
         padding: 5px;
         border-radius: 2px;
         background-color: $color-light-dark;
@@ -809,11 +930,12 @@ section {
 .calendar-container {
 
     user-select: none;
+
     .button {
         margin: 2px;
     }
 
-    > header {
+    >header {
         padding: 15px;
     }
 }
@@ -850,8 +972,8 @@ section {
 
 .form-header {
     h2 {
-        font-size: $font-size-header;
-        font-weight: 600;
+        font-size: 22px;
+        font-weight: 400;
     }
 
     .close {
@@ -887,7 +1009,8 @@ section {
             margin-right: 5px;
         }
 
-        input, textarea {
+        input,
+        textarea {
             font-family: 'Nunito', serif;
             outline: none;
             border: none;
@@ -975,7 +1098,7 @@ table {
         font-weight: 300;
     }
 
-    thead > tr:last-child {
+    thead>tr:last-child {
         border-bottom: 1px solid #E6E6E6;
     }
 
@@ -1000,7 +1123,7 @@ table {
 
 .creation-type-label {
     display: inline-flex;
-    padding: 10px;
+    padding: 5px 10px;
     border-radius: 2px;
     box-shadow: 0 0 5px -4px $color-dark;
     font-weight: 500;
@@ -1029,11 +1152,15 @@ table {
         padding-block: 10px;
     }
 
-    .date, .begin, .end, .duration {
+    .date,
+    .begin,
+    .end,
+    .duration {
         width: 200px;
     }
 
-    .creation-type, .last-edited-by {
+    .creation-type,
+    .last-edited-by {
         width: 300px;
     }
 
@@ -1057,7 +1184,7 @@ table {
         box-shadow: inset 0 0 5px -5px $color-dark;
     }
 
-    tr:nth-of-type(2n + 1) .time-picker-input{
+    tr:nth-of-type(2n + 1) .time-picker-input {
         background: #F6F6F6;
     }
 
@@ -1087,7 +1214,7 @@ table {
         border-radius: 2px;
         background: #F6F6F6;
 
-        > h3 {
+        >h3 {
             font-weight: bold;
             font-size: 20px;
             padding: 10px;
@@ -1100,10 +1227,12 @@ table {
             border-radius: 2px;
             background: $color-white;
             margin: 5px;
+            padding: 10px;
             label {
                 margin-right: 10px;
                 font-weight: 600;
             }
+
             input {
                 min-width: 200px;
                 outline: none;
@@ -1116,16 +1245,19 @@ table {
                 cursor: pointer;
                 text-align: center;
             }
+
             .button {
                 padding-inline: 15px;
                 &:not(:hover) {
                     background: $color-white;
                 }
             }
+
             .button:last-of-type {
                 border-bottom-left-radius: 0;
                 border-top-left-radius: 0;
             }
+
             .button:first-of-type {
                 border-top-right-radius: 0;
                 border-bottom-right-radius: 0;
@@ -1142,7 +1274,7 @@ table {
     color: $color-dark;
     position: relative;
 
-    > h3 {
+    >h3 {
         font-weight: bold;
         font-size: 20px;
         background: #F6F6F6;
@@ -1154,7 +1286,7 @@ table {
 
     .statistic-panel-list {
 
-        > div {
+        >div {
             display: inline-flex;
             flex-direction: column;
             margin: 10px 20px 10px 10px;
@@ -1280,7 +1412,7 @@ table {
     padding: 10px;
     color: $color-dark;
 
-    > h3 {
+    >h3 {
         font-weight: bold;
         font-size: 20px;
         background: #F6F6F6;
@@ -1305,7 +1437,7 @@ table {
     justify-content: center;
     width: 100%;
 
-    > div {
+    >div {
         display: inline-flex;
         width: calc(100% / 3);
         flex-direction: column;
@@ -1313,13 +1445,13 @@ table {
         justify-content: center;
         position: relative;
 
-        > h3 {
+        >h3 {
             text-transform: uppercase;
             color: #AAAAAA;
             font-weight: 600;
         }
 
-        > span {
+        >span {
             font-size: 100px;
             font-weight: 100;
             padding: 30px 0 10px 0;
@@ -1404,7 +1536,8 @@ table {
         font-weight: 500;
     }
 
-    input, textarea {
+    input,
+    textarea {
         background: #F6F6F6;
         box-shadow: inset 0 0 5px -5px $color-dark;
     }
@@ -1443,6 +1576,7 @@ table {
     max-width: 550px;
     width: 100%;
     padding: 5px;
+
     label {
         min-width: 100px;
     }
@@ -1536,39 +1670,76 @@ table {
         transform: rotate(360deg);
     }
 }
+
 @keyframes dash {
     0% {
         stroke-dasharray: 1, 150;
         stroke-dashoffset: 0;
     }
+
     50% {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -35;
     }
+
     100% {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -124;
     }
 }
+
 .vacation-container {
     width: 100%;
     padding: 5px;
 }
+
 .vacation-control-panel {
     justify-content: space-between;
 }
+
 .vacation-item {
     display: flex;
     align-items: center;
     text-align: center;
     justify-content: space-between;
     padding: 3px;
+
     >div {
-        flex-basis: 200px;
+        flex-basis: 250px;
     }
 }
+
+.container-approver{
+    position: relative;
+}
+
+.list-appovers{
+    z-index: 10;
+    display: flex;
+    background-color: $color-dark;
+    right: 100%;
+    width:  450px;
+    position: absolute;
+    color: $color-light;
+    border-radius: 3px;
+    flex-direction: column;
+    .item.header-name{
+        >div{
+            border-bottom: 1px solid $color-cyan;
+        }
+    }
+    .item{
+        padding: 10px 15px;
+        display: flex;
+        >div{
+            flex-basis: 225px;
+        }
+    }
+}
+
 .list-vacation-container {
     margin: 15px;
+
     p {
         font-size: 20px;
         text-align: center;
@@ -1577,20 +1748,24 @@ table {
         border-bottom: 2px solid #00ADB5;
     }
 }
+
 .link {
     text-decoration: none;
 }
+
 div.end-item-action {
-    flex-basis: 250px;
+    flex-basis: 300px;
     display: flex;
     text-align: center;
     justify-content: center;
 }
+
 .end-item-action {
     >* {
         margin-right: 2px;
     }
 }
+
 .spinner-container {
     position: absolute;
     box-shadow: 0 0 20px -10px #222831;
@@ -1603,6 +1778,7 @@ div.end-item-action {
     left: 50%;
     margin: -50px 0 0 -50px;
 }
+
 .spinner {
     animation: rotate 2s linear infinite;
     z-index: 2;
@@ -1612,15 +1788,18 @@ div.end-item-action {
     margin: -25px 0 0 -25px;
     width: 50px;
     height: 50px;
+
     .path {
         stroke: rgb(126, 176, 241);
         stroke-linecap: round;
         animation: dash 1.5s ease-in-out infinite;
     }
 }
+
 .custom-icon-green {
     color: #16ec56;
 }
+
 .custom-icon-red {
     color: #ff0000;
 }
@@ -1644,11 +1823,277 @@ div.end-item-action {
             min-width: 10px;
         }
 
-        &:hover, &.active {
+        &:hover,
+        &.active {
             background: $color-light-dark;
             color: $color-light;
         }
     }
 }
 
+.sick-leaves-list {
+    background: $color-white;
+    border-radius: 2px;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+    margin: 15px;
 
+    table {
+        td {
+            padding: 15px 10px;
+            vertical-align: middle;
+        }
+
+        .button:not(:last-of-type) {
+            margin-right: 5px;
+        }
+
+        .button {
+            display: inline;
+            padding: 7px 20px 7px 20px;
+        }
+
+        .status {
+            padding: 5px 10px 5px 10px;
+            border-radius: 2px;
+            display: inline-flex;
+
+            &.expired {
+                color: $color-dark;
+                background: $color-silver;
+            }
+            &.under-review {
+                color: $color-light;
+                background: $color-cyan;
+            }
+            &.approved {
+                color: $color-light;
+                background: $color-green;
+            }
+            &.rejected {
+                color: $color-light;
+                background: $color-red;
+            }
+        }
+    }
+}
+
+.sick-leave-form {
+    position: absolute;
+    z-index: 999;
+    background: $color-white;
+    padding: 15px;
+    border-radius: 2px;
+    box-shadow: 0 0 20px -10px $color-dark;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .form-header {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #E6E6E6;
+    }
+
+    .form-item {
+        padding: 10px 0 10px 0;
+    }
+
+    label {
+        margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+        background: #F6F6F6;
+        box-shadow: inset 0 0 5px -5px $color-dark;
+    }
+
+    .buttons {
+        padding-top: 10px;
+    }
+}
+
+.sick-leaves-panel {
+    justify-content: space-between;
+    background: $color-white;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+    border-radius: 2px;
+    margin: 15px 15px 0 15px;
+    padding: 10px;
+
+    nav {
+        display: flex;
+        align-items: center;
+        a:not(:last-of-type) {
+            margin-right: 5px;
+        }
+        a:hover, a.active {
+            background: $color-light-dark;
+            color: $color-light;
+        }
+        a {
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 2px;
+            background: #F6F6F6;
+        }
+    }
+}
+
+/* User page styles */
+.nameLabel
+{
+    font-size: 28px;
+    font-weight: bold;
+    font-family: "Nunito", serif;
+    color: $color-dark;
+}
+.infoContainerAbsolute
+{
+    position: absolute;
+    left: 600px;
+
+}
+.typeOfWork
+{
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: $color-cyan;
+    font-family: 'Nunito', sans-serif;
+
+}
+.userForm.row
+{
+    align-self: center;
+}
+img
+{
+    margin-left: 20px;
+    width: 200px;
+    height: 200px;
+    border-radius: 4px;
+    border: 1px solid $color-dark;
+}
+.userForm
+{
+    display: flex;
+    align-items: flex-start;
+    width: 700px;
+    height: 90%;
+
+    padding-right: 5%;
+    color: $color-dark;
+}
+.annotation
+{
+    margin-top: 100px;
+    color: $color-light-dark;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+hr
+{
+    position: absolute;
+
+    width: 450px;
+    border: 1px solid #c6c4c4;
+}
+
+.contactInfo
+{
+    line-height: 50px;
+}
+.editForm
+{
+    border: 1px solid $color-cyan;
+    font-family: "Nunito", serif;
+    padding: 1rem ;
+    flex: 1 1 auto;
+    justify-content: center;
+
+    margin-top: 2%;
+    margin-left: 25px;
+    width: 60%;
+    background-color: $color-white;
+    border-radius: 3px;
+    word-wrap: break-word;
+}
+
+.infoContainer
+{
+    color: $color-light;
+}
+.formControl {
+    margin-left: 20px;
+    font-size: 1rem;
+    display: block;
+    width: 100%;
+    padding: .5rem .75rem;
+    transition: all .2s cubic-bezier(.68, -.55, .265, 1.55);
+    color: #8898aa;
+    border: 1px solid #cad1d7;
+    border-radius: .375rem;
+    background-color: #fff;
+    background-clip: padding-box;
+}
+.formControl {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+.formControlLabel {
+    margin-top: 20px;
+    align-self: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: $color-dark;
+
+}
+.formResponseLabel {
+    position: absolute;
+    left: 600px;
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: 700;
+    color: $color-light-dark;
+
+}
+
+.formControl {
+    font-size: .875rem;
+}
+.formControlAlternative {
+    transition: box-shadow .15s ease;
+    border: 0;
+    box-shadow: 0 1px 3px rgba(50, 50, 93, .15), 0 1px 0 rgba(0, 0, 0, .02);
+}
+
+.row
+{
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+/* end of user page styles */
+
+.response-container {
+    position: relative;
+ 
+}
+
+.response-box {
+    position: absolute;
+    top: -5px;
+    left: 103%;
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid rgb(126, 176, 241);
+    background: white;
+    z-index: 10;
+    text-align: center;
+}

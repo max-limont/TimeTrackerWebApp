@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from "react";
 import {AuthorizationUser, AuthUserResponse} from "../../types/auth.types";
-import {authLoginAction, authLogoutAction, authorizeUserById, setUser} from "../../store/auth/auth.slice";
+import {authLoginAction, authLogoutAction, authorizeUserById} from "../../store/auth/auth.slice";
 import {User} from "../../types/user.types";
 import {useLocation, useNavigate} from "react-router-dom";
 import {accessTokenKey, getCookie, refreshTokenKey} from "../../helpers/cookies";

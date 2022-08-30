@@ -7,6 +7,8 @@ import {ProtectedComponent} from "../Auth/ProtectedComponent";
 import { Vacation } from "../Vacation/Vacation";
 import { ManageVacationRequest  } from "../Vacation/ManageVacations";
 import {UserPage} from "../UserPage/UserPage";
+import {SickLeavesList} from "../SickLeaves/SickLeavesList";
+import {SickLeavesRequestsList} from "../SickLeaves/SickLeavesRequestsList";
 
 export type ContentStateType = {
     showContent: boolean
@@ -20,9 +22,12 @@ export const Content: FC = () => {
                 <Route index element={<ProtectedComponent component={<TimeTracker />} />} />
                 <Route path={"/calendar"} element={<ProtectedComponent component={<Calendar />} />} />
                 <Route path={"/user-list"} element={<ProtectedComponent component={<UserList />} />} />
+                <Route path={'/user/:id'} element={<UserPage />} />
                 <Route path={"/user-page"} element={<ProtectedComponent component={<UserPage />} />} />
                 <Route path={"/vacation"} element={<ProtectedComponent component={<Vacation />} />} />
                 <Route path={"/manage-vacation"} element={<ProtectedComponent component={<ManageVacationRequest />} />} />
+                <Route path={"/sick-leaves"} element={<ProtectedComponent component={<SickLeavesList />} />}/>
+                <Route path={"/manage-sick-leaves"} element={<ProtectedComponent component={<SickLeavesRequestsList />} />}/>
             </Routes>
         </div>
     )

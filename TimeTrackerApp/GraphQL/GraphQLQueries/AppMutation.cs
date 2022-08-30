@@ -5,13 +5,12 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
 using System;
-using TimeTrackerApp.GraphQL.GraphQLQueries.RoleQueries;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
+        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
@@ -100,11 +99,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
             
             Field<VacationType, Vacation>()
                 .Name("DeleteVacationRequest")
-                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Vacation request")
+                .Argument<IntGraphType, int>("Id", "Vacation request")
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
-                    return await vacationRepository.RemoveAsync(id);
+                    var model =  await vacationRepository.RemoveAsync(id);
+
+                    return model;
                 });
 
             Field<AuthTokenType, AuthenticationToken>()
@@ -249,18 +250,41 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 
             Field<VacationType, Vacation>()
                 .Name("ChangeAcceptedState")
-                .Argument<IntGraphType, int>("Id", "id user")
+                .Argument<VacationResponseInputType, VacationResponse>("response", "response ")
                 .Argument<BooleanGraphType, bool>("StateAccepted", "new state Accepted")
                 .ResolveAsync(async _ =>
                 {
-                    var id = _.GetArgument<int>("Id");
+                    var response = _.GetArgument<VacationResponse>("response");
                     var state = _.GetArgument<bool>("StateAccepted");
-                    return await vacationRepository.ChangeAcceptedState(id, state);
+                    return await vacationRepository.ChangeAcceptedState(response, state);
                 });
-            
-            Field<RoleMutation>()
-                .Name("RoleMutation")
-                .Resolve(_ => new { });
+
+            Field<SickLeaveType, SickLeave>()
+                .Name("CreateSickLeave")
+                .Argument<NonNullGraphType<SickLeaveInputType>, SickLeave>("SickLeave", "Sick leave")
+                .ResolveAsync(async context =>
+                {
+                    var sickLeave = context.GetArgument<SickLeave>("SickLeave");
+                    return await sickLeaveRepository.CreateAsync(sickLeave);
+                });
+
+            Field<SickLeaveType, SickLeave>()
+                .Name("EditSickLeave")
+                .Argument<NonNullGraphType<SickLeaveInputType>, SickLeave>("SickLeave", "Sick leave")
+                .ResolveAsync(async context =>
+                {
+                    var sickLeave = context.GetArgument<SickLeave>("SickLeave");
+                    return await sickLeaveRepository.EditAsync(sickLeave);
+                });
+
+            Field<SickLeaveType, SickLeave>()
+                .Name("RemoveSickLeave")
+                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Sick leave id")
+                .ResolveAsync(async context =>
+                {
+                    var id = context.GetArgument<int>("Id");
+                    return await sickLeaveRepository.RemoveAsync(id);
+                });
         }
     }
 }

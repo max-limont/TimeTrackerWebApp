@@ -5,18 +5,12 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using System.Collections.Generic;
 using System;
-using TimeTrackerApp.GraphQL.GraphQLQueries.RoleQueries;
-using TimeTrackerApp.GraphQL.GraphQLQueries.TeamQueries;
-using GraphQL.MicrosoftDI;
-using Microsoft.AspNetCore.Http;
-using TimeTrackerApp.GraphQL.GraphQLQueries;
-using TimeTrackerApp.Helpers;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppQuery : ObjectGraphType
     {
-        public AppQuery(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository)
+        public AppQuery(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
         {
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
@@ -180,7 +174,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
-                    return await vacationRepository.GetByIdAsync(id);
+                    return await vacationRepository.GetVacationByIdAsync(id);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
             
@@ -259,15 +253,54 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var id = contex.GetArgument<int>("ReceiverId");
                     return await vacationRepository.GetRequestVacation(id);
                 })
+                .AuthorizeWithPolicy("LoggedIn");
+
+            Field<ListGraphType<SickLeaveType>, IEnumerable<SickLeave>>()
+                .Name("FetchAllSickLeaves")
+                .ResolveAsync(async context =>
+                {
+                    return await sickLeaveRepository.FetchAllAsync();
+                })
+                .AuthorizeWithPolicy("LoggedIn"); ;
+
+            Field<ListGraphType<SickLeaveType>, IEnumerable<SickLeave>>()
+                .Name("FetchAllSickLeavesByEmployeeId")
+                .Argument<NonNullGraphType<IdGraphType>, int>("EmployeeId", "Employee id")
+                .ResolveAsync(async context =>
+                {
+                    var employeeId = context.GetArgument<int>("EmployeeId");
+                    return await sickLeaveRepository.FetchAllByEmployeeIdAsync(employeeId);
+                })
+                .AuthorizeWithPolicy("LoggedIn"); ;
+
+            Field<ListGraphType<SickLeaveType>, IEnumerable<SickLeave>>()
+                .Name("FetchAllSickLeavesForManagerByManagerId")
+                .Argument<NonNullGraphType<IdGraphType>, int>("ManagerId", "Manager id")
+                .ResolveAsync(async context =>
+                {
+                    var managerId = context.GetArgument<int>("ManagerId");
+                    return await sickLeaveRepository.FetchAllForManagerByManagerIdAsync(managerId);
+                })
+                .AuthorizeWithPolicy("LoggedIn");
+
+            Field<SickLeaveType, SickLeave>()
+                .Name("GetSickLeaveById")
+                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Sick leave id")
+                .ResolveAsync(async context =>
+                {
+                    var id = context.GetArgument<int>("Id");
+                    return await sickLeaveRepository.GetByIdAsync(id);
+                })
                 .AuthorizeWithPolicy("LoggedIn"); 
             
-            Field<RoleQuery>()
-                .Name("RoleQuery")
-                .Resolve(_ => new { });
-
-            Field<TeamQuery>()
-                .Name("TeamQuery")
-                .Resolve(_ => new { });
+            Field<ListGraphType<UserType>, List<User>>()
+                .Name("GetApprovers")
+                .Argument<IntGraphType, int>("userId", "user id")
+                .ResolveAsync(async context =>
+                {
+                    return await vacationRepository.GetVacationApprovers(context.GetArgument<int>("userId"));
+                })
+                .AuthorizeWithPolicy("LoggedIn");
         }
     }
 }

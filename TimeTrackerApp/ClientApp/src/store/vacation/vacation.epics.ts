@@ -1,7 +1,15 @@
 import {combineEpics, Epic, ofType} from "redux-observable";
-import { from, map, mergeMap, Observable } from "rxjs";
+import {from, map, mergeMap, Observable, of} from "rxjs";
 import { graphqlRequest } from "../../graphql/api";
-import { createVacationQuery, getVacationRequestQuery, getVacationsByUserIdQuery, removeVacationQuery, updateVacationQuery } from "../../graphql/queries/vacation.queries";
+import {
+    createResponseQuery,
+    createVacationQuery,
+    getApproversByUserId,
+    getVacationRequestQuery,
+    getVacationsByUserIdQuery,
+    removeVacationQuery,
+    updateVacationQuery
+} from "../../graphql/queries/vacation.queries";
 import {
     addVacation,
     removeRequestVacation,
@@ -14,7 +22,8 @@ import {
     createVacationAction,
     getRequestVacationAction,
     removeVacationAction,
-    updateVacationAction
+    updateVacationAction,
+    createResponseAction, fetchApproversAction, setApprovers
 } from "./vacation.slice";
 import moment from "moment";
 import { VacationType } from "../../types/vacation.types";
@@ -39,6 +48,7 @@ const getVacationsByUserIdEpic: Epic = (action$: Observable<ReturnType<typeof ge
             userId: action.payload
         })).pipe(
             map(response => {
+                console.log(response);
                 return setVacation(formatDateToNormalFormat(response.data.fetchAllUserVacationRequests));
             })
         ))
@@ -52,6 +62,7 @@ const createVacationRequestEpic: Epic = (action$: Observable<ReturnType<typeof c
             model: action.payload
         })).pipe(
             map(response => {
+                console.log(response);
                 const model: VacationType = response.data.createVacationRequest;
                 return addVacation({
                     ...model,
@@ -62,7 +73,7 @@ const createVacationRequestEpic: Epic = (action$: Observable<ReturnType<typeof c
         )));
 };
 
-export const getVacationRequestEpic = (action$:Observable<ReturnType<typeof getRequestVacationAction>>) => {
+ const getVacationRequestEpic = (action$:Observable<ReturnType<typeof getRequestVacationAction>>) => {
     return action$.pipe(
         ofType(getRequestVacationAction.type),
         mergeMap((action:PayloadAction<number>)=> from(graphqlRequest(getVacationRequestQuery, {
@@ -79,13 +90,14 @@ export const getVacationRequestEpic = (action$:Observable<ReturnType<typeof getR
     )
 };
 
-export const removeVacationEpic: Epic = (action$: Observable<ReturnType<typeof removeVacationAction>>): any => {
+ const removeVacationEpic: Epic = (action$: Observable<ReturnType<typeof removeVacationAction>>): any => {
     return action$.pipe(
         ofType(removeVacationAction.type),
         mergeMap(action => from(graphqlRequest(removeVacationQuery, {
             id: action.payload
         })).pipe(
             map(response => {
+                console.log(response);
                 if (!response?.errors) {
                     const userId = store.getState().rootReducer.auth.user?.id ?? 0;
                     const dataResponse: VacationType = response.data.deleteVacationRequest;
@@ -94,21 +106,21 @@ export const removeVacationEpic: Epic = (action$: Observable<ReturnType<typeof r
                     }
                     return removeRequestVacation(dataResponse.id)
                 }
-                throw new Error();
+                throw new Error("error to delete vacation");
             })
         )))
 };
 
-export const updateVacationEpic: Epic = (action$: Observable<ReturnType<typeof updateVacationAction>>): any => {
+ const updateVacationEpic: Epic = (action$: Observable<ReturnType<typeof updateVacationAction>>): any => {
     return action$.pipe(
         ofType(updateVacationAction.type),
         mergeMap(action => {
-            let updateVacationModel: any = action.payload;
-            delete updateVacationModel.user;
+            console.log(action.payload);
             return from(graphqlRequest(updateVacationQuery, {
-                model: updateVacationModel
+                model: action.payload
             })).pipe(
                 map(response => {
+                    console.log(response)
                     if (!response?.errors) {
                         const userId = store.getState().rootReducer.auth.user?.id ?? 0;
                         const dataResponse: VacationType = response.data.editVacationRequest;
@@ -132,7 +144,44 @@ export const updateVacationEpic: Epic = (action$: Observable<ReturnType<typeof u
     )
 };
 
-export const vacationEpic = combineEpics(getVacationsByUserIdEpic, updateVacationEpic, createVacationRequestEpic, getVacationRequestEpic, removeVacationEpic);
+
+const createResponseEpic: Epic = (action$: Observable<ReturnType<typeof createResponseAction>>):any=>{
+return action$.pipe(
+    ofType(createResponseAction.type),
+    mergeMap((action:any)=>from(graphqlRequest(createResponseQuery,{
+        state: action.payload.stateAccepte,
+        response: action.payload.response
+    })).pipe(
+        map(response=>{
+            console.log(response);
+            if(!response?.errors){
+                 return updateRequestVacation({...response.data.changeAcceptedState,
+                    endingTime: moment(response.data.changeAcceptedState.endingTime).format("yyyy-MM-DD"),
+                    startingTime: moment(response.data.changeAcceptedState.startingTime).format("yyyy-MM-DD")
+                });
+            }
+            throw new Error("error to change status vacation request")
+        }))))}
+
+const fetchApproversEpic:Epic = (action$:Observable<typeof fetchApproversAction>):any=>{
+    return action$.pipe(
+        ofType(fetchApproversAction.type),
+        mergeMap((action:any)=>from(graphqlRequest(getApproversByUserId,
+            {
+                userId: action.payload
+            })).pipe(
+            map((response:any)=>{
+                console.log(response);
+                if(!response?.errors){
+                   return  setApprovers(response.data.getApprovers);
+                }
+                throw new Error("error to fetch approvers");
+            })
+        ))
+    )
+}
+
+export const vacationEpic = combineEpics(getVacationsByUserIdEpic, fetchApproversEpic,updateVacationEpic,createResponseEpic,createVacationRequestEpic, getVacationRequestEpic, removeVacationEpic);
 
 
 

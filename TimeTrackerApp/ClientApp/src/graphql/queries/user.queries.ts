@@ -3,13 +3,12 @@ export const getUserByEmailQuery = `
         getUserByEmail(email: $email) {
             id
             email
-            password
             firstName
             lastName
             isFullTimeEmployee
             weeklyWorkingTime
             remainingVacationDays
-            privilegesValue 
+            privilegesValue
         }
     }
 `
@@ -25,9 +24,6 @@ export const getUserByIdQuery = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
-            vacationPermissionId,
-            teamId,
-            roleId
         }
     }
 `

@@ -11,62 +11,60 @@ namespace TimeTrackerApp.MsSql.Repositories
     {
         private readonly string connectionString;
         private IVacationManagment VacationManagment { get; set; }
+        private IVacationResponse vacationResponse { get; set; }
 
-        public VacationRepository(IConfiguration configuration,IVacationManagment vacationManagment)
+        public VacationRepository(IConfiguration configuration, IVacationManagment vacationManagment,
+            IVacationResponse vacationResponse)
         {
             this.connectionString = configuration.GetConnectionString("MsSqlAzure");
             VacationManagment = vacationManagment;
+            this.vacationResponse = vacationResponse;
         }
 
         public async Task<Vacation> CreateAsync(Vacation vacation)
         {
             string query = @"INSERT INTO Vacation (UserId, StartingTime, EndingTime, Comment) 
-              VALUES (@UserId, @StartingTime, @EndingTime, @Comment); 
-               Insert Into VacationManagment (UserId, ManagerId) Values (@UserId,1)";
+              VALUES (@UserId, @StartingTime, @EndingTime, @Comment) select  @@IDENTITY";
             /*1 в запросе должен быть юзер который по дефолту будеть иметь доступ*/
 
             using (var connection = new SqlConnection(connectionString))
             {
-                string queryFetchManageUsers = @$"select  h.Id from Users as h inner join Role as r  on h.RoleId = r.Id
-               and r.Value>(select value from Role inner join Users U on Role.Id = U.RoleId and U.Id={vacation.UserId})";
-
-                int affectedRows = await connection.ExecuteAsync(query, vacation);
-                var managersId = await connection.QueryAsync<int>(queryFetchManageUsers);
-
-                if (affectedRows > 0)
+                string queryFetchManagersUser = @$"Select UserId from VacationManager";
+                int id = await connection.QueryFirstAsync<int>(query, vacation);
+                if (id != 0)
                 {
-                    foreach (var modelId in managersId)
+                    var userManagers = await VacationManagment.GetByUserIdVacationManagment(vacation.UserId);
+                    if (userManagers == null)
                     {
-                        VacationManagment.CreateVacationManagment(new VacationManagment
+                        var defaultManagersId = await connection.QueryAsync<int>(queryFetchManagersUser);
+                        foreach (var managerId in defaultManagersId)
                         {
-                            UserId= vacation.UserId,
-                            ManagerId = modelId
-                        });
+                            var model = await VacationManagment.CreateVacationManagment(new VacationManagment()
+                            {
+                                ManagerId = managerId,
+                                EmployeeId = vacation.UserId
+                            });
+                        }
                     }
-                    
-                    return (await FetchAllAsync()).Last();
+
+                    return await GetVacationByIdAsync(id);
                 }
 
-                throw new Exception("Vacation request creation error!");
+                throw new Exception("Vacation create error!");
             }
         }
 
         public async Task<Vacation> EditAsync(Vacation vacation)
         {
             string query =
-                @"UPDATE Vacation SET UserId = @UserId,IsAccepted=@IsAccepted, StartingTime = @StartingTime, EndingTime = @EndingTime, Comment = @Comment WHERE Id = @Id;
-              Select * from Vacation as b Inner Join Users as u on b.UserId=u.Id and b.Id=@Id and u.Id=@UserId";
+                @"UPDATE Vacation SET UserId = @UserId,IsAccepted=@IsAccepted, StartingTime = @StartingTime, EndingTime = @EndingTime, Comment = @Comment WHERE Id = @Id";
 
             using (var connection = new SqlConnection(connectionString))
             {
-                var model = await connection.QueryAsync<Vacation, User, Vacation>(query, (c, d) =>
+                int result = await connection.ExecuteAsync(query, vacation);
+                if (result > 0)
                 {
-                    c.User = d;
-                    return c;
-                }, vacation, splitOn: "Id");
-                if (model != null)
-                {
-                    return model.First();
+                    return await GetVacationByIdAsync(vacation.Id);
                 }
 
                 throw new Exception("Vacation request editing error!");
@@ -76,58 +74,96 @@ namespace TimeTrackerApp.MsSql.Repositories
         public async Task<List<Vacation>> FetchAllAsync()
         {
             string query = @"SELECT * FROM Vacation";
-
             using (var connection = new SqlConnection(connectionString))
             {
                 return (await connection.QueryAsync<Vacation>(query)).ToList();
             }
         }
 
-        public async Task<Vacation> ChangeAcceptedState(int id, bool stateAccept)
+        public async Task<Vacation> ChangeAcceptedState(VacationResponse response, bool stateAccept)
         {
             string query = @"Update Vacation set IsAccepted=@StateAccepted Where Id=@Id";
             using (var connection = new SqlConnection(connectionString))
             {
-                int result = await connection.ExecuteAsync(query, new { Id = id, StateAccept = stateAccept });
+                int result = await connection.ExecuteAsync(query,
+                    new { Id = response.VacationId, StateAccepted = stateAccept });
                 if (result == 0)
                 {
                     throw new Exception();
                 }
 
-                return await GetByIdAsync(id);
+                var model = await vacationResponse.CreateVacationResponse(response);
+                return await GetVacationByIdAsync(response.VacationId);
+            }
+        }
+
+        public async Task<List<User>> GetVacationApprovers(int userId)
+        {
+            string getVacationApprovers = @$"select * from Users as u Inner join UserManagement 
+                        as v on u.Id = v.ManagerId and v.EmployeeId = {userId}";
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var approvers = await connection.QueryAsync<User>(getVacationApprovers);
+                return approvers.ToList();
             }
         }
 
         public async Task<IEnumerable<Vacation>> FetchAllUserVacationAsync(int userId)
         {
             string query = @"SELECT * FROM Vacation WHERE UserId = @UserId";
-
             using (var connection = new SqlConnection(connectionString))
             {
-                return await connection.QueryAsync<Vacation>(query, new { UserId = userId });
+                var vacations = await connection.QueryAsync<Vacation>(query, new { UserId = userId });
+                var approvers = await GetVacationApprovers(userId);
+                if (vacations != null)
+                {
+                    foreach (var vacation in vacations)
+                    {
+                        vacation.ApproveUsers = approvers.ToList();
+                        if (vacation.IsAccepted != null)
+                        {
+                            vacation.VacationResponse =
+                                await vacationResponse.GetVacationResponseByVacationId(vacation.Id);
+                        }
+                    }
+
+                    return vacations;
+                }
+
+                throw new Exception();
             }
         }
 
-        public async Task<Vacation> GetByIdAsync(int id)
+        public async Task<Vacation> GetVacationByIdAsync(int id)
         {
-            string query = @"SELECT * FROM Vacation WHERE Id = @Id";
-
+            string query = @$"Select * from Vacation as v inner join Users as u on   v.UserId = u.Id
+            and v.Id={id}";
             using (var connection = new SqlConnection(connectionString))
             {
-                var vacationRequest = await connection.QuerySingleOrDefaultAsync<Vacation>(query, new { Id = id });
-                if (vacationRequest is not null)
+                var vacations = await connection.QueryAsync<Vacation, User, Vacation>(query,
+                    (v, u) =>
+                    {
+                        v.User = u;
+                        return v;
+                    }, splitOn: "Id");
+                if (vacations is not null)
                 {
-                    return vacationRequest;
+                    var vacation = vacations.First();
+                    vacation.ApproveUsers = await GetVacationApprovers(vacation.UserId);
+                    vacation.VacationResponse = await vacationResponse.GetVacationResponseByVacationId(vacation.Id);
+                    return vacation;
                 }
 
-                throw new Exception("This vacation request was not found");
+                throw new Exception("This vacation was not found");
             }
         }
 
         public async Task<List<Vacation>> GetRequestVacation(int receiverUserId)
         {
-            string query = @$"Select * from Vacation as v inner join Users as u on v.IsAccepted is null and  v.UserId = u.Id
-            and u.Id in (Select UserId from VacationManagment where ManagerId={receiverUserId})";
+            string query = @$"Select * from Vacation as v inner join Users as u on   v.UserId = u.Id
+            and u.Id in (Select EmployeeId from UserManagement where ManagerId={receiverUserId}) and v.IsAccepted is null";
+
             using (var connection = new SqlConnection(connectionString))
             {
                 var listVacation = await connection.QueryAsync<Vacation, User, Vacation>(query, (v, u) =>
@@ -152,21 +188,14 @@ namespace TimeTrackerApp.MsSql.Repositories
 
             using (var connection = new SqlConnection(connectionString))
             {
-                try
+                var vacationRequest = await GetVacationByIdAsync(id);
+                int affectedRows = await connection.ExecuteAsync(query, new { Id = id });
+                if (affectedRows > 0)
                 {
-                    var vacationRequest = await GetByIdAsync(id);
-                    int affectedRows = await connection.ExecuteAsync(query, new { Id = id });
-                    if (affectedRows > 0)
-                    {
-                        return vacationRequest;
-                    }
+                    return vacationRequest;
+                }
 
-                    throw new Exception("Vacation request removal error!");
-                }
-                catch (Exception exception)
-                {
-                    throw new Exception(exception.Message);
-                }
+                throw new Exception("Vacation request removal error!");
             }
         }
     }

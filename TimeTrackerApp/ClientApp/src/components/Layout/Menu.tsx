@@ -11,6 +11,8 @@ import {
     faAngleRight,
     faAddressBook,
     faEnvelopeOpenText,
+    faBookMedical,
+    faLaptopMedical
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import {useAuth} from "../../hooks/useAuth";
@@ -42,8 +44,6 @@ export const Menu: FC = () => {
                 </div>
                 <div className={"logo flex-container"}>
                     <FontAwesomeIcon icon={faStopwatch} className={"icon"} />
-           
-           
                     <h2>
                         TimeTracker
                     </h2>
@@ -67,7 +67,13 @@ export const Menu: FC = () => {
                             <li>
                                 <Link to={"/vacation"} className={"flex-container"}>
                                     <FontAwesomeIcon icon={faUmbrellaBeach} className={"icon"} />
-                                    <span>Vacations</span>
+                                    <span>My vacations</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to={"/sick-leaves"} replace className={"flex-container"}>
+                                    <FontAwesomeIcon icon={faLaptopMedical} className={"icon"} />
+                                    <span>My sick leaves</span>
                                 </Link>
                             </li>
                         </ul>
@@ -83,6 +89,12 @@ export const Menu: FC = () => {
                                 <Link to={"/manage-vacation"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faEnvelopeOpenText} className={"icon"} />
                                     <span>Vacation requests</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to={"/manage-sick-leaves"} replace className={"flex-container"}>
+                                    <FontAwesomeIcon icon={faBookMedical} className={"icon"} />
+                                    <span>Sick leaves requests</span>
                                 </Link>
                             </li>
                         </ul>
