@@ -23,7 +23,7 @@ namespace TimeTrackerApp.BackgroundTasks
 
 		public async Task Execute(IJobExecutionContext context)
 		{
-			await Execute(context, DateTime.UtcNow);
+			await Execute(context, new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 12, 0, 0).ToUniversalTime());
 		}
 
 		public async Task Execute(IJobExecutionContext context, DateTime dateTime)
