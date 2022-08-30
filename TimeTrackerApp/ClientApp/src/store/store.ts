@@ -17,6 +17,8 @@ import { teamEpic } from './team/team.epic';
 import { teamSlice } from './team/team.slice';
 import {sickLeaveSlice} from "./sickLeave/sickLeave.slice";
 import {sickLeaveEpics} from "./sickLeave/sickLeave.epics";
+import {userSlice} from "./user/user.slice";
+
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -30,7 +32,8 @@ const rootReducer = combineReducers({
   vacation: vacationSlice.reducer,
   roles: roleSlice.reducer,
   team: teamSlice.reducer,
-  sickLeave: sickLeaveSlice.reducer
+  sickLeave: sickLeaveSlice.reducer,
+  user: userSlice.reducer
 })
 
 export const store = configureStore({

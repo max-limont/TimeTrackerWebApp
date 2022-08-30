@@ -1758,3 +1758,142 @@ div.end-item-action {
         }
     }
 }
+
+/* User page styles */
+.nameLabel
+{
+    font-size: 28px;
+    font-weight: bold;
+    font-family: "Nunito", serif;
+    color: $color-dark;
+}
+.infoContainerAbsolute
+{
+    position: absolute;
+    left: 600px;
+
+}
+.typeOfWork
+{
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: $color-cyan;
+    font-family: 'Nunito', sans-serif;
+
+}
+.userForm.row
+{
+    align-self: center;
+}
+img
+{
+    margin-left: 20px;
+    width: 200px;
+    height: 200px;
+    border-radius: 4px;
+    border: 1px solid $color-dark;
+}
+.userForm
+{
+    display: flex;
+    align-items: flex-start;
+    width: 700px;
+    height: 90%;
+
+    padding-right: 5%;
+    color: $color-dark;
+}
+.annotation
+{
+    margin-top: 100px;
+    color: $color-light-dark;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+hr
+{
+    position: absolute;
+
+    width: 450px;
+    border: 1px solid #c6c4c4;
+}
+
+.contactInfo
+{
+    line-height: 50px;
+}
+.editForm
+{
+    border: 1px solid $color-cyan;
+    font-family: "Nunito", serif;
+    padding: 1rem ;
+    flex: 1 1 auto;
+    justify-content: center;
+
+    margin-top: 2%;
+    margin-left: 25px;
+    width: 60%;
+    background-color: $color-white;
+    border-radius: 3px;
+    word-wrap: break-word;
+}
+
+.infoContainer
+{
+    color: $color-light;
+}
+.formControl {
+    margin-left: 20px;
+    font-size: 1rem;
+    display: block;
+    width: 100%;
+    padding: .5rem .75rem;
+    transition: all .2s cubic-bezier(.68, -.55, .265, 1.55);
+    color: #8898aa;
+    border: 1px solid #cad1d7;
+    border-radius: .375rem;
+    background-color: #fff;
+    background-clip: padding-box;
+}
+.formControl {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+.formControlLabel {
+    margin-top: 20px;
+    align-self: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: $color-dark;
+
+}
+.formResponseLabel {
+    position: absolute;
+    left: 600px;
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: 700;
+    color: $color-light-dark;
+
+}
+
+.formControl {
+    font-size: .875rem;
+}
+.formControlAlternative {
+    transition: box-shadow .15s ease;
+    border: 0;
+    box-shadow: 0 1px 3px rgba(50, 50, 93, .15), 0 1px 0 rgba(0, 0, 0, .02);
+}
+
+.row
+{
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+/* end of user page styles */
