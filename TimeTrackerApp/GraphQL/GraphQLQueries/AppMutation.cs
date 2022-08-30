@@ -5,7 +5,6 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
 using System;
-using TimeTrackerApp.GraphQL.GraphQLQueries.RoleQueries;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
@@ -100,11 +99,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
             
             Field<VacationType, Vacation>()
                 .Name("DeleteVacationRequest")
-                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "Vacation request")
+                .Argument<IntGraphType, int>("Id", "Vacation request")
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
-                    return await vacationRepository.RemoveAsync(id);
+                    var model =  await vacationRepository.RemoveAsync(id);
+
+                    return model;
                 });
 
             Field<AuthTokenType, AuthenticationToken>()
@@ -249,13 +250,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 
             Field<VacationType, Vacation>()
                 .Name("ChangeAcceptedState")
-                .Argument<IntGraphType, int>("Id", "id user")
+                .Argument<VacationResponseInputType, VacationResponse>("response", "response ")
                 .Argument<BooleanGraphType, bool>("StateAccepted", "new state Accepted")
                 .ResolveAsync(async _ =>
                 {
-                    var id = _.GetArgument<int>("Id");
+                    var response = _.GetArgument<VacationResponse>("response");
                     var state = _.GetArgument<bool>("StateAccepted");
-                    return await vacationRepository.ChangeAcceptedState(id, state);
+                    return await vacationRepository.ChangeAcceptedState(response, state);
                 });
 
             Field<SickLeaveType, SickLeave>()
@@ -284,10 +285,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var id = context.GetArgument<int>("Id");
                     return await sickLeaveRepository.RemoveAsync(id);
                 });
-            
-            Field<RoleMutation>()
-                .Name("RoleMutation")
-                .Resolve(_ => new { });
         }
     }
 }

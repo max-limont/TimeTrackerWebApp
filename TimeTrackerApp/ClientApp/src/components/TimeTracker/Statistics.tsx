@@ -68,7 +68,7 @@ export const Statistics: FC<StatisticPropsType> = (props) => {
         }
         setState({
             ...state,
-            chartWidth: Math.min(document.getElementsByClassName('statistic-panel')[0].clientWidth - 45 ?? metadata.width, metadata.width),
+            chartWidth: Math.min(document.getElementsByClassName('statistic-panel')[0] ? document.getElementsByClassName('statistic-panel')[0].clientWidth - 45 : 0 ?? metadata.width, metadata.width),
             chartHeight: metadata.height,
             chartMaxValue: maxValue,
             chartMinValue: minValue,

@@ -5,12 +5,6 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using System.Collections.Generic;
 using System;
-using TimeTrackerApp.GraphQL.GraphQLQueries.RoleQueries;
-using TimeTrackerApp.GraphQL.GraphQLQueries.TeamQueries;
-using GraphQL.MicrosoftDI;
-using Microsoft.AspNetCore.Http;
-using TimeTrackerApp.GraphQL.GraphQLQueries;
-using TimeTrackerApp.Helpers;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
@@ -180,7 +174,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
-                    return await vacationRepository.GetByIdAsync(id);
+                    return await vacationRepository.GetVacationByIdAsync(id);
                 })
                 .AuthorizeWithPolicy("LoggedIn");
             
@@ -297,15 +291,16 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     var id = context.GetArgument<int>("Id");
                     return await sickLeaveRepository.GetByIdAsync(id);
                 })
-                .AuthorizeWithPolicy("LoggedIn"); ;
+                .AuthorizeWithPolicy("LoggedIn"); 
             
-            Field<RoleQuery>()
-                .Name("RoleQuery")
-                .Resolve(_ => new { });
-
-            Field<TeamQuery>()
-                .Name("TeamQuery")
-                .Resolve(_ => new { });
+            Field<ListGraphType<UserType>, List<User>>()
+                .Name("GetApprovers")
+                .Argument<IntGraphType, int>("userId", "user id")
+                .ResolveAsync(async context =>
+                {
+                    return await vacationRepository.GetVacationApprovers(context.GetArgument<int>("userId"));
+                })
+                .AuthorizeWithPolicy("LoggedIn");
         }
     }
 }

@@ -54,6 +54,7 @@ export const fetchAllSickLeavesForManagerByManagerIdEpic: Epic = (action$: Obser
         ofType(fetchAllSickLeavesForManagerByManagerId.type),
         mergeMap(action => from(graphqlRequest(fetchAllSickLeavesForManagerByManagerIdQuery, action.payload)).pipe(
             map(response => {
+                console.log(response)
                 if (response?.data?.fetchAllSickLeavesForManagerByManagerId) {
                     const apiResponse = response.data.fetchAllSickLeavesForManagerByManagerId
                     const sickLeaves = apiResponse.map((sickLeave: any) => parseObjectToSickLeave(sickLeave))

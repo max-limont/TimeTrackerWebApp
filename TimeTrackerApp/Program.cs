@@ -28,19 +28,19 @@ using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.MsSql.Migrations;
 using TimeTrackerApp.BackgroundTasks;
 using TimeTrackerApp.Services;
+using VacationResponse = TimeTrackerApp.MsSql.Migrations.VacationResponse;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string connectionString = builder.Configuration.GetConnectionString(Constants.DatabaseConnectionString);
+string connectionString = builder.Configuration.GetConnectionString(Constants.DatabaseConnectionStringAzure);
 
 builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new AuthenticationTokenRepository(connectionString));
 builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
 builder.Services.AddSingleton<IVacationRepository, VacationRepository>();
-builder.Services.AddSingleton<ITeamRepository>(provider => new TeamRepository(connectionString));
+builder.Services.AddSingleton<IVacationResponse,VacationResponseRepository>();
 builder.Services.AddSingleton<IVacationManagment>(provider => new VacationManagmentRepository(connectionString));
-builder.Services.AddSingleton<IRoleRepository>(provider => new RoleRepository(connectionString));
 builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
 builder.Services.AddSingleton<ISickLeaveRepository>(provider => new SickLeaveRepository(connectionString));
 
@@ -49,24 +49,24 @@ builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAutho
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
-// builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
-builder.Services.AddHostedService<BackgroundTaskService>();
-builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
-builder.Services.AddScoped<AutoCreateRecordsTask>();
+// // builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
+// builder.Services.AddHostedService<BackgroundTaskService>();
+// builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
+// builder.Services.AddScoped<AutoCreateRecordsTask>();
 
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()
 //         .WithGlobalConnectionString(connectionString)
 //         /* typeof(migration) миграция яка буде використовуватисб ,
 //          также нужно в класе всегда помечать [migration(nummberId)] */
-//         .ScanIn(typeof(AddedTableBackgroundTask).Assembly)
+//         .ScanIn(typeof(ChangeVacationResponse).Assembly)
 //         .For.All())
 //     .AddLogging(config=>config.AddFluentMigratorConsole());
 
 
 // Add services to the container.
 builder.Services.AddCors(
-builder => {
+    builder => {
         builder.AddPolicy("DefaultPolicy", option =>
         {
             option.AllowAnyMethod();

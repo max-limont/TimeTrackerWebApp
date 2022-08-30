@@ -9,9 +9,6 @@ export const getUserByEmailQuery = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
-            vacationPermissionId,
-            teamId,
-            roleId
         }
     }
 `
@@ -27,9 +24,6 @@ export const getUserByIdQuery = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
-            vacationPermissionId,
-            teamId,
-            roleId
         }
     }
 `

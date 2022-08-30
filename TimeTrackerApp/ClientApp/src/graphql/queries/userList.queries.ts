@@ -9,9 +9,6 @@ export const getPaginatedUserList = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
-            vacationPermissionId,
-            teamId,
-            roleId
        }
     }
 `
@@ -27,9 +24,6 @@ export const getSearchResponse = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
-            vacationPermissionId,
-            teamId,
-            roleId
        }
     }
 `

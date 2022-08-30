@@ -19,11 +19,11 @@ const initialState: ContentStateType = {
 
 export const TimeTracker: FC = () => {
 
-    const [state, setState] = useState(initialState)
-    const auth = useAuth()
-    let records = useAppSelector(state => state.rootReducer.timeTracker.records)
+    const [state, setState] = useState(initialState);
+    const auth = useAuth();
+    let records = useAppSelector(state => state.rootReducer.timeTracker.records);
     let timeTrackerListItems = [...records].map(record => recordToTimeTrackerListItem(record)).sort((recordA, recordB) => recordB.date.getTime() - recordA.date.getTime());
-    let lastRecord = timeTrackerListItems.filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined
+    let lastRecord = timeTrackerListItems.filter(record => record.date >= new Date(new Date().setHours(0, 0, 0, 0)))[0] ?? undefined;
 
     useEffect(() => {
         if (auth.state?.user && (records || lastRecord)) {
@@ -40,6 +40,7 @@ export const TimeTracker: FC = () => {
                 </div>
             </section>
         </div>
+         
     ) : (
         <Loading />
     )

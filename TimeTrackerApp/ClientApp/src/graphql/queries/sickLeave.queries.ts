@@ -17,9 +17,6 @@ export const fetchAllSickLeavesQuery = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
             approver {
                 id
@@ -30,9 +27,6 @@ export const fetchAllSickLeavesQuery = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
         }
     }
@@ -57,9 +51,6 @@ export const fetchAllSickLeavesByEmployeeIdQuery = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
             approver {
                 id
@@ -70,9 +61,6 @@ export const fetchAllSickLeavesByEmployeeIdQuery = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
         }
     }
@@ -97,9 +85,6 @@ export const fetchAllSickLeavesForManagerByManagerIdQuery = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
             approver {
                 id
@@ -110,9 +95,6 @@ export const fetchAllSickLeavesForManagerByManagerIdQuery = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
         }
     }
@@ -137,9 +119,6 @@ export const getSickLeaveByIdQuery = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
             approver {
                 id
@@ -150,9 +129,6 @@ export const getSickLeaveByIdQuery = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
         }
     }
@@ -177,9 +153,6 @@ export const createSickLeaveMutation = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
             approver {
                 id
@@ -190,9 +163,6 @@ export const createSickLeaveMutation = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
         }
     }
@@ -217,9 +187,6 @@ export const updateSickLeaveMutation = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
             approver {
                 id
@@ -230,9 +197,6 @@ export const updateSickLeaveMutation = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
         }
     }
@@ -257,9 +221,6 @@ export const removeSickLeaveMutation = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
             approver {
                 id
@@ -270,9 +231,6 @@ export const removeSickLeaveMutation = `
                 weeklyWorkingTime
                 remainingVacationDays
                 privilegesValue
-                vacationPermissionId,
-                teamId,
-                roleId
             }
         }
     }

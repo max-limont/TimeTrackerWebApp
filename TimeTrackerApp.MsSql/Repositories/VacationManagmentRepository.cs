@@ -5,14 +5,13 @@ using TimeTrackerApp.Business.Repositories;
 
 namespace TimeTrackerApp.MsSql.Repositories;
 
-public class VacationManagmentRepository:IVacationManagment
+public class VacationManagmentRepository : IVacationManagment
 {
     private string connectionString { get; set; }
-    private SqlConnection Connection {
-        get
-        {
-            return new SqlConnection(connectionString);
-        }
+
+    private SqlConnection Connection
+    {
+        get { return new SqlConnection(connectionString); }
     }
 
     public VacationManagmentRepository(string conn)
@@ -20,28 +19,33 @@ public class VacationManagmentRepository:IVacationManagment
         connectionString = conn;
     }
 
-    public async Task<VacationManagment> GetByIdVacationManagent(int id)
+    public async Task<VacationManagment?> GetByIdVacationManagent(int id)
     {
-        string query = @$"Select * from VacationManagment where Id={id}";
+        string query = @$"Select * from UserManagement where Id={id}";
         using (Connection)
         {
-            var model = await Connection.QueryFirstAsync<VacationManagment>(query);
-            if (model != null)
-            {
-                return model;
-            }
+            var model = await Connection.QueryFirstOrDefaultAsync<VacationManagment>(query);
+            return model;
+        }
+    }
 
-            throw new Exception();
+    public async Task<List<VacationManagment>> GetByUserIdVacationManagment(int userId)
+    {
+        string query = @$"Select * from UserManagement where EmployeeId ={userId}";
+        using (Connection)
+        {
+            var model = await Connection.QueryAsync<VacationManagment>(query);
+            return model.ToList();
         }
     }
 
     public async Task<VacationManagment> UpdateVacationManagment(VacationManagment model)
     {
-        string query = @" Update VacationManagment  Set UserId=@UserId, ManagerId=@ManagerId where Id = @Id";
+        string query = @" Update UserManagement  Set EmployeeId=@EmployeeId, ManagerId=@ManagerId where Id = @Id";
         using (var connection = new SqlConnection(connectionString))
         {
             var result = await connection.ExecuteAsync(query, model);
-            if(result>0)
+            if (result > 0)
             {
                 return model;
             }
@@ -52,8 +56,8 @@ public class VacationManagmentRepository:IVacationManagment
 
     public async Task<VacationManagment> DeleteVacationManagment(int id)
     {
-        var model =  await GetByIdVacationManagent(id);
-        string query = @$"Delete From VacationManagment where Id={id}";
+        var model = await GetByIdVacationManagent(id);
+        string query = @$"Delete From UserManagement where Id={id}";
         using (Connection)
         {
             int result = await Connection.ExecuteAsync(query);
@@ -66,9 +70,10 @@ public class VacationManagmentRepository:IVacationManagment
         }
     }
 
-    public  async Task<VacationManagment> CreateVacationManagment(VacationManagment model)
+    public async Task<VacationManagment> CreateVacationManagment(VacationManagment model)
     {
-        string query = @" Insert into VacationManagment (UserId, ManagerId) Values (@UserId,@ManagerId) select @@INDENTITY";
+        string query =
+            @" Insert into UserManagement (EmployeeId, ManagerId) Values (@EmployeeId,@ManagerId) select @@INDENTITY";
         using (Connection)
         {
             var id = await Connection.QueryFirstAsync<int>(query, model);
@@ -76,6 +81,7 @@ public class VacationManagmentRepository:IVacationManagment
             {
                 return await GetByIdVacationManagent(id);
             }
+
             throw new Exception();
         }
     }

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {removeVacationAction, updateVacationAction} from "../../store/vacation/vacation.slice";
+import { EditVacationType } from "../../types/vacation.types";
 
 export const  postFixDate = "T00:00:00+00:00";
 
@@ -11,24 +12,30 @@ type Props = {
     stateForm: React.Dispatch<React.SetStateAction<boolean>>,
     visible: boolean,
     idVacation: number,
-    sourceVacation?: any
+    sourceVacation: number|undefined
 }
 
 export function EditVacation(obj: Props) {
     const dispatch = useDispatch();
     const { stateForm, visible, idVacation, sourceVacation } = obj;
+    console.log()
     const setVisible = stateForm;
-    const [vacation, setVacation] = useState(sourceVacation ? useAppSelector(state => state.rootReducer.vacation.vacations.find(item => item.id == idVacation)) : useAppSelector(s => s.rootReducer.vacation.requestVacations.find(item => item.id == idVacation)));
+    const [vacation, setVacation] = useState(sourceVacation ?
+         useAppSelector(state => state.rootReducer.vacation.requestVacations.find(item => item.id == idVacation)) 
+         : useAppSelector(s => s.rootReducer.vacation.vacations.find(item => item.id == idVacation)));
 
 
     function onFinish(e: React.FormEvent) {
         e.preventDefault();
         if (vacation) {
             dispatch(updateVacationAction({
-                ...vacation,
+                id: vacation.id,
+                isAccepted: vacation.isAccepted,
+                comment: vacation.comment,
+                userId: vacation.userId,
                 startingTime: vacation.startingTime + postFixDate,
                 endingTime: vacation.endingTime + postFixDate
-            }));
+            } as EditVacationType));
         }
         setVisible(false);
     }
@@ -56,18 +63,14 @@ export function EditVacation(obj: Props) {
                                 <label>Type Day</label>
                                 <input type="date" value={endingTime} onChange={(e) => setVacation({ ...vacation, endingTime: e.target.value })} />
                             </div>
+                            
                             <div className={"form-item w-100"}>
                                 <label>Comment</label>
-                                <textarea defaultValue={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }} />
-                            </div>
+                                {!sourceVacation? <textarea defaultValue={comment} onChange={(e) => { setVacation({ ...vacation, comment: e.target.value }) }} />
+                            : <label>{comment!==""?comment:"Here isnt comment"}</label>}
+                                </div>
                         </div>
                         <button type="submit" className={"button cyan-button"}>Edit</button>
-                        <button className={"button red-button"} onClick={(e) => {
-                            e.preventDefault();
-                            dispatch(removeVacationAction(id))
-                        }}>
-                            Remove
-                        </button>
                         <button type="reset" className={"button silver-button"}>Reset</button>
                     </form>
                 </div>
