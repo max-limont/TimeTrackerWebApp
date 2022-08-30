@@ -63,13 +63,11 @@ export function GiveResponse(obj: Props) {
                     </div>
                     <button onClick={()=>{
                         setStateAccept(false);
-                          setVisible(false);
                     }} type={"submit"} className={"button yellow-button close"} >
                         <FontAwesomeIcon icon={faXmark} className={"icon"} />
                     </button>
                     <button  onClick={()=>{
                         setStateAccept(true);
-                        setVisible(false);
                     }}  type={"submit"} className="button green-button close" >
                         <FontAwesomeIcon icon={faCheck} className={"icon"} />
                     </button>
