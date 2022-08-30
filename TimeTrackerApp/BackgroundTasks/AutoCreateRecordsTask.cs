@@ -23,13 +23,18 @@ namespace TimeTrackerApp.BackgroundTasks
 
 		public async Task Execute(IJobExecutionContext context)
 		{
+			await Execute(context, new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 12, 0, 0).ToUniversalTime());
+		}
+
+		public async Task Execute(IJobExecutionContext context, DateTime dateTime)
+		{
 			var fullTimeEmployees = await userRepository.FetchFullTimeEmployeesAsync();
 			foreach (var employee in fullTimeEmployees)
 			{
 				var record = new Record()
 				{
 					IsAutomaticallyCreated = true,
-					CreatedAt = DateTime.UtcNow,
+					CreatedAt = dateTime,
 					WorkingTime = employee.WeeklyWorkingTime / 5 * 60 * 1000,
 					EmployeeId = employee.Id,
 				};
@@ -39,7 +44,7 @@ namespace TimeTrackerApp.BackgroundTasks
 					var backgroundTask = new BackgroundTask()
 					{
 						Type = nameof(AutoCreateRecordsTask),
-						DateTime = DateTime.UtcNow,
+						DateTime = dateTime,
 					};
 					await recordRepository.CreateAsync(record);
 					await backgroundTaskRepository.CreateAsync(backgroundTask);

@@ -24,6 +24,15 @@ export const fetchUserRecordsByMonthQuery = `
     }
 `
 
+export const fetchUserLastWeekTimeTrackerStatisticsQuery = `
+    query FetchUserLastWeekTimeTrackerStatistics($userId: ID!) {
+        fetchUserLastWeekTimeTrackerStatistics(userId: $userId) {
+            date
+            totalWorkingTime
+        }
+    }
+`
+
 export const createRecordMutation = `
     mutation CreateRecord($record: RecordInputType!) {
         createRecord(record: $record) {

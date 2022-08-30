@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { CreateVacation } from "./CreateVacation";
 import { EditVacation } from "./EditVacation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faCheck, faClock, faClose, faTimes, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "../../hooks/useAppSelector";
-import {getVacationsByUserIdAction, removeVacationAction} from "../../store/vacation/vacation.slice";
-import {getAllVacationLevelAction} from "../../store/vacationLevel/vacationLevel.slice";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { getVacationsByUserIdAction, removeVacationAction } from "../../store/vacation/vacation.slice";
+import { getRolesAction } from "../../store/role/role.slice";
+import { fetchTeams } from "../../store/team/team.slice";
 
 
 export function Vacation() {
@@ -18,31 +18,32 @@ export function Vacation() {
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(state => state.rootReducer.vacation.vacations);
     const auth = useAuth();
-    const vacationLevel = useAppSelector(state => state.rootReducer.vacationLevel.vacationLevels.find(x => x.id == auth.state?.user?.vacationPermissionId));
-
+    const teams  = useAppSelector(state=>state.rootReducer.team.teams)
     useEffect(() => {
         const id = auth.state?.user?.id;
-        if (id){
+        // console.log(auth.state?.user?.roleId);
+        console.log(teams);
+        if (id) {
+            dispatch(fetchTeams());
             dispatch(getVacationsByUserIdAction(id));
-            dispatch(getAllVacationLevelAction());
+            dispatch(getRolesAction());
         }
     }, [auth.state?.user]);
 
+
+
     return (
         <>
-            {editState ? <EditVacation  stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
+            {editState ? <EditVacation stateForm={setEditState} visible={editState} idVacation={id} /> : <></>}
             {createState ? <CreateVacation stateForm={setCreateState} visible={createState} /> : <></>}
             <div className="vacation-container">
                 <div className="control-panel vacation-control-panel">
                     <div>
                         <button onClick={() => setCreateState(true)} className="button cyan-button">Create Vacation Request</button>
                     </div>
-                    <div>
-                        {vacationLevel?.value ? vacationLevel.value > 1 ? <Link className="link" to="/manage-vacation"><button className="button cyan-button">Manage Requests Vacations</button></Link> : <></> : <></>}
-                    </div>
                 </div>
                 <div className="list-vacation-container">
-                    <p style={{margin: "5px"}}>Your Vacations</p>
+                    <p style={{ margin: "5px" }}>Your Vacations</p>
                     <div className="list-vacations">
                         {!(vacationsList.length == 0) ?
                             <>
@@ -57,25 +58,24 @@ export function Vacation() {
                                         <div key={i} className="vacation-item">
                                             <div>{item.startingTime}</div>
                                             <div>{item.endingTime}</div>
-                                            <div>{item.isAccepted ? <FontAwesomeIcon icon={faCheck} className={"custom-icon-green icon"} />
+                                            <div>{item.isAccepted ? <span className={" button green-button"} >Aceppted</span>
                                                 : item.isAccepted == null ?
-                                                    <FontAwesomeIcon icon={faClock} className={"icon"} />
-                                                    : <FontAwesomeIcon icon={faBan} className={"custom-icon-red icon"} />
+                                                    <span className=" button yellow-button">Wait for confirmation</span>
+                                                    : <span  className={"button red-button"} >Canceled</span>
                                             }</div>
                                             <div className={"end-item-action"} ><button onClick={() => {
                                                 setEditState(true);
                                                 setIdEdit(item.id)
                                             }} className="button cyan-button">Edit</button>
                                                 <button className={"button red-button close"} onClick={() =>
-                                                     dispatch(removeVacationAction(item.id))} >
+                                                    dispatch(removeVacationAction(item.id))} >
                                                     <FontAwesomeIcon icon={faXmark} className={"icon"} />
                                                 </button>
                                             </div>
                                         </div>
                                     );
                                 })}
-                            </>
-                            : <div>You dont have vacations</div>}
+                            </> : <div>You dont have vacations</div>}
                     </div>
                 </div>
             </div>

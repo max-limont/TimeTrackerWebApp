@@ -67,26 +67,28 @@ export const Timer: FC = () => {
     return (
         <div className={"timer-panel"}>
             <h3>Timer: </h3>
-            <div className={"timer"}>
-                <div className={"hours"}>
-                    <span>{Math.floor(state.time / 3600000) < 10 ? `0${Math.floor(state.time / 3600000)}` : Math.floor(state.time / 3600000)}</span>
-                    <h3>hours</h3>
+            <div className={'timer-container flex-container flex-column justify-content-center align-items-center h-100'}>
+                <div className={"timer"}>
+                    <div className={"hours"}>
+                        <span>{Math.floor(state.time / 3600000) < 10 ? `0${Math.floor(state.time / 3600000)}` : Math.floor(state.time / 3600000)}</span>
+                        <h3>hours</h3>
+                    </div>
+                    <div className={"minutes"}>
+                        <span>{Math.floor(state.time / 60000) % 60 < 10 ? `0${Math.floor(state.time / 60000) % 60}` : Math.floor(state.time / 60000) % 60}</span>
+                        <h3>minutes</h3>
+                    </div>
+                    <div className={"seconds"}>
+                        <span>{Math.floor(state.time / 1000) % 60 < 10 ? `0${Math.floor(state.time / 1000) % 60}` : Math.floor(state.time / 1000) % 60}</span>
+                        <h3>seconds</h3>
+                    </div>
                 </div>
-                <div className={"minutes"}>
-                    <span>{Math.floor(state.time / 60000) % 60 < 10 ? `0${Math.floor(state.time / 60000) % 60}` : Math.floor(state.time / 60000) % 60}</span>
-                    <h3>minutes</h3>
+                <div className={"flex-container justify-content-center"}>
+                    { !state.enabled ?
+                        <a className={"button cyan-button"} onClick={() => timerStart()}>Start</a>
+                        :
+                        <a className={"button red-button"} onClick={() => timerStop()}>Stop</a>
+                    }
                 </div>
-                <div className={"seconds"}>
-                    <span>{Math.floor(state.time / 1000) % 60 < 10 ? `0${Math.floor(state.time / 1000) % 60}` : Math.floor(state.time / 1000) % 60}</span>
-                    <h3>seconds</h3>
-                </div>
-            </div>
-            <div className={"flex-container justify-content-center"}>
-                { !state.enabled ?
-                    <a className={"button cyan-button"} onClick={() => timerStart()}>Start</a>
-                    :
-                    <a className={"button red-button"} onClick={() => timerStop()}>Stop</a>
-                }
             </div>
         </div>
     );

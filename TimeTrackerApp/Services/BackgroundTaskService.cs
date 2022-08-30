@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -31,7 +30,7 @@ namespace TimeTrackerApp.Services
 			foreach (var type in Constants.BackgroundTaskTypes)
 			{
 				var latestBackgroundTask = await backgroundTasksRepository.GetLatestByTypeAsync(type);
-				var timeHasPassedSinceLastExecution = latestBackgroundTask != null ? (DateTime.UtcNow - latestBackgroundTask.DateTime).TotalSeconds : -1;
+				var timeHasPassedSinceLastExecution = latestBackgroundTask != null ? (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 12, 0, 0).ToUniversalTime() - latestBackgroundTask.DateTime).TotalSeconds : -1;
 				switch (type)
 				{
 					case nameof(AutoCreateRecordsTask):
@@ -42,7 +41,15 @@ namespace TimeTrackerApp.Services
 							{
 								if (task.TaskType == type)
 								{
-									await task.Execute(null);
+									for (int i = 0; i < numberOfTasksToExecute; i++)
+									{
+										var dateTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 12, 0, 0);
+										if (latestBackgroundTask != null)
+										{
+											dateTime = new DateTime(latestBackgroundTask.DateTime.Year, latestBackgroundTask.DateTime.Month, latestBackgroundTask.DateTime.AddDays(i + 1).Day, 12, 0, 0);
+										}
+										await task.Execute(null, dateTime.ToUniversalTime());
+									}
 								}
 							}
 						}
@@ -53,7 +60,7 @@ namespace TimeTrackerApp.Services
 
 		public Task StopAsync(CancellationToken cancellationToken)
 		{
-			throw new System.NotImplementedException();
+			return Task.CompletedTask;
 		}
 	}
 }

@@ -62,6 +62,7 @@ $color-cyan: #00ADB5;
 $color-light: #EEEEEE;
 $color-silver: #D6D6D6;
 $color-red: #F24C4C;
+$color-green: #33B249;
 $color-white: #FFFFFF;
 $color-yellow: #FFC107;
 
@@ -455,11 +456,11 @@ section {
     &.inverse {
         background: transparent;
         color: $color-light-dark;
-        border: 1px solid $color-light;
+        border: 1px solid $color-light-dark;
 
         &:not(.disabled):hover {
             background: $color-light-dark;
-            color: $color-light-dark;
+            color: $color-light;
         }
     }
 }
@@ -571,6 +572,27 @@ section {
         &:not(.disabled):hover {
             background: $color-silver;
             color: $color-dark;
+        }
+    }
+}
+.green-button {
+    background: $color-green;
+    color: $color-light;
+
+    &:not(.disabled):hover {
+        background: transparent;
+        color: $color-green;
+        border: 1px solid $color-green;
+    }
+
+    &.inverse {
+        background: transparent;
+        color: $color-green;
+        border: 1px solid $color-green;
+
+        &:not(.disabled):hover {
+            background: $color-green;
+            color: $color-light;
         }
     }
 }
@@ -828,8 +850,8 @@ section {
 
 .form-header {
     h2 {
-        font-size: $font-size-header;
-        font-weight: 600;
+        font-size: 22px;
+        font-weight: 400;
     }
 
     .close {
@@ -978,7 +1000,7 @@ table {
 
 .creation-type-label {
     display: inline-flex;
-    padding: 10px;
+    padding: 5px 10px;
     border-radius: 2px;
     box-shadow: 0 0 5px -4px $color-dark;
     font-weight: 500;
@@ -1076,7 +1098,8 @@ table {
             display: flex;
             align-items: stretch;
             border-radius: 2px;
-            padding: 10px;
+            background: $color-white;
+            margin: 5px;
             label {
                 margin-right: 10px;
                 font-weight: 600;
@@ -1085,15 +1108,19 @@ table {
                 min-width: 200px;
                 outline: none;
                 padding: 5px 10px;
-                background: white;
+                background: $color-white;
                 border-block: 1px solid $color-light-dark;
                 border-inline: none;
                 font-family: 'Nunito', sans-serif;
                 font-size: 15px;
                 cursor: pointer;
+                text-align: center;
             }
             .button {
                 padding-inline: 15px;
+                &:not(:hover) {
+                    background: $color-white;
+                }
             }
             .button:last-of-type {
                 border-bottom-left-radius: 0;
@@ -1113,6 +1140,7 @@ table {
     box-shadow: 0 0 5px -4px $color-light-dark;
     padding: 10px;
     color: $color-dark;
+    position: relative;
 
     > h3 {
         font-weight: bold;
@@ -1121,19 +1149,15 @@ table {
         padding: 10px;
         margin: -10px -10px 0 -10px;
         border-radius: 2px;
+        margin-bottom: 10px;
     }
 
     .statistic-panel-list {
-        margin-top: 30px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        flex-wrap: wrap;
-        align-items: stretch;
 
         > div {
             display: inline-flex;
             flex-direction: column;
-            padding-block: 0 30px;
+            margin: 10px 20px 10px 10px;
         }
 
         h4 {
@@ -1146,9 +1170,104 @@ table {
         span {
             color: $color-light-dark;
             font-weight: 700;
-            font-size: 30px;
-            margin-top: 10px;
+            font-size: 20px;
         }
+    }
+
+    .chart-wrapper {
+        border: 1px solid #E6E6E6;
+        margin-left: 15px;
+        border-radius: 2px;
+    }
+}
+
+.chart-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 10px 10px 10px;
+    width: auto;
+    .scale {
+        margin-right: 10px;
+        width: 30px;
+        flex-direction: column-reverse;
+        position: relative;
+
+        label {
+            width: 30px;
+            position: absolute;
+            display: inline-flex;
+            align-items: center;
+            justify-content: right;
+            font-size: 12px;
+            height: 15px;
+            color: $color-light-dark;
+            margin-bottom: -8px;
+            margin-top: -7px;
+        }
+    }
+}
+
+.chart-titles {
+    margin-top: 10px;
+    margin-left: 40px;
+
+    label {
+        display: inline-flex;
+        justify-content: center;
+        text-align: center;
+        color: $color-light-dark;
+    }
+}
+
+.chart {
+    display: inline-flex;
+    align-items: flex-end;
+    position: relative;
+    z-index: 3;
+
+    .chart-item {
+        border-radius: 2px;
+        display: inline-flex;
+
+        .value {
+            background: rgba(0, 0, 0, 0.5);
+            color: $color-light;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 2px 10px;
+            border-radius: 2px;
+            font-size: 12px;
+            position: relative;
+            z-index: 9;
+        }
+
+        &.positive {
+            align-items: flex-start;
+        }
+
+        &.negative {
+            align-items: flex-end;
+        }
+    }
+
+    .max-value-line, .min-value-line {
+        display: inline-flex;
+        width: 100%;
+        z-index: 1;
+        height: 1px;
+        position: absolute;
+        top: 0;
+    }
+    .min-value-line {
+        background: gray;
+        border-radius: 2px;
+    }
+    .max-value-line {
+        background: $color-light-dark;
+        border-radius: 2px;
     }
 }
 
@@ -1182,6 +1301,8 @@ table {
 
 .timer {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
 
     > div {
@@ -1305,7 +1426,7 @@ table {
 }
 
 .user-title {
-     padding-top: 15px;
+    padding-top: 15px;
 }
 
 .user-list-controls {
@@ -1526,6 +1647,114 @@ div.end-item-action {
         &:hover, &.active {
             background: $color-light-dark;
             color: $color-light;
+        }
+    }
+}
+
+.sick-leaves-list {
+    background: $color-white;
+    border-radius: 2px;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+    margin: 15px;
+
+    table {
+        td {
+            padding: 15px 10px;
+            vertical-align: middle;
+        }
+
+        .button:not(:last-of-type) {
+            margin-right: 5px;
+        }
+
+        .button {
+            display: inline;
+            padding: 7px 20px 7px 20px;
+        }
+
+        .status {
+            padding: 5px 10px 5px 10px;
+            border-radius: 2px;
+            display: inline-flex;
+
+            &.expired {
+                color: $color-dark;
+                background: $color-silver;
+            }
+            &.under-review {
+                color: $color-light;
+                background: $color-cyan;
+            }
+            &.approved {
+                color: $color-light;
+                background: $color-green;
+            }
+            &.rejected {
+                color: $color-light;
+                background: $color-red;
+            }
+        }
+    }
+}
+
+.sick-leave-form {
+    position: absolute;
+    z-index: 999;
+    background: $color-white;
+    padding: 15px;
+    border-radius: 2px;
+    box-shadow: 0 0 20px -10px $color-dark;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .form-header {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #E6E6E6;
+    }
+
+    .form-item {
+        padding: 10px 0 10px 0;
+    }
+
+    label {
+        margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+        background: #F6F6F6;
+        box-shadow: inset 0 0 5px -5px $color-dark;
+    }
+
+    .buttons {
+        padding-top: 10px;
+    }
+}
+
+.sick-leaves-panel {
+    justify-content: space-between;
+    background: $color-white;
+    box-shadow: 0 0 5px -4px $color-light-dark;
+    border-radius: 2px;
+    margin: 15px 15px 0 15px;
+    padding: 10px;
+
+    nav {
+        display: flex;
+        align-items: center;
+        a:not(:last-of-type) {
+            margin-right: 5px;
+        }
+        a:hover, a.active {
+            background: $color-light-dark;
+            color: $color-light;
+        }
+        a {
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 2px;
+            background: #F6F6F6;
         }
     }
 }

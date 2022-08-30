@@ -24,6 +24,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FluentMigrator.Runner;
+using TimeTrackerApp.Business.Models;
+using TimeTrackerApp.MsSql.Migrations;
 using TimeTrackerApp.BackgroundTasks;
 using TimeTrackerApp.Services;
 
@@ -35,26 +37,29 @@ builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new Au
 builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
-builder.Services.AddSingleton<IVacationRepository>(provider => new VacationRepository(connectionString));
-builder.Services.AddSingleton<IVacationLevelRepository>(provider => new VacationLevelRepository(connectionString));
+builder.Services.AddSingleton<IVacationRepository, VacationRepository>();
+builder.Services.AddSingleton<ITeamRepository>(provider => new TeamRepository(connectionString));
+builder.Services.AddSingleton<IVacationManagment>(provider => new VacationManagmentRepository(connectionString));
+builder.Services.AddSingleton<IRoleRepository>(provider => new RoleRepository(connectionString));
 builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
+builder.Services.AddSingleton<ISickLeaveRepository>(provider => new SickLeaveRepository(connectionString));
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
+// builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
 builder.Services.AddHostedService<BackgroundTaskService>();
-
 builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
 builder.Services.AddScoped<AutoCreateRecordsTask>();
-//
+
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()
 //         .WithGlobalConnectionString(connectionString)
 //         /* typeof(migration) миграция яка буде використовуватисб ,
 //          также нужно в класе всегда помечать [migration(nummberId)] */
-//         .ScanIn(typeof(ChangeCalendarTimeTracker).Assembly)
+//         .ScanIn(typeof(AddedTableBackgroundTask).Assembly)
 //         .For.All())
 //     .AddLogging(config=>config.AddFluentMigratorConsole());
 

@@ -14,8 +14,8 @@ import {fetchUserCount, fetchUserListPage, fetchUserListSearchRequest} from "../
 
 export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
-    const auth = useAuth()
-    const contentPerPage = 1
+    const auth = useAuth();
+    const contentPerPage = 2;
 
     const dispatch = useDispatch()
     const [state, setState] = useState<UserListPage>({
