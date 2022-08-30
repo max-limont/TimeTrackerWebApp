@@ -42,7 +42,7 @@ namespace TimeTrackerApp.MsSql.Repositories
                             var model = await VacationManagment.CreateVacationManagment(new VacationManagment()
                             {
                                 ManagerId = managerId,
-                                UserId = vacation.UserId
+                                EmployeeId = vacation.UserId
                             });
                         }
                     }
