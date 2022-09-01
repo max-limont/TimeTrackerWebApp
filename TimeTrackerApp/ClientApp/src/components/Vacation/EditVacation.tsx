@@ -57,7 +57,7 @@ export function EditVacation(obj: Props) {
         return (
             <div className={`form-event-container dark-background ${!visible && "hidden"}`}>
                 <div className={"form-event"}>
-                    {validationError==""?<></>:validationError}
+                  
                     <div className={"form-header"}>
                         <h2>Edit event</h2>
                         <button className={"button red-button close"} onClick={() => {
@@ -66,10 +66,12 @@ export function EditVacation(obj: Props) {
                             <FontAwesomeIcon icon={faXmark} className={"icon"} />
                         </button>
                     </div>
-                    <form onSubmit={(e) => onFinish(e)}
-                          onChange={()=>{
-                              setError("");
-                          }}>
+                    <form onSubmit={(e) => onFinish(e)} onChange={()=>{setError("")}}>
+                        <div className={"form-group"}>
+                            <div className={"form-item w-100 color-red"}>
+                                {validationError == "" ? <></> : validationError}
+                            </div>
+                        </div>
                         <div className={"form-group"}>
                             <div className={"form-item w-100"}>
                                 <label>Starting Time</label>

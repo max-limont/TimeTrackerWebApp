@@ -128,11 +128,11 @@ export function Vacation() {
                                 <div className="vacation-item" style={{textAlign: "center"}}>
                                     <div>Starting Time</div>
                                     <div>Ending Time</div>
-                                    <div className={"end-item-action"}>IsAccepted</div>
+                                    <div className={"end-item-action"} style={{flexBasis: "200px"}}>IsAccepted</div>
                                     <div className={"end-item-action"}>Actions</div>
                                 </div>
-
                                 {vacationsList.map((item, i) => {
+
                                     const Comment = (<span className="response-container">
                                                         {item.vacationResponse ?
                                                             item.vacationResponse.comment !== "" ?
@@ -140,18 +140,22 @@ export function Vacation() {
                                                                              comment={item.vacationResponse.comment}/> : <></>
                                                             : <></>}
                                                     </span>);
+
                                     return (
                                         <div key={i} className="vacation-item">
                                             <div>{item.startingTime}</div>
                                             <div>{item.endingTime}</div>
-                                            <div className={"end-item-action"}>{item.isAccepted ? <>
-                                                <span className={" button green-button-no-action"}>Aceppted
+                                            <div className={"end-item-action"}
+                                                 style={{flexBasis: "200px"}}>{item.isAccepted ? <>
+                                                <span className={" button green-button-no-action"}
+                                                      style={{flexGrow: "1"}}>Aceppted
                                                 </span>
                                                     {Comment}
                                                 </>
                                                 : item.isAccepted == null ?
-                                                    <span className=" button yellow-button">Wait for confirmation</span>
-                                                    : <><span className={"button red-button"}>Canceled</span>
+                                                    <span className="button yellow-button" style={{flexGrow: "1"}}>Wait for confirmation</span>
+                                                    : <><span className={"button red-button"}
+                                                              style={{flexGrow: "1"}}>Canceled</span>
                                                         {Comment}</>
                                             }
                                             </div>
@@ -187,5 +191,6 @@ export function Vacation() {
                     </div>
                 </div>
             </div>
-        </>);
+        </>
+    );
 }

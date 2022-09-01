@@ -28,7 +28,6 @@ using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.MsSql.Migrations;
 using TimeTrackerApp.BackgroundTasks;
 using TimeTrackerApp.Services;
-using VacationResponse = TimeTrackerApp.MsSql.Migrations.VacationResponse;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +38,7 @@ builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepositor
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
 builder.Services.AddSingleton<IVacationRepository, VacationRepository>();
-builder.Services.AddSingleton<IVacationResponse,VacationResponseRepository>();
+builder.Services.AddSingleton<IVacationResponseRepository,VacationResponseRepositoryRepository>();
 builder.Services.AddSingleton<IVacationManagment>(provider => new VacationManagmentRepository(connectionString));
 builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
 builder.Services.AddSingleton<ISickLeaveRepository>(provider => new SickLeaveRepository(connectionString));
@@ -49,7 +48,7 @@ builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAutho
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
-// // builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
+// builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
 // builder.Services.AddHostedService<BackgroundTaskService>();
 // builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
 // builder.Services.AddScoped<AutoCreateRecordsTask>();
@@ -108,14 +107,14 @@ builder.Services.AddGraphQL(b => b
                 .AddSchema<AppSchema>()
                 .AddGraphTypes(typeof(AppSchema).Assembly));
 
-builder.Services.AddQuartz(service =>
-{
-    service.UseMicrosoftDependencyInjectionJobFactory();
-    service.AddJob<AutoCreateRecordsTask>(options => options.WithIdentity(new JobKey(nameof(AutoCreateRecordsTask))));
-    service.AddTrigger(options => options.ForJob(new JobKey(nameof(AutoCreateRecordsTask))).WithIdentity($"{nameof(AutoCreateRecordsTask)}-trigger").WithCronSchedule(builder.Configuration[Constants.AutoCreateRecordsTaskCron]));
-});
+// builder.Services.AddQuartz(service =>
+// {
+//     service.UseMicrosoftDependencyInjectionJobFactory();
+//     service.AddJob<AutoCreateRecordsTask>(options => options.WithIdentity(new JobKey(nameof(AutoCreateRecordsTask))));
+//     service.AddTrigger(options => options.ForJob(new JobKey(nameof(AutoCreateRecordsTask))).WithIdentity($"{nameof(AutoCreateRecordsTask)}-trigger").WithCronSchedule(builder.Configuration[Constants.AutoCreateRecordsTaskCron]));
+// });
 
-builder.Services.AddQuartzHostedService(service => service.WaitForJobsToComplete = true);
+// builder.Services.AddQuartzHostedService(service => service.WaitForJobsToComplete = true);
 
 
 // In production, the React files will be served from this directory

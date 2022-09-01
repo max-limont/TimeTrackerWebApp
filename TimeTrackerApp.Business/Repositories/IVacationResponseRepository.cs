@@ -2,7 +2,7 @@
 
 namespace TimeTrackerApp.Business.Repositories;
 
-public interface IVacationResponse
+public interface IVacationResponseRepository
 {
     public Task<VacationResponse> GetVacationResponses();
     public Task<VacationResponse> GetVacationResponseById(int id);

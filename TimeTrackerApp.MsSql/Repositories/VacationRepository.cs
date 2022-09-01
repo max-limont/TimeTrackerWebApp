@@ -11,14 +11,14 @@ namespace TimeTrackerApp.MsSql.Repositories
     {
         private readonly string connectionString;
         private IVacationManagment VacationManagment { get; set; }
-        private IVacationResponse vacationResponse { get; set; }
+        private IVacationResponseRepository VacationResponseRepository { get; set; }
 
         public VacationRepository(IConfiguration configuration, IVacationManagment vacationManagment,
-            IVacationResponse vacationResponse)
+            IVacationResponseRepository vacationResponseRepository)
         {
             this.connectionString = configuration.GetConnectionString("MsSqlAzure");
             VacationManagment = vacationManagment;
-            this.vacationResponse = vacationResponse;
+            this.VacationResponseRepository = vacationResponseRepository;
         }
 
         public async Task<Vacation> CreateAsync(Vacation vacation)
@@ -92,7 +92,7 @@ namespace TimeTrackerApp.MsSql.Repositories
                     throw new Exception();
                 }
 
-                var model = await vacationResponse.CreateVacationResponse(response);
+                var model = await VacationResponseRepository.CreateVacationResponse(response);
                 return await GetVacationByIdAsync(response.VacationId);
             }
         }
@@ -124,7 +124,7 @@ namespace TimeTrackerApp.MsSql.Repositories
                         if (vacation.IsAccepted != null)
                         {
                             vacation.VacationResponse =
-                                await vacationResponse.GetVacationResponseByVacationId(vacation.Id);
+                                await VacationResponseRepository.GetVacationResponseByVacationId(vacation.Id);
                         }
                     }
 
@@ -151,7 +151,7 @@ namespace TimeTrackerApp.MsSql.Repositories
                 {
                     var vacation = vacations.First();
                     vacation.ApproveUsers = await GetVacationApprovers(vacation.UserId);
-                    vacation.VacationResponse = await vacationResponse.GetVacationResponseByVacationId(vacation.Id);
+                    vacation.VacationResponse = await VacationResponseRepository.GetVacationResponseByVacationId(vacation.Id);
                     return vacation;
                 }
 

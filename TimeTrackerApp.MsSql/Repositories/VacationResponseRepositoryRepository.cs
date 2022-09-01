@@ -7,7 +7,7 @@ using TimeTrackerApp.Business.Repositories;
 
 namespace TimeTrackerApp.MsSql.Repositories;
 
-public class VacationResponseRepository:IVacationResponse
+public class VacationResponseRepositoryRepository:IVacationResponseRepository
 {
     private string connectionString { get; set; }
 
@@ -18,7 +18,7 @@ public class VacationResponseRepository:IVacationResponse
         }
     }
     
-    public VacationResponseRepository(IConfiguration configuration)
+    public VacationResponseRepositoryRepository(IConfiguration configuration)
     {
         connectionString = configuration.GetConnectionString("MsSqlAzure");
     } 
