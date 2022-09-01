@@ -66,15 +66,18 @@ export function EditVacation(obj: Props) {
                             <FontAwesomeIcon icon={faXmark} className={"icon"} />
                         </button>
                     </div>
-                    <form onSubmit={(e) => onFinish(e)}>
+                    <form onSubmit={(e) => onFinish(e)}
+                          onChange={()=>{
+                              setError("");
+                          }}>
                         <div className={"form-group"}>
                             <div className={"form-item w-100"}>
                                 <label>Starting Time</label>
-                                <input type="date" value={startingTime} onChange={(e) => setVacation({ ...vacation, startingTime: e.target.value })} />
+                                <input  className={validationError!=""?"validation-error color-red":""} type="date" value={startingTime} onChange={(e) => setVacation({ ...vacation, startingTime: e.target.value })} />
                             </div>
                             <div className={"form-item w-100"}>
                                 <label>Type Day</label>
-                                <input type="date" value={endingTime} onChange={(e) => setVacation({ ...vacation, endingTime: e.target.value })} />
+                                <input  className={validationError!=""?"validation-error color-red":""} type="date" value={endingTime} onChange={(e) => setVacation({ ...vacation, endingTime: e.target.value })} />
                             </div>
                             
                             <div className={"form-item w-100"}>

@@ -1,5 +1,5 @@
 import {combineEpics, Epic, ofType} from "redux-observable";
-import {from, map, mergeMap, Observable, of} from "rxjs";
+import {catchError, from, map, mergeMap, Observable, of} from "rxjs";
 import { graphqlRequest } from "../../graphql/api";
 import {
     createResponseQuery,
@@ -51,7 +51,11 @@ const getVacationsByUserIdEpic: Epic = (action$: Observable<ReturnType<typeof ge
                 console.log(response);
                 return setVacation(formatDateToNormalFormat(response.data.fetchAllUserVacationRequests));
             })
-        ))
+        )),
+        catchError(error=>
+        {
+            throw new Error("error to "+ error)
+        })
     )
 };
 

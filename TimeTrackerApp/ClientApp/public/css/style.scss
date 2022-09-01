@@ -1018,6 +1018,11 @@ section {
             padding: 7px 5px;
             font-size: 16px;
             width: 100%;
+         
+        }
+        
+        input.validation-error{
+            border: 2px solid $color-red;
         }
 
         select {
@@ -1032,6 +1037,10 @@ section {
     }
 }
 
+.color-red{
+    color: $color-red;
+}
+
 .form-event {
     left: 50%;
     top: 50%;
@@ -1044,7 +1053,7 @@ section {
     padding: 15px;
     max-width: 720px;
     width: 100%;
-
+   
     .form-item {
         padding: 10px 0 10px 0;
     }
@@ -1244,6 +1253,7 @@ table {
                 font-size: 15px;
                 cursor: pointer;
                 text-align: center;
+               
             }
 
             .button {
@@ -2097,3 +2107,5 @@ hr
     z-index: 10;
     text-align: center;
 }
+
+
