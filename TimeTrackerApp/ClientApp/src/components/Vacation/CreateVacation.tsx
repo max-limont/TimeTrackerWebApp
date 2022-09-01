@@ -19,6 +19,7 @@ export function CreateVacation(obj: Props) {
     const setState = obj.stateForm;
     const { visible } = obj;
     const auth = useAuth();
+    const [validationError, setError] = useState('');
     const [vacation, setVacation] = useState({
         userId: auth.state?.user?.id,
         startingTime: moment().format("yyyy-MM-DD"),
@@ -28,12 +29,23 @@ export function CreateVacation(obj: Props) {
     function onFinish(e: React.FormEvent) {
         e.preventDefault();
         console.log(vacation);
-        dispatch(createVacationAction({
-            ...vacation,
-            startingTime: vacation.startingTime + postFixDate,
-            endingTime: vacation.endingTime + postFixDate
-        }));
-        setState(false);
+        let accessToQuery = moment(startingTime).isBefore(moment());
+        if(!accessToQuery)
+        {
+            accessToQuery = moment(endingTime).isSameOrBefore(moment(startingTime));
+        }
+        if(accessToQuery){
+            setError("Choose correct date");
+        } 
+        if(!accessToQuery){
+            dispatch(createVacationAction({
+                ...vacation,
+                startingTime: vacation.startingTime + postFixDate,
+                endingTime: vacation.endingTime + postFixDate
+            }));
+            setState(false);
+        }
+     
     }
 
     const { startingTime, endingTime, comment } = vacation
@@ -41,6 +53,7 @@ export function CreateVacation(obj: Props) {
     return (
         <div className={`form-event-container dark-background ${!visible && "hidden"}`}>
             <div className={"form-event"}>
+                {validationError==""?<></>:validationError}
                 <div className={"form-header"}>
                     <h2>Create vacation</h2>
                     <button className={"button red-button close"} onClick={() => setState(false)}>
