@@ -5,12 +5,16 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using System.Collections.Generic;
 using System;
+using System.Linq;
+using System.Reflection;
+using Microsoft.AspNetCore.Http;
+using TimeTrackerApp.Business.Enums;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppQuery : ObjectGraphType
     {
-        public AppQuery(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
+        public AppQuery(IHttpContextAccessor contextAccessor,ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
         {
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
@@ -298,6 +302,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<IntGraphType, int>("userId", "user id")
                 .ResolveAsync(async context =>
                 {
+                    
+
                     return await vacationRepository.GetVacationApprovers(context.GetArgument<int>("userId"));
                 })
                 .AuthorizeWithPolicy("LoggedIn");

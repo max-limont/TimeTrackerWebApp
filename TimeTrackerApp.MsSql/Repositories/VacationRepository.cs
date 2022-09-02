@@ -10,14 +10,14 @@ namespace TimeTrackerApp.MsSql.Repositories
     public class VacationRepository : IVacationRepository
     {
         private readonly string connectionString;
-        private IVacationManagment VacationManagment { get; set; }
+        private IUserManagement UserManagement { get; set; }
         private IVacationResponseRepository VacationResponseRepository { get; set; }
 
-        public VacationRepository(IConfiguration configuration, IVacationManagment vacationManagment,
+        public VacationRepository(IConfiguration configuration, IUserManagement userManagement,
             IVacationResponseRepository vacationResponseRepository)
         {
             this.connectionString = configuration.GetConnectionString("MsSqlAzure");
-            VacationManagment = vacationManagment;
+            UserManagement = userManagement;
             this.VacationResponseRepository = vacationResponseRepository;
         }
 
@@ -33,13 +33,13 @@ namespace TimeTrackerApp.MsSql.Repositories
                 int id = await connection.QueryFirstAsync<int>(query, vacation);
                 if (id != 0)
                 {
-                    var userManagers = await VacationManagment.GetByUserIdVacationManagment(vacation.UserId);
+                    var userManagers = await UserManagement.GetByUserIdVacationManagment(vacation.UserId);
                     if (userManagers == null)
                     {
                         var defaultManagersId = await connection.QueryAsync<int>(queryFetchManagersUser);
                         foreach (var managerId in defaultManagersId)
                         {
-                            var model = await VacationManagment.CreateVacationManagment(new VacationManagment()
+                            var model = await UserManagement.CreateVacationManagment(new VacationManagement()
                             {
                                 ManagerId = managerId,
                                 EmployeeId = vacation.UserId

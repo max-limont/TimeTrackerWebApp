@@ -5,7 +5,7 @@ using TimeTrackerApp.Business.Repositories;
 
 namespace TimeTrackerApp.MsSql.Repositories;
 
-public class VacationManagmentRepository : IVacationManagment
+public class UserManagementRepository : IUserManagement
 {
     private string connectionString { get; set; }
 
@@ -14,32 +14,32 @@ public class VacationManagmentRepository : IVacationManagment
         get { return new SqlConnection(connectionString); }
     }
 
-    public VacationManagmentRepository(string conn)
+    public UserManagementRepository(string conn)
     {
         connectionString = conn;
     }
 
-    public async Task<VacationManagment?> GetByIdVacationManagent(int id)
+    public async Task<VacationManagement?> GetByIdVacationManagent(int id)
     {
         string query = @$"Select * from UserManagement where Id={id}";
         using (Connection)
         {
-            var model = await Connection.QueryFirstOrDefaultAsync<VacationManagment>(query);
+            var model = await Connection.QueryFirstOrDefaultAsync<VacationManagement>(query);
             return model;
         }
     }
 
-    public async Task<List<VacationManagment>> GetByUserIdVacationManagment(int userId)
+    public async Task<List<VacationManagement>> GetByUserIdVacationManagment(int userId)
     {
         string query = @$"Select * from UserManagement where EmployeeId ={userId}";
         using (Connection)
         {
-            var model = await Connection.QueryAsync<VacationManagment>(query);
+            var model = await Connection.QueryAsync<VacationManagement>(query);
             return model.ToList();
         }
     }
 
-    public async Task<VacationManagment> UpdateVacationManagment(VacationManagment model)
+    public async Task<VacationManagement> UpdateVacationManagment(VacationManagement model)
     {
         string query = @" Update UserManagement  Set EmployeeId=@EmployeeId, ManagerId=@ManagerId where Id = @Id";
         using (var connection = new SqlConnection(connectionString))
@@ -54,7 +54,7 @@ public class VacationManagmentRepository : IVacationManagment
         throw new Exception();
     }
 
-    public async Task<VacationManagment> DeleteVacationManagment(int id)
+    public async Task<VacationManagement> DeleteVacationManagment(int id)
     {
         var model = await GetByIdVacationManagent(id);
         string query = @$"Delete From UserManagement where Id={id}";
@@ -70,7 +70,7 @@ public class VacationManagmentRepository : IVacationManagment
         }
     }
 
-    public async Task<VacationManagment> CreateVacationManagment(VacationManagment model)
+    public async Task<VacationManagement> CreateVacationManagment(VacationManagement model)
     {
         string query =
             @" Insert into UserManagement (EmployeeId, ManagerId) Values (@EmployeeId,@ManagerId) select @@INDENTITY";

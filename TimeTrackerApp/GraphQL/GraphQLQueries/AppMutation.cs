@@ -5,20 +5,62 @@ using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
 using System;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
+using TimeTrackerApp.Business.Enums;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
+        public AppMutation(IHttpContextAccessor contextAccessor,ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
+
+            Field<BooleanGraphType, bool>()
+                .Name("RemovePrivilege")
+                .Argument<IntGraphType, int>("userId", "user id whose privelege will be update")
+                .Argument<IntGraphType, int>("privilegeValue", "value privilege")
+                .ResolveAsync(async context =>
+                {
+                    var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserId").Value);
+                    if (userId==context.GetArgument<int>("userId"))
+                    {
+                        throw new Exception("You cant remove yourself privilege");
+                    }
+                    var valuePrivilege = context.GetArgument<int>("privilegeValue");
+                    /*нужно обновить репозиторий для изменения привелегий*/
+                    return true;
+                });
+            
+            Field<BooleanGraphType, bool>()
+                .Name("AddPrivilege")
+                .Argument<IntGraphType, int>("privilegeValue", "value privilege")
+                .Argument<IntGraphType, int>("userId", "user id whose privelege will be update")
+                .ResolveAsync(async context =>
+                {
+                    var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserId").Value);
+                    if (userId==context.GetArgument<int>("userId"))
+                    {
+                        throw new Exception("You cant add a privilege for yourself");
+                    }
+                    var valuePrivilege = context.GetArgument<int>("privilegeValue");
+                    /*нужно обновить репозиторий для изменения привелегий*/
+                    return true;
+                });
+            
             Field<UserType, User>()
                 .Name("CreateUser")
                 .Argument<NonNullGraphType<UserInputType>, User>("User", "User")
                 .ResolveAsync(async context =>
                 {
+                    var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserPrivilegesValue").Value);
+                    var result = userPermission & Convert.ToInt32(Privileges.CreateUsers);
+                    if (!(result>0))
+                    {
+                        throw new Exception("You dont have permission to create users");
+                    }
                     var user = context.GetArgument<User>("User");
                     return await userRepository.CreateAsync(user);
                 });
@@ -28,6 +70,12 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
                 .ResolveAsync(async context =>
                 {
+                    var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserPrivilegesValue").Value);
+                    var result =userPermission & Convert.ToInt32(Privileges.DeleteUsers);
+                    if (!(result>0))
+                    {
+                        throw new Exception("You dont have permission to delete users");
+                    }
                     int id = context.GetArgument<int>("Id");
                     return await userRepository.RemoveAsync(id);
                 });
@@ -37,6 +85,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<UserInputType>, User>("User", "User")
                 .ResolveAsync(async context =>
                 {
+                    var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserPrivilegesValue").Value);
+                    var result =userPermission & Convert.ToInt32(Privileges.EditUsers);
+                    if (!(result>0))
+                    {
+                        throw new Exception("You dont have permission to edit users");
+                    }
+                    
                     var user = context.GetArgument<User>("User");
                     return await userRepository.EditAsync(user);
                 });
@@ -66,8 +121,21 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<RecordInputType>, Record>("Record", "Record")
                 .ResolveAsync(async context =>
                 {
-                    var record = context.GetArgument<Record>("Record");
+                    var record = context.GetArgument<Record>("Record"); 
+                    var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserId").Value);
+                    if (record.EmployeeId == userId)
+                    {
+                          return await recordRepository.EditAsync(record);
+                    }
+                    
+                    var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserPrivilegesValue").Value);
+                    var result =userPermission & Convert.ToInt32(Privileges.EditUsers);
+                    if (!(result>0))
+                    {
+                        throw new Exception("You dont have permission to edit records for another users");
+                    }
                     return await recordRepository.EditAsync(record);
+                  
                 });
 
             Field<RecordType, Record>()

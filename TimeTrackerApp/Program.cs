@@ -24,6 +24,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FluentMigrator.Runner;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.MsSql.Migrations;
 using TimeTrackerApp.BackgroundTasks;
@@ -39,9 +41,10 @@ builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(co
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
 builder.Services.AddSingleton<IVacationRepository, VacationRepository>();
 builder.Services.AddSingleton<IVacationResponseRepository,VacationResponseRepositoryRepository>();
-builder.Services.AddSingleton<IVacationManagment>(provider => new VacationManagmentRepository(connectionString));
+builder.Services.AddSingleton<IUserManagement>(provider => new UserManagementRepository(connectionString));
 builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
 builder.Services.AddSingleton<ISickLeaveRepository>(provider => new SickLeaveRepository(connectionString));
+
 
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());

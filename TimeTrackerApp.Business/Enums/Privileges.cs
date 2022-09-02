@@ -1,11 +1,11 @@
 ﻿namespace TimeTrackerApp.Business.Enums
 {
 	[Flags]
-	public enum Privileges
+	public enum Privileges:Int32
 	{
-		WatchUsers = 0,
-		CreateUsers = 1,
-		EditUsers = 2,
-		DeleteUsers = 4
+		WatchUsers = 1,
+		CreateUsers = 2,
+		EditUsers = 4,
+		DeleteUsers = 8
 	}
 }

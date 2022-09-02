@@ -1,6 +1,6 @@
 ﻿namespace TimeTrackerApp.Business.Models;
 
-public class VacationManagment
+public class VacationManagement
 {
     public int Id { get; set; }
     public int EmployeeId { get; set; }
