@@ -16,39 +16,84 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
         public AppMutation(IHttpContextAccessor contextAccessor,ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
-
-
-            Field<BooleanGraphType, bool>()
-                .Name("RemovePrivilege")
-                .Argument<IntGraphType, int>("userId", "user id whose privelege will be update")
-                .Argument<IntGraphType, int>("privilegeValue", "value privilege")
-                .ResolveAsync(async context =>
-                {
-                    var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserId").Value);
-                    if (userId==context.GetArgument<int>("userId"))
-                    {
-                        throw new Exception("You cant remove yourself privilege");
-                    }
-                    var valuePrivilege = context.GetArgument<int>("privilegeValue");
-                    /*нужно обновить репозиторий для изменения привелегий*/
-                    return true;
-                });
             
-            Field<BooleanGraphType, bool>()
-                .Name("AddPrivilege")
-                .Argument<IntGraphType, int>("privilegeValue", "value privilege")
+            Field<UserType, User>()
+                .Name("ChangedPrivelege")
                 .Argument<IntGraphType, int>("userId", "user id whose privelege will be update")
+                .Argument<IntGraphType, int>("privilegeValue", "value privilege")
                 .ResolveAsync(async context =>
                 {
                     var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserId").Value);
                     if (userId==context.GetArgument<int>("userId"))
                     {
-                        throw new Exception("You cant add a privilege for yourself");
+                        throw new Exception("You cant change yourself privilege");
+                    }
+                    var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserPrivilegesValue").Value);
+                    var result =userPermission & Convert.ToInt32(Privileges.EditUsers);
+                    if (!(result>0))
+                    {
+                        throw new Exception("You dont have permission to edit users");
                     }
                     var valuePrivilege = context.GetArgument<int>("privilegeValue");
-                    /*нужно обновить репозиторий для изменения привелегий*/
-                    return true;
+                    var user = await userRepository.ChangePrivelegeValueAsync(new User
+                    {
+                        Id =userId,
+                        PrivilegesValue = valuePrivilege
+                    });
+                    return user;
                 });
+
+            // Field<UserType, User>()
+            //     .Name("RemovePrivilege")
+            //     .Argument<IntGraphType, int>("userId", "user id whose privelege will be update")
+            //     .Argument<IntGraphType, int>("privilegeValue", "value privilege")
+            //     .ResolveAsync(async context =>
+            //     {
+            //         var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserId").Value);
+            //         if (userId==context.GetArgument<int>("userId"))
+            //         {
+            //             throw new Exception("You cant remove yourself privilege");
+            //         }
+            //         var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserPrivilegesValue").Value);
+            //         var result =userPermission & Convert.ToInt32(Privileges.EditUsers);
+            //         if (!(result>0))
+            //         {
+            //             throw new Exception("You dont have permission to edit users");
+            //         }
+            //         var removeValuePrivilege = context.GetArgument<int>("privilegeValue");
+            //         var valuePrivilegeUser = (await userRepository.GetByIdAsync(userId)).PrivilegesValue;
+            //         return await userRepository.ChangePrivelegeValueAsync(new User
+            //         {
+            //             Id = userId,
+            //             PrivilegesValue = valuePrivilegeUser- removeValuePrivilege
+            //         });
+            //     });
+            //
+            // Field<UserType, User>()
+            //     .Name("AddPrivilege")
+            //     .Argument<IntGraphType, int>("privilegeValue", "value privilege")
+            //     .Argument<IntGraphType, int>("userId", "user id whose privelege will be update")
+            //     .ResolveAsync(async context =>
+            //     {
+            //         var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserId").Value);
+            //         if (userId==context.GetArgument<int>("userId"))
+            //         {
+            //             throw new Exception("You cant add a privilege for yourself");
+            //         }
+            //         var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserPrivilegesValue").Value);
+            //         var result =userPermission & Convert.ToInt32(Privileges.EditUsers);
+            //         if (!(result>0))
+            //         {
+            //             throw new Exception("You dont have permission to edit users");
+            //         }
+            //         var addValuePrivilege = context.GetArgument<int>("privilegeValue");
+            //         var valuePrivilegeUser = (await userRepository.GetByIdAsync(userId)).PrivilegesValue;
+            //         return await userRepository.ChangePrivelegeValueAsync(new User
+            //         {
+            //             Id = userId,
+            //             PrivilegesValue = valuePrivilegeUser +  addValuePrivilege
+            //         });
+            //     });
             
             Field<UserType, User>()
                 .Name("CreateUser")
@@ -76,6 +121,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     {
                         throw new Exception("You dont have permission to delete users");
                     }
+                    
                     int id = context.GetArgument<int>("Id");
                     return await userRepository.RemoveAsync(id);
                 });

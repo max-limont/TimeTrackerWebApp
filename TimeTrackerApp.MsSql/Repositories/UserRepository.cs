@@ -51,6 +51,21 @@ namespace TimeTrackerApp.MsSql.Repositories
 			}
 		}
 
+		public async Task<User> ChangePrivelegeValueAsync(User user)
+		{
+			string query = @"UPDATE Users SET PrivilegesValue = @PrivilegesValue WHERE Id = @Id";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				int affectedRows = await connection.ExecuteAsync(query, user);
+				if (affectedRows > 0)
+				{
+					return await GetByIdAsync(user.Id);
+				}
+				throw new Exception("User editing error!");
+			} 
+		}
+
 		public async Task<User> EditAsync(User user)
 		{
 			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, IsFullTimeEmployee = @IsFullTimeEmployee, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue, VacationPermissionId = @VacationPermissionId WHERE Id = @Id";

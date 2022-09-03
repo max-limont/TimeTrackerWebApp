@@ -20,6 +20,12 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                .Name("FetchAllUsers")
                .ResolveAsync(async context =>
                {
+                   var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserPrivilegesValue").Value);
+                   var result =userPermission & Convert.ToInt32(Privileges.WatchUsers);
+                   if (!(result>0))
+                   {
+                       throw new Exception("You dont have permission to edit users");
+                   }
                    return await userRepository.FetchAllAsync();
                })
                .AuthorizeWithPolicy("LoggedIn");
@@ -32,6 +38,12 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                .Name("UserFetchPageList")
                .ResolveAsync(async context =>
                {
+                   var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims.First(x=>x.Type=="UserPrivilegesValue").Value);
+                   var result =userPermission & Convert.ToInt32(Privileges.WatchUsers);
+                   if (!(result>0))
+                   {
+                       throw new Exception("You dont have permission to edit users");
+                   }
                    int from = context.GetArgument<int>("From");
                    int contentPerPage = context.GetArgument<int>("ContentPerPage");
                    string orderBy = context.GetArgument<string>("OrderBy");
@@ -302,8 +314,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<IntGraphType, int>("userId", "user id")
                 .ResolveAsync(async context =>
                 {
-                    
-
                     return await vacationRepository.GetVacationApprovers(context.GetArgument<int>("userId"));
                 })
                 .AuthorizeWithPolicy("LoggedIn");
