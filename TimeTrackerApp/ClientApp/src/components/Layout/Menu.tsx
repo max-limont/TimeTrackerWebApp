@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faGear,
@@ -14,8 +14,9 @@ import {
     faBookMedical,
     faLaptopMedical
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {useAuth} from "../../hooks/useAuth";
+import {Privileges} from "../../helpers/enums";
 
 
 type MenuState = {
@@ -30,8 +31,8 @@ export const Menu: FC = () => {
 
     const [state, setState] = useState(initialMenuState)
     const auth = useAuth()
-    const navigate = useNavigate()
-
+    const navigate = useNavigate();
+  
     const toggle = () => {
         setState({ ...state, collapsed: !state.collapsed })
     }
@@ -53,49 +54,50 @@ export const Menu: FC = () => {
                         <h4>General</h4>
                         <ul>
                             <li>
-                                <Link to={"/"} replace className={"flex-container"}>
+                                <NavLink to={"/"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faHouse} className={"icon"} />
                                     <span>Home</span>
-                                </Link>
+                                </NavLink>
                             </li>
                             <li>
-                                <Link to={"/calendar"} replace className={"flex-container"}>
+                                <NavLink to={"/calendar"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faCalendarDays} className={"icon"} />
                                     <span>Calendar</span>
-                                </Link>
+                                </NavLink>
                             </li>
                             <li>
-                                <Link to={"/vacation"} className={"flex-container"}>
+                                <NavLink to={"/vacation"} className={"flex-container"}>
                                     <FontAwesomeIcon icon={faUmbrellaBeach} className={"icon"} />
                                     <span>My vacations</span>
-                                </Link>
+                                </NavLink>
                             </li>
                             <li>
-                                <Link to={"/sick-leaves"} replace className={"flex-container"}>
+                                <NavLink to={"/sick-leaves"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faLaptopMedical} className={"icon"} />
                                     <span>My sick leaves</span>
-                                </Link>
+                                </NavLink>
                             </li>
                         </ul>
                         <h4>Management</h4>
                         <ul>
-                            <li>
-                                <Link to={"/user-list"} replace className={"flex-container"}>
+                            {auth.state?.user?.privilegesValue?(auth.state?.user?.privilegesValue & Privileges.WatchUsers) > 0 ?
+                             <li>
+                                <NavLink to={"/user-list"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faAddressBook} className={"icon"} />
                                     <span>Employees</span>
-                                </Link>
-                            </li>
+                                </NavLink>
+                            </li>:<></>:<></>}
                             <li>
-                                <Link to={"/manage-vacation"} replace className={"flex-container"}>
+                                <NavLink to={"/manage-vacation"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faEnvelopeOpenText} className={"icon"} />
                                     <span>Vacation requests</span>
-                                </Link>
+                                </NavLink>
                             </li>
                             <li>
-                                <Link to={"/manage-sick-leaves"} replace className={"flex-container"}>
+                                <NavLink to={"/manage-sick-leaves"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faBookMedical} className={"icon"} />
                                     <span>Sick leaves requests</span>
-                                </Link>
+                                </NavLink>
                             </li>
                         </ul>
                     </nav>

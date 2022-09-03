@@ -939,6 +939,20 @@ section > header h2 {
   min-height: 150px;
 }
 
+li a.active {
+  background-color: #EEEEEE;
+  box-shadow: inset 0 -5px #00ADB5;
+}
+li a.active:hover {
+  border-right: none;
+}
+li a.active:hover span, li a.active:hover svg {
+  color: #00ADB5;
+}
+li a.active span, li a.active svg {
+  color: #222831;
+}
+
 .day-data {
   padding-right: 2px;
   position: relative;

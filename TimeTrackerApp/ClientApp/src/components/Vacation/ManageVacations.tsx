@@ -15,6 +15,7 @@ import {
 import {GiveResponse} from "./GiveResponse";
 import {User} from "../../types/user.types";
 import {ShowComment} from "./Vacation";
+import {Privileges} from "../../helpers/enums";
 
 
 export function ManageVacationRequest() {
@@ -32,7 +33,7 @@ export function ManageVacationRequest() {
         if (auth.state?.user?.id) {
             dispatch(getRequestVacationAction(auth.state?.user?.id));
         }
-    }, [auth.state?.user?.id]);
+    }, [auth.state?.user?.id]); 
 
     return (
         <>
