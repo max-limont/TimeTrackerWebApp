@@ -12,6 +12,7 @@ import {
     removeVacationAction
 } from "../../store/vacation/vacation.slice";
 import {User} from "../../types/user.types";
+import {HubConnection, HubConnectionBuilder} from "@aspnet/signalr";
 
 
 type Props = {
@@ -22,7 +23,8 @@ type Props = {
 export function ShowComment(prop: Props) {
     const {approver, comment} = prop;
     const [visibleResponse, setResponse] = useState(false);
-
+ 
+    
     return (
         <>
             {visibleResponse ?

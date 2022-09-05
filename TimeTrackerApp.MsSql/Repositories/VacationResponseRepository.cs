@@ -7,7 +7,7 @@ using TimeTrackerApp.Business.Repositories;
 
 namespace TimeTrackerApp.MsSql.Repositories;
 
-public class VacationResponseRepositoryRepository:IVacationResponseRepository
+public class VacationResponseRepository:IVacationResponseRepository
 {
     private string connectionString { get; set; }
 
@@ -18,7 +18,7 @@ public class VacationResponseRepositoryRepository:IVacationResponseRepository
         }
     }
     
-    public VacationResponseRepositoryRepository(IConfiguration configuration)
+    public VacationResponseRepository(IConfiguration configuration)
     {
         connectionString = configuration.GetConnectionString("MsSqlAzure");
     } 
@@ -84,6 +84,22 @@ public class VacationResponseRepositoryRepository:IVacationResponseRepository
         string query = @$"Delete from VacationResponse where Id = {id}";
         using (Connection)
         {
+            int affectedRows = await Connection.ExecuteAsync(query);
+            if (affectedRows > 0)
+            {
+                return model;
+            }
+            throw new Exception();
+        }
+    }
+    public async  Task<VacationResponse> RemoveVacationResponseByVacationId(int id)
+    {
+  
+        string query = @$"Delete from VacationResponse where VacationId = {id}";
+        using (Connection)
+        {
+            var model = await Connection.QueryFirstAsync<VacationResponse>(
+                $"Select * from VacationResponse where VacationId = {id}");
             int affectedRows = await Connection.ExecuteAsync(query);
             if (affectedRows > 0)
             {

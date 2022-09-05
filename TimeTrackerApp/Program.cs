@@ -24,6 +24,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FluentMigrator.Runner;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using TimeTrackerApp.Business.Models;
@@ -40,12 +41,10 @@ builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepositor
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
 builder.Services.AddSingleton<IVacationRepository, VacationRepository>();
-builder.Services.AddSingleton<IVacationResponseRepository,VacationResponseRepositoryRepository>();
+builder.Services.AddSingleton<IVacationResponseRepository,VacationResponseRepository>();
 builder.Services.AddSingleton<IUserManagement>(provider => new UserManagementRepository(connectionString));
 builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
 builder.Services.AddSingleton<ISickLeaveRepository>(provider => new SickLeaveRepository(connectionString));
-
-
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
@@ -69,14 +68,14 @@ builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>()
 // Add services to the container.
 builder.Services.AddCors(
     builder => {
-        builder.AddPolicy("DefaultPolicy", option =>
-        {
-            option.AllowAnyMethod();
-            option.AllowAnyOrigin();
-            option.AllowAnyHeader();
-        });
-    }
-);
+        builder.AddPolicy("DefaultPolicy", 
+            option=>option.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .SetIsOriginAllowed((host) => true));
+        
+    });
 
 JwtTokenService.Configuration = builder.Configuration;
 
@@ -109,6 +108,8 @@ builder.Services.AddGraphQL(b => b
                 .AddErrorInfoProvider(options => options.ExposeExceptionStackTrace = true)
                 .AddSchema<AppSchema>()
                 .AddGraphTypes(typeof(AppSchema).Assembly));
+
+builder.Services.AddSignalR();
 
 // builder.Services.AddQuartz(service =>
 // {
@@ -149,6 +150,8 @@ app.UseGraphQL<ISchema>();
 
 app.UseGraphQLAltair();
 app.UseExceptionHandler("/error");
+
+app.MapHub<SignalHub>("MessageHub");
 
 app.UseSpa(spa =>
 {

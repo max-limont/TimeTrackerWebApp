@@ -7,7 +7,9 @@ using TimeTrackerApp.Business.Services;
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using TimeTrackerApp.Business.Enums;
+using TimeTrackerApp.Services;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
@@ -16,7 +18,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
         public AppMutation(IHttpContextAccessor contextAccessor, ICalendarRepository calendarRepository,
             IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository,
             IUserRepository userRepository, IVacationRepository vacationRepository,
-            ISickLeaveRepository sickLeaveRepository)
+            ISickLeaveRepository sickLeaveRepository,IVacationResponseRepository vacationResponseRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
@@ -235,8 +237,9 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .ResolveAsync(async context =>
                 {
                     int id = context.GetArgument<int>("Id");
+                    var response = await vacationResponseRepository.RemoveVacationResponseByVacationId(id);
                     var model = await vacationRepository.RemoveAsync(id);
-
+                    
                     return model;
                 });
 
@@ -287,6 +290,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     string email = context.GetArgument<string>("Email");
                     string password = context.GetArgument<string>("Password");
 
+                    
+                    
                     try
                     {
                         var authenticationServiceResponse = await authenticationService.Login(email, password);

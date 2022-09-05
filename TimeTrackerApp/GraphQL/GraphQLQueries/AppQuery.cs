@@ -8,13 +8,18 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using TimeTrackerApp.Business.Enums;
+using TimeTrackerApp.Services;
 
 namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppQuery : ObjectGraphType
     {
-        public AppQuery(IHttpContextAccessor contextAccessor,ICalendarRepository calendarRepository, IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository, IUserRepository userRepository, IVacationRepository vacationRepository, ISickLeaveRepository sickLeaveRepository)
+        public AppQuery(IHttpContextAccessor contextAccessor,ICalendarRepository calendarRepository,
+            IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository,
+            IUserRepository userRepository, IVacationRepository vacationRepository, 
+            ISickLeaveRepository sickLeaveRepository, IHubContext<SignalHub> hubContext)
         {
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
@@ -81,6 +86,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
                 .ResolveAsync(async context =>
                 {
+                    
                     int id = context.GetArgument<int>("Id");
                     return await userRepository.GetByIdAsync(id);
                 })
@@ -199,6 +205,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<IdGraphType>>("UserId", "User id")
                 .ResolveAsync(async context =>
                 {
+                    await hubContext.Clients.All.SendAsync("ReceiveMessage","hello");
                     int userId = context.GetArgument<int>("UserId");
                     return await vacationRepository.FetchAllUserVacationAsync(userId);
                 })
