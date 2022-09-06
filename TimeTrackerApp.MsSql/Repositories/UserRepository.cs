@@ -38,7 +38,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> CreateAsync(User user)
 		{
-			string query = @"INSERT INTO Users (Email, Password, FirstName, LastName, IsFullTimeEmployee, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue, VacationPermissionId) VALUES (@Email, @Password, @FirstName, @LastName, @IsFullTimeEmployee, @WeeklyWorkingTime, @RemainingVacationDays, @PrivilegesValue, @VacationPermissionId)";
+			string query = @"INSERT INTO Users (Email, Password, FirstName, LastName, IsFullTimeEmployee, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue) VALUES (@Email, @Password, @FirstName, @LastName, @IsFullTimeEmployee, @WeeklyWorkingTime, @RemainingVacationDays, @PrivilegesValue)";
 			using (var connection = new SqlConnection(connectionString))
 			{
 				user.Password = PasswordService.Encrypt(user.Password);
@@ -68,7 +68,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> EditAsync(User user)
 		{
-			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, IsFullTimeEmployee = @IsFullTimeEmployee, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue, VacationPermissionId = @VacationPermissionId WHERE Id = @Id";
+			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, IsFullTimeEmployee = @IsFullTimeEmployee, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -149,6 +149,17 @@ namespace TimeTrackerApp.MsSql.Repositories
 				}
 				throw new Exception("User with this email was not found!");
 			}
+		}
+
+		public async Task<bool> IsEmailExistAsync(string email)
+        {
+			var query = @"SELECT * FROM Users WHERE Email = @Email";
+			using (var connection = new SqlConnection(connectionString))
+			{
+				var user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Email = email });
+				return user is not null;
+			}
+
 		}
 
 		public async Task<User> RemoveAsync(int id)

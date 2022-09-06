@@ -118,7 +118,17 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     }
 
                     var user = context.GetArgument<User>("User");
-                    return await userRepository.CreateAsync(user);
+                    try
+                    {
+                        await userRepository.GetByEmailAsync(user.Email);
+                        return null;
+                    }catch (Exception ex)
+                    {
+                        if (ex.Message == "User with this email was not found!")
+                            return await userRepository.CreateAsync(user);
+                        return null;
+                    }
+                    
                 });
 
             Field<UserType, User>()

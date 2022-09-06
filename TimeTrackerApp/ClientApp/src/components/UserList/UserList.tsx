@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {User} from "../../types/user.types";
 import {Select} from "./Select";
 import ExportXlsx from "./ExportXlsx";
@@ -10,12 +10,20 @@ import {useAuth} from "../../hooks/useAuth";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {useDispatch} from "react-redux";
 import {UserListPage} from "../../types/userList.types";
-import {fetchUserCount, fetchUserListPage, fetchUserListSearchRequest} from "../../store/userList/userList.slice";
+
+import {
+    deleteUserAction, editUserAction,
+    fetchUserCount,
+    fetchUserListPage,
+    fetchUserListSearchRequest
+} from "../../store/userList/userList.slice";
+import UserEdit from "./UserEdit";
+import UserItem from "./UserItem";
 
 export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
     const auth = useAuth();
-    const contentPerPage = 2;
+    const contentPerPage = 10;
 
     const dispatch = useDispatch()
     const [state, setState] = useState<UserListPage>({
@@ -27,6 +35,8 @@ export const UserList: FC = () => {
 
     const [request, setSearch] = useState<string>("")
 
+    const [userIdForEdit, setUserIdForEdit] = useState<number>(0)
+
     const navigate = useNavigate()
 
     const selectHandler = (settings: { orderBy: string, isReverse: boolean }) => {
@@ -34,6 +44,11 @@ export const UserList: FC = () => {
     }
     const firstContentIndexHandler = (index: number) => {
         setState({...state, from: index})
+    }
+
+
+    const userActionHandler = (gameId: number) => {
+        setUserIdForEdit(gameId)
     }
 
     const selectOptions = [
@@ -66,7 +81,7 @@ export const UserList: FC = () => {
                     <div className={'form-group w-100'}>
                         <div className={"form-item w-100"}>
                             <label>Search users: </label>
-                            <input type={"text"} onChange={event => setSearch(event.target.value)} />
+                            <input type={"text"} onChange={event => setSearch(event.target.value)}/>
                             <FontAwesomeIcon icon={faMagnifyingGlass} className={"icon"}/>
                         </div>
                     </div>
@@ -75,31 +90,31 @@ export const UserList: FC = () => {
                     <span>Sort by:</span>
                     <Select options={selectOptions} selectHandler={selectHandler}/>
                     <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
-                    <a className="link-btn addUser button cyan-button">Create user</a>
+                    <Link to={"/user-create"} className="link-btn addUser button cyan-button">Create user</Link>
                 </div>
             </div>
             <table className={"user-list-list"}>
                 <thead>
-                    <tr className={"userList-list-title"}>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Weekly Working Time</th>
-                    </tr>
+                <tr className={"userList-list-title"}>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Weekly Working Time</th>
+                    <th>Full-time/Part-time</th>
+                    <th/>
+                </tr>
                 </thead>
                 <tbody>
-                    { userList &&
-                        userList.map((item: User) => (
-                            <tr onClick={() => navigate("/user/" + item.id, )} key={item.id} className="link-btn userItem">
-                                <td>{item.firstName} {item.lastName}</td>
-                                <td>{item.email}</td>
-                                <td>{item.weeklyWorkingTime}</td>
-                            </tr>
-                        ))
-                    }
+                {userList &&
+                userList.map((item: User) => (
+                    item.id == userIdForEdit
+                        ? <UserEdit key={item.id} item={item} handler={userActionHandler}/>
+                        : <UserItem key={item.id} item={item} handler={userActionHandler}/>
+                ))
+                }
                 </tbody>
             </table>
-            { !request.length &&
-                <Pagination contentPerPage={contentPerPage} count={count} setFirstContentIndex={firstContentIndexHandler}/>
+            {!request.length &&
+            <Pagination contentPerPage={contentPerPage} count={count} setFirstContentIndex={firstContentIndexHandler}/>
             }
         </section>
     )

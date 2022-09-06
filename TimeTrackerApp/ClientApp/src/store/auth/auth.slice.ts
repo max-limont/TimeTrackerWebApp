@@ -34,7 +34,7 @@ export const authSlice = createSlice({
 });
 
 export const {logout, setError, setUser, setLoadingState} = authSlice.actions;
-export const authorizeUserById = createAction<number>("AuthorizeUserById")
+export const authorizeUser = createAction<number>("AuthorizeUser")
 export const authLoginAction = createAction<AuthLoginInputType>("AuthLogin");
 export const authRefreshAction = createAction<AuthRefreshInputType>("AuthRefresh");
 export const authLogoutAction = createAction<number>("AuthLogout");

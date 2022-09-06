@@ -8,7 +8,6 @@ export type User = {
     weeklyWorkingTime: number,
     remainingVacationDays: number,
     privilegesValue: number
-    vacationPermissionId: number,
 }
 
 export type GetUserByIdQueryInputType = {
@@ -18,3 +17,11 @@ export type GetUserByIdQueryInputType = {
 export type GetUserByEmailQueryInputType = {
     email: string
 }
+
+// export interface UserCreateData {
+//     email: string,
+//     password: string,
+//     firstName: string,
+//     lastName: string,
+//     isFullTimeEmployee: boolean
+// }

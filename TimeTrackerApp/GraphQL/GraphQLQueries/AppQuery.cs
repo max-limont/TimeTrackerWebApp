@@ -21,6 +21,16 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
             IUserRepository userRepository, IVacationRepository vacationRepository, 
             ISickLeaveRepository sickLeaveRepository, IHubContext<SignalHub> hubContext)
         {
+            Field<BooleanGraphType, bool>()
+                .Name("IsUserEmailExist")
+                .Argument<NonNullGraphType<StringGraphType>, string>("Email", "User email")
+                .ResolveAsync(async context =>
+                {
+                    string email = context.GetArgument<string>("Email");
+                    return await userRepository.GetByEmailAsync(email) != null;
+                })
+                .AuthorizeWithPolicy("LoggedIn");
+
             Field<ListGraphType<UserType>, IEnumerable<User>>()
                .Name("FetchAllUsers")
                .ResolveAsync(async context =>

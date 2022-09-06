@@ -13,6 +13,7 @@ namespace TimeTrackerApp.Business.Repositories
 		Task<User> ChangePrivelegeValueAsync(User user);
 		Task<User> GetByIdAsync(int id);
 		Task<User> GetByEmailAsync(string email);
+		Task<bool> IsEmailExistAsync(string email);
 		Task<User> CreateAsync(User user);
 		Task<User> EditAsync(User user);
 		Task<User> RemoveAsync(int id);

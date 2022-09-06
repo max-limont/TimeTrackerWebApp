@@ -7,14 +7,13 @@ export const getPaginatedUserList = `
             lastName
             isFullTimeEmployee
             weeklyWorkingTime
-            remainingVacationDays
-            privilegesValue
+            privilegesValue 
        }
     }
 `
 
 export const getSearchResponse = `
-    query ($request: String) {
+    query ($request: String!) {
         userFetchSearchList(request: $request) {
             id
             email

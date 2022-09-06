@@ -7,7 +7,7 @@ import {
 } from "../../graphql/queries/auth.queries";
 import {
     authLoginAction, authLogoutAction,
-    authorizeUserById, authRefreshAction, logout,
+    authorizeUser, authRefreshAction, logout,
     setError,
     setUser
 } from "./auth.slice";
@@ -32,7 +32,7 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
                     const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
-                    return authorizeUserById(userId)
+                    return authorizeUser(userId)
                 }
                 return setError(parseError("Wrong email or password!"))
             })
@@ -52,7 +52,7 @@ const authRefreshEpic: Epic = (action$: Observable<ReturnType<typeof authRefresh
                 if (response?.data?.authRefresh?.accessToken && response?.data?.authRefresh?.refreshToken) {
                     setCookie({key: refreshTokenKey, value: response.data.authRefresh.refreshToken, lifetime: 30 * 24 * 60 * 60})
                     setCookie({key: accessTokenKey, value: response.data.authRefresh.accessToken, lifetime: 2 * 60})
-                    return authorizeUserById(parseInt(parseJwt<AuthUserResponse>(response.data.authRefresh.refreshToken).UserId));
+                    return authorizeUser(parseInt(parseJwt<AuthUserResponse>(response.data.authRefresh.refreshToken).UserId));
                 }
                 return authLogoutAction(getCookie(refreshTokenKey) ? parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId) : 0)
             })
@@ -83,9 +83,9 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
     )
 };
 
-const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUserById>>): any => {
+const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUser>>): any => {
     return action$.pipe(
-        ofType(authorizeUserById.type),
+        ofType(authorizeUser.type),
         mergeMap(action => from(graphqlRequest(getUserByIdQuery, {
             id: action.payload
         } as GetUserByIdQueryInputType)).pipe(

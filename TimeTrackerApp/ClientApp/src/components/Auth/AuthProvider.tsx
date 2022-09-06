@@ -1,13 +1,12 @@
 import React, {FC, useEffect, useState} from "react";
 import {AuthorizationUser, AuthUserResponse} from "../../types/auth.types";
-import {authLoginAction, authLogoutAction, authorizeUserById} from "../../store/auth/auth.slice";
-import {User} from "../../types/user.types";
-import {useLocation, useNavigate} from "react-router-dom";
-import {accessTokenKey, getCookie, refreshTokenKey} from "../../helpers/cookies";
-import {parseJwt} from "../../helpers/parseJwt";
-import {useAppSelector} from "../../hooks/useAppSelector";
-import {useDispatch} from "react-redux";
-
+import {authLoginAction, authLogoutAction, authorizeUser, setUser} from "../../store/auth/auth.slice";
+import { User } from "../../types/user.types";
+import { useDispatch } from "react-redux";
+import {useLocation, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import {accessTokenKey, getCookie, refreshTokenKey } from "../../helpers/cookies";
+import { parseJwt } from "../../helpers/parseJwt";
 const defaultSignIn = (credentials: AuthorizationUser, callback: any) => {}
 const defaultSignOut = (callback: any) => {}
 
@@ -63,7 +62,7 @@ export const AuthProvider: FC<any> = ({ children }) => {
 
         if (refreshToken) {
             if (!authUser) {
-                dispatch(authorizeUserById(parseInt(parseJwt<AuthUserResponse>(refreshToken).UserId)))
+                dispatch(authorizeUser(parseInt(parseJwt<AuthUserResponse>(refreshToken).UserId)))
             }
         } else {
             dispatch(authLogoutAction(getCookie(refreshTokenKey) ? parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId) : 0))

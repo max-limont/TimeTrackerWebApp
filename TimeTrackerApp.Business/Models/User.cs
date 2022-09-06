@@ -14,6 +14,9 @@
 		public int WeeklyWorkingTime { get; set; } = defaultWeeklyWorkingTime;
 		public int RemainingVacationDays { get; set; } = defaultRemainingVacationDays;
 		public int PrivilegesValue { get; set; }
+<<<<<<< HEAD
 		public int VacationPermissionId { get; set; }
+=======
+>>>>>>> e912e2e73cc1920574a207cc5baed4e692d75333
 	}
 }
