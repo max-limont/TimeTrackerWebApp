@@ -9,10 +9,10 @@ const UserItem: FC<{item: User, handler(gameId: number): void}> = ({item, handle
     const dispatch = useDispatch()
     return (
         <tr className="link-btn userItem">
-            <td onClick={() => navigate("/user?id=" + item.id,)}>{item.firstName} {item.lastName}</td>
-            <td onClick={() => navigate("/user?id=" + item.id,)}>{item.email}</td>
-            <td onClick={() => navigate("/user?id=" + item.id,)}>{item.weeklyWorkingTime}</td>
-            <td onClick={() => navigate("/user?id=" + item.id,)}>{item.isFullTimeEmployee ? "Full-time" : "Part-time"}</td>
+            <td style={{cursor: "pointer"}} onClick={() => navigate("/user/" + item.id,)}>{item.firstName} {item.lastName}</td>
+            <td style={{cursor: "pointer"}} onClick={() => navigate("/user/" + item.id,)}>{item.email}</td>
+            <td style={{cursor: "pointer"}} onClick={() => navigate("/user/" + item.id,)}>{item.weeklyWorkingTime}</td>
+            <td style={{cursor: "pointer"}} onClick={() => navigate("/user/" + item.id,)}>{item.isFullTimeEmployee ? "Full-time" : "Part-time"}</td>
             <td>
                 <button onClick={e => {
                     e.preventDefault()
