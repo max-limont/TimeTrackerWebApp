@@ -12,11 +12,13 @@ import {useDispatch} from "react-redux";
 import {UserListPage} from "../../types/userList.types";
 
 import {
-    deleteUserAction,
+    deleteUserAction, editUserAction,
     fetchUserCount,
     fetchUserListPage,
     fetchUserListSearchRequest
 } from "../../store/userList/userList.slice";
+import UserEdit from "./UserEdit";
+import UserItem from "./UserItem";
 
 export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
@@ -33,6 +35,8 @@ export const UserList: FC = () => {
 
     const [request, setSearch] = useState<string>("")
 
+    const [userIdForEdit, setUserIdForEdit] = useState<number>(0)
+
     const navigate = useNavigate()
 
     const selectHandler = (settings: { orderBy: string, isReverse: boolean }) => {
@@ -40,6 +44,11 @@ export const UserList: FC = () => {
     }
     const firstContentIndexHandler = (index: number) => {
         setState({...state, from: index})
+    }
+
+
+    const userActionHandler = (gameId: number) => {
+        setUserIdForEdit(gameId)
     }
 
     const selectOptions = [
@@ -72,7 +81,7 @@ export const UserList: FC = () => {
                     <div className={'form-group w-100'}>
                         <div className={"form-item w-100"}>
                             <label>Search users: </label>
-                            <input type={"text"} onChange={event => setSearch(event.target.value)} />
+                            <input type={"text"} onChange={event => setSearch(event.target.value)}/>
                             <FontAwesomeIcon icon={faMagnifyingGlass} className={"icon"}/>
                         </div>
                     </div>
@@ -86,32 +95,26 @@ export const UserList: FC = () => {
             </div>
             <table className={"user-list-list"}>
                 <thead>
-                    <tr className={"userList-list-title"}>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Weekly Working Time</th>
-                        <th/>
-                    </tr>
+                <tr className={"userList-list-title"}>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Weekly Working Time</th>
+                    <th>Full-time/Part-time</th>
+                    <th/>
+                </tr>
                 </thead>
                 <tbody>
-                    { userList &&
-                        userList.map((item: User) => (
-                            <tr key={item.id} className="link-btn userItem">
-                                <td onClick={() => navigate("/user?id=" + item.id, )}>{item.firstName} {item.lastName}</td>
-                                <td onClick={() => navigate("/user?id=" + item.id, )}>{item.email}</td>
-                                <td onClick={() => navigate("/user?id=" + item.id, )}>{item.weeklyWorkingTime}</td>
-                                <td><button onClick={e => {
-                                    e.preventDefault()
-                                    dispatch(deleteUserAction(item.id))
-                                    // window.location.reload()
-                                }}>Delete</button></td>
-                            </tr>
-                        ))
-                    }
+                {userList &&
+                userList.map((item: User) => (
+                    item.id == userIdForEdit
+                        ? <UserEdit key={item.id} item={item} handler={userActionHandler}/>
+                        : <UserItem key={item.id} item={item} handler={userActionHandler}/>
+                ))
+                }
                 </tbody>
             </table>
-            { !request.length &&
-                <Pagination contentPerPage={contentPerPage} count={count} setFirstContentIndex={firstContentIndexHandler}/>
+            {!request.length &&
+            <Pagination contentPerPage={contentPerPage} count={count} setFirstContentIndex={firstContentIndexHandler}/>
             }
         </section>
     )

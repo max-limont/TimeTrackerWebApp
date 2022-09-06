@@ -136,14 +136,17 @@ const AddUserForm = () => {
                     }
 
                     <div className={"form-item w-100"}>
-                        <button onClick={async (e) => {
+                        <button onClick={e => {
                             e.preventDefault()
                             const isPasswordError = user.password != repeatPassword
                             setCheckInputs({...checkInputs, password: isPasswordError})
                             if (isPasswordError)
                                 return
                             dispatch(createUserAction(user))
-                            setCheckInputs({...checkInputs, email: createdUser != null})
+
+                            setCheckInputs({...checkInputs, email: createdUser == null})
+
+                            console.log(createdUser)
                             if (createdUser != null)
                                 navigate("/user-list", {replace: true})
                         }}

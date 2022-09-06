@@ -1,12 +1,12 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {User} from "../../types/user.types";
 import {UserListPage} from "../../types/userList.types";
-import {filter} from "rxjs";
 
 type UserListStateType = {
     userList: User[],
     createdUser: User | null,
     deletedUser: User | null
+    editedUser: User | null,
     count: number,
     error: null | string
 }
@@ -14,6 +14,7 @@ type UserListStateType = {
 const initialState: UserListStateType = {
     createdUser: null,
     deletedUser: null,
+    editedUser: null,
     userList: [],
     count: 0,
     error: null
@@ -45,16 +46,32 @@ export const userListSlice = createSlice({
                 deletedUser: action.payload
             }
         },
+        editUser: (state, action: PayloadAction<User>) => {
+            return {
+                ...state,
+                error: null,
+                editedUser: action.payload,
+                userList: state.userList.map(item => item.id === action.payload.id ? action.payload : item)
+            }
+        },
         userListError: (state, action: PayloadAction<string>) => {
             return {...state, count: 0, error: action.payload, userList: []}
         }
     }
 })
 
-export const {setUserListCount, setUserList, userListError, insertCreatedUser, deleteUser} = userListSlice.actions
+export const {
+    setUserListCount,
+    setUserList,
+    userListError,
+    insertCreatedUser,
+    deleteUser,
+    editUser
+} = userListSlice.actions
 
 export const fetchUserListPage = createAction<UserListPage>("fetchUserListPage");
 export const createUserAction = createAction<User>("createUser");
+export const editUserAction = createAction<User>("editUser");
 export const deleteUserAction = createAction<number>("deleteUser");
 export const fetchUserCount = createAction("fetchUserCount");
 export const fetchUserListSearchRequest = createAction<{ request: string }>("fetchUserListSearchRequest");

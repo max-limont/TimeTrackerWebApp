@@ -7,11 +7,11 @@ import {
     fetchUserCount,
     fetchUserListPage, fetchUserListSearchRequest,
     setUserList,
-    setUserListCount, deleteUserAction, deleteUser
+    setUserListCount, deleteUserAction, deleteUser, editUserAction, editUser
 } from "./userList.slice";
 import {graphqlRequest} from "../../graphql/api";
 import {Action} from "react-epics";
-import {createUserQuery, deleteUserQuery} from "../../graphql/queries/user.queries";
+import {createUserQuery, deleteUserQuery, editUserQuery} from "../../graphql/queries/user.queries";
 
 const fetchUserListPageEpic: Epic = (action$: Observable<ReturnType<typeof fetchUserListPage>>): any => {
     return action$.pipe(
@@ -74,6 +74,21 @@ const createUserEpic: Epic = (action$: Observable<ReturnType<typeof createUserAc
         ))
     )
 }
+const editUserEpic: Epic = (action$: Observable<ReturnType<typeof editUserAction>>): any => {
+    return action$.pipe(
+        ofType(editUserAction.type),
+        mergeMap(action => from(graphqlRequest(editUserQuery, {userInput: action.payload})).pipe(
+            map(response => {
+                console.log(action.payload)
+                console.warn(response.data)
+                if (response.data.editUser) {
+                    return editUser(response.data.editUser)
+                }
+                return {type: 'CreateUserError', payload: 'Error'} as Action
+            })
+        ))
+    )
+}
 
 const deleteUserEpic: Epic = (action$: Observable<ReturnType<typeof deleteUserAction>>): any => {
     return action$.pipe(
@@ -95,6 +110,7 @@ export const userListEpics = combineEpics(
     fetchUserCountEpic,
     fetchUserListSearchResponseEpic,
     createUserEpic,
-    deleteUserEpic
+    deleteUserEpic,
+    editUserEpic
 );
 

@@ -53,7 +53,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> EditAsync(User user)
 		{
-			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, IsFullTimeEmployee = @IsFullTimeEmployee, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue, VacationPermissionId = @VacationPermissionId WHERE Id = @Id";
+			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, IsFullTimeEmployee = @IsFullTimeEmployee, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{

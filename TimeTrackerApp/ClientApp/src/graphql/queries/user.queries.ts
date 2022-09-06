@@ -58,3 +58,17 @@ export const deleteUserQuery = `
         }
     }
 `
+export const editUserQuery = `
+    mutation ($userInput: UserInputType!) {
+      editUser(user: $userInput) {
+            id
+            email
+            password
+            firstName
+            lastName
+            isFullTimeEmployee
+            weeklyWorkingTime
+            privilegesValue 
+      }
+    }
+`
