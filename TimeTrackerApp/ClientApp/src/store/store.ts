@@ -22,9 +22,11 @@ import {HubConnectionBuilder} from "@aspnet/signalr";
 var connection = new HubConnectionBuilder()
     .withUrl("https://timetrackerwebapp1.azurewebsites.net/MessageHub")
     .build();
+
 connection.on("ReceiveMessage", data => {
     console.log(data);
 });
+
 connection.start().then(e=>{
     console.log(e);
 });
