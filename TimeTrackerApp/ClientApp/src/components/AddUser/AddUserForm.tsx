@@ -40,6 +40,11 @@ const AddUserForm = () => {
             setUser({...user, weeklyWorkingTime: UserDataInit.weeklyWorkingTime})
     }, [user.isFullTimeEmployee])
 
+    useEffect(()=>{
+        if (createdUser != null)
+            navigate("/user-list", {replace: true})
+    }, [createdUser])
+
     return (
         <div className={"flex-container flex-column"}>
             <form className={"authentication-form addUserForm"}>
@@ -142,13 +147,9 @@ const AddUserForm = () => {
                             setCheckInputs({...checkInputs, password: isPasswordError})
                             if (isPasswordError)
                                 return
+
                             dispatch(createUserAction(user))
-
                             setCheckInputs({...checkInputs, email: createdUser == null})
-
-                            console.log(createdUser)
-                            if (createdUser != null)
-                                navigate("/user-list", {replace: true})
                         }}
                                 className={"button dark-button w-100"}>
                             Create
