@@ -32,7 +32,7 @@ namespace TimeTrackerApp.Business.Services
 		{
             try
             {
-                var user = await userRepository.GetByEmailAsync(email);
+                var user = await userRepository.GetByEmailAsync(email,1);
                 if (!PasswordService.CompareWithHash(user.Password, password))
                 {
                     throw new Exception("Wrong password!");

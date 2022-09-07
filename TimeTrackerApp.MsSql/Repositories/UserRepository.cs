@@ -81,6 +81,21 @@ namespace TimeTrackerApp.MsSql.Repositories
 			}
 		}
 
+		public async Task<User> ChangeActivationState(User user)
+		{
+			string query = @"UPDATE Users SET Activation = @Activation WHERE Id = @Id";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				int affectedRows = await connection.ExecuteAsync(query, user);
+				if (affectedRows > 0)
+				{
+					return await GetByIdAsync(user.Id);
+				}
+				throw new Exception("User change activation error!");
+			}
+		}
+
 		public async Task<IEnumerable<User>> FetchAllAsync()
 		{
 			string query = @"SELECT * FROM Users";
@@ -136,13 +151,19 @@ namespace TimeTrackerApp.MsSql.Repositories
 			}
 		}
 
-		public async Task<User> GetByEmailAsync(string email)
+		public async Task<User> GetByEmailAsync(string email,int modeQuery=0)
 		{
-			string query = @"SELECT * FROM Users WHERE Email = @Email";
+			string additionalToQuery = "";
+			if (modeQuery == 1)
+			{
+				additionalToQuery = $" and Activation= @Activation";
+			}
+
+			string query = $@"SELECT * FROM Users WHERE Email = @Email {additionalToQuery}";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				var user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Email = email });
+				var user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Email = email,Activation=true });
 				if (user is not null)
 				{
 					return user;

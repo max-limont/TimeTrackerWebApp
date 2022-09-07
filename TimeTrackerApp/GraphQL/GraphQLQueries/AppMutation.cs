@@ -18,7 +18,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
         public AppMutation(IHttpContextAccessor contextAccessor, ICalendarRepository calendarRepository,
             IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository,
             IUserRepository userRepository, IVacationRepository vacationRepository,
-            ISickLeaveRepository sickLeaveRepository,IVacationResponseRepository vacationResponseRepository)
+            ISickLeaveRepository sickLeaveRepository, IVacationResponseRepository vacationResponseRepository)
         {
             var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
 
@@ -122,13 +122,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     {
                         await userRepository.GetByEmailAsync(user.Email);
                         return null;
-                    }catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         if (ex.Message == "User with this email was not found!")
                             return await userRepository.CreateAsync(user);
                         return null;
                     }
-                    
                 });
 
             Field<UserType, User>()
@@ -142,6 +142,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     {
                         throw new Exception("You cant delete yourself");
                     }
+
                     var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
                         .First(x => x.Type == "UserPrivilegesValue").Value);
                     var result = userPermission & Convert.ToInt32(Privileges.DeleteUsers);
@@ -151,7 +152,11 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     }
 
                     int id = context.GetArgument<int>("Id");
-                    return await userRepository.RemoveAsync(id);
+                    return await userRepository.ChangeActivationState(new User()
+                    {
+                        Id = id,
+                        Activation = false
+                    });
                 });
 
             Field<UserType, User>()
@@ -166,6 +171,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     {
                         throw new Exception("You dont have permission to edit users");
                     }
+
                     var user = context.GetArgument<User>("User");
                     return await userRepository.EditAsync(user);
                 });
@@ -249,7 +255,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     int id = context.GetArgument<int>("Id");
                     var response = await vacationResponseRepository.RemoveVacationResponseByVacationId(id);
                     var model = await vacationRepository.RemoveAsync(id);
-                    
+
                     return model;
                 });
 
@@ -300,8 +306,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     string email = context.GetArgument<string>("Email");
                     string password = context.GetArgument<string>("Password");
 
-                    
-                    
+
                     try
                     {
                         var authenticationServiceResponse = await authenticationService.Login(email, password);
