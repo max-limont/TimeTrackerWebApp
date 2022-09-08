@@ -215,7 +215,9 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<IdGraphType>>("UserId", "User id")
                 .ResolveAsync(async context =>
                 {
-                    await hubContext.Clients.All.SendAsync("ReceiveMessage","hello");
+                    var groups = hubContext.Groups;
+                    var clients = hubContext.Clients;
+                    await hubContext.Clients.Group("AuthUser").SendAsync("ReceiveMessage","hello");
                     int userId = context.GetArgument<int>("UserId");
                     return await vacationRepository.FetchAllUserVacationAsync(userId);
                 })

@@ -1,18 +1,27 @@
 ﻿using System;
-using System.ComponentModel.Design.Serialization;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
+using TimeTrackerApp.Business.Repositories;
+using TimeTrackerApp.Business.Services;
 
 namespace TimeTrackerApp.Services;
 
 public class SignalHub:Hub
 {
-    public IHttpContextAccessor Accessor;
-    public SignalHub(IHttpContextAccessor accessor)
+    private IUserRepository UserRepository;
+    public SignalHub(IUserRepository userRepository)
     {
-        Accessor = accessor;
+        UserRepository = userRepository;
+    }
+
+    public async Task ConnectUser(string email, string password)
+    {
+        var user =  await UserRepository.GetByEmailAsync(email);
+        if (!PasswordService.CompareWithHash(user.Password, password))
+        {
+            throw new Exception("Wrong password!");
+        }
+        
+        await Groups.AddToGroupAsync(Context.ConnectionId, "AuthUser");
     }
 }
