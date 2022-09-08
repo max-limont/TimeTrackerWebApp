@@ -5,6 +5,7 @@ import { Message, MessageTypes } from "../Layout/Message";
 import { useAuth } from "../../hooks/useAuth";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {useDispatch} from "react-redux";
+import { authSignalR } from '../../store/store';
 
 type AuthenticationFormState = {
     userData: AuthorizationUser,
@@ -61,7 +62,8 @@ export const AuthenticationForm: FC = () => {
                     <div className={"form-item w-100"}>
                         <button onClick={event => {
                             event.preventDefault()
-                            auth.signIn(state.userData, () => { })
+                            auth.signIn(state.userData, () => { });
+                            dispatch( authSignalR(state.userData));
                         }} className={"button dark-button w-100"}>
                             Sign in
                         </button>

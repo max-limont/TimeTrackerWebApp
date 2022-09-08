@@ -18,6 +18,11 @@ export type GetUserByEmailQueryInputType = {
     email: string
 }
 
+export type AuthUserType = {
+    email: string,
+    password: string
+}
+
 // export interface UserCreateData {
 //     email: string,
 //     password: string,
