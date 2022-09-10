@@ -32,11 +32,15 @@ export const signalRSlice = createSlice({
     reducers: {
         authSignalR: (state, action: PayloadAction<AuthorizationUser>) => {
             return null;
+        },
+        logoutR: (state)=>{
+            connection.invoke("LogOut");
+            return null;
         }
     }
 });
 
-export const {authSignalR} = signalRSlice.actions;
+export const {authSignalR,logoutR} = signalRSlice.actions;
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -76,7 +80,7 @@ connection.on("Action", data => {
         case "": {
             break;
         }
-        case "getApprovers": {
+        case "editUser": {
             const url = window.location.origin;
             const data = dataTyped.data.find(x => x.type == "id");
             const userId = store.getState().rootReducer.auth.user?.id ?? 0;
