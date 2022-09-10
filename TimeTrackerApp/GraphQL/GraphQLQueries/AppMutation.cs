@@ -6,6 +6,7 @@ using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using TimeTrackerApp.Business.Enums;
@@ -15,12 +16,12 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(IHttpContextAccessor contextAccessor, ICalendarRepository calendarRepository,
+        public AppMutation(SignalHub signalHub,IHubContext<SignalHub> hubContext,IHttpContextAccessor contextAccessor, ICalendarRepository calendarRepository,
             IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository,
             IUserRepository userRepository, IVacationRepository vacationRepository,
             ISickLeaveRepository sickLeaveRepository, IVacationResponseRepository vacationResponseRepository)
         {
-            var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
+            var authenticationService = new AuthenticationService(signalHub,userRepository, authenticationTokenRepository);
 
             Field<UserType, User>()
                 .Name("ChangedPrivelege")
@@ -126,7 +127,13 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     catch (Exception ex)
                     {
                         if (ex.Message == "User with this email was not found!")
+                        {
+                            await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
+                            {
+                                Type = "createUser",
+                            });
                             return await userRepository.CreateAsync(user);
+                        }
                         return null;
                     }
                 });
@@ -152,6 +159,15 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     }
 
                     int id = context.GetArgument<int>("Id");
+                    await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
+                    {
+                        Type = "deleteUser",
+                        Data = new Claim[]
+                        {
+                            new Claim("id", $"{id}")
+                        }
+                    });
+                    
                     return await userRepository.ChangeActivationState(new User()
                     {
                         Id = id,
@@ -164,6 +180,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<UserInputType>, User>("User", "User")
                 .ResolveAsync(async context =>
                 {
+                    var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
+                        .First(x => x.Type == "UserId").Value);
                     var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
                         .First(x => x.Type == "UserPrivilegesValue").Value);
                     var result = userPermission & Convert.ToInt32(Privileges.EditUsers);
@@ -173,6 +191,16 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     }
 
                     var user = context.GetArgument<User>("User");
+                    await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
+                    {
+                        Type = "editUser",
+                        IssuerMessage = userId,
+                        Data = new Claim[]
+                        {
+                            new Claim("id", $"{user.Id}")
+                        }
+                    });
+
                     return await userRepository.EditAsync(user);
                 });
 

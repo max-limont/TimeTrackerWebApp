@@ -13,7 +13,15 @@ public class SignalHub:Hub
     {
         UserRepository = userRepository;
     }
-
+    public async Task ConnectUserWithHashPassword(string email, string password)
+    {
+        var user =  await UserRepository.GetByEmailAsync(email);
+        if (!user.Password.Equals(password))
+        {
+            throw new Exception("error to refresh!");
+        }
+        await Groups.AddToGroupAsync(Context.ConnectionId, "AuthUser");
+    }
     public async Task ConnectUser(string email, string password)
     {
         var user =  await UserRepository.GetByEmailAsync(email);
@@ -21,7 +29,9 @@ public class SignalHub:Hub
         {
             throw new Exception("Wrong password!");
         }
-        
         await Groups.AddToGroupAsync(Context.ConnectionId, "AuthUser");
     }
-}
+    public async Task LogOut()
+    {
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, "AuthUser");
+    } }

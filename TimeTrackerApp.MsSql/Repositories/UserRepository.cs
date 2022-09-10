@@ -82,7 +82,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 		}
 
 		public async Task<User> ChangeActivationState(User user)
-		{
+		{    
 			string query = @"UPDATE Users SET Activation = @Activation WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))

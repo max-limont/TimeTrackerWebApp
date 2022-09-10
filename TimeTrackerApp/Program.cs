@@ -46,6 +46,8 @@ builder.Services.AddSingleton<IUserManagement>(provider => new UserManagementRep
 builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
 builder.Services.AddSingleton<ISickLeaveRepository>(provider => new SickLeaveRepository(connectionString));
 
+builder.Services.AddSingleton<SignalHub>();
+
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();

@@ -1,5 +1,5 @@
 import {configureStore, combineReducers, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {authSlice} from './auth/auth.slice';
+import {authorizeUser, authSlice} from './auth/auth.slice';
 import {timeTrackerSlice} from "./timeTracker/timeTracker.slice";
 import {combineEpics, createEpicMiddleware} from "redux-observable";
 import {calendarSlice} from './calendar/calendar.slice';
@@ -19,30 +19,24 @@ import {HubConnectionBuilder} from "@aspnet/signalr";
 import {AuthUserType, User} from "../types/user.types";
 import {developmentApiUrl, productionApiUrl} from "../graphql/api";
 import {AuthorizationUser} from "../types/auth.types";
+import {SignalData} from '../types/app.types';
 
 var connection = new HubConnectionBuilder()
     .withUrl("https://localhost:5001/MessageHub")
     .build();
 
-connection.on("ReceiveMessage", data => {
-    console.log(data);
-});
-
-connection.start();
 
 export const signalRSlice = createSlice({
     name: "signalRSlice",
-    initialState: "",
+    initialState: null,
     reducers: {
-        authSignalR: (state,action:PayloadAction<AuthorizationUser>) => {
-            console.log("123");
-            connection.invoke("ConnectUser", action.payload.email, action.payload.password);
-            return "";
+        authSignalR: (state, action: PayloadAction<AuthorizationUser>) => {
+            return null;
         }
     }
 });
 
-export const  {authSignalR} = signalRSlice.actions;
+export const {authSignalR} = signalRSlice.actions;
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -73,6 +67,34 @@ export const store = configureStore({
 epicMiddleware.run(rootEpic);
 
 export const state = store.getState();
+
+
+connection.on("Action", data => {
+    var dataTyped: SignalData = data;
+    console.log(dataTyped);
+    switch (dataTyped.type) {
+        case "": {
+            break;
+        }
+        case "getApprovers": {
+            const url = window.location.origin;
+            const data = dataTyped.data.find(x => x.type == "id");
+            const userId = store.getState().rootReducer.auth.user?.id ?? 0;
+            const issuerMessage = dataTyped.issuerMessage;
+            if (userId == parseInt(data?.value != undefined ? data.value : "0")) {
+                if (!(issuerMessage == userId)) {
+                    store.dispatch(authorizeUser(userId));
+                }
+            }
+            if (url + `/user/` + data?.value == window.location.toString()) {
+                /*здесь нужно dispatch если юзер смотрит другого юзера*/
+            }
+            break;
+        }
+    }
+});
+
+connection.start();
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
