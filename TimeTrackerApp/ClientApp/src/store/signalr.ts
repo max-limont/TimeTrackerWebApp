@@ -6,10 +6,11 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AuthorizationUser} from "../types/auth.types";
 
 
-
+console.log(window.location.origin);
 
 var connection = new HubConnectionBuilder()
-    .withUrl("https://localhost:5001/MessageHub")
+    .withUrl(window.location.origin==="http://localhost:3000"?`https://localhost:5001/MessageHub`
+        :"https://timetrackerwebapp1.azurewebsites.net/MessageHub")
     .build();
  
 interface SignalRState  {
