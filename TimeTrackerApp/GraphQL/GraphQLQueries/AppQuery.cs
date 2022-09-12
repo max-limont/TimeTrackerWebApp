@@ -331,6 +331,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<IntGraphType, int>("userId", "user id")
                 .ResolveAsync(async context =>
                 {
+                    
                     await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
                     {
                         Type = "getApprovers",

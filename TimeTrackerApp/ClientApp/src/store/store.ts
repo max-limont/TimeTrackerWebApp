@@ -85,7 +85,9 @@ connection.on("Action", data => {
             const data = dataTyped.data.find(x => x.type == "id");
             const userId = store.getState().rootReducer.auth.user?.id ?? 0;
             const issuerMessage = dataTyped.issuerMessage;
+            console.log(dataTyped.issuerMessage);
             if (userId == parseInt(data?.value != undefined ? data.value : "0")) {
+                console.log(dataTyped);
                 if (!(issuerMessage == userId)) {
                     store.dispatch(authorizeUser(userId));
                 }

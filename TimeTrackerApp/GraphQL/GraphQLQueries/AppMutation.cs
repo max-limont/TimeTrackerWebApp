@@ -7,6 +7,7 @@ using TimeTrackerApp.Business.Services;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using TimeTrackerApp.Business.Enums;
@@ -16,13 +17,29 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
+        private IHubContext<SignalHub> hubContext { get; set; }
+
+        private async Task SendMessageEditRecord(int issuer,int editedUserId)
+        {
+            await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
+            {
+                Type = "editUser",
+                IssuerMessage = issuer,
+                Data = new Claim[]
+                {
+                    new Claim("id", $"{editedUserId}")
+                }
+            });
+        }
+
         public AppMutation(SignalHub signalHub,IHubContext<SignalHub> hubContext,IHttpContextAccessor contextAccessor, ICalendarRepository calendarRepository,
             IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository,
             IUserRepository userRepository, IVacationRepository vacationRepository,
             ISickLeaveRepository sickLeaveRepository, IVacationResponseRepository vacationResponseRepository)
         {
             var authenticationService = new AuthenticationService(signalHub,userRepository, authenticationTokenRepository);
-
+            this.hubContext = hubContext;
+            
             Field<UserType, User>()
                 .Name("ChangedPrivelege")
                 .Argument<IntGraphType, int>("userId", "user id whose privelege will be update")
@@ -189,18 +206,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     {
                         throw new Exception("You dont have permission to edit users");
                     }
-
                     var user = context.GetArgument<User>("User");
-                    await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
-                    {
-                        Type = "editUser",
-                        IssuerMessage = userId,
-                        Data = new Claim[]
-                        {
-                            new Claim("id", $"{user.Id}")
-                        }
-                    });
-
+                    await SendMessageEditRecord(userId,user.Id);
                     return await userRepository.EditAsync(user);
                 });
 
