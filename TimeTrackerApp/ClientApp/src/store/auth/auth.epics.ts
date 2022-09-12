@@ -19,7 +19,8 @@ import {GetUserByIdQueryInputType} from "../../types/user.types";
 import {parseJwt} from "../../helpers/parseJwt";
 import {AuthLoginInputType, AuthLogoutInputType, AuthUserResponse} from "../../types/auth.types";
 import {parseObjectToUser} from "../user/user.slice";
-import {logoutR, store} from "../store";
+import { store} from "../store";
+import { logoutR } from "../signalr";
 
 const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginAction>>): any => {
     return action$.pipe(

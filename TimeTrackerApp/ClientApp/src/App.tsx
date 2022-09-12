@@ -4,8 +4,8 @@ import { Index } from "./components/Layout/Index";
 import {AuthProvider} from "./components/Auth/AuthProvider";
 
 
-const App = () => {
-
+function App ()  {
+    
     return (
         <BrowserRouter>
             <AuthProvider>

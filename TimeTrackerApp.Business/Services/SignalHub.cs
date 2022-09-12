@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using TimeTrackerApp.Business.Enums;
 using TimeTrackerApp.Business.Repositories;
 using TimeTrackerApp.Business.Services;
 
@@ -27,7 +28,21 @@ public class SignalHub:Hub
     {
         var model = connectedUser.FirstOrDefault(x => x.Value.Equals(Context.ConnectionId));
         connectedUser.Remove(model.Key);
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, "AuthUser");
+        try
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "AuthUser");
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Admins");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        await Clients.Group("Admins").SendAsync("online",$"{connectedUser.Count}");
+    }
+
+    public async Task Test()
+    {
+        var asd = 1;
     }
 
     private async Task AddUser(string email, string password,bool hashed=false)
@@ -57,6 +72,13 @@ public class SignalHub:Hub
             connectedUser.Add(user.Id,Context.ConnectionId);
             Console.WriteLine("New User");
         }
+        
         await Groups.AddToGroupAsync(Context.ConnectionId, "AuthUser");
+        if ((user.PrivilegesValue& Convert.ToInt32(Privileges.WatchUsers))>0)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, "Admins");
+        }
+
+        await Clients.Group("Admins").SendAsync("online",$"{connectedUser.Count}");
     }
 }

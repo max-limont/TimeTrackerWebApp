@@ -20,27 +20,7 @@ import {AuthUserType, User} from "../types/user.types";
 import {developmentApiUrl, productionApiUrl} from "../graphql/api";
 import {AuthorizationUser} from "../types/auth.types";
 import {SignalData} from '../types/app.types';
-
-var connection = new HubConnectionBuilder()
-    .withUrl("https://localhost:5001/MessageHub")
-    .build();
-
-
-export const signalRSlice = createSlice({
-    name: "signalRSlice",
-    initialState: null,
-    reducers: {
-        authSignalR: (state, action: PayloadAction<AuthorizationUser>) => {
-            return null;
-        },
-        logoutR: (state)=>{
-            connection.invoke("LogOut");
-            return null;
-        }
-    }
-});
-
-export const {authSignalR,logoutR} = signalRSlice.actions;
+import { signalRSlice } from './signalr';
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -73,34 +53,6 @@ epicMiddleware.run(rootEpic);
 export const state = store.getState();
 
 
-connection.on("Action", data => {
-    var dataTyped: SignalData = data;
-    console.log(dataTyped);
-    switch (dataTyped.type) {
-        case "": {
-            break;
-        }
-        case "editUser": {
-            const url = window.location.origin;
-            const data = dataTyped.data.find(x => x.type == "id");
-            const userId = store.getState().rootReducer.auth.user?.id ?? 0;
-            const issuerMessage = dataTyped.issuerMessage;
-            console.log(dataTyped.issuerMessage);
-            if (userId == parseInt(data?.value != undefined ? data.value : "0")) {
-                console.log(dataTyped);
-                if (!(issuerMessage == userId)) {
-                    store.dispatch(authorizeUser(userId));
-                }
-            }
-            if (url + `/user/` + data?.value == window.location.toString()) {
-                /*здесь нужно dispatch если юзер смотрит другого юзера*/
-            }
-            break;
-        }
-    }
-});
-
-connection.start();
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

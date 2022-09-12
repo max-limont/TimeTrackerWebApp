@@ -5,7 +5,6 @@ import { Message, MessageTypes } from "../Layout/Message";
 import { useAuth } from "../../hooks/useAuth";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {useDispatch} from "react-redux";
-import { authSignalR } from '../../store/store';
 
 type AuthenticationFormState = {
     userData: AuthorizationUser,

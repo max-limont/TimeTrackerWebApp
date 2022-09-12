@@ -169,7 +169,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 
                     var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
                         .First(x => x.Type == "UserPrivilegesValue").Value);
-                    var result = userPermission & Convert.ToInt32(Privileges.DeleteUsers);
+                    var result = userPermission & Convert.ToInt32(Privileges.EditUsers);
                     if (!(result > 0))
                     {
                         throw new Exception("You dont have permission to delete users");
