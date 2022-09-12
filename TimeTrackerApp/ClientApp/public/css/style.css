@@ -1601,4 +1601,11 @@ hr {
           cursor: pointer;
           width: 100%; }
 
+.user-item td {
+  padding: 10px 12px; }
+.user-item button:not(:last-child) {
+  margin-right: 5px; }
+.user-item button {
+  padding: 5px 20px; }
+
 /*# sourceMappingURL=style.css.map */

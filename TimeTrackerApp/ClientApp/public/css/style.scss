@@ -2241,4 +2241,16 @@ hr {
   }
 }
 
+.user-item {
 
+  td {
+    padding: 10px 12px;
+  }
+
+  button:not(:last-child) {
+    margin-right: 5px;
+  }
+  button {
+    padding: 5px 20px;
+  }
+}
