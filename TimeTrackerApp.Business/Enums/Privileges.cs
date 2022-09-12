@@ -6,6 +6,8 @@
 		WatchUsers = 1,
 		CreateUsers = 2,
 		EditUsers = 4,
-		DeleteUsers = 8
+		ManageCalendarNotes = 8,
+		ManageSickLeaves = 16,
+		ApproveAndRejectVacations = 32
 	}
 }
