@@ -131,28 +131,28 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     
                 });
 
-            Field<UserType, User>()
-                .Name("DeleteUser")
-                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
-                .ResolveAsync(async context =>
-                {
-                    var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
-                        .First(x => x.Type == "UserId").Value);
-                    if (userId == context.GetArgument<int>("userId"))
-                    {
-                        throw new Exception("You cant delete yourself");
-                    }
-                    var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
-                        .First(x => x.Type == "UserPrivilegesValue").Value);
-                    var result = userPermission & Convert.ToInt32(Privileges.DeleteUsers);
-                    if (!(result > 0))
-                    {
-                        throw new Exception("You dont have permission to delete users");
-                    }
+            //Field<UserType, User>()
+            //    .Name("DeleteUser")
+            //    .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
+            //    .ResolveAsync(async context =>
+            //    {
+            //        var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
+            //            .First(x => x.Type == "UserId").Value);
+            //        if (userId == context.GetArgument<int>("userId"))
+            //        {
+            //            throw new Exception("You cant delete yourself");
+            //        }
+            //        var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
+            //            .First(x => x.Type == "UserPrivilegesValue").Value);
+            //        var result = userPermission & Convert.ToInt32(Privileges.DeleteUsers);
+            //        if (!(result > 0))
+            //        {
+            //            throw new Exception("You dont have permission to delete users");
+            //        }
 
-                    int id = context.GetArgument<int>("Id");
-                    return await userRepository.RemoveAsync(id);
-                });
+            //        int id = context.GetArgument<int>("Id");
+            //        return await userRepository.RemoveAsync(id);
+            //    });
 
             Field<UserType, User>()
                 .Name("EditUser")
