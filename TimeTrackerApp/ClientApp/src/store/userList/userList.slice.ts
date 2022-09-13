@@ -7,11 +7,13 @@ type UserListStateType = {
     createdUser: User | null,
     deletedUser: User | null
     editedUser: User | null,
+    exportUsers: User[],
     count: number,
     error: null | string
 }
 
 const initialState: UserListStateType = {
+    exportUsers: [],
     createdUser: null,
     deletedUser: null,
     editedUser: null,
@@ -29,6 +31,9 @@ export const userListSlice = createSlice({
         },
         setUserList: (state, action: PayloadAction<User[]>) => {
             return {...state, error: null, userList: action.payload}
+        },
+        setExportData: (state, action: PayloadAction<User[]>) => {
+            return {...state, error: null, exportUsers: action.payload}
         },
         insertCreatedUser: (state, action: PayloadAction<User>) => {
             return {
@@ -63,6 +68,7 @@ export const userListSlice = createSlice({
 export const {
     setUserListCount,
     setUserList,
+    setExportData,
     userListError,
     insertCreatedUser,
     deleteUser,
@@ -70,6 +76,7 @@ export const {
 } = userListSlice.actions
 
 export const fetchUserListPage = createAction<UserListPage>("fetchUserListPage");
+export const fetchExportData = createAction<UserListPage>("fetchExportData");
 export const createUserAction = createAction<User>("createUser");
 export const editUserAction = createAction<User>("editUser");
 export const deleteUserAction = createAction<number>("deleteUser");

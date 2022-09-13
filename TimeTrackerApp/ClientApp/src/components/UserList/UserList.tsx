@@ -20,6 +20,7 @@ import {
 import UserEdit from "./UserEdit";
 import UserItem from "./UserItem";
 import {Privileges} from "../../helpers/enums";
+import ExportPdf from "./ExportPdf";
 
 export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
@@ -95,6 +96,7 @@ export const UserList: FC = () => {
                     <span>Sort by:</span>
                     <Select options={selectOptions} selectHandler={selectHandler}/>
                     <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
+                    <ExportPdf count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
                     <Link to={"/user-create"} className="link-btn addUser button cyan-button">Create user</Link>
                 </div>
             </div>

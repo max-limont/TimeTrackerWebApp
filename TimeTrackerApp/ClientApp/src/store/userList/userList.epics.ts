@@ -7,7 +7,7 @@ import {
     fetchUserCount,
     fetchUserListPage, fetchUserListSearchRequest,
     setUserList,
-    setUserListCount, deleteUserAction, deleteUser, editUserAction, editUser
+    setUserListCount, deleteUserAction, deleteUser, editUserAction, editUser, fetchExportData, setExportData
 } from "./userList.slice";
 import {graphqlRequest} from "../../graphql/api";
 import {Action} from "react-epics";
@@ -27,6 +27,24 @@ const fetchUserListPageEpic: Epic = (action$: Observable<ReturnType<typeof fetch
                     return setUserList(response.data.userFetchPageList);
                 }
                 return {type: 'FetchUserListPageError', payload: 'Error'} as Action
+            })
+        ))
+    )
+}
+const fetchExportDataEpic: Epic = (action$: Observable<ReturnType<typeof fetchExportData>>): any => {
+    return action$.pipe(
+        ofType(fetchExportData.type),
+        mergeMap(action => from(graphqlRequest(getPaginatedUserList, {
+            from: 0,
+            contentPerPage: action.payload.contentPerPage,
+            orderBy: action.payload.orderBy,
+            isReverse: action.payload.isReverse
+        })).pipe(
+            map(response => {
+                if (response?.data?.userFetchPageList) {
+                    return setExportData(response.data.userFetchPageList);
+                }
+                return {type: 'FetchExportDataError', payload: 'Error'} as Action
             })
         ))
     )
@@ -107,6 +125,7 @@ const deleteUserEpic: Epic = (action$: Observable<ReturnType<typeof deleteUserAc
 
 export const userListEpics = combineEpics(
     fetchUserListPageEpic,
+    fetchExportDataEpic,
     fetchUserCountEpic,
     fetchUserListSearchResponseEpic,
     createUserEpic,

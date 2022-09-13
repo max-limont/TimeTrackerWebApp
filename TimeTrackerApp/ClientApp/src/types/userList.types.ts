@@ -3,6 +3,6 @@ export type UserListPage = {
     contentPerPage: number,
     orderBy: string
     isReverse: boolean
-    privilegesValue: number
-    vacationPermissionId?: number
+    // privilegesValue: number
+    // vacationPermissionId?: number
 }
