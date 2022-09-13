@@ -19,11 +19,8 @@ import {
 } from "../../store/userList/userList.slice";
 import UserEdit from "./UserEdit";
 import UserItem from "./UserItem";
-<<<<<<< HEAD
 import {Privileges} from "../../helpers/enums";
-=======
 import ExportPdf from "./ExportPdf";
->>>>>>> c26288e9a6859a753854cded244170cba2aaeb7f
 
 export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);

@@ -142,7 +142,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                         return null;
                     }
                 });
-
             Field<UserType, User>()
                 .Name("DeleteUser")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
