@@ -91,7 +91,7 @@ export const UserList: FC = () => {
                     <span>Sort by:</span>
                     <Select options={selectOptions} selectHandler={selectHandler}/>
                     <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
-                    <ExportPdf/>
+                    <ExportPdf count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
                     <Link to={"/user-create"} className="link-btn addUser button cyan-button">Create user</Link>
                 </div>
             </div>
