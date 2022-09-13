@@ -28,6 +28,11 @@ export enum UserPrivileges
     ApproveAndRejectVacations = 32
 }
 
+export type AuthUserType = {
+    email: string,
+    password: string
+}
+
 // export interface UserCreateData {
 //     email: string,
 //     password: string,

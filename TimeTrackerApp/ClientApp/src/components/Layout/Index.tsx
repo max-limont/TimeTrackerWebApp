@@ -2,6 +2,12 @@
 import {Menu} from "./Menu";
 import {FC} from "react";
 import {Content} from "./Content";
+import connection from "../../store/signalr";
+
+
+window.addEventListener("close", ()=>{
+    connection.invoke("Test");
+});
 
 export const Index: FC = () => {
 

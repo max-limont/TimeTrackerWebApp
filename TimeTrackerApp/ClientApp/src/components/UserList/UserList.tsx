@@ -19,12 +19,13 @@ import {
 } from "../../store/userList/userList.slice";
 import UserEdit from "./UserEdit";
 import UserItem from "./UserItem";
+import {Privileges} from "../../helpers/enums";
 
 export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
     const auth = useAuth();
     const contentPerPage = 10;
-
+    const onlineUsers = useAppSelector(s=>s.rootReducer.signal.usersOnline);
     const dispatch = useDispatch()
     const [state, setState] = useState<UserListPage>({
         from: 0,
@@ -78,11 +79,15 @@ export const UserList: FC = () => {
         <section className={"user-list flex-container flex-column w-100"}>
             <div className={"user-list-controls flex-container flex-wrap"}>
                 <form className={"search-form flex-container align-items-center w-100"}>
+                    
                     <div className={'form-group w-100'}>
                         <div className={"form-item w-100"}>
                             <label>Search users: </label>
                             <input type={"text"} onChange={event => setSearch(event.target.value)}/>
                             <FontAwesomeIcon icon={faMagnifyingGlass} className={"icon"}/>
+                        </div>
+                        <div>
+                            Users Online: {`${onlineUsers}`}
                         </div>
                     </div>
                 </form>

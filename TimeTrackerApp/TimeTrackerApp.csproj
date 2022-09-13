@@ -64,6 +64,8 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\helpers\enums.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\signalr.ts" />
+    <TypeScriptCompile Include="ClientApp\src\types\app.types.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -46,6 +46,8 @@ builder.Services.AddSingleton<IUserManagement>(provider => new UserManagementRep
 builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
 builder.Services.AddSingleton<ISickLeaveRepository>(provider => new SickLeaveRepository(connectionString));
 
+builder.Services.AddSingleton<SignalHub>();
+
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
@@ -60,10 +62,10 @@ builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>()
 //         .WithGlobalConnectionString(connectionString)
 //         /* typeof(migration) миграция яка буде використовуватисб ,
 //          также нужно в класе всегда помечать [migration(nummberId)] */
-//         .ScanIn(typeof(ChangeVacationResponse).Assembly)
+//         .ScanIn(typeof(AddActivationToUser).Assembly)
 //         .For.All())
 //     .AddLogging(config=>config.AddFluentMigratorConsole());
-
+//
 
 // Add services to the container.
 builder.Services.AddCors(

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using TimeTrackerApp.Business.Enums;
@@ -215,7 +216,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<IdGraphType>>("UserId", "User id")
                 .ResolveAsync(async context =>
                 {
-                    await hubContext.Clients.All.SendAsync("ReceiveMessage","hello");
                     int userId = context.GetArgument<int>("UserId");
                     return await vacationRepository.FetchAllUserVacationAsync(userId);
                 })
@@ -331,6 +331,15 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<IntGraphType, int>("userId", "user id")
                 .ResolveAsync(async context =>
                 {
+                    
+                    await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
+                    {
+                        Type = "getApprovers",
+                        Data = new Claim[]
+                        {
+                            new Claim("id", $"{5}")
+                        }
+                    });
                     return await vacationRepository.GetVacationApprovers(context.GetArgument<int>("userId"));
                 })
                 .AuthorizeWithPolicy("LoggedIn");
