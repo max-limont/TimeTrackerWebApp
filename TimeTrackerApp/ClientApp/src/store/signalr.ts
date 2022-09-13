@@ -45,32 +45,7 @@ connection.on("online", data =>{
 });
 
 
-connection.on("Action", data => {
-    var dataTyped: SignalData = data;
-    console.log(dataTyped);
-    switch (dataTyped.type) {
-        case "": {
-            break;
-        }
-        case "editUser": {
-            const url = window.location.origin;
-            const data = dataTyped.data.find(x => x.type == "id");
-            const userId = store.getState().rootReducer.auth.user?.id ?? 0;
-            const issuerMessage = dataTyped.issuerMessage;
-            console.log(dataTyped.issuerMessage);
-            if (userId == parseInt(data?.value != undefined ? data.value : "0")) {
-                console.log(dataTyped);
-                if (!(issuerMessage == userId)) {
-                    store.dispatch(authorizeUser(userId));
-                }
-            }
-            if (url + `/user/` + data?.value == window.location.toString()) {
-                /*здесь нужно dispatch если юзер смотрит другого юзера*/
-            }
-            break;
-        }
-    }
-});
+
 
 connection.start();
 

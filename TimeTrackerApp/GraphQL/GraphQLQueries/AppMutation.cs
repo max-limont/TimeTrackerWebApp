@@ -19,18 +19,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
     {
         private IHubContext<SignalHub> hubContext { get; set; }
 
-        private async Task SendMessageEditRecord(int issuer,int editedUserId)
-        {
-            await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
-            {
-                Type = "editUser",
-                IssuerMessage = issuer,
-                Data = new Claim[]
-                {
-                    new Claim("id", $"{editedUserId}")
-                }
-            });
-        }
 
         public AppMutation(SignalHub signalHub,IHubContext<SignalHub> hubContext,IHttpContextAccessor contextAccessor, ICalendarRepository calendarRepository,
             IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository,
@@ -191,6 +179,29 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                         Activation = false
                     });
                 });
+            
+            //Field<UserType, User>()
+            //    .Name("DeleteUser")
+            //    .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
+            //    .ResolveAsync(async context =>
+            //    {
+            //        var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
+            //            .First(x => x.Type == "UserId").Value);
+            //        if (userId == context.GetArgument<int>("userId"))
+            //        {
+            //            throw new Exception("You cant delete yourself");
+            //        }
+            //        var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
+            //            .First(x => x.Type == "UserPrivilegesValue").Value);
+            //        var result = userPermission & Convert.ToInt32(Privileges.DeleteUsers);
+            //        if (!(result > 0))
+            //        {
+            //            throw new Exception("You dont have permission to delete users");
+            //        }
+
+            //        int id = context.GetArgument<int>("Id");
+            //        return await userRepository.RemoveAsync(id);
+            //    });
 
             Field<UserType, User>()
                 .Name("EditUser")
@@ -207,7 +218,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                         throw new Exception("You dont have permission to edit users");
                     }
                     var user = context.GetArgument<User>("User");
-                    await SendMessageEditRecord(userId,user.Id);
                     return await userRepository.EditAsync(user);
                 });
 
