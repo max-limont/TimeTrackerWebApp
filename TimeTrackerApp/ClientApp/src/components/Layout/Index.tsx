@@ -18,7 +18,7 @@ export const Index: FC = () => {
         if(auth.state?.user){
             setLoading(false);
         }
-    }, [auth.state?.user]);
+    }, [auth.state]);
     
     return (
         <>
