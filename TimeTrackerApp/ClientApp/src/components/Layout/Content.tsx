@@ -10,7 +10,7 @@ import {UserPage} from "../UserPage/UserPage";
 
 import {SickLeavesList} from "../SickLeaves/SickLeavesList";
 import {SickLeavesRequestsList} from "../SickLeaves/SickLeavesRequestsList";
-import AddUserForm from "../AddUser/AddUserForm";
+import CreateUserForm from "../UserList/CreateUserForm";
 
 export type ContentStateType = {
     showContent: boolean
@@ -25,7 +25,7 @@ export const Content: FC = () => {
                 <Route path={"/calendar"} element={<ProtectedComponent component={<Calendar />} />} />
                 <Route path={"/user-list"} element={<ProtectedComponent component={<UserList />} />} />
                 <Route path={'/user/:id'} element={<UserPage />} />
-                <Route path={"/user-create"} element={<ProtectedComponent component={<AddUserForm />} />} />
+                <Route path={"/user-create"} element={<ProtectedComponent component={<CreateUserForm />} />} />
                 <Route path={"/user-page"} element={<ProtectedComponent component={<UserPage />} />} />
                 <Route path={"/vacation"} element={<ProtectedComponent component={<Vacation />} />} />
                 <Route path={"/manage-vacation"} element={<ProtectedComponent component={<ManageVacationRequest />} />} />

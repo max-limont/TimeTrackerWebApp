@@ -105,7 +105,7 @@ export const UserList: FC = () => {
                     <th>Email</th>
                     <th>Weekly Working Time</th>
                     <th>Full-time/Part-time</th>
-                    <th/>
+                    <th style={{width: 250}}>Actions</th>
                 </tr>
                 </thead>
                 <tbody>

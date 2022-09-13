@@ -1871,4 +1871,87 @@ hr {
   text-align: center;
 }
 
+.create-user-form {
+  border-radius: 2px;
+  box-shadow: 0 0 5px -4px #393E46;
+  background: #FFFFFF;
+  margin: 15px;
+}
+.create-user-form .form-header {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #E6E6E6;
+  padding: 10px;
+}
+.create-user-form form {
+  margin: 10px;
+}
+.create-user-form form input:not([type=submit]), .create-user-form form textarea, .create-user-form form select {
+  border: 1px solid #D6D6D6;
+  transition: 0.1s ease;
+}
+.create-user-form form input:not([type=submit]):focus, .create-user-form form textarea:focus, .create-user-form form select:focus {
+  border: 1px solid #393E46;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+}
+.create-user-form form .form-group .group-header {
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 300;
+  text-transform: uppercase;
+  color: gray;
+}
+.create-user-form form .create-user-button {
+  padding: 7px 70px;
+}
+.create-user-form form .group-grid {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+.create-user-form form .form-group:not(:first-child) {
+  margin-top: 20px;
+}
+.create-user-form form .form-group:not(:first-child) .flex-wrap label {
+  margin-bottom: 7px;
+}
+.create-user-form form .form-group:not(:first-child) label {
+  margin-right: 10px;
+}
+.create-user-form form .credentials-group .group-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+.create-user-form form .personal-information-group .group-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+.create-user-form form .additional-information-group .group-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+.create-user-form form .user-privileges-group .user-privileges > .group-grid {
+  grid-template-columns: repeat(5, 1fr);
+}
+.create-user-form form .user-privileges-group .user-privileges > .group-grid > div {
+  padding-right: 10px;
+  justify-content: space-between;
+  background: #F6F6F6;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.create-user-form form .user-privileges-group .user-privileges > .group-grid > div label {
+  margin-bottom: 0;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.user-item td {
+  padding: 10px 12px;
+}
+.user-item button:not(:last-child) {
+  margin-right: 5px;
+}
+.user-item button {
+  padding: 5px 20px;
+}
+
 /*# sourceMappingURL=style.css.map */
