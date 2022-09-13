@@ -47,8 +47,7 @@ export const UserList: FC = () => {
     const firstContentIndexHandler = (index: number) => {
         setState({...state, from: index})
     }
-
-
+    
     const userActionHandler = (gameId: number) => {
         setUserIdForEdit(gameId)
     }

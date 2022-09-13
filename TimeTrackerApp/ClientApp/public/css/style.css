@@ -1954,4 +1954,50 @@ hr {
   padding: 5px 20px;
 }
 
+.center-block {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #222831;
+  position: fixed;
+  text-align: center;
+  z-index: 100;
+  border-radius: 2px;
+  padding: 15px;
+  max-width: 720px;
+  width: 100%;
+}
+
+.loader {
+  width: 25%;
+  height: 4.8px;
+  display: inline-block;
+  position: relative;
+  background: #393E46;
+  overflow: hidden;
+}
+
+.loader::after {
+  content: "";
+  width: 192px;
+  height: 4.8px;
+  background: #00ADB5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  animation: animloader 1s linear infinite;
+}
+
+@keyframes animloader {
+  0% {
+    left: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    left: 100%;
+    transform: translateX(0%);
+  }
+}
+
 /*# sourceMappingURL=style.css.map */
