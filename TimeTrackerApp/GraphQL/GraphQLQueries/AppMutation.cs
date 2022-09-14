@@ -402,6 +402,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                             AccessToken = authenticationServiceResponse.AccessToken,
                             RefreshToken = authenticationServiceResponse.RefreshToken
                         };
+                        var user = await userRepository.GetByIdAsync(userId);
+                        await signalHub.ConnectUserWithHashPassword(user.Email, user.Password);
                         return authenticationServiceApiResponse;
                     }
                     catch (Exception exception)

@@ -13,7 +13,7 @@ interface Prop{
 }
 
 const ExportPdf: FC<Prop> = ({count, orderBy, isReverse}) => {
-    const {exportUsers} = useAppSelector(state => state.rootReducer.userList)
+    const exportUsers = useAppSelector(state => state.rootReducer.userList.exportUsers)
     const dispatch = useDispatch()
     const exportToPDF = () => {
         const doc = new jsPDF()
