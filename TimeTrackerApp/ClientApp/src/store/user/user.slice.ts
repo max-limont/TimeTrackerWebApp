@@ -1,5 +1,5 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {GetUserByIdQueryInputType, User} from "../../types/user.types";
+import {GetUserByEmailQueryInputType, GetUserByIdQueryInputType, User} from "../../types/user.types";
 
 type UserSliceStateType = {
     user: User | null
@@ -20,6 +20,7 @@ export const userSlice = createSlice({
 })
 
 export const getUserById = createAction<GetUserByIdQueryInputType>("GetUserById")
+export const getUserByEmail = createAction<GetUserByEmailQueryInputType>("GetUserByEmail")
 export const {setUser} = userSlice.actions
 
 export const parseObjectToUser = (object: any): User => {
@@ -31,9 +32,6 @@ export const parseObjectToUser = (object: any): User => {
         isFullTimeEmployee: Boolean(JSON.parse(object.isFullTimeEmployee)),
         weeklyWorkingTime: parseInt(object.weeklyWorkingTime ?? ''),
         remainingVacationDays: parseInt(object.remainingVacationDays ?? ''),
-        privilegesValue: parseInt(object.privilegesValue ?? ''),
-        vacationPermissionId: parseInt(object.vacationPermissionId??""),
-        teamId: parseInt(object.teamId),
-        roleId: parseInt(object.roleId)
+        privilegesValue: parseInt(object.privilegesValue ?? '')
     } as User
 }

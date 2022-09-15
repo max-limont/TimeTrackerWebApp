@@ -729,6 +729,14 @@ section > header {
     .form-group .form-item label {
       font-size: 16px;
       margin-right: 5px; }
+    .form-group .form-item input:not([type='submit']), .form-group .form-item textarea, .form-group .form-item select {
+      border: 1px solid #D6D6D6;
+      transition: 0.1s ease; }
+      .form-group .form-item input:not([type='submit']):focus, .form-group .form-item textarea:focus, .form-group .form-item select:focus {
+        border: 1px solid #393E46 !important;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3) !important; }
+      .form-group .form-item input:not([type='submit']).invalid, .form-group .form-item textarea.invalid, .form-group .form-item select.invalid {
+        border: 1px solid #F24C4C; }
     .form-group .form-item input,
     .form-group .form-item textarea {
       font-family: 'Nunito', serif;
@@ -897,7 +905,7 @@ table .bottom-table-row {
     border-radius: 2px;
     background: #FFFFFF;
     margin: 5px;
-    padding: 10px; }
+    user-select: none; }
     .time-tracker-container .time-tracker-list-header .month-picker label {
       margin-right: 10px;
       font-weight: 600; }
@@ -1556,12 +1564,6 @@ hr {
     padding: 10px; }
   .create-user-form form {
     margin: 10px; }
-    .create-user-form form input:not([type='submit']), .create-user-form form textarea, .create-user-form form select {
-      border: 1px solid #D6D6D6;
-      transition: 0.1s ease; }
-      .create-user-form form input:not([type='submit']):focus, .create-user-form form textarea:focus, .create-user-form form select:focus {
-        border: 1px solid #393E46;
-        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3); }
     .create-user-form form .form-group .group-header {
       width: 100%;
       margin-bottom: 10px;
@@ -1569,6 +1571,8 @@ hr {
       font-weight: 300;
       text-transform: uppercase;
       color: gray; }
+    .create-user-form form .form-group .form-item {
+      align-items: flex-start; }
     .create-user-form form .create-user-button {
       padding: 7px 70px; }
     .create-user-form form .group-grid {
@@ -1607,5 +1611,11 @@ hr {
   margin-right: 5px; }
 .user-item button {
   padding: 5px 20px; }
+
+.validation-error {
+  display: block;
+  margin-top: 5px;
+  color: #F24C4C;
+  font-size: 14px; }
 
 /*# sourceMappingURL=style.css.map */

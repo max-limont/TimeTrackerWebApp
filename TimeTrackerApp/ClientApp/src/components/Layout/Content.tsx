@@ -10,7 +10,7 @@ import {UserPage} from "../UserPage/UserPage";
 
 import {SickLeavesList} from "../SickLeaves/SickLeavesList";
 import {SickLeavesRequestsList} from "../SickLeaves/SickLeavesRequestsList";
-import CreateUserForm from "../UserList/CreateUserForm";
+import {CreateUserForm} from "../UserList/CreateUserForm";
 
 export type ContentStateType = {
     showContent: boolean

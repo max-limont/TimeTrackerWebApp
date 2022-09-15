@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link, useNavigate} from "react-router-dom";
-import {User} from "../../types/user.types";
+import {User, UserInputType} from "../../types/user.types";
 import {Select} from "./Select";
 import ExportXlsx from "./ExportXlsx";
 import Pagination from "./Pagination";

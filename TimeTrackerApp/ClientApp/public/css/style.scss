@@ -1010,6 +1010,21 @@ section {
       margin-right: 5px;
     }
 
+    input:not([type='submit']), textarea, select {
+      border: 1px solid $color-silver;
+      transition: 0.1s ease;
+
+      &:focus {
+        border: 1px solid $color-light-dark !important;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      &.invalid {
+        border: 1px solid $color-red;
+      }
+
+    }
+
     input,
     textarea {
       font-family: 'Nunito', serif;
@@ -1254,7 +1269,7 @@ table {
       border-radius: 2px;
       background: $color-white;
       margin: 5px;
-      padding: 10px;
+      user-select: none;
 
       label {
         margin-right: 10px;
@@ -2153,16 +2168,6 @@ hr {
   form {
     margin: 10px;
 
-    input:not([type='submit']), textarea, select {
-      border: 1px solid $color-silver;
-      transition: 0.1s ease;
-
-      &:focus {
-        border: 1px solid $color-light-dark;
-        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
-      }
-    }
-
     .form-group {
       .group-header {
         width: 100%;
@@ -2171,6 +2176,9 @@ hr {
         font-weight: 300;
         text-transform: uppercase;
         color: gray;
+      }
+      .form-item {
+        align-items: flex-start;
       }
     }
 
@@ -2251,4 +2259,11 @@ hr {
   button {
     padding: 5px 20px;
   }
+}
+
+.validation-error {
+  display: block;
+  margin-top: 5px;
+  color: $color-red;
+  font-size: 14px;
 }

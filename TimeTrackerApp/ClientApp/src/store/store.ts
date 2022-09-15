@@ -14,12 +14,6 @@ import {vacationEpic} from './vacation/vacation.epics';
 import {sickLeaveSlice} from "./sickLeave/sickLeave.slice";
 import {sickLeaveEpics} from "./sickLeave/sickLeave.epics";
 import {userSlice} from "./user/user.slice";
-import * as SignalR from "@aspnet/signalr";
-import {HubConnectionBuilder} from "@aspnet/signalr";
-import {AuthUserType, User} from "../types/user.types";
-import {developmentApiUrl, productionApiUrl} from "../graphql/api";
-import {AuthorizationUser} from "../types/auth.types";
-import {SignalData} from '../types/app.types';
 import { signalRSlice } from './signalr';
 
 const epicMiddleware = createEpicMiddleware();
@@ -49,10 +43,6 @@ export const store = configureStore({
 
 // @ts-ignore
 epicMiddleware.run(rootEpic);
-
 export const state = store.getState();
-
-
-
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
