@@ -627,22 +627,24 @@ section > header {
   width: 100%;
   z-index: 999;
   padding: 15px; }
-  .calendar-form label {
-    max-width: 100px;
-    width: 100%; }
-  .calendar-form .form-item {
+  .calendar-form .switch {
+    background: #F6F6F6;
+    width: 100% !important; }
+  .calendar-form .group-grid {
+    grid-template-columns: repeat(2, 1fr); }
+  .calendar-form .form-item:not(.switch) {
+    align-items: flex-start;
     padding: 5px 0 5px 0; }
   .calendar-form .form-header {
     padding-bottom: 10px;
     margin-bottom: 15px;
     border-bottom: 1px solid #E6E6E6; }
-  .calendar-form input,
-  .calendar-form textarea,
-  .calendar-form select {
-    background: #F6F6F6;
-    box-shadow: inset 0 0 5px -5px #222831; }
   .calendar-form label {
-    font-weight: 600; }
+    font-weight: 400; }
+  .calendar-form .form-item.flex-wrap label {
+    margin-bottom: 7px; }
+  .calendar-form .form-item:not(.flex-wrap) label {
+    margin-right: 10px; }
   .calendar-form textarea {
     margin-top: 10px;
     resize: vertical;
@@ -723,15 +725,35 @@ section > header {
   flex-wrap: wrap; }
   .form-group:not(:last-child) {
     margin-bottom: 15px; }
+  .form-group .switch {
+    width: auto;
+    border-radius: 2px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 0 10px 0 0;
+    align-items: center !important; }
+    .form-group .switch label {
+      width: 100%;
+      cursor: pointer;
+      padding: 10px; }
+  .form-group .group-grid {
+    display: grid;
+    align-items: start;
+    gap: 10px;
+    width: 100%; }
   .form-group .form-item {
     display: inline-flex;
-    align-items: center; }
+    align-items: flex-start; }
     .form-group .form-item label {
       font-size: 16px;
-      margin-right: 5px; }
+      margin-right: 5px;
+      display: block; }
     .form-group .form-item input:not([type='submit']), .form-group .form-item textarea, .form-group .form-item select {
       border: 1px solid #D6D6D6;
-      transition: 0.1s ease; }
+      transition: 0.1s ease;
+      align-self: self-start;
+      vertical-align: top; }
       .form-group .form-item input:not([type='submit']):focus, .form-group .form-item textarea:focus, .form-group .form-item select:focus {
         border: 1px solid #393E46 !important;
         box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3) !important; }
@@ -751,7 +773,6 @@ section > header {
     .form-group .form-item select {
       font-family: 'Nunito', serif;
       outline: none;
-      border: none;
       border-radius: 2px;
       padding: 7px 5px;
       font-size: 16px;
@@ -1302,7 +1323,6 @@ div.end-item-action {
   box-shadow: 0 0 20px -10px #222831;
   width: 100px;
   height: 100px;
-  border: 1px solid black;
   background-color: white;
   border-radius: 8px;
   top: 50%;
@@ -1448,8 +1468,7 @@ img {
   margin-left: 20px;
   width: 200px;
   height: 200px;
-  border-radius: 4px;
-  border: 1px solid #222831; }
+  border-radius: 4px; }
 
 .userForm {
   display: flex;
@@ -1575,10 +1594,6 @@ hr {
       align-items: flex-start; }
     .create-user-form form .create-user-button {
       padding: 7px 70px; }
-    .create-user-form form .group-grid {
-      display: grid;
-      gap: 10px;
-      width: 100%; }
     .create-user-form form .form-group:not(:first-child) {
       margin-top: 20px; }
       .create-user-form form .form-group:not(:first-child) .flex-wrap label {

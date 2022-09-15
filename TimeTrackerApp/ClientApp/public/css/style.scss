@@ -865,12 +865,17 @@ section {
   z-index: 999;
   padding: 15px;
 
-  label {
-    max-width: 100px;
-    width: 100%;
+  .switch {
+    background: #F6F6F6;
+    width: 100% !important;
   }
 
-  .form-item {
+  .group-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-item:not(.switch) {
+    align-items: flex-start;
     padding: 5px 0 5px 0;
   }
 
@@ -880,15 +885,20 @@ section {
     border-bottom: 1px solid #E6E6E6;
   }
 
-  input,
-  textarea,
-  select {
-    background: #F6F6F6;
-    box-shadow: inset 0 0 5px -5px $color-dark;
+  label {
+    font-weight: 400;
   }
 
-  label {
-    font-weight: 600;
+  .form-item.flex-wrap {
+    label {
+      margin-bottom: 7px;
+    }
+  }
+
+  .form-item:not(.flex-wrap) {
+    label {
+      margin-right: 10px;
+    }
   }
 
   textarea {
@@ -1001,18 +1011,44 @@ section {
     margin-bottom: 15px;
   }
 
+  .switch {
+    width: auto;
+    border-radius: 2px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 0 10px 0 0;
+    align-items: center !important;
+
+    label {
+      width: 100%;
+      cursor: pointer;
+      padding: 10px;
+    }
+  }
+
+  .group-grid {
+    display: grid;
+    align-items: start;
+    gap: 10px;
+    width: 100%;
+  }
+
   .form-item {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
 
     label {
       font-size: 16px;
       margin-right: 5px;
+      display: block;
     }
 
     input:not([type='submit']), textarea, select {
       border: 1px solid $color-silver;
       transition: 0.1s ease;
+      align-self: self-start;
+      vertical-align: top;
 
       &:focus {
         border: 1px solid $color-light-dark !important;
@@ -1022,7 +1058,6 @@ section {
       &.invalid {
         border: 1px solid $color-red;
       }
-
     }
 
     input,
@@ -1044,7 +1079,6 @@ section {
     select {
       font-family: 'Nunito', serif;
       outline: none;
-      border: none;
       border-radius: 2px;
       padding: 7px 5px;
       font-size: 16px;
@@ -1822,7 +1856,6 @@ div.end-item-action {
   box-shadow: 0 0 20px -10px #222831;
   width: 100px;
   height: 100px;
-  border: 1px solid black;
   background-color: white;
   border-radius: 8px;
   top: 50%;
@@ -2028,7 +2061,6 @@ img {
   width: 200px;
   height: 200px;
   border-radius: 4px;
-  border: 1px solid $color-dark;
 }
 
 .userForm {
@@ -2184,12 +2216,6 @@ hr {
 
     .create-user-button {
       padding: 7px 70px;
-    }
-
-    .group-grid {
-      display: grid;
-      gap: 10px;
-      width: 100%;
     }
 
     .form-group:not(:first-child) {

@@ -2,19 +2,11 @@ import React, {FormEvent, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/useAppSelector";
-import {User, UserInputType, UserPrivileges} from "../../types/user.types";
+import {UserInputType, UserPrivileges} from "../../types/user.types";
 import Switch from "react-switch";
 import {createUserAction} from "../../store/userList/userList.slice";
 import {getUserByEmail, parseObjectToUser} from "../../store/user/user.slice";
-
-type ValidationFieldType = {
-    name: string,
-    validationMessage: string
-}
-
-type ValidationStateType = {
-    fields: ValidationFieldType[]
-}
+import {ValidationFieldType, ValidationStateType} from "../../types/validation.types";
 
 const initialState: UserInputType = {
     email: '',
