@@ -47,7 +47,6 @@ const initialState: SickLeavesListStateType = {
 }
 
 export const SickLeavesList: FC = () => {
-
     const auth = useAuth()
     const dispatch = useDispatch()
     const sickLeaves = useAppSelector(state => state.rootReducer.sickLeave.sickLeaves)

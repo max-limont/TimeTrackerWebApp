@@ -23,8 +23,8 @@ type Props = {
 export function ShowComment(prop: Props) {
     const {approver, comment} = prop;
     const [visibleResponse, setResponse] = useState(false);
- 
-    
+
+
     return (
         <>
             {visibleResponse ?
@@ -119,23 +119,21 @@ export function Vacation() {
                     </div>
                 </div>
 
-                <div className="list-vacation-container">
-                    <p style={{margin: "5px", display: "flex"}}>
-                        Your Vacations
+                <div className={'sick-leaves-container flex-container flex-column w-100'}>
+                    <div className={'sick-leaves-list flex-container flex-column'}>
+                        <table className={'sick-leaves-list-table'}>
+                            <thead>
+                            <tr>
+                                <th>Starting Time</th>
+                                <th>Ending Time</th>
+                                <th>IsAccepted</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {vacationsList.map((item, i) => {
 
-                    </p>
-                    <div className="list-vacations">
-                        {!(vacationsList.length == 0) ?
-                            <>
-                                <div className="vacation-item" style={{textAlign: "center"}}>
-                                    <div>Starting Time</div>
-                                    <div>Ending Time</div>
-                                    <div className={"end-item-action"} style={{flexBasis: "200px"}}>IsAccepted</div>
-                                    <div className={"end-item-action"}>Actions</div>
-                                </div>
-                                {vacationsList.map((item, i) => {
-
-                                    const Comment = (<span className="response-container">
+                                const Comment = (<span className="response-container">
                                                         {item.vacationResponse ?
                                                             item.vacationResponse.comment !== "" ?
                                                                 <ShowComment approver={item.vacationResponse?.user}
@@ -143,53 +141,53 @@ export function Vacation() {
                                                             : <></>}
                                                     </span>);
 
-                                    return (
-                                        <div key={i} className="vacation-item">
-                                            <div>{item.startingTime}</div>
-                                            <div>{item.endingTime}</div>
-                                            <div className={"end-item-action"}
-                                                 style={{flexBasis: "200px"}}>{item.isAccepted ? <>
+                                return (
+                                    <tr key={i}>
+                                        <td>{item.startingTime}</td>
+                                        <td>{item.endingTime}</td>
+                                        <td>{item.isAccepted ? <>
                                                 <span className={" button green-button-no-action"}
                                                       style={{flexGrow: "1"}}>Aceppted
                                                 </span>
-                                                    {Comment}
-                                                </>
-                                                : item.isAccepted == null ?
-                                                    <span className="button yellow-button" style={{flexGrow: "1"}}>Wait for confirmation</span>
-                                                    : <><span className={"button red-button"}
-                                                              style={{flexGrow: "1"}}>Canceled</span>
-                                                        {Comment}</>
-                                            }
-                                            </div>
-                                            <div className={"end-item-action"}>
-                                                {item.isAccepted == true ?
-                                                    <button className="button cyan-button">You have not any
-                                                        action</button>
-                                                    :
-                                                    <>
-                                                        {item.isAccepted == null ?
-                                                            <>
-                                                                <button onClick={() => {
-                                                                    setEditState(true);
-                                                                    setIdEdit(item.id);
-                                                                }} className="button cyan-button">Edit
-                                                                </button>
-                                                                <button className={"button red-button close"}
-                                                                        onClick={() => dispatch(removeVacationAction(item.id))}>
-                                                                    Delete Request
-                                                                </button>
-                                                            </> :
+                                                {Comment}
+                                            </>
+                                            : item.isAccepted == null ?
+                                                <span className="button yellow-button" style={{flexGrow: "1"}}>Wait for confirmation</span>
+                                                : <><span className={"button red-button"}
+                                                          style={{flexGrow: "1"}}>Canceled</span>
+                                                    {Comment}</>
+                                        }
+                                        </td>
+                                        <td>
+                                            {item.isAccepted == true ?
+                                                <button className="button cyan-button">You have not any
+                                                    action</button>
+                                                :
+                                                <>
+                                                    {item.isAccepted == null ?
+                                                        <>
+                                                            <button onClick={() => {
+                                                                setEditState(true);
+                                                                setIdEdit(item.id);
+                                                            }} className="button cyan-button">Edit
+                                                            </button>
                                                             <button className={"button red-button close"}
                                                                     onClick={() => dispatch(removeVacationAction(item.id))}>
                                                                 Delete Request
-                                                            </button>}
-                                                    </>
-                                                }
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </> : <div>You dont have vacations</div>}
+                                                            </button>
+                                                        </> :
+                                                        <button className={"button red-button close"}
+                                                                onClick={() => dispatch(removeVacationAction(item.id))}>
+                                                            Delete Request
+                                                        </button>}
+                                                </>
+                                            }
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

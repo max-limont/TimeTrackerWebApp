@@ -4,6 +4,8 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Repositories;
+using TimeTrackerApp.MsSql.Migrations;
+using VacationResponse = TimeTrackerApp.Business.Models.VacationResponse;
 
 namespace TimeTrackerApp.MsSql.Repositories;
 
@@ -92,20 +94,17 @@ public class VacationResponseRepository:IVacationResponseRepository
             throw new Exception();
         }
     }
-    public async  Task<VacationResponse> RemoveVacationResponseByVacationId(int id)
+    public async  Task<VacationResponse?> RemoveVacationResponseByVacationId(int id)
     {
   
-        string query = @$"Delete from VacationResponse where VacationId = {id}";
         using (Connection)
         {
-            var model = await Connection.QueryFirstAsync<VacationResponse>(
-                $"Select * from VacationResponse where VacationId = {id}");
-            int affectedRows = await Connection.ExecuteAsync(query);
-            if (affectedRows > 0)
+            var model = await GetVacationResponseByVacationId(id);
+            if (model == null)
             {
-                return model;
+                return null;
             }
-            throw new Exception();
+            return await RemoveVacationResponse(model.Id);
         }
     }
 

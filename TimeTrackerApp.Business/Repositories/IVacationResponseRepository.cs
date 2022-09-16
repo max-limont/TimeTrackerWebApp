@@ -10,7 +10,7 @@ public interface IVacationResponseRepository
     public Task<VacationResponse?>  GetVacationResponseByVacationId(int vacationId);
     public Task<VacationResponse> CreateVacationResponse(VacationResponse vacationResponse);
     public Task<VacationResponse> RemoveVacationResponse(int id);
-    public Task<VacationResponse> RemoveVacationResponseByVacationId(int id);
+    public Task<VacationResponse?> RemoveVacationResponseByVacationId(int id);
 
     public Task<VacationResponse> UpdateVacationResponse(VacationResponse vacationResponse);
 }

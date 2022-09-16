@@ -32,7 +32,7 @@ export const AuthenticationForm: FC = () => {
             setState({ ...state, error: authErrorMessage })
             dispatch(setError(''));
         }
-    }, [authErrorMessage])
+    }, [authErrorMessage]);
 
     return (
         <div className={"flex-container flex-column position-relative"}>

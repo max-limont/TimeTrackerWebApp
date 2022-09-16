@@ -33,7 +33,7 @@ export function ManageVacationRequest() {
         if (auth.state?.user?.id) {
             dispatch(getRequestVacationAction(auth.state?.user?.id));
         }
-    }, [auth.state?.user?.id]); 
+    }, [auth.state?.user?.id]);
 
     return (
         <>
@@ -41,66 +41,70 @@ export function ManageVacationRequest() {
             {responseState ? <GiveResponse stateForm={setResponse} visible={responseState} idVacation={id}/> : <></>}
             {editState ?
                 <EditVacation sourceVacation={2} stateForm={setEditState} visible={editState} idVacation={id}/> : <></>}
-            <div className="vacation-container">
-                <div className="control-panel vacation-control-panel">
-                </div>
-                <div className="list-vacation-container">
-                    <p style={{margin: "5px"}}>Manage Vacations Request</p>
-                    <div className="list-vacations">
-                        {!(requestsVacation.length == 0) ?
-                            <>
-                                <div className="vacation-item" style={{textAlign: "center"}}>
-                                    <div>Starting Time</div>
-                                    <div>Ending Time</div>
-                                    <div>Count Day</div>
-                                    <div className={"end-item-action"} style={{flexBasis: "250px"}}>User</div>
-                                    <div className={"end-item-action"}>Actions</div>
-                                </div>
-                                {requestsVacation.map((item, i) => {
-                                    const itemToUpdate = {
-                                        ...item,
-                                        startingTime: item.startingTime + postFixDate,
-                                        endingTime: item.endingTime + postFixDate
-                                    };
-                                    if (item.isAccepted == null) {
-                                        return (
-                                            <div key={i} className="vacation-item">
-                                                <div>{item.startingTime}</div>
-                                                <div>{item.endingTime}</div>
-                                                <div>{moment.duration(moment(item.endingTime).diff(moment(item.startingTime))).asDays()}</div>
-                                                <div className={"end-item-action"} style={{flexBasis: "250px"}}>
-                                                    <div style={{flexGrow: "1",whiteSpace: "nowrap"}}
-                                                         onClick={() => navigate("/user?id=" + item.id)}
-                                                         className="button cyan-button close">
-                                                        {item.user?.firstName} {item.user?.lastName}
-                                                    </div>
-                                                    {item.comment!==""? <ShowComment approver={null}   comment={item.comment}/>:<></>}
-                                                </div>
-                                                <div className={"end-item-action"}>
-                                                    <button className="button silver-button close" onClick={() => {
-                                                        setEditState(true);
-                                                        setIdEdit(item.id);
-                                                    }}>
-                                                        <FontAwesomeIcon icon={faEdit} className={"icon"}/>
-                                                    </button>
-                                                    <button className="button cyan-button close" onClick={() => {
-                                                        setResponse(true);
-                                                        setIdEdit(item.id);
-                                                    }}>Give Response</button>
-                                                    <button className="button red-button close" onClick={() => {dispatch(removeVacationAction(item.id))}}>
-                                                        <FontAwesomeIcon icon={faTrash} className={"icon"}/>
-                                                    </button>
-                                                </div>
+            <div className={'sick-leaves-container flex-container flex-column w-100'}>
+
+            <div className={'sick-leaves-list flex-container flex-column'}>
+                    <table className={'sick-leaves-list-table'}>
+                        <thead>
+                        <tr>
+                            <th>Starting Time</th>
+                            <th>Ending Time</th>
+                            <th>Count Day</th>
+                            <th>User</th>
+                            <th >Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {requestsVacation.map((item, i) => {
+                            const itemToUpdate = {
+                                ...item,
+                                startingTime: item.startingTime + postFixDate,
+                                endingTime: item.endingTime + postFixDate
+                            };
+
+                            if (item.isAccepted == null) {
+                                return (
+                                    <tr key={i} >
+                                        <td>{item.startingTime}</td>
+                                        <td>{item.endingTime}</td>
+                                        <td>{moment.duration(moment(item.endingTime).diff(moment(item.startingTime))).asDays()}</td>
+                                        <td >
+                                            <div style={{flexGrow: "1", whiteSpace: "nowrap"}}
+                                                 onClick={() => navigate("/user/" + item.user?.id)}
+                                                 className="button cyan-button close">
+                                                {item.user?.firstName} {item.user?.lastName}
                                             </div>
-                                        );
-                                    }
-                                    return (<></>);
-                                })}
-                            </>
-                            : <div>You dont have any vacations</div>}
-                    </div>
+                                            {item.comment !== "" ?
+                                                <ShowComment approver={null} comment={item.comment}/> : <></>}
+                                        </td>
+                                        <td style={{
+                                            display: "flex"
+                                        }}>
+                                            <button className="button silver-button close" onClick={() => {
+                                                setEditState(true);
+                                                setIdEdit(item.id);
+                                            }}>
+                                                <FontAwesomeIcon icon={faEdit} className={"icon"}/>
+                                            </button>
+                                            <button className="button cyan-button close" onClick={() => {
+                                                setResponse(true);
+                                                setIdEdit(item.id);
+                                            }}>Give Response
+                                            </button>
+                                            <button className="button red-button close" onClick={() => {
+                                                dispatch(removeVacationAction(item.id))
+                                            }}>
+                                                <FontAwesomeIcon icon={faTrash} className={"icon"}/>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            }
+                            return (<></>);
+                        })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </>
-    );
-}
+    );}

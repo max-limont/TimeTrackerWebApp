@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using TimeTrackerApp.Business.Enums;
 using TimeTrackerApp.Business.Repositories;
@@ -12,8 +13,10 @@ public class SignalHub:Hub
     public static Dictionary<int, string> connectedUser = new Dictionary<int, string>();
     
     private IUserRepository UserRepository;
-    public SignalHub(IUserRepository userRepository)
+    private IHttpContextAccessor contextAccessor;
+    public SignalHub(IHttpContextAccessor contextAccessor,IUserRepository userRepository)
     {
+        this.contextAccessor = contextAccessor;
         UserRepository = userRepository;
     }
     public async Task ConnectUserWithHashPassword(string email, string password)
@@ -69,7 +72,7 @@ public class SignalHub:Hub
         }
         catch 
         {
-            connectedUser.Add(user.Id,Context.ConnectionId);
+            connectedUser.Add(user.Id, Context.ConnectionId);
             Console.WriteLine("New User");
         }
         

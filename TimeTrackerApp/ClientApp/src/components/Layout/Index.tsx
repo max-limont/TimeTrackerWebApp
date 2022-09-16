@@ -4,19 +4,25 @@ import {FC, useEffect, useState} from "react";
 import {Content} from "./Content";
 import connection from "../../store/signalr";
 import {useAuth} from "../../hooks/useAuth";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useDispatch } from "react-redux";
+import {AuthorizationUser} from "../../types/auth.types";
 
 
-window.addEventListener("close", ()=>{
-    connection.invoke("Test");
-});
+
 
 export const Index: FC = () => {
     const  auth = useAuth();
     const [isLoadingApp,setLoading] = useState(true);
+    const isAuthUser = useAuth().state?.isUserAuthenticated;
+    const dispatch = useDispatch();
     
     useEffect(() => {
         if(auth.state?.user){
             setLoading(false);
+            if(isAuthUser==true){
+                console.log(`${auth.state?.user?.id}`);
+            }
         }
     }, [auth.state]);
     
