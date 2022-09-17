@@ -9,11 +9,13 @@ namespace TimeTrackerApp.BackgroundTasks
 	public class AutoCreateRecordsTask : IBackgroundTask
 	{
 		private readonly IUserRepository userRepository;
+		private readonly IVacationRepository vacationRepository;
 		private readonly IRecordRepository recordRepository;
 		private readonly IBackgroundTaskRepository backgroundTaskRepository;
 
-		public AutoCreateRecordsTask(IUserRepository userRepository, IRecordRepository recordRepository, IBackgroundTaskRepository backgroundTaskRepository)
+		public AutoCreateRecordsTask(IVacationRepository vacationRepository,IUserRepository userRepository, IRecordRepository recordRepository, IBackgroundTaskRepository backgroundTaskRepository)
 		{
+			this.vacationRepository = vacationRepository;
 			this.userRepository = userRepository;
 			this.recordRepository = recordRepository;
 			this.backgroundTaskRepository = backgroundTaskRepository;
@@ -31,27 +33,30 @@ namespace TimeTrackerApp.BackgroundTasks
 			var fullTimeEmployees = await userRepository.FetchFullTimeEmployeesAsync();
 			foreach (var employee in fullTimeEmployees)
 			{
-				var record = new Record()
+				if (!await userRepository.UserOnLeave(employee.Id))
 				{
-					IsAutomaticallyCreated = true,
-					CreatedAt = dateTime,
-					WorkingTime = employee.WeeklyWorkingTime / 5 * 60 * 1000,
-					EmployeeId = employee.Id,
-				};
-
-				try
-				{
-					var backgroundTask = new BackgroundTask()
+					var record = new Record()
 					{
-						Type = nameof(AutoCreateRecordsTask),
-						DateTime = dateTime,
+						IsAutomaticallyCreated = true,
+						CreatedAt = dateTime,
+						WorkingTime = employee.WeeklyWorkingTime / 5 * 60 * 1000,
+						EmployeeId = employee.Id,
 					};
-					await recordRepository.CreateAsync(record);
-					await backgroundTaskRepository.CreateAsync(backgroundTask);
-				}
-				catch (Exception exception)
-				{
-					Console.WriteLine(exception.Message);
+
+					try
+					{
+						var backgroundTask = new BackgroundTask()
+						{
+							Type = nameof(AutoCreateRecordsTask),
+							DateTime = dateTime,
+						};
+						await recordRepository.CreateAsync(record);
+						await backgroundTaskRepository.CreateAsync(backgroundTask);
+					}
+					catch (Exception exception)
+					{
+						Console.WriteLine(exception.Message);
+					}
 				}
 			}
 		}

@@ -54,6 +54,7 @@ namespace TimeTrackerApp.MsSql.Repositories
             }
         }
 
+
         public async Task<Vacation> EditAsync(Vacation vacation)
         {
             string query =
