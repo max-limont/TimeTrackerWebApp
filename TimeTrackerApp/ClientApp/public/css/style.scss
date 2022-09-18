@@ -217,10 +217,10 @@ body {
 
 .authentication-form {
   max-width: 400px;
-  width: 100%;
+  width: 400px;
   background: $color-light;
   border-radius: 2px;
-  padding: 15px;
+  padding: 20px;
   box-shadow: 0 0 20px -10px $color-dark;
 
   span {
@@ -231,9 +231,18 @@ body {
     color: $color-dark;
   }
 
-  .form-item {
-    padding: 10px 5px 10px 5px;
+  input {
+    width: 100%;
   }
+
+  .group-grid {
+    gap: 15px !important;
+  }
+
+  button {
+    margin-top: 5px;
+  }
+
 }
 
 .h-100 {
@@ -1554,30 +1563,6 @@ table {
       top: calc(50% - 50px);
       position: absolute;
     }
-  }
-}
-
-.message {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 10px 15px 10px 15px;
-  background: $color-light;
-  border-radius: 2px;
-  position: absolute;
-  width: 100%;
-  box-shadow: 0 0 20px -10px $color-dark;
-  transition: 0.3s ease;
-  font-size: 15px;
-  font-weight: 500;
-
-  .icon {
-    margin-right: 15px;
-    font-size: $font-size-default;
-  }
-
-  &.error {
-    color: $color-red;
   }
 }
 

@@ -30,10 +30,13 @@ export const authSlice = createSlice({
         setError: (state: AuthStateType, action: PayloadAction<string>) => {
             return {...state, error: action.payload}
         },
+        clearError: (state: AuthStateType) => {
+            return {...state, error: null}
+        }
     }
 });
 
-export const {logout, setError, setUser, setLoadingState} = authSlice.actions;
+export const {logout, setError, clearError, setUser, setLoadingState} = authSlice.actions;
 export const authorizeUser = createAction<number>("AuthorizeUser")
 export const authLoginAction = createAction<AuthLoginInputType>("AuthLogin");
 export const authRefreshAction = createAction<AuthRefreshInputType>("AuthRefresh");
