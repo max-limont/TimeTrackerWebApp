@@ -1197,8 +1197,11 @@ table .bottom-table-row {
     margin-right: 10px;
     position: relative; }
     .user-list-controls-group .select-wrapper .select-button {
+      border: 1px solid #D6D6D6;
+      transition: 0.1s ease;
+      align-self: self-start;
+      vertical-align: top;
       background: #F6F6F6;
-      border: none;
       outline: none;
       box-shadow: inset 0 0 5px -4px #393E46;
       padding: 7px 10px;
@@ -1209,6 +1212,11 @@ table .bottom-table-row {
       font-family: 'Nunito', sans-serif;
       font-size: 15px;
       font-weight: 600; }
+      .user-list-controls-group .select-wrapper .select-button:focus {
+        border: 1px solid #393E46 !important;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3) !important; }
+      .user-list-controls-group .select-wrapper .select-button.invalid {
+        border: 1px solid #F24C4C; }
     .user-list-controls-group .select-wrapper .icon {
       margin-inline: -20px 20px; }
     .user-list-controls-group .select-wrapper ul {
@@ -1387,7 +1395,11 @@ div.end-item-action {
   box-shadow: 0 0 20px -10px #222831;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); }
+  transform: translate(-50%, -50%);
+  max-width: 600px;
+  width: 100%; }
+  .sick-leave-form .group-grid {
+    grid-template-columns: repeat(2, 1fr); }
   .sick-leave-form .form-header {
     padding-bottom: 10px;
     margin-bottom: 10px;
@@ -1396,9 +1408,6 @@ div.end-item-action {
     padding: 10px 0 10px 0; }
   .sick-leave-form label {
     margin-bottom: 5px; }
-  .sick-leave-form input, .sick-leave-form textarea, .sick-leave-form select {
-    background: #F6F6F6;
-    box-shadow: inset 0 0 5px -5px #222831; }
   .sick-leave-form .buttons {
     padding-top: 10px; }
 
