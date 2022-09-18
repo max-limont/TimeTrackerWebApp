@@ -1179,7 +1179,7 @@ table .bottom-table-row {
     background: #F6F6F6;
     box-shadow: inset 0 0 5px -5px #222831;
     max-width: 500px;
-    padding-block: 8px;
+    padding-block: 5px !important;
     width: 100%; }
   .search-form .form-item {
     display: flex;
@@ -1187,12 +1187,6 @@ table .bottom-table-row {
   .search-form .icon {
     margin-left: -25px;
     margin-right: 25px; }
-
-.user-list-list {
-  background: #FFFFFF;
-  margin: 0 15px 15px 15px;
-  border-radius: 2px;
-  box-shadow: 0 0 5px -4px #393E46; }
 
 .user-list-controls-group {
   padding: 5px; }
@@ -1618,5 +1612,24 @@ hr {
   margin-top: 5px;
   color: #F24C4C;
   font-size: 14px; }
+
+.user-list-container {
+  background: #FFFFFF;
+  margin: 0 15px 15px 15px;
+  border-radius: 2px;
+  box-shadow: 0 0 5px -4px #393E46; }
+  .user-list-container .user-list-container-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 2px;
+    background: #F6F6F6; }
+    .user-list-container .user-list-container-header > h3 {
+      font-weight: bold;
+      font-size: 20px;
+      padding: 10px;
+      border-radius: 2px; }
+    .user-list-container .user-list-container-header .users-online {
+      margin-right: 10px; }
 
 /*# sourceMappingURL=style.css.map */
