@@ -138,10 +138,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     {
                         if (ex.Message == "User with this email was not found!")
                         {
-                            await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
-                            {
-                                Type = "createUser",
-                            });
+                          
                             return await userRepository.CreateAsync(user);
                         }
                         return null;
@@ -168,15 +165,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     }
 
                     int id = context.GetArgument<int>("Id");
-                    await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
-                    {
-                        Type = "deleteUser",
-                        Data = new Claim[]
-                        {
-                            new Claim("id", $"{id}")
-                        }
-                    });
-                    
+                  
                     return await userRepository.ChangeActivationState(new User()
                     {
                         Id = id,

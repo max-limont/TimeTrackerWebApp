@@ -332,14 +332,6 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .ResolveAsync(async context =>
                 {
                     
-                    await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
-                    {
-                        Type = "getApprovers",
-                        Data = new Claim[]
-                        {
-                            new Claim("id", $"{5}")
-                        }
-                    });
                     return await vacationRepository.GetVacationApprovers(context.GetArgument<int>("userId"));
                 })
                 .AuthorizeWithPolicy("LoggedIn");
