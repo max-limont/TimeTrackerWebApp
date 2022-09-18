@@ -19,7 +19,6 @@ import {
 } from "../../store/userList/userList.slice";
 import UserEdit from "./UserEdit";
 import UserItem from "./UserItem";
-import {Privileges} from "../../helpers/enums";
 import ExportPdf from "./ExportPdf";
 
 export const UserList: FC = () => {
@@ -97,7 +96,7 @@ export const UserList: FC = () => {
                     <Select options={selectOptions} selectHandler={selectHandler}/>
                     <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
                     <ExportPdf count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
-                    <Link to={"/user-create"} className="link-btn addUser button cyan-button">Create user</Link>
+                    <Link to={"/user-create"} className={"button cyan-button"}>Create user</Link>
                 </div>
             </div>
             <table className={"user-list-list"}>
