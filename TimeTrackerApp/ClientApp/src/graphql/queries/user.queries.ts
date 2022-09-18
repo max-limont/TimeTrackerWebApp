@@ -5,6 +5,7 @@ export const getUserByEmailQuery = `
             email
             firstName
             lastName
+            password
             isFullTimeEmployee
             weeklyWorkingTime
             remainingVacationDays
@@ -20,6 +21,7 @@ export const getUserByIdQuery = `
             email
             firstName
             lastName
+            password
             isFullTimeEmployee
             weeklyWorkingTime
             remainingVacationDays
@@ -36,6 +38,7 @@ export const createUserQuery = `
             password
             firstName
             lastName
+            password
             isFullTimeEmployee
             weeklyWorkingTime
             privilegesValue 
