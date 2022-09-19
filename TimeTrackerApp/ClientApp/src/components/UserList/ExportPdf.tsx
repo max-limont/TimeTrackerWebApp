@@ -17,7 +17,14 @@ const ExportPdf: FC<Prop> = ({count, orderBy, isReverse}) => {
     const exportToPDF = () => {
         const doc = new jsPDF()
         autoTable(doc,{
-            // head: [['Id', 'Email', 'First Name', "Last Name", "Is Full-time", "Weekly working time", "Privileges Value"]],
+            head: [{
+                id:'Id',
+                email:'Email',
+                firstName:'First Name',
+                lastName:"Last Name",
+                isFullTimeEmployee:"Is Full-time",
+                weeklyWorkingTime:"Weekly working time",
+                privilegesValue:"Privileges Value"}],
             body: exportUsers
         })
         doc.save("users.pdf")
