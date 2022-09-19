@@ -4,8 +4,8 @@ import {AuthRefreshInputType, AuthUserResponse} from "../types/auth.types";
 import {store} from "../store/store";
 import {authRefreshAction} from "../store/auth/auth.slice";
 
-const developmentApiUrl = "http://localhost:5000/graphql";
-const productionApiUrl = "https://timetrackerwebapp1.azurewebsites.net/graphql";
+export const developmentApiUrl = "http://localhost:5000/graphql";
+export const productionApiUrl = "https://timetrackerwebapp1.azurewebsites.net/graphql";
 
 const getAuthorizationHeader = (): string => {
     const accessToken = getCookie(accessTokenKey);

@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.SignalR;
 using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Repositories;
+using TimeTrackerApp.Services;
 
 namespace TimeTrackerApp.Business.Services
 {
@@ -7,6 +9,7 @@ namespace TimeTrackerApp.Business.Services
 	{
         private IUserRepository userRepository { get; set; }
         private IAuthenticationTokenRepository authenticationTokenRepository { get; set; }
+        private SignalHub _signalHub { get; set; }
 
         public class AuthenticationResponse
 		{
@@ -22,8 +25,9 @@ namespace TimeTrackerApp.Business.Services
 			}
 		}
 
-        public AuthenticationService(IUserRepository userRepository, IAuthenticationTokenRepository authenticationTokenRepository)
-		{
+        public AuthenticationService(SignalHub hubContext,IUserRepository userRepository, IAuthenticationTokenRepository authenticationTokenRepository)
+        {
+	        _signalHub = hubContext;
             this.userRepository = userRepository;
             this.authenticationTokenRepository = authenticationTokenRepository;
 		}
@@ -32,11 +36,13 @@ namespace TimeTrackerApp.Business.Services
 		{
             try
             {
-                var user = await userRepository.GetByEmailAsync(email);
+                var user = await userRepository.GetByEmailAsync(email,1);
                 if (!PasswordService.CompareWithHash(user.Password, password))
                 {
                     throw new Exception("Wrong password!");
                 }
+                await _signalHub.ConnectUser(email, password);
+                
                 var accessToken = JwtTokenService.GenerateAccessToken(user);
                 var refreshToken = JwtTokenService.GenerateRefreshToken(user);
                 var refreshTokenDb = new AuthenticationToken()
@@ -86,6 +92,7 @@ namespace TimeTrackerApp.Business.Services
                         UserId = user.Id,
                         Token = newRefreshToken,
                     };
+                    await _signalHub.ConnectUserWithHashPassword(user.Email,user.Password);
                     await authenticationTokenRepository.UpdateByUserIdAsync(userId, newRefreshToken);
                     return new AuthenticationResponse(newAccessToken, newRefreshToken);
 				}

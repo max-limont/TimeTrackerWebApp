@@ -19,6 +19,8 @@ import {GetUserByIdQueryInputType} from "../../types/user.types";
 import {parseJwt} from "../../helpers/parseJwt";
 import {AuthLoginInputType, AuthLogoutInputType, AuthUserResponse} from "../../types/auth.types";
 import {parseObjectToUser} from "../user/user.slice";
+import { store} from "../store";
+import { logoutR } from "../signalr";
 
 const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginAction>>): any => {
     return action$.pipe(
@@ -73,6 +75,7 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
             map(() => {
                 clearCookie(refreshTokenKey)
                 clearCookie(accessTokenKey)
+                store.dispatch(logoutR());
                 return logout()
             })
         )),

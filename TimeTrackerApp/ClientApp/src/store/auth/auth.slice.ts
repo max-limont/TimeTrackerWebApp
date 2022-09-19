@@ -3,7 +3,7 @@ import {AuthLoginInputType, AuthRefreshInputType, AuthUserResponse} from "../../
 import { User } from "../../types/user.types"
 
 type AuthStateType = {
-    user: User | null,
+    user: User | null|undefined,
     isLoading: boolean,
     error?: string | null
 }
@@ -22,7 +22,7 @@ export const authSlice = createSlice({
             return {...state, user: action.payload}
         },
         logout: (state: AuthStateType) => {
-            return {...state, user: null}
+            return {...state, user: undefined}
         },
         setLoadingState:  (state, action: PayloadAction<boolean>) => {
             return{...state, isLoading: action.payload}

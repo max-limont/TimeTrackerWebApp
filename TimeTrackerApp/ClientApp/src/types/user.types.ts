@@ -18,6 +18,10 @@ export type GetUserByEmailQueryInputType = {
     email: string
 }
 
+export type AuthUserType = {
+    email: string,
+    password: string
+}
 export enum UserPrivileges
 {
     WatchUsers = 1,
@@ -27,6 +31,7 @@ export enum UserPrivileges
     ManageSickLeaves = 16,
     ApproveAndRejectVacations = 32
 }
+
 
 // export interface UserCreateData {
 //     email: string,

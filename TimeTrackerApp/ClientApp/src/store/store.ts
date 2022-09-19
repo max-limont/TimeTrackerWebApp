@@ -1,5 +1,5 @@
-import {configureStore, combineReducers} from '@reduxjs/toolkit';
-import {authSlice} from './auth/auth.slice';
+import {configureStore, combineReducers, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {authorizeUser, authSlice} from './auth/auth.slice';
 import {timeTrackerSlice} from "./timeTracker/timeTracker.slice";
 import {combineEpics, createEpicMiddleware} from "redux-observable";
 import {calendarSlice} from './calendar/calendar.slice';
@@ -16,20 +16,11 @@ import {sickLeaveEpics} from "./sickLeave/sickLeave.epics";
 import {userSlice} from "./user/user.slice";
 import * as SignalR from "@aspnet/signalr";
 import {HubConnectionBuilder} from "@aspnet/signalr";
-
-
-
-var connection = new HubConnectionBuilder()
-    .withUrl("https://timetrackerwebapp1.azurewebsites.net/MessageHub")
-    .build();
-
-connection.on("ReceiveMessage", data => {
-    console.log(data);
-});
-
-connection.start().then(e=>{
-    console.log(e);
-});
+import {AuthUserType, User} from "../types/user.types";
+import {developmentApiUrl, productionApiUrl} from "../graphql/api";
+import {AuthorizationUser} from "../types/auth.types";
+import {SignalData} from '../types/app.types';
+import { signalRSlice } from './signalr';
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -42,7 +33,8 @@ const rootReducer = combineReducers({
     timeTracker: timeTrackerSlice.reducer,
     vacation: vacationSlice.reducer,
     sickLeave: sickLeaveSlice.reducer,
-    user: userSlice.reducer
+    user: userSlice.reducer,
+    signal: signalRSlice.reducer
 });
 
 export const store = configureStore({
@@ -59,6 +51,8 @@ export const store = configureStore({
 epicMiddleware.run(rootEpic);
 
 export const state = store.getState();
+
+
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

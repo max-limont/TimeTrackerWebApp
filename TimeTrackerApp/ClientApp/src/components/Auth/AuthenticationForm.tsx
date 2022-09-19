@@ -61,7 +61,8 @@ export const AuthenticationForm: FC = () => {
                     <div className={"form-item w-100"}>
                         <button onClick={event => {
                             event.preventDefault()
-                            auth.signIn(state.userData, () => { })
+                            auth.signIn(state.userData, () => { });
+                            // dispatch( authSignalR(state.userData));
                         }} className={"button dark-button w-100"}>
                             Sign in
                         </button>

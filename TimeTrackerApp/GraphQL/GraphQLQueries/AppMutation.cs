@@ -6,6 +6,8 @@ using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.Business.Services;
 using System;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using TimeTrackerApp.Business.Enums;
@@ -15,13 +17,17 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(IHttpContextAccessor contextAccessor, ICalendarRepository calendarRepository,
+        private IHubContext<SignalHub> hubContext { get; set; }
+
+
+        public AppMutation(SignalHub signalHub,IHubContext<SignalHub> hubContext,IHttpContextAccessor contextAccessor, ICalendarRepository calendarRepository,
             IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository,
             IUserRepository userRepository, IVacationRepository vacationRepository,
-            ISickLeaveRepository sickLeaveRepository,IVacationResponseRepository vacationResponseRepository)
+            ISickLeaveRepository sickLeaveRepository, IVacationResponseRepository vacationResponseRepository)
         {
-            var authenticationService = new AuthenticationService(userRepository, authenticationTokenRepository);
-
+            var authenticationService = new AuthenticationService(signalHub,userRepository, authenticationTokenRepository);
+            this.hubContext = hubContext;
+            
             Field<UserType, User>()
                 .Name("ChangedPrivelege")
                 .Argument<IntGraphType, int>("userId", "user id whose privelege will be update")
@@ -122,15 +128,57 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     {
                         await userRepository.GetByEmailAsync(user.Email);
                         return null;
-                    }catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         if (ex.Message == "User with this email was not found!")
+                        {
+                            await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
+                            {
+                                Type = "createUser",
+                            });
                             return await userRepository.CreateAsync(user);
+                        }
                         return null;
                     }
-                    
                 });
+            Field<UserType, User>()
+                .Name("DeleteUser")
+                .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
+                .ResolveAsync(async context =>
+                {
+                    var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
+                        .First(x => x.Type == "UserId").Value);
+                    if (userId == context.GetArgument<int>("userId"))
+                    {
+                        throw new Exception("You cant delete yourself");
+                    }
 
+                    var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
+                        .First(x => x.Type == "UserPrivilegesValue").Value);
+                    var result = userPermission & Convert.ToInt32(Privileges.EditUsers);
+                    if (!(result > 0))
+                    {
+                        throw new Exception("You dont have permission to delete users");
+                    }
+
+                    int id = context.GetArgument<int>("Id");
+                    await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
+                    {
+                        Type = "deleteUser",
+                        Data = new Claim[]
+                        {
+                            new Claim("id", $"{id}")
+                        }
+                    });
+                    
+                    return await userRepository.ChangeActivationState(new User()
+                    {
+                        Id = id,
+                        Activation = false
+                    });
+                });
+            
             //Field<UserType, User>()
             //    .Name("DeleteUser")
             //    .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
@@ -159,6 +207,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<NonNullGraphType<UserInputType>, User>("User", "User")
                 .ResolveAsync(async context =>
                 {
+                    var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
+                        .First(x => x.Type == "UserId").Value);
                     var userPermission = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
                         .First(x => x.Type == "UserPrivilegesValue").Value);
                     var result = userPermission & Convert.ToInt32(Privileges.EditUsers);
@@ -249,7 +299,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     int id = context.GetArgument<int>("Id");
                     var response = await vacationResponseRepository.RemoveVacationResponseByVacationId(id);
                     var model = await vacationRepository.RemoveAsync(id);
-                    
+
                     return model;
                 });
 
@@ -300,8 +350,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     string email = context.GetArgument<string>("Email");
                     string password = context.GetArgument<string>("Password");
 
-                    
-                    
+
                     try
                     {
                         var authenticationServiceResponse = await authenticationService.Login(email, password);
@@ -353,6 +402,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                             AccessToken = authenticationServiceResponse.AccessToken,
                             RefreshToken = authenticationServiceResponse.RefreshToken
                         };
+                        var user = await userRepository.GetByIdAsync(userId);
+                        await signalHub.ConnectUserWithHashPassword(user.Email, user.Password);
                         return authenticationServiceApiResponse;
                     }
                     catch (Exception exception)
