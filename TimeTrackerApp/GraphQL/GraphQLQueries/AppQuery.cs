@@ -22,13 +22,26 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
             IUserRepository userRepository, IVacationRepository vacationRepository, 
             ISickLeaveRepository sickLeaveRepository, IHubContext<SignalHub> hubContext)
         {
-            Field<BooleanGraphType, bool>()
-                .Name("IsUserEmailExist")
-                .Argument<NonNullGraphType<StringGraphType>, string>("Email", "User email")
+            Field<ListGraphType<ExportUsersType>, List<ExportUserDataItem>>()
+                .Name("ExportUsers")
+                .Argument<StringGraphType, string>("OrderBy", "Order by")
+                .Argument<BooleanGraphType, bool?>("IsReverse", "Is reverse")
                 .ResolveAsync(async context =>
                 {
-                    string email = context.GetArgument<string>("Email");
-                    return await userRepository.GetByEmailAsync(email) != null;
+                    int count = await userRepository.GetCountAsync();
+                    string orderBy = context.GetArgument<string>("OrderBy");
+                    bool? isReverse = context.GetArgument<bool?>("IsReverse");
+                    var users = await userRepository.FetchPageListAsync(0, count, orderBy, (bool)isReverse);
+                    List<ExportUserDataItem> exportUserDataItems = new();
+                    foreach (var user in users)
+                    {
+                        var userRecords = await recordRepository.FetchAllUserRecordsAsync(user.Id);
+                        int workingTime = 0;
+                        foreach (var record in userRecords)
+                            workingTime += record.WorkingTime;
+                        exportUserDataItems.Add(new ExportUserDataItem(user, workingTime));
+                    }
+                    return exportUserDataItems;
                 })
                 .AuthorizeWithPolicy("LoggedIn");
 
@@ -80,7 +93,8 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                .ResolveAsync(async context =>
                {
                    string request = context.GetArgument<string>("Request");
-                   return await userRepository.FetchSearchListAsync(request);
+                   var res = await userRepository.FetchSearchListAsync(request);
+                   return res;
                })
                .AuthorizeWithPolicy("LoggedIn");
 

@@ -119,7 +119,8 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<User>> FetchSearchListAsync(string request)
 		{
-			string query = @"SELECT * FROM Users WHERE (LastName LIKE '@Request%') OR (FirstName LIKE '@Request%') OR (Email LIKE '@Request%')";
+			//string query = @"SELECT * FROM Users WHERE (LastName LIKE '@Request%') OR (FirstName LIKE '@Request%') OR (Email LIKE '@Request%')";
+			string query = $"SELECT * FROM Users WHERE (LastName LIKE '{request}%') OR (FirstName LIKE '{request}%') OR (Email LIKE '{request}%')";
 
 			using (var connection = new SqlConnection(connectionString))
 			{

@@ -32,3 +32,15 @@ export const getUserCount = `
         userCount
     }
 `
+
+export const getExportData= `
+    query ExportData($orderBy: String!, $isReverse: Boolean!){
+      exportUsers(orderBy: $orderBy, isReverse: $isReverse){
+        email,
+        firstName,
+        lastName,
+        workType,
+        workingTime
+      }
+    }
+`

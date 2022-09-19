@@ -1,6 +1,11 @@
 import {combineEpics, Epic, ofType} from "redux-observable";
 import {from, map, mergeMap, Observable} from "rxjs";
-import {getPaginatedUserList, getSearchResponse, getUserCount} from "../../graphql/queries/userList.queries";
+import {
+    getExportData,
+    getPaginatedUserList,
+    getSearchResponse,
+    getUserCount
+} from "../../graphql/queries/userList.queries";
 import {
     insertCreatedUser,
     createUserAction,
@@ -34,15 +39,13 @@ const fetchUserListPageEpic: Epic = (action$: Observable<ReturnType<typeof fetch
 const fetchExportDataEpic: Epic = (action$: Observable<ReturnType<typeof fetchExportData>>): any => {
     return action$.pipe(
         ofType(fetchExportData.type),
-        mergeMap(action => from(graphqlRequest(getPaginatedUserList, {
-            from: 0,
-            contentPerPage: action.payload.contentPerPage,
+        mergeMap(action => from(graphqlRequest(getExportData, {
             orderBy: action.payload.orderBy,
             isReverse: action.payload.isReverse
         })).pipe(
             map(response => {
-                if (response?.data?.userFetchPageList) {
-                    return setExportData(response.data.userFetchPageList);
+                if (response?.data?.exportUsers) {
+                    return setExportData(response.data.exportUsers);
                 }
                 return {type: 'FetchExportDataError', payload: 'Error'} as Action
             })
@@ -69,6 +72,7 @@ const fetchUserListSearchResponseEpic: Epic = (action$: Observable<ReturnType<ty
         ofType(fetchUserListSearchRequest.type),
         mergeMap(action => from(graphqlRequest(getSearchResponse, {request: action.payload.request})).pipe(
             map(response => {
+                console.warn(action)
                 if (response.data.userFetchSearchList) {
                     return setUserList(response.data.userFetchSearchList);
                 }
