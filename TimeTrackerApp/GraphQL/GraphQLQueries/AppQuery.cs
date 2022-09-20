@@ -35,7 +35,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     List<ExportUserDataItem> exportUserDataItems = new();
                     foreach (var user in users)
                     {
-                        var userRecords = await recordRepository.FetchAllUserRecordsAsync(user.Id);
+                        var userRecords = await recordRepository.FetchUserRecordsByMonthAsync(user.Id, DateTime.UtcNow.Month);
                         int workingTime = 0;
                         foreach (var record in userRecords)
                             workingTime += record.WorkingTime / 1000 / 60 / 60;

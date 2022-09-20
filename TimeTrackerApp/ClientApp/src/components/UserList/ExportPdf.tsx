@@ -22,7 +22,7 @@ const ExportPdf: FC<Prop> = ({orderBy, isReverse}) => {
                 firstName:'First Name',
                 lastName:"Last Name",
                 workType:"Work Type",
-                workingTime:"Weekly working time"}],
+                workingTime:"Time worked"}],
             body: exportUsers
         })
         doc.save("users.pdf")
