@@ -45,32 +45,14 @@ export const TimeTracker: FC<TimeTrackerPropsType> = (props) => {
         }
     }, [thisMonthRecords])
 
-    return (
-        <div className={"time-tracker-statistic w-100"}>
-            <Timer defaultProps={{records: records, lastRecord: lastRecord} as TimeTrackerDefaultPropsType}/>
-            <div className={"statistic-panel w-100"}>
-                <h3>Current month activity:</h3>
-                <div className={"statistic-panel-list"}>
-                    <div>
-                        <h4>Time worked</h4>
-                        <span>
-                            { getFormattedTime(timeWorkedInThisMonth) }
-                        </span>
-                    </div>
-                    <div>
-                        <h4>Time to be worked</h4>
-                        <span>
-                            { getFormattedTime(timeToBeWorkedInThisMonth) }
-                        </span>
-                    </div>
-                    <div>
-                        <h4>Attendance</h4>
-                        <span>
-                            {attendance} days
-                        </span>
-                    </div>
+    return state.showContent ? (
+        <div className={"flex-container flex-column w-100"}>
+            <section className={"time-tracker-container w-100"}>
+                <div className={"section-content flex-container flex-column"}>
+                    <TimeTrackerPanels />
+                    <TimeTrackerList records={timeTrackerListItems} id={parseInt(`${auth.state?.user?.id}`)} />
                 </div>
-            </div>
+            </section>
         </div>
     );
 }

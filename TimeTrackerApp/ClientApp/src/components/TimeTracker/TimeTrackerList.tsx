@@ -9,7 +9,8 @@ import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/useAppSelector";
 
 type TimeTrackerListPropsType = {
-    defaultProps: TimeTrackerDefaultPropsType
+    records: TimeTrackerItem[],
+    id: number
 }
 
 type TimeTrackerListStateType = {
@@ -25,12 +26,20 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
     const auth = useAuth()
     const dispatch = useDispatch();
     const [state, setState] = useState(initialState);
-    const {records} = props.defaultProps
+    const {records, id} = props
     const recordsInStore = useAppSelector(state => state.rootReducer.timeTracker.records)
     const dateTimeFormatter = Intl.DateTimeFormat('default', {hour: '2-digit', minute: 'numeric', second: 'numeric'})
     let componentStyle: CSSProperties = {maxWidth: window.innerWidth - 310};
 
-    let mouseListener = (event: Event) => {
+    useEffect(() => {
+        if (auth.state?.user?.id && state.selectedMonth) {
+            dispatch(fetchUserRecordsByMonth({userId: id, monthNumber: state.selectedMonth.getMonth() + 1}))
+        }
+        if (state.recordIsBeingEdited)
+            window.onclick = mouseListener
+    }, [auth, state])
+
+    const mouseListener = (event: Event) => {
         const element = event.target as Element
         if (!element.classList.contains('time-picker-input') && !element.classList.contains('save-record')) {
             setState({...state, recordIsBeingEdited: null})
