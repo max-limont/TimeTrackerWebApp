@@ -24,7 +24,6 @@ export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
     const auth = useAuth();
     const contentPerPage = 10;
-    const onlineUsers = useAppSelector(s => s.rootReducer.signal.usersOnline);
     const dispatch = useDispatch()
     const [state, setState] = useState<UserListPage>({
         from: 0,
