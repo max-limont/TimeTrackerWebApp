@@ -41,6 +41,10 @@ namespace TimeTrackerApp.Business.Services
                 {
                     throw new Exception("Wrong password!");
                 }
+                if (user.Activation == false)
+                {
+	                throw new Exception("User blocked");
+                }
                 await _signalHub.ConnectUser(email, password);
                 
                 var accessToken = JwtTokenService.GenerateAccessToken(user);

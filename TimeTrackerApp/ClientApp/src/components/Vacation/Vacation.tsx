@@ -23,8 +23,8 @@ type Props = {
 export function ShowComment(prop: Props) {
     const {approver, comment} = prop;
     const [visibleResponse, setResponse] = useState(false);
- 
-    
+
+
     return (
         <>
             {visibleResponse ?
@@ -71,7 +71,32 @@ export function Vacation() {
     const [visibleApprovers, setApprovers] = useState(false);
     const [id, setIdEdit] = useState(0);
     const vacationsList = useAppSelector(state => state.rootReducer.vacation.vacations);
+    const [vacations, setVacation] = useState(vacationsList);
+    const [filterState, setFilterState]: any = useState('');
     const auth = useAuth();
+    const filterVacationsByAcceptState = (state: string | boolean | null) => {
+        setFilterState(state);
+        console.log(state);
+        switch (state) {
+            case "": {
+                setVacation(vacationsList);
+                break
+            }
+            case true: {
+                console.log(state);
+                setVacation(vacationsList.filter(x => x.isAccepted == true));
+                break;
+            }
+            case false: {
+                setVacation(vacationsList.filter(x => x.isAccepted == false));
+                break;
+            }
+            case null: {
+                setVacation(vacationsList.filter(x => x.isAccepted == null));
+                break;
+            }
+        }
+    }
     useEffect(() => {
         const id = auth.state?.user?.id;
         // console.log(auth.state?.user?.roleId);
@@ -80,6 +105,10 @@ export function Vacation() {
             dispatch(fetchApproversAction(id));
         }
     }, [auth.state?.user]);
+    
+    useEffect(() => {
+        filterVacationsByAcceptState(filterState);
+    }, [vacationsList]);
 
     return (
         <>
@@ -87,55 +116,65 @@ export function Vacation() {
             {editState ? <EditVacation sourceVacation={undefined} stateForm={setEditState} visible={editState}
                                        idVacation={id}/> : <></>}
             {createState ? <CreateVacation stateForm={setCreateState} visible={createState}/> : <></>}
+
             <div className="vacation-container">
-                <div className="control-panel vacation-control-panel">
-                    <div>
-                        <button onClick={() => setCreateState(true)} className="button cyan-button">Create Vacation
-                            Request
-                        </button>
-                    </div>
-                    <div>
-                        <div className={"container-approver"}>
-                            <div className={"list-appovers"}>
-                                {visibleApprovers ?
-                                    <>
-                                        <div className={"item header-name"}>
-                                            <div>Manager</div>
-                                            <div>Email</div>
-                                        </div>
-                                        {approvers.map(x =>
-                                            <div key={x.id} className={"item "}>
-                                                <div>{x.firstName}{" "}{x.lastName}</div>
-                                                <div> {x.email}</div>
-                                            </div>)}
-                                    </>
-                                    : <></>
-                                }
+
+                <div className={'sick-leaves-panel flex-container'}>
+                    <nav>
+                        <a className={`${filterState === '' ? 'active' : ''}`}
+                           onClick={() => filterVacationsByAcceptState("")}>All</a>
+                        <a className={`${filterState === true ? 'active' : ''}`}
+                           onClick={() => filterVacationsByAcceptState(true)}>Accepted</a>
+                        <a className={`${filterState === false ? 'active' : ''}`}
+                           onClick={() => filterVacationsByAcceptState(false)}>Rejected</a>
+                        <a className={`${filterState === null ? 'active' : ''}`}
+                           onClick={() => filterVacationsByAcceptState(null)}>Waiting Confirm</a>
+
+                        <div>
+                            <div className={"container-approver"}>
+                                <div className={"list-appovers"}>
+                                    {visibleApprovers ?
+                                        <>
+                                            <div className={"item header-name"}>
+                                                <div>Manager</div>
+                                                <div>Email</div>
+                                            </div>
+                                            {approvers.map(x =>
+                                                <div key={x.id} className={"item "}>
+                                                    <div>{x.firstName}{" "}{x.lastName}</div>
+                                                    <div> {x.email}</div>
+                                                </div>)}
+                                        </>
+                                        : <></>
+                                    }
+                                </div>
                             </div>
                         </div>
-                        <button onClick={() => setApprovers(!visibleApprovers)} className="button cyan-button">Check
+                    </nav>
+                    <div>
+                        <a className={'button cyan-button'} onClick={() => setApprovers(!visibleApprovers)}>Check
                             Approvers
-                        </button>
+                        </a> 
+                        <a style={{marginLeft:"5px"}} className={'button cyan-button'} onClick={() => setCreateState(true)}>Create Vacation
+                            Request
+                        </a>
                     </div>
                 </div>
+                <div className={'sick-leaves-container flex-container flex-column w-100'}>
+                    <div className={'sick-leaves-list flex-container flex-column'}>
+                        <table className={'sick-leaves-list-table'}>
+                            <thead>
+                            <tr>
+                                <th>Starting Time</th>
+                                <th>Ending Time</th>
+                                <th>IsAccepted</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {vacations.map((item, i) => {
 
-                <div className="list-vacation-container">
-                    <p style={{margin: "5px", display: "flex"}}>
-                        Your Vacations
-
-                    </p>
-                    <div className="list-vacations">
-                        {!(vacationsList.length == 0) ?
-                            <>
-                                <div className="vacation-item" style={{textAlign: "center"}}>
-                                    <div>Starting Time</div>
-                                    <div>Ending Time</div>
-                                    <div className={"end-item-action"} style={{flexBasis: "200px"}}>IsAccepted</div>
-                                    <div className={"end-item-action"}>Actions</div>
-                                </div>
-                                {vacationsList.map((item, i) => {
-
-                                    const Comment = (<span className="response-container">
+                                const Comment = (<span className="response-container">
                                                         {item.vacationResponse ?
                                                             item.vacationResponse.comment !== "" ?
                                                                 <ShowComment approver={item.vacationResponse?.user}
@@ -143,53 +182,53 @@ export function Vacation() {
                                                             : <></>}
                                                     </span>);
 
-                                    return (
-                                        <div key={i} className="vacation-item">
-                                            <div>{item.startingTime}</div>
-                                            <div>{item.endingTime}</div>
-                                            <div className={"end-item-action"}
-                                                 style={{flexBasis: "200px"}}>{item.isAccepted ? <>
+                                return (
+                                    <tr key={i}>
+                                        <td>{item.startingTime}</td>
+                                        <td>{item.endingTime}</td>
+                                        <td>{item.isAccepted ? <>
                                                 <span className={" button green-button-no-action"}
                                                       style={{flexGrow: "1"}}>Aceppted
                                                 </span>
-                                                    {Comment}
-                                                </>
-                                                : item.isAccepted == null ?
-                                                    <span className="button yellow-button" style={{flexGrow: "1"}}>Wait for confirmation</span>
-                                                    : <><span className={"button red-button"}
-                                                              style={{flexGrow: "1"}}>Canceled</span>
-                                                        {Comment}</>
-                                            }
-                                            </div>
-                                            <div className={"end-item-action"}>
-                                                {item.isAccepted == true ?
-                                                    <button className="button cyan-button">You have not any
-                                                        action</button>
-                                                    :
-                                                    <>
-                                                        {item.isAccepted == null ?
-                                                            <>
-                                                                <button onClick={() => {
-                                                                    setEditState(true);
-                                                                    setIdEdit(item.id);
-                                                                }} className="button cyan-button">Edit
-                                                                </button>
-                                                                <button className={"button red-button close"}
-                                                                        onClick={() => dispatch(removeVacationAction(item.id))}>
-                                                                    Delete Request
-                                                                </button>
-                                                            </> :
+                                                {Comment}
+                                            </>
+                                            : item.isAccepted == null ?
+                                                <span className="button yellow-button" style={{flexGrow: "1"}}>Wait for confirmation</span>
+                                                : <><span className={"button red-button"}
+                                                          style={{flexGrow: "1"}}>Canceled</span>
+                                                    {Comment}</>
+                                        }
+                                        </td>
+                                        <td>
+                                            {item.isAccepted == true ?
+                                                <button className="button cyan-button">You have not any
+                                                    action</button>
+                                                :
+                                                <>
+                                                    {item.isAccepted == null ?
+                                                        <>
+                                                            <button onClick={() => {
+                                                                setEditState(true);
+                                                                setIdEdit(item.id);
+                                                            }} className="button cyan-button">Edit
+                                                            </button>
                                                             <button className={"button red-button close"}
                                                                     onClick={() => dispatch(removeVacationAction(item.id))}>
                                                                 Delete Request
-                                                            </button>}
-                                                    </>
-                                                }
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </> : <div>You dont have vacations</div>}
+                                                            </button>
+                                                        </> :
+                                                        <button className={"button red-button close"}
+                                                                onClick={() => dispatch(removeVacationAction(item.id))}>
+                                                            Delete Request
+                                                        </button>}
+                                                </>
+                                            }
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

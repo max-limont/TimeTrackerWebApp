@@ -17,16 +17,22 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
 {
     public class AppMutation : ObjectGraphType
     {
-        private IHubContext<SignalHub> hubContext { get; set; }
+        private IHubContext<SignalHub> HubContext { get; set; }
+        private IHttpContextAccessor ContextAccessor { get; set; }
 
-
+        private int GetUserIdAcessor()
+        {
+             return int.Parse(ContextAccessor.HttpContext.User.Identities.First().Claims
+                                    .First(x => x.Type == "UserId").Value);
+        }
         public AppMutation(SignalHub signalHub,IHubContext<SignalHub> hubContext,IHttpContextAccessor contextAccessor, ICalendarRepository calendarRepository,
             IAuthenticationTokenRepository authenticationTokenRepository, IRecordRepository recordRepository,
             IUserRepository userRepository, IVacationRepository vacationRepository,
             ISickLeaveRepository sickLeaveRepository, IVacationResponseRepository vacationResponseRepository)
         {
             var authenticationService = new AuthenticationService(signalHub,userRepository, authenticationTokenRepository);
-            this.hubContext = hubContext;
+            HubContext = hubContext;
+            ContextAccessor = contextAccessor;
             
             Field<UserType, User>()
                 .Name("ChangedPrivelege")
@@ -34,8 +40,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .Argument<IntGraphType, int>("privilegeValue", "value privilege")
                 .ResolveAsync(async context =>
                 {
-                    var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
-                        .First(x => x.Type == "UserId").Value);
+                    var userId = GetUserIdAcessor();
                     if (userId == context.GetArgument<int>("userId"))
                     {
                         throw new Exception("You cant change yourself privilege");
@@ -133,10 +138,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     {
                         if (ex.Message == "User with this email was not found!")
                         {
-                            await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
-                            {
-                                Type = "createUser",
-                            });
+                          
                             return await userRepository.CreateAsync(user);
                         }
                         return null;
@@ -163,15 +165,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     }
 
                     int id = context.GetArgument<int>("Id");
-                    await hubContext.Clients.Group("AuthUser").SendAsync("Action", new ActionPayload()
-                    {
-                        Type = "deleteUser",
-                        Data = new Claim[]
-                        {
-                            new Claim("id", $"{id}")
-                        }
-                    });
-                    
+                  
                     return await userRepository.ChangeActivationState(new User()
                     {
                         Id = id,

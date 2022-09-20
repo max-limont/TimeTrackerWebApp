@@ -10,6 +10,7 @@ namespace TimeTrackerApp.Business.Repositories
 		Task<IEnumerable<User>> FetchFullTimeEmployeesAsync();
 		Task<IEnumerable<User>> FetchPartTimeEmployeesAsync();
 		Task<int> GetCountAsync();
+		Task<bool> UserOnLeave(int userId);
 		Task<User> ChangePrivelegeValueAsync(User user);
 		Task<User> GetByIdAsync(int id);
 		Task<User> GetByEmailAsync(string email,int modeQuery=0);

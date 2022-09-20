@@ -15,6 +15,31 @@ namespace TimeTrackerApp.MsSql.Repositories
 			this.connectionString = connectionString;
 		}
 
+		public async Task<bool> UserOnLeave(int userId)
+		{
+			string queryVacation =
+				@"Select * from Vacation where StartingTime<=GETDATE() and EndingTime>=GETDATE() and UserId=@userId";
+			string querySickLeaves =
+				@"Select * from SickLeaves where StartDate<=GETDATE() and EndDate>=GETDATE() and EmployeeId=@userId";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				var result = await connection.QueryFirstOrDefaultAsync<Vacation>(queryVacation, new
+				{
+					userId = userId
+				});
+				var resultSick = await connection.QueryFirstOrDefaultAsync<SickLeave>(querySickLeaves, new
+				{
+					userId = userId
+				});
+				if (result == null && resultSick == null) 
+				{
+					return false;
+				}
+				return true;
+			}
+		}
+		
 		public async Task<User> ChangePassword(int id, string password)
 		{
 			string query = "UPDATE Users SET Password = @Password WHERE Id = @Id";

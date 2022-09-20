@@ -25,7 +25,7 @@ export const signalRSlice = createSlice({
     name: "signalRSlice",
     initialState: state,
     reducers: {
-        authSignalR: (state, action: PayloadAction<AuthorizationUser>) => {
+        authSignalR: (state) => {
             return state;
         },
         logoutR: (state)=>{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using TimeTrackerApp.Business.Enums;
 using TimeTrackerApp.Business.Repositories;
@@ -12,8 +13,10 @@ public class SignalHub:Hub
     public static Dictionary<int, string> connectedUser = new Dictionary<int, string>();
     
     private IUserRepository UserRepository;
-    public SignalHub(IUserRepository userRepository)
+    private IHttpContextAccessor contextAccessor;
+    public SignalHub(IHttpContextAccessor contextAccessor,IUserRepository userRepository)
     {
+        this.contextAccessor = contextAccessor;
         UserRepository = userRepository;
     }
     public async Task ConnectUserWithHashPassword(string email, string password)
@@ -28,9 +31,9 @@ public class SignalHub:Hub
     {
         var model = connectedUser.FirstOrDefault(x => x.Value.Equals(Context.ConnectionId));
         connectedUser.Remove(model.Key);
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, "AuthUser");
         try
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "AuthUser");
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Admins");
         }
         catch (Exception e)
@@ -38,11 +41,6 @@ public class SignalHub:Hub
             Console.WriteLine(e);
         }
         await Clients.Group("Admins").SendAsync("online",$"{connectedUser.Count}");
-    }
-
-    public async Task Test()
-    {
-        var asd = 1;
     }
 
     private async Task AddUser(string email, string password,bool hashed=false)
@@ -63,18 +61,28 @@ public class SignalHub:Hub
                 throw new Exception("error to refresh!");
             }
         }
+       
         try
         {
             connectedUser[user.Id] = Context.ConnectionId;
+            await Groups.RemoveFromGroupAsync(connectedUser[user.Id], "AuthUser");
+            try
+            {
+                await Groups.RemoveFromGroupAsync(connectedUser[user.Id], "Admins");
+            }
+            catch
+            {
+                Console.WriteLine("Users not found in Admin Group");
+            }
         }
         catch 
         {
-            connectedUser.Add(user.Id,Context.ConnectionId);
+            connectedUser.Add(user.Id, Context.ConnectionId);
             Console.WriteLine("New User");
         }
         
         await Groups.AddToGroupAsync(Context.ConnectionId, "AuthUser");
-        if ((user.PrivilegesValue& Convert.ToInt32(Privileges.WatchUsers))>0)
+        if ((user.PrivilegesValue & Convert.ToInt32(Privileges.WatchUsers))>0)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, "Admins");
         }

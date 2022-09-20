@@ -53,9 +53,9 @@ builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
 // builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
-// builder.Services.AddHostedService<BackgroundTaskService>();
-// builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
-// builder.Services.AddScoped<AutoCreateRecordsTask>();
+builder.Services.AddHostedService<BackgroundTaskService>();
+builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
+builder.Services.AddScoped<AutoCreateRecordsTask>();
 
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()
@@ -113,14 +113,14 @@ builder.Services.AddGraphQL(b => b
 
 builder.Services.AddSignalR();
 
-// builder.Services.AddQuartz(service =>
-// {
-//     service.UseMicrosoftDependencyInjectionJobFactory();
-//     service.AddJob<AutoCreateRecordsTask>(options => options.WithIdentity(new JobKey(nameof(AutoCreateRecordsTask))));
-//     service.AddTrigger(options => options.ForJob(new JobKey(nameof(AutoCreateRecordsTask))).WithIdentity($"{nameof(AutoCreateRecordsTask)}-trigger").WithCronSchedule(builder.Configuration[Constants.AutoCreateRecordsTaskCron]));
-// });
+builder.Services.AddQuartz(service =>
+{
+    service.UseMicrosoftDependencyInjectionJobFactory();
+    service.AddJob<AutoCreateRecordsTask>(options => options.WithIdentity(new JobKey(nameof(AutoCreateRecordsTask))));
+    service.AddTrigger(options => options.ForJob(new JobKey(nameof(AutoCreateRecordsTask))).WithIdentity($"{nameof(AutoCreateRecordsTask)}-trigger").WithCronSchedule(builder.Configuration[Constants.AutoCreateRecordsTaskCron]));
+});
 
-// builder.Services.AddQuartzHostedService(service => service.WaitForJobsToComplete = true);
+builder.Services.AddQuartzHostedService(service => service.WaitForJobsToComplete = true);
 
 
 // In production, the React files will be served from this directory

@@ -32,6 +32,7 @@ export const parseObjectToUser = (object: any): User => {
         weeklyWorkingTime: parseInt(object.weeklyWorkingTime ?? ''),
         remainingVacationDays: parseInt(object.remainingVacationDays ?? ''),
         privilegesValue: parseInt(object.privilegesValue ?? ''),
+        password: object.password ?? "",
         vacationPermissionId: parseInt(object.vacationPermissionId??""),
         teamId: parseInt(object.teamId),
         roleId: parseInt(object.roleId)
