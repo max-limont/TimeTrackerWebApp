@@ -105,6 +105,10 @@ export function Vacation() {
             dispatch(fetchApproversAction(id));
         }
     }, [auth.state?.user]);
+    
+    useEffect(() => {
+        filterVacationsByAcceptState(filterState);
+    }, [vacationsList]);
 
     return (
         <>

@@ -29,29 +29,36 @@ namespace TimeTrackerApp.MsSql.Repositories
 
             using (var connection = new SqlConnection(connectionString))
             {
-                string queryFetchManagersUser = @$"Select UserId from VacationManager";
-                int id = await connection.QueryFirstAsync<int>(query, vacation);
-                if (id != 0)
-                {
-                    var userManagers = await UserManagement.GetByUserIdVacationManagment(vacation.UserId);
-                    if (userManagers == null)
+                // string dateBlock = @$"select * from Vacation where StartingTime
+                //  between @StartingTime  and @EndingTime or EndingTime between @StartingTime  and @EndingTime  and IsAccepted=1";
+                // // var vacationToday = await connection.QueryFirstAsync<Vacation>(dateBlock, vacation);
+                // // if (vacationToday == null)
+                // // {
+                    string queryFetchManagersUser = @$"Select UserId from VacationManager";
+                    int id = await connection.QueryFirstAsync<int>(query, vacation);
+                    if (id != 0)
                     {
-                        var defaultManagersId = await connection.QueryAsync<int>(queryFetchManagersUser);
-                        foreach (var managerId in defaultManagersId)
+                        var userManagers = await UserManagement.GetByUserIdVacationManagment(vacation.UserId);
+                        if (userManagers == null)
                         {
-                            var model = await UserManagement.CreateVacationManagment(new VacationManagement()
+                            var defaultManagersId = await connection.QueryAsync<int>(queryFetchManagersUser);
+                            foreach (var managerId in defaultManagersId)
                             {
-                                ManagerId = managerId,
-                                EmployeeId = vacation.UserId
-                            });
+                                var model = await UserManagement.CreateVacationManagment(new VacationManagement()
+                                {
+                                    ManagerId = managerId,
+                                    EmployeeId = vacation.UserId
+                                });
+                            }
                         }
+
+                        return await GetVacationByIdAsync(id);
                     }
 
-                    return await GetVacationByIdAsync(id);
+                    throw new Exception("Vacation create error!");
                 }
-
-                throw new Exception("Vacation create error!");
-            }
+            // }
+            // throw new Exception("Vacation create error!");
         }
 
 
