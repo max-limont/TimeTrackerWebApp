@@ -36,7 +36,7 @@ export const TimeTracker: FC = () => {
             <section className={"time-tracker-container w-100"}>
                 <div className={"section-content flex-container flex-column"}>
                     <TimeTrackerPanels />
-                    <TimeTrackerList records={timeTrackerListItems} />
+                    <TimeTrackerList records={timeTrackerListItems} id={parseInt(`${auth.state?.user?.id}`)} />
                 </div>
             </section>
         </div>
