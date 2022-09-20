@@ -1,8 +1,8 @@
 import { combineEpics, ofType } from "redux-observable";
 import {from, map, mergeMap, Observable} from "rxjs";
 import { graphqlRequest } from "../../graphql/api";
-import {parseObjectToUser, setUser} from "./user.slice";
-import {getUserByIdQuery} from "../../graphql/queries/user.queries";
+import {getUserByEmail, parseObjectToUser, setUser} from "./user.slice";
+import {getUserByEmailQuery, getUserByIdQuery} from "../../graphql/queries/user.queries";
 import {Epic} from "redux-observable";
 import {getUserById} from "./user.slice";
 import {Action} from "react-epics";
@@ -18,6 +18,20 @@ const getUserByIdEpic: Epic = (action$: Observable<ReturnType<typeof getUserById
                     return setUser(user);
                 }
                 return {type: "GetUserByIdError", payload: "Error"} as Action
+            })
+        )));
+}
+
+const getUserByEmailEpic: Epic = (action$: Observable<ReturnType<typeof getUserByEmail>>): any => {
+    return action$.pipe(
+        ofType(getUserByEmail.type),
+        mergeMap((action :any) => from(graphqlRequest(getUserByEmailQuery, action.payload)).pipe(
+            map(response => {
+                if (response?.data?.getUserByEmail) {
+                    const user = parseObjectToUser(response.data.getUserByEmail);
+                    return setUser(user);
+                }
+                return {type: "GetUserByEmailError", payload: "Error"} as Action
             })
         )));
 }
@@ -48,5 +62,5 @@ const getUserByIdEpic: Epic = (action$: Observable<ReturnType<typeof getUserById
 
 
 
-export const userEpics = combineEpics(getUserByIdEpic);
+export const userEpics = combineEpics(getUserByIdEpic, getUserByEmailEpic);
 

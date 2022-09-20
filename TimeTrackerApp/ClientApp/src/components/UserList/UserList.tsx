@@ -76,22 +76,17 @@ export const UserList: FC = () => {
         <section className={"user-list flex-container flex-column w-100"}>
             <div className={"user-list-controls flex-container flex-wrap"}>
                 <form className={"search-form flex-container align-items-center w-100"}>
-
                     <div className={'form-group w-100'}>
                         <div className={"form-item w-100"}>
                             <label>Search users: </label>
                             <input type={"text"} onChange={event => setSearch(event.target.value)}/>
                             <FontAwesomeIcon icon={faMagnifyingGlass} className={"icon"}/>
                         </div>
-                        <div>
-                            Users Online: {`${onlineUsers}`}
-                        </div>
                     </div>
                 </form>
                 <div className={"user-list-controls-group flex-container align-items-center"}>
                     <span>Sort by:</span>
                     <Select options={selectOptions} selectHandler={selectHandler}/>
-
                     <div className={"dropdown"}>
                         <button className="dropbtn dark-button">Export Data</button>
                         <div className={"dropdown-content"}>
@@ -99,30 +94,34 @@ export const UserList: FC = () => {
                             <ExportPdf isReverse={state.isReverse} orderBy={state.orderBy}/>
                         </div>
                     </div>
-
                     <Link to={"/user-create"} className="button cyan-button">Create user</Link>
                 </div>
             </div>
-            <table className={"user-list-list"}>
-                <thead>
-                <tr className={"userList-list-title"}>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Weekly Working Time</th>
-                    <th>Full-time/Part-time</th>
-                    <th style={{width: 250}}>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {userList &&
-                userList.map((item: User) => (
-                    item.id == userIdForEdit
-                        ? <UserEdit key={item.id} item={item} handler={userActionHandler}/>
-                        : <UserItem key={item.id} item={item} handler={userActionHandler}/>
-                ))
-                }
-                </tbody>
-            </table>
+            <div className={'user-list-container'}>
+                <div className={'user-list-container-header'}>
+                    <h3>List of employees:</h3>
+                </div>
+                <table className={"user-list-table w-100"}>
+                    <thead>
+                    <tr className={"userList-list-title"}>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Weekly Working Time</th>
+                        <th>Full-time/Part-time</th>
+                        <th style={{width: 250}}>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {userList &&
+                        userList.map((item: User) => (
+                            item.id == userIdForEdit
+                                ? <UserEdit key={item.id} item={item} handler={userActionHandler}/>
+                                : <UserItem key={item.id} item={item} handler={userActionHandler}/>
+                        ))
+                    }
+                    </tbody>
+                </table>
+            </div>
             {!request.length &&
             <Pagination contentPerPage={contentPerPage} count={count} setFirstContentIndex={firstContentIndexHandler}/>
             }

@@ -1,6 +1,6 @@
 import React, {CSSProperties, FC, useState} from 'react';
 import {deleteUserAction, editUserAction} from "../../store/userList/userList.slice";
-import {User} from "../../types/user.types";
+import {User, UserInputType} from "../../types/user.types";
 import {useDispatch} from "react-redux";
 
 const btnStyle: CSSProperties = {
@@ -12,7 +12,7 @@ const btnStyle: CSSProperties = {
 }
 
 const UserEdit: FC<{ item: User, handler(gameId: number): void }> = ({item, handler}) => {
-    const [user, setUser] = useState<User>(item)
+    const [user, setUser] = useState(item)
     const dispatch = useDispatch()
     return (
         <tr key={item.id} className="link-btn userItem">

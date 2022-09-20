@@ -87,7 +87,6 @@ const createUserEpic: Epic = (action$: Observable<ReturnType<typeof createUserAc
         ofType(createUserAction.type),
         mergeMap(action => from(graphqlRequest(createUserQuery, {userInput: action.payload})).pipe(
             map(response => {
-                console.log(response)
                 if (response.data.createUser) {
                     return insertCreatedUser(response.data.createUser)
                 }
@@ -101,8 +100,6 @@ const editUserEpic: Epic = (action$: Observable<ReturnType<typeof editUserAction
         ofType(editUserAction.type),
         mergeMap(action => from(graphqlRequest(editUserQuery, {userInput: action.payload})).pipe(
             map(response => {
-                console.log(action.payload)
-                console.warn(response.data)
                 if (response.data.editUser) {
                     return editUser(response.data.editUser)
                 }
@@ -117,7 +114,6 @@ const deleteUserEpic: Epic = (action$: Observable<ReturnType<typeof deleteUserAc
         ofType(deleteUserAction.type),
         mergeMap(action => from(graphqlRequest(deleteUserQuery, {id: action.payload})).pipe(
             map(response => {
-                console.log(response)
                 if (response.data.deleteUser) {
                     return deleteUser(response.data.deleteUser)
                 }

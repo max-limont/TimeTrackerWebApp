@@ -217,10 +217,10 @@ body {
 
 .authentication-form {
   max-width: 400px;
-  width: 100%;
+  width: 400px;
   background: $color-light;
   border-radius: 2px;
-  padding: 15px;
+  padding: 20px;
   box-shadow: 0 0 20px -10px $color-dark;
 
   span {
@@ -231,9 +231,18 @@ body {
     color: $color-dark;
   }
 
-  .form-item {
-    padding: 10px 5px 10px 5px;
+  input {
+    width: 100%;
   }
+
+  .group-grid {
+    gap: 15px !important;
+  }
+
+  button {
+    margin-top: 5px;
+  }
+
 }
 
 .h-100 {
@@ -494,13 +503,13 @@ section {
   text-align: center;
   justify-content: center;
   align-items: center;
-  font-family: 'Nunito',
-  serif;
+  font-family: 'Nunito', serif;
   padding: 8px 20px;
   border-radius: 2px;
   font-weight: 600;
   font-size: 16px;
   border: 1px solid transparent;
+  text-decoration: none;
   cursor: pointer;
   outline: none;
 }
@@ -865,12 +874,17 @@ section {
   z-index: 999;
   padding: 15px;
 
-  label {
-    max-width: 100px;
-    width: 100%;
+  .switch {
+    background: #F6F6F6;
+    width: 100% !important;
   }
 
-  .form-item {
+  .group-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-item:not(.switch) {
+    align-items: flex-start;
     padding: 5px 0 5px 0;
   }
 
@@ -880,15 +894,20 @@ section {
     border-bottom: 1px solid #E6E6E6;
   }
 
-  input,
-  textarea,
-  select {
-    background: #F6F6F6;
-    box-shadow: inset 0 0 5px -5px $color-dark;
+  label {
+    font-weight: 400;
   }
 
-  label {
-    font-weight: 600;
+  .form-item.flex-wrap {
+    label {
+      margin-bottom: 7px;
+    }
+  }
+
+  .form-item:not(.flex-wrap) {
+    label {
+      margin-right: 10px;
+    }
   }
 
   textarea {
@@ -1001,13 +1020,53 @@ section {
     margin-bottom: 15px;
   }
 
+  .switch {
+    width: auto;
+    border-radius: 2px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 0 10px 0 0;
+    align-items: center !important;
+
+    label {
+      width: 100%;
+      cursor: pointer;
+      padding: 10px;
+    }
+  }
+
+  .group-grid {
+    display: grid;
+    align-items: start;
+    gap: 10px;
+    width: 100%;
+  }
+
   .form-item {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
 
     label {
       font-size: 16px;
       margin-right: 5px;
+      display: block;
+    }
+
+    input:not([type='submit']), textarea, select {
+      border: 1px solid $color-silver;
+      transition: 0.1s ease;
+      align-self: self-start;
+      vertical-align: top;
+
+      &:focus {
+        border: 1px solid $color-light-dark !important;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      &.invalid {
+        border: 1px solid $color-red;
+      }
     }
 
     input,
@@ -1029,7 +1088,6 @@ section {
     select {
       font-family: 'Nunito', serif;
       outline: none;
-      border: none;
       border-radius: 2px;
       padding: 7px 5px;
       font-size: 16px;
@@ -1254,7 +1312,7 @@ table {
       border-radius: 2px;
       background: $color-white;
       margin: 5px;
-      padding: 10px;
+      user-select: none;
 
       label {
         margin-right: 10px;
@@ -1508,30 +1566,6 @@ table {
   }
 }
 
-.message {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 10px 15px 10px 15px;
-  background: $color-light;
-  border-radius: 2px;
-  position: absolute;
-  width: 100%;
-  box-shadow: 0 0 20px -10px $color-dark;
-  transition: 0.3s ease;
-  font-size: 15px;
-  font-weight: 500;
-
-  .icon {
-    margin-right: 15px;
-    font-size: $font-size-default;
-  }
-
-  &.error {
-    color: $color-red;
-  }
-}
-
 .edit-record-form {
   position: fixed;
   background: $color-white;
@@ -1619,7 +1653,7 @@ table {
     background: #F6F6F6;
     box-shadow: inset 0 0 5px -5px $color-dark;
     max-width: 500px;
-    padding-block: 8px;
+    padding-block: 5px !important;
     width: 100%;
   }
 
@@ -1632,13 +1666,6 @@ table {
     margin-left: -25px;
     margin-right: 25px;
   }
-}
-
-.user-list-list {
-  background: $color-white;
-  margin: 0 15px 15px 15px;
-  border-radius: 2px;
-  box-shadow: 0 0 5px -4px $color-light-dark;
 }
 
 .user-list-controls-group {
@@ -1655,8 +1682,20 @@ table {
     position: relative;
 
     .select-button {
+      border: 1px solid $color-silver;
+      transition: 0.1s ease;
+      align-self: self-start;
+      vertical-align: top;
+
+      &:focus {
+        border: 1px solid $color-light-dark !important;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      &.invalid {
+        border: 1px solid $color-red;
+      }
       background: #F6F6F6;
-      border: none;
       outline: none;
       box-shadow: inset 0 0 5px -4px $color-light-dark;
       padding: 7px 10px;
@@ -1807,7 +1846,6 @@ div.end-item-action {
   box-shadow: 0 0 20px -10px #222831;
   width: 100px;
   height: 100px;
-  border: 1px solid black;
   background-color: white;
   border-radius: 8px;
   top: 50%;
@@ -1967,6 +2005,12 @@ div.end-item-action {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  max-width: 600px;
+  width: 100%;
+
+  .group-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   .form-header {
     padding-bottom: 10px;
@@ -1980,11 +2024,6 @@ div.end-item-action {
 
   label {
     margin-bottom: 5px;
-  }
-
-  input, textarea, select {
-    background: #F6F6F6;
-    box-shadow: inset 0 0 5px -5px $color-dark;
   }
 
   .buttons {
@@ -2054,7 +2093,6 @@ img {
   width: 200px;
   height: 200px;
   border-radius: 4px;
-  border: 1px solid $color-dark;
 }
 
 .userForm {
@@ -2194,16 +2232,6 @@ hr {
   form {
     margin: 10px;
 
-    input:not([type='submit']), textarea, select {
-      border: 1px solid $color-silver;
-      transition: 0.1s ease;
-
-      &:focus {
-        border: 1px solid $color-light-dark;
-        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
-      }
-    }
-
     .form-group {
       .group-header {
         width: 100%;
@@ -2213,16 +2241,13 @@ hr {
         text-transform: uppercase;
         color: gray;
       }
+      .form-item {
+        align-items: flex-start;
+      }
     }
 
     .create-user-button {
       padding: 7px 70px;
-    }
-
-    .group-grid {
-      display: grid;
-      gap: 10px;
-      width: 100%;
     }
 
     .form-group:not(:first-child) {
@@ -2337,5 +2362,38 @@ hr {
   100% {
     left: 100%;
     transform: translateX(0%);
+  }
+}
+
+.validation-error {
+  display: block;
+  margin-top: 5px;
+  color: $color-red;
+  font-size: 14px;
+}
+
+.user-list-container {
+  background: $color-white;
+  margin: 0 15px 15px 15px;
+  border-radius: 2px;
+  box-shadow: 0 0 5px -4px $color-light-dark;
+
+  .user-list-container-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 2px;
+    background: #F6F6F6;
+
+    > h3 {
+      font-weight: bold;
+      font-size: 20px;
+      padding: 10px;
+      border-radius: 2px;
+    }
+
+    .users-online {
+      margin-right: 10px;
+    }
   }
 }

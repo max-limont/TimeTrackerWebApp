@@ -10,6 +10,19 @@ export type User = {
     privilegesValue: number
 }
 
+export type UserInputType = {
+    id?: number | null,
+    email: string,
+    password: string,
+    passwordConfirmation: string,
+    firstName: string,
+    lastName: string,
+    isFullTimeEmployee: boolean,
+    weeklyWorkingTime: number,
+    remainingVacationDays: number,
+    privilegesValue: number
+}
+
 export type GetUserByIdQueryInputType = {
     id: number
 }
