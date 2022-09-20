@@ -1,24 +1,24 @@
-import {CSSProperties, FC, useEffect, useState} from "react";
-import {deleteRecord, updateRecord} from "../../store/timeTracker/timeTracker.slice";
-import {TimeTrackerDefaultPropsType} from "./Home";
+import {FC, useEffect, useState} from "react";
+import {deleteRecord, fetchUserRecordsByMonth, updateRecord} from "../../store/timeTracker/timeTracker.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleInfo, faPenClip, faGears} from "@fortawesome/free-solid-svg-icons";
-import {Record} from "../../types/timeTracker.types";
+import {faCircleInfo, faPenClip, faGears, faAngleLeft, faAngleRight} from "@fortawesome/free-solid-svg-icons";
+import {Record, TimeTrackerItem} from "../../types/timeTracker.types";
 import {useAuth} from "../../hooks/useAuth";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/useAppSelector";
 
 type TimeTrackerListPropsType = {
-    records: TimeTrackerItem[],
-    id: number
+    records: TimeTrackerItem[]
 }
 
 type TimeTrackerListStateType = {
-    recordIsBeingEdited?: Record | null
+    recordIsBeingEdited?: Record | null,
+    selectedMonth?: Date | null
 }
 
 const initialState: TimeTrackerListStateType = {
-    recordIsBeingEdited: null
+    recordIsBeingEdited: null,
+    selectedMonth: new Date(new Date().setHours(0, 0, 0, 0))
 }
 
 export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
@@ -26,14 +26,13 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
     const auth = useAuth()
     const dispatch = useDispatch();
     const [state, setState] = useState(initialState);
-    const {records, id} = props
+    const {records} = props
     const recordsInStore = useAppSelector(state => state.rootReducer.timeTracker.records)
-    const dateTimeFormatter = Intl.DateTimeFormat('default', {hour: '2-digit', minute: 'numeric', second: 'numeric'})
-    let componentStyle: CSSProperties = {maxWidth: window.innerWidth - 310};
+    const timeFormatter = Intl.DateTimeFormat('default', {hour: '2-digit', minute: 'numeric', second: 'numeric'})
 
     useEffect(() => {
         if (auth.state?.user?.id && state.selectedMonth) {
-            dispatch(fetchUserRecordsByMonth({userId: id, monthNumber: state.selectedMonth.getMonth() + 1}))
+            dispatch(fetchUserRecordsByMonth({userId: auth.state.user.id, monthNumber: state.selectedMonth.getMonth() + 1}))
         }
         if (state.recordIsBeingEdited)
             window.onclick = mouseListener
@@ -64,18 +63,32 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
         return parseInt(substrings[0]) * 3600000 + parseInt(substrings[1]) * 60000 + parseInt(substrings[2]) * 1000
     }
 
+    const getTimeFromString = (time: string) => {
+        const substrings = time.split(':');
+        return [parseInt(substrings[0]), parseInt(substrings[1]), parseInt(substrings[2])]
+    }
+
     const removeTimeTrackerListItem = (recordId: number) => {
         dispatch(deleteRecord(recordId));
     }
 
-    useEffect(() => {
-        if (state.recordIsBeingEdited)
-            window.onclick = mouseListener
-    }, [state.recordIsBeingEdited])
-
     return (
         <>
-            <div className={"time-tracker-list flex-container flex-column position-relative"} style={componentStyle}>
+            <div className={"time-tracker-list flex-container flex-column position-relative"}>
+                <div className={'time-tracker-list-header'}>
+                    <h3>
+                        Time tracks:
+                    </h3>
+                    <div className={'month-picker flex-container align-items-center'}>
+                        <a className={"button light-dark-button inverse"} onClick={() => setState({...state, selectedMonth: new Date(state.selectedMonth?.setMonth(state.selectedMonth?.getMonth() - 1) ?? 0)})}>
+                            <FontAwesomeIcon icon={faAngleLeft} className={"icon"}/>
+                        </a>
+                        <input type={"month"} value={state.selectedMonth ? `${state.selectedMonth.getFullYear()}-${state.selectedMonth.getMonth() + 1 < 10 ? '0' : ''}${state.selectedMonth.getMonth() + 1}` : ''} onChange={event => setState({...state, selectedMonth: event.target.value ? new Date(event.target.value) : undefined})}/>
+                        <a className={"button light-dark-button inverse"} onClick={() => setState({...state, selectedMonth: new Date(state.selectedMonth?.setMonth(state.selectedMonth?.getMonth() + 1) ?? 0)})}>
+                            <FontAwesomeIcon icon={faAngleRight} className={"icon"}/>
+                        </a>
+                    </div>
+                </div>
                 <table className={"time-tracker-table"}>
                     <thead>
                     <tr>
@@ -103,16 +116,43 @@ export const TimeTrackerList: FC<TimeTrackerListPropsType> = (props) => {
                         records.map(record => (
                             <tr key={record.id}>
                                 <td>{record.date.toLocaleDateString()}</td>
-                                <td>{new Date(record.begin).toLocaleTimeString()}</td>
-                                <td>{new Date(record.end).toLocaleTimeString()}</td>
                                 <td>
                                     { record.id === state.recordIsBeingEdited?.id ?
-                                        <input className={'time-picker-input'} type={'time'} step={1} defaultValue={dateTimeFormatter.format(record.duration + new Date().getTimezoneOffset() * 60000)} onChange={event => setState({...state, recordIsBeingEdited: {...state.recordIsBeingEdited, workingTime: convertStringToTime(event.target.value)} as Record})} />
+                                        <input className={'time-picker-input'}
+                                               type={'time'}
+                                               step={1}
+                                               defaultValue={timeFormatter.format(state.recordIsBeingEdited!.createdAt.getTime())}
+                                               onChange={event => {
+                                                   const timeSections = getTimeFromString(event.target.value)
+                                                   const hours = timeSections[0]
+                                                   const minutes = timeSections[1]
+                                                   const seconds = timeSections[2]
+                                                   const createdAt = new Date(state.recordIsBeingEdited!.createdAt.setHours(hours, minutes, seconds))
+                                                   const workingTime = state.recordIsBeingEdited!.workingTime + record.begin - createdAt.getTime()
+                                                   setState({...state, recordIsBeingEdited: {
+                                                       ...state.recordIsBeingEdited,
+                                                       createdAt: createdAt,
+                                                       workingTime: workingTime
+                                                   } as Record})
+                                               }}
+                                        />
                                         :
-                                        dateTimeFormatter.format(record.duration + new Date().getTimezoneOffset() * 60000)
+                                        new Date(record.begin).toLocaleTimeString()
                                     }
-
                                 </td>
+                                <td>
+                                    { record.id === state.recordIsBeingEdited?.id ?
+                                        <input className={'time-picker-input'}
+                                               type={'time'}
+                                               step={1}
+                                               defaultValue={timeFormatter.format(state.recordIsBeingEdited!.createdAt.getTime() + state.recordIsBeingEdited!.workingTime)}
+                                               onChange={event => setState({...state, recordIsBeingEdited: {...state.recordIsBeingEdited, workingTime: Math.max(1000, convertStringToTime(event.target.value) - convertStringToTime(state.recordIsBeingEdited!.createdAt.toLocaleTimeString()))} as Record})}
+                                        />
+                                        :
+                                        new Date(record.begin + record.duration).toLocaleTimeString()
+                                    }
+                                </td>
+                                <td>{timeFormatter.format(record.duration + new Date().getTimezoneOffset() * 60000)}</td>
                                 <td>
                                     {record.isAutomaticallyCreated ?
                                         <span className={"creation-type-label automatically"}>

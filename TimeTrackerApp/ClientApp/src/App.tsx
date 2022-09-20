@@ -2,10 +2,11 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthenticationIndex} from "./components/Auth/AuthenticationIndex";
 import { Index } from "./components/Layout/Index";
 import {AuthProvider} from "./components/Auth/AuthProvider";
+import connection from "./store/signalr";
 
 
-const App = () => {
-
+function App ()  {
+    
     return (
         <BrowserRouter>
             <AuthProvider>

@@ -1,13 +1,12 @@
 import React, {FC, useEffect, useState} from "react";
 import {AuthorizationUser, AuthUserResponse} from "../../types/auth.types";
-import {authLoginAction, authLogoutAction, authorizeUserById, setUser} from "../../store/auth/auth.slice";
-import {User} from "../../types/user.types";
-import {useLocation, useNavigate} from "react-router-dom";
-import {accessTokenKey, getCookie, refreshTokenKey} from "../../helpers/cookies";
-import {parseJwt} from "../../helpers/parseJwt";
-import {useAppSelector} from "../../hooks/useAppSelector";
-import {useDispatch} from "react-redux";
-
+import {authLoginAction, authLogoutAction, authorizeUser, setUser} from "../../store/auth/auth.slice";
+import { User } from "../../types/user.types";
+import { useDispatch } from "react-redux";
+import {useLocation, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import {accessTokenKey, getCookie, refreshTokenKey } from "../../helpers/cookies";
+import { parseJwt } from "../../helpers/parseJwt";
 const defaultSignIn = (credentials: AuthorizationUser, callback: any) => {}
 const defaultSignOut = (callback: any) => {}
 
@@ -41,13 +40,13 @@ export const authContext = React.createContext(initialAuthContextState);
 
 export const AuthProvider: FC<any> = ({ children }) => {
 
-    const [state, setState] = useState(initialAuthState)
-    const authUser = useAppSelector(state => state.rootReducer.auth.user)
-    const location = useLocation()
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const accessToken = getCookie(accessTokenKey)
-    const refreshToken = getCookie(refreshTokenKey)
+    const [state, setState] = useState(initialAuthState);
+    const authUser = useAppSelector(state => state.rootReducer.auth.user);
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const accessToken = getCookie(accessTokenKey);
+    const refreshToken = getCookie(refreshTokenKey);
 
     useEffect(() => {
 
@@ -58,32 +57,17 @@ export const AuthProvider: FC<any> = ({ children }) => {
         if (authUser) {
             setState({...state, user: authUser, isUserAuthenticated: true})
             if (location.pathname === '/login')
-                navigate('/', {replace: true})
+                navigate('/home', {replace: true})
         }
 
         if (refreshToken) {
             if (!authUser) {
-                dispatch(authorizeUserById(parseInt(parseJwt<AuthUserResponse>(refreshToken).UserId)))
+                dispatch(authorizeUser(parseInt(parseJwt<AuthUserResponse>(refreshToken).UserId)))
             }
         } else {
             dispatch(authLogoutAction(getCookie(refreshTokenKey) ? parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId) : 0))
-        }
-
-        if (!authUser) {
-            /*if (localStorage.getItem("auth")) {
-                const userInStorage = JSON.parse(localStorage.getItem("auth")!)
-                const user = {
-                    id: parseInt(userInStorage.id),
-                    email: userInStorage.email ?? "",
-                    firstName: userInStorage.firstName ?? "Unknown",
-                    lastName: userInStorage.lastName ?? "User",
-                    isFullTimeEmployee: Boolean(JSON.parse(userInStorage.isFullTimeEmployee)),
-                    weeklyWorkingTime: parseInt(userInStorage.weeklyWorkingTime ?? ''),
-                    remainingVacationDays: parseInt(userInStorage.remainingVacationDays ?? ''),
-                    privilegesValue: parseInt(userInStorage.privilegesValue ?? ''),
-                    vacationPermissionId: parseInt(userInStorage.vacationPermissionId ?? '')
-                } as User
-                dispatch(setUser(user))*/
+            if (location.pathname !== '/login')
+                navigate('/login', {replace: true})
         }
 
     }, [authUser, accessToken, refreshToken])

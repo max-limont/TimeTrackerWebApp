@@ -19,8 +19,18 @@ export type TimeTrackerItem = {
     editor?: User | null
 }
 
+export type TimeTrackerDailyStatistics = {
+    totalWorkingTime: number,
+    date: Date
+}
+
 export type FetchAllUserRecordsInputType = {
     userId: number
+}
+
+export type FetchUserRecordsByMonthQueryInputType = {
+    userId: number,
+    monthNumber: number
 }
 
 export type CreateRecordInputType = {
@@ -33,4 +43,8 @@ export type UpdateRecordInputType = {
 
 export type DeleteRecordInputType = {
     id: number
+}
+
+export type FetchUserLastWeekTimeTrackerStatisticsQueryType = {
+    userId: number
 }

@@ -15,6 +15,31 @@ namespace TimeTrackerApp.MsSql.Repositories
 			this.connectionString = connectionString;
 		}
 
+		public async Task<bool> UserOnLeave(int userId)
+		{
+			string queryVacation =
+				@"Select * from Vacation where StartingTime<=GETDATE() and EndingTime>=GETDATE() and UserId=@userId";
+			string querySickLeaves =
+				@"Select * from SickLeaves where StartDate<=GETDATE() and EndDate>=GETDATE() and EmployeeId=@userId";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				var result = await connection.QueryFirstOrDefaultAsync<Vacation>(queryVacation, new
+				{
+					userId = userId
+				});
+				var resultSick = await connection.QueryFirstOrDefaultAsync<SickLeave>(querySickLeaves, new
+				{
+					userId = userId
+				});
+				if (result == null && resultSick == null) 
+				{
+					return false;
+				}
+				return true;
+			}
+		}
+		
 		public async Task<User> ChangePassword(int id, string password)
 		{
 			string query = "UPDATE Users SET Password = @Password WHERE Id = @Id";
@@ -38,7 +63,7 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<User> CreateAsync(User user)
 		{
-			string query = @"INSERT INTO Users (Email, Password, FirstName, LastName, IsFullTimeEmployee, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue, VacationPermissionId) VALUES (@Email, @Password, @FirstName, @LastName, @IsFullTimeEmployee, @WeeklyWorkingTime, @RemainingVacationDays, @PrivilegesValue, @VacationPermissionId)";
+			string query = @"INSERT INTO Users (Email, Password, FirstName, LastName, IsFullTimeEmployee, WeeklyWorkingTime, RemainingVacationDays, PrivilegesValue, Activation) VALUES (@Email, @Password, @FirstName, @LastName, @IsFullTimeEmployee, @WeeklyWorkingTime, @RemainingVacationDays, @PrivilegesValue, @Activation)";
 			using (var connection = new SqlConnection(connectionString))
 			{
 				user.Password = PasswordService.Encrypt(user.Password);
@@ -51,9 +76,24 @@ namespace TimeTrackerApp.MsSql.Repositories
 			}
 		}
 
+		public async Task<User> ChangePrivelegeValueAsync(User user)
+		{
+			string query = @"UPDATE Users SET PrivilegesValue = @PrivilegesValue WHERE Id = @Id";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				int affectedRows = await connection.ExecuteAsync(query, user);
+				if (affectedRows > 0)
+				{
+					return await GetByIdAsync(user.Id);
+				}
+				throw new Exception("User editing error!");
+			} 
+		}
+
 		public async Task<User> EditAsync(User user)
 		{
-			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, IsFullTimeEmployee = @IsFullTimeEmployee, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue, VacationPermissionId = @VacationPermissionId WHERE Id = @Id";
+			string query = @"UPDATE Users SET Email = @Email, FirstName = @FirstName, LastName = @LastName, IsFullTimeEmployee = @IsFullTimeEmployee, WeeklyWorkingTime = @WeeklyWorkingTime, RemainingVacationDays = @RemainingVacationDays, PrivilegesValue = @PrivilegesValue, Activation = @Activation WHERE Id = @Id";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -63,6 +103,21 @@ namespace TimeTrackerApp.MsSql.Repositories
 					return user;
 				}
 				throw new Exception("User editing error!");
+			}
+		}
+
+		public async Task<User> ChangeActivationState(User user)
+		{    
+			string query = @"UPDATE Users SET Activation = @Activation WHERE Id = @Id";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				int affectedRows = await connection.ExecuteAsync(query, user);
+				if (affectedRows > 0)
+				{
+					return await GetByIdAsync(user.Id);
+				}
+				throw new Exception("User change activation error!");
 			}
 		}
 
@@ -89,7 +144,8 @@ namespace TimeTrackerApp.MsSql.Repositories
 
 		public async Task<IEnumerable<User>> FetchSearchListAsync(string request)
 		{
-			string query = @"SELECT * FROM Users WHERE (LastName LIKE '@Request%') OR (FirstName LIKE '@Request%') OR (Email LIKE '@Request%')";
+			//string query = @"SELECT * FROM Users WHERE (LastName LIKE '@Request%') OR (FirstName LIKE '@Request%') OR (Email LIKE '@Request%')";
+			string query = $"SELECT * FROM Users WHERE (LastName LIKE '{request}%') OR (FirstName LIKE '{request}%') OR (Email LIKE '{request}%')";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -121,19 +177,36 @@ namespace TimeTrackerApp.MsSql.Repositories
 			}
 		}
 
-		public async Task<User> GetByEmailAsync(string email)
+		public async Task<User> GetByEmailAsync(string email,int modeQuery=0)
 		{
-			string query = @"SELECT * FROM Users WHERE Email = @Email";
+			string additionalToQuery = "";
+			if (modeQuery == 1)
+			{
+				additionalToQuery = $" and Activation= @Activation";
+			}
+
+			string query = $@"SELECT * FROM Users WHERE Email = @Email {additionalToQuery}";
 
 			using (var connection = new SqlConnection(connectionString))
 			{
-				var user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Email = email });
+				var user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Email = email,Activation=true });
 				if (user is not null)
 				{
 					return user;
 				}
 				throw new Exception("User with this email was not found!");
 			}
+		}
+
+		public async Task<bool> IsEmailExistAsync(string email)
+        {
+			var query = @"SELECT * FROM Users WHERE Email = @Email";
+			using (var connection = new SqlConnection(connectionString))
+			{
+				var user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Email = email });
+				return user is not null;
+			}
+
 		}
 
 		public async Task<User> RemoveAsync(int id)
@@ -156,6 +229,26 @@ namespace TimeTrackerApp.MsSql.Repositories
 				{
 					throw new Exception(exception.Message);
 				}
+			}
+		}
+
+		public async Task<IEnumerable<User>> FetchFullTimeEmployeesAsync()
+		{
+			string query = "SELECT * FROM Users WHERE IsFullTimeEmployee = 1";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
+			}
+		}
+
+		public async Task<IEnumerable<User>> FetchPartTimeEmployeesAsync()
+		{
+			string query = "SELECT * FROM Users WHERE IsFullTimeEmployee = 0";
+
+			using (var connection = new SqlConnection(connectionString))
+			{
+				return await connection.QueryAsync<User>(query);
 			}
 		}
 	}

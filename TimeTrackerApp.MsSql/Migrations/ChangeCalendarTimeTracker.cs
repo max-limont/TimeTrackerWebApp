@@ -7,14 +7,15 @@ public class ChangeCalendarTimeTracker:Migration
 {
     public override void Up()
     {
-        Create.Column("IsFullTimeEmployee").OnTable("Users")
-            .AsBinary().WithDefaultValue(1);
-        
-        Rename.Column("TypeDayId").OnTable("Users").To("DayTypeId");
-        
-        Delete.Column("Comment")
-            .FromTable("Records");
-        
+        // Create.Column("IsFullTimeEmployee").OnTable("Users")
+        //     .AsBinary().WithDefaultValue(1);
+        //
+        // Rename.Column("TypeDayId").OnTable("Users").To("DayTypeId");
+        //
+        // Delete.Column("Comment")
+        //     .FromTable("Records");
+        throw new NotImplementedException();
+
     }
 
     public override void Down()

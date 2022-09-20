@@ -1,15 +1,21 @@
-using GraphQL;
+using Quartz;
+using System;
 using System.Text;
+using System.Reflection;
+using System.Formats.Asn1;
+using GraphQL;
 using GraphQL.Types;
 using GraphQL.Server;
 using GraphQL.Validation;
 using GraphQL.MicrosoftDI;
 using GraphQL.Authorization;
 using GraphQL.SystemTextJson;
+using TimeTrackerApp.Helpers;
+using TimeTrackerApp.Business.Services;
 using TimeTrackerApp.Business.Repositories;
+using TimeTrackerApp.MsSql.Migrations;
 using TimeTrackerApp.MsSql.Repositories;
 using TimeTrackerApp.GraphQL.GraphQLSchema;
-using TimeTrackerApp.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
@@ -17,12 +23,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using TimeTrackerApp.Business.Services;
-using System;
-using System.Formats.Asn1;
-using System.Reflection;
 using FluentMigrator.Runner;
+using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using TimeTrackerApp.Business.Models;
 using TimeTrackerApp.MsSql.Migrations;
+using TimeTrackerApp.BackgroundTasks;
+using TimeTrackerApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,36 +40,44 @@ builder.Services.AddSingleton<IAuthenticationTokenRepository>(provider => new Au
 builder.Services.AddSingleton<IRecordRepository>(provider => new RecordRepository(connectionString));
 builder.Services.AddSingleton<IUserRepository>(provider => new UserRepository(connectionString));
 builder.Services.AddSingleton<ICalendarRepository>(provider => new CalendarRepository(connectionString));
-builder.Services.AddSingleton<IVacationRepository>(provider => new VacationRepository(connectionString));
-builder.Services.AddSingleton<IVacationLevelRepository>(provider => new VacationLevelRepository(connectionString));
+builder.Services.AddSingleton<IVacationRepository, VacationRepository>();
+builder.Services.AddSingleton<IVacationResponseRepository,VacationResponseRepository>();
+builder.Services.AddSingleton<IUserManagement>(provider => new UserManagementRepository(connectionString));
+builder.Services.AddSingleton<IBackgroundTaskRepository>(provider => new BackgroundTaskRepository(connectionString));
+builder.Services.AddSingleton<ISickLeaveRepository>(provider => new SickLeaveRepository(connectionString));
 
+builder.Services.AddSingleton<SignalHub>();
 
 builder.Services.AddTransient<AuthorizationSettings>(provider => new CustomAuthorizationSettings());
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 builder.Services.AddTransient<IAuthorizationEvaluator, AuthorizationEvaluator>();
 
-//
+// builder.Services.AddSingleton<IHostedService, MyBackgroundTask>();
+builder.Services.AddHostedService<BackgroundTaskService>();
+builder.Services.AddScoped<IBackgroundTask, AutoCreateRecordsTask>();
+builder.Services.AddScoped<AutoCreateRecordsTask>();
+
 // builder.Services.AddFluentMigratorCore().
 //     ConfigureRunner(config =>config.AddSqlServer()
 //         .WithGlobalConnectionString(connectionString)
 //         /* typeof(migration) миграция яка буде використовуватисб ,
 //          также нужно в класе всегда помечать [migration(nummberId)] */
-//         .ScanIn(typeof(ChangeCalendarTimeTracker).Assembly)
+//         .ScanIn(typeof(AddActivationToUser).Assembly)
 //         .For.All())
 //     .AddLogging(config=>config.AddFluentMigratorConsole());
-
+//
 
 // Add services to the container.
 builder.Services.AddCors(
-builder => {
-        builder.AddPolicy("DefaultPolicy", option =>
-        {
-            option.AllowAnyMethod();
-            option.AllowAnyOrigin();
-            option.AllowAnyHeader();
-        });
-    }
-);
+    builder => {
+        builder.AddPolicy("DefaultPolicy", 
+            option=>option.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .SetIsOriginAllowed((host) => true));
+        
+    });
 
 JwtTokenService.Configuration = builder.Configuration;
 
@@ -95,6 +111,16 @@ builder.Services.AddGraphQL(b => b
                 .AddSchema<AppSchema>()
                 .AddGraphTypes(typeof(AppSchema).Assembly));
 
+builder.Services.AddSignalR();
+
+builder.Services.AddQuartz(service =>
+{
+    service.UseMicrosoftDependencyInjectionJobFactory();
+    service.AddJob<AutoCreateRecordsTask>(options => options.WithIdentity(new JobKey(nameof(AutoCreateRecordsTask))));
+    service.AddTrigger(options => options.ForJob(new JobKey(nameof(AutoCreateRecordsTask))).WithIdentity($"{nameof(AutoCreateRecordsTask)}-trigger").WithCronSchedule(builder.Configuration[Constants.AutoCreateRecordsTaskCron]));
+});
+
+builder.Services.AddQuartzHostedService(service => service.WaitForJobsToComplete = true);
 
 
 // In production, the React files will be served from this directory
@@ -126,6 +152,8 @@ app.UseGraphQL<ISchema>();
 
 app.UseGraphQLAltair();
 app.UseExceptionHandler("/error");
+
+app.MapHub<SignalHub>("MessageHub");
 
 app.UseSpa(spa =>
 {
