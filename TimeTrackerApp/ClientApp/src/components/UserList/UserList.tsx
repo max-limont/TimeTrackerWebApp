@@ -1,7 +1,7 @@
-import React, {CSSProperties, FC, useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {User} from "../../types/user.types";
 import {Select} from "./Select";
 import ExportXlsx from "./ExportXlsx";
@@ -19,7 +19,6 @@ import {
 import UserEdit from "./UserEdit";
 import UserItem from "./UserItem";
 import ExportPdf from "./ExportPdf";
-import "./dropDown.scss"
 
 export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);

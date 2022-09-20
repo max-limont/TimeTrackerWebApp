@@ -1916,6 +1916,47 @@ div.end-item-action {
   }
 }
 
+.dropbtn {
+  color: white;
+  padding: 6px 15px;
+  border: 1px solid $color-dark;
+  border-radius: 2px;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 500;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: $color-white;
+  min-width: 100%;
+  z-index: 1;
+  border-radius: 2px;
+}
+
+.dropdown-content a {
+  display: block;
+  border: 1px solid $color-dark;
+}
+
+.dropdown:hover .dropdown-content{
+  display: block;
+}
+
+.export{
+  padding: 8px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
 .sick-leave-form {
   position: absolute;
   z-index: 999;
