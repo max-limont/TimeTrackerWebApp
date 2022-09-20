@@ -9,6 +9,7 @@ export const getPaginatedUserList = `
             activation
             weeklyWorkingTime
             privilegesValue 
+            activation
        }
     }
 `
@@ -19,7 +20,6 @@ export const getSearchResponse = `
             id
             activation
             email
-            activation
             firstName
             lastName
             isFullTimeEmployee
