@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {CSSProperties, FC, useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link, useNavigate} from "react-router-dom";
@@ -12,21 +12,20 @@ import {useDispatch} from "react-redux";
 import {UserListPage} from "../../types/userList.types";
 
 import {
-    deleteUserAction, editUserAction,
     fetchUserCount,
     fetchUserListPage,
     fetchUserListSearchRequest
 } from "../../store/userList/userList.slice";
 import UserEdit from "./UserEdit";
 import UserItem from "./UserItem";
-import {Privileges} from "../../helpers/enums";
 import ExportPdf from "./ExportPdf";
+import "./dropDown.scss"
 
 export const UserList: FC = () => {
     const {userList, count} = useAppSelector(state => state.rootReducer.userList);
     const auth = useAuth();
     const contentPerPage = 10;
-    const onlineUsers = useAppSelector(s=>s.rootReducer.signal.usersOnline);
+    const onlineUsers = useAppSelector(s => s.rootReducer.signal.usersOnline);
     const dispatch = useDispatch()
     const [state, setState] = useState<UserListPage>({
         from: 0,
@@ -39,15 +38,13 @@ export const UserList: FC = () => {
 
     const [userIdForEdit, setUserIdForEdit] = useState<number>(0)
 
-    const navigate = useNavigate()
-
     const selectHandler = (settings: { orderBy: string, isReverse: boolean }) => {
         setState({...state, ...settings})
     }
     const firstContentIndexHandler = (index: number) => {
         setState({...state, from: index})
     }
-    
+
     const userActionHandler = (gameId: number) => {
         setUserIdForEdit(gameId)
     }
@@ -71,6 +68,7 @@ export const UserList: FC = () => {
 
     useEffect(() => {
         if (auth.state?.isUserAuthenticated) {
+            console.log(request)
             dispatch(request.length ? fetchUserListSearchRequest({request}) : fetchUserListPage(state))
         }
     }, [request, state, auth])
@@ -79,7 +77,7 @@ export const UserList: FC = () => {
         <section className={"user-list flex-container flex-column w-100"}>
             <div className={"user-list-controls flex-container flex-wrap"}>
                 <form className={"search-form flex-container align-items-center w-100"}>
-                    
+
                     <div className={'form-group w-100'}>
                         <div className={"form-item w-100"}>
                             <label>Search users: </label>
@@ -94,9 +92,16 @@ export const UserList: FC = () => {
                 <div className={"user-list-controls-group flex-container align-items-center"}>
                     <span>Sort by:</span>
                     <Select options={selectOptions} selectHandler={selectHandler}/>
-                    <ExportXlsx count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
-                    <ExportPdf count={count} isReverse={state.isReverse} orderBy={state.orderBy}/>
-                    <Link to={"/user-create"} className="link-btn addUser button cyan-button">Create user</Link>
+
+                    <div className={"dropdown"}>
+                        <button className="dropbtn dark-button">Export Data</button>
+                        <div className={"dropdown-content"}>
+                            <ExportXlsx isReverse={state.isReverse} orderBy={state.orderBy}/>
+                            <ExportPdf isReverse={state.isReverse} orderBy={state.orderBy}/>
+                        </div>
+                    </div>
+
+                    <Link to={"/user-create"} className="button cyan-button">Create user</Link>
                 </div>
             </div>
             <table className={"user-list-list"}>

@@ -1,5 +1,5 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {User} from "../../types/user.types";
+import {ExportDataItemType, User} from "../../types/user.types";
 import {UserListPage} from "../../types/userList.types";
 
 type UserListStateType = {
@@ -7,7 +7,7 @@ type UserListStateType = {
     createdUser: User | null,
     deletedUser: User | null
     editedUser: User | null,
-    exportUsers: User[],
+    exportUsers: ExportDataItemType[],
     count: number,
     error: null | string
 }
@@ -32,7 +32,7 @@ export const userListSlice = createSlice({
         setUserList: (state, action: PayloadAction<User[]>) => {
             return {...state, error: null, userList: action.payload}
         },
-        setExportData: (state, action: PayloadAction<User[]>) => {
+        setExportData: (state, action: PayloadAction<ExportDataItemType[]>) => {
             return {...state, error: null, exportUsers: action.payload}
         },
         insertCreatedUser: (state, action: PayloadAction<User>) => {

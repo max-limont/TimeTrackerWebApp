@@ -32,6 +32,14 @@ export enum UserPrivileges
     ApproveAndRejectVacations = 32
 }
 
+export type ExportDataItemType = {
+    email: string,
+    firstName: string,
+    lastName: string,
+    workType: "Full-time" | "Part-time",
+    workingTime: number
+}
+
 
 // export interface UserCreateData {
 //     email: string,
