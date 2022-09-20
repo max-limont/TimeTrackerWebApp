@@ -40,13 +40,13 @@ export const authContext = React.createContext(initialAuthContextState);
 
 export const AuthProvider: FC<any> = ({ children }) => {
 
-    const [state, setState] = useState(initialAuthState)
-    const authUser = useAppSelector(state => state.rootReducer.auth.user)
-    const location = useLocation()
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const accessToken = getCookie(accessTokenKey)
-    const refreshToken = getCookie(refreshTokenKey)
+    const [state, setState] = useState(initialAuthState);
+    const authUser = useAppSelector(state => state.rootReducer.auth.user);
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const accessToken = getCookie(accessTokenKey);
+    const refreshToken = getCookie(refreshTokenKey);
 
     useEffect(() => {
 
@@ -57,7 +57,7 @@ export const AuthProvider: FC<any> = ({ children }) => {
         if (authUser) {
             setState({...state, user: authUser, isUserAuthenticated: true})
             if (location.pathname === '/login')
-                navigate('/', {replace: true})
+                navigate('/home', {replace: true})
         }
 
         if (refreshToken) {

@@ -54,7 +54,7 @@ export const Menu: FC = () => {
                         <h4>General</h4>
                         <ul>
                             <li>
-                                <NavLink to={"/"} replace className={"flex-container"}>
+                                <NavLink to={"/home"} replace className={"flex-container"}>
                                     <FontAwesomeIcon icon={faHouse} className={"icon"} />
                                     <span>Home</span>
                                 </NavLink>

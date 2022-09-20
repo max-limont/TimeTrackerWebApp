@@ -21,7 +21,7 @@ export const Content: FC = () => {
     return (
         <div className={"content-container flex-container w-100"}>
             <Routes>
-                <Route index element={<ProtectedComponent component={<TimeTracker />} />} />
+                <Route path={"/home"} element={<ProtectedComponent component={<TimeTracker />} />} />
                 <Route path={"/calendar"} element={<ProtectedComponent component={<Calendar />} />} />
                 <Route path={"/user-list"} element={<ProtectedComponent component={<UserList />} />} />
                 <Route path={'/user/:id'} element={<UserPage />} />
