@@ -1,5 +1,5 @@
 import React, {CSSProperties, FC, useState} from 'react';
-import {deleteUserAction, editUserAction} from "../../store/userList/userList.slice";
+import {changedActivationState, editUserAction} from "../../store/userList/userList.slice";
 import {User, UserInputType} from "../../types/user.types";
 import {useDispatch} from "react-redux";
 

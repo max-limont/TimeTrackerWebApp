@@ -145,8 +145,9 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     }
                 });
             Field<UserType, User>()
-                .Name("DeleteUser")
+                .Name("ChangeActivationState")
                 .Argument<NonNullGraphType<IdGraphType>, int>("Id", "User id")
+                .Argument<BooleanGraphType, bool>("activationState", "User state")
                 .ResolveAsync(async context =>
                 {
                     var userId = int.Parse(contextAccessor.HttpContext.User.Identities.First().Claims
@@ -165,13 +166,15 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                     }
 
                     int id = context.GetArgument<int>("Id");
+                    bool state = context.GetArgument<bool>("activationState");
                   
                     return await userRepository.ChangeActivationState(new User()
                     {
                         Id = id,
-                        Activation = false
+                        Activation = state
                     });
                 });
+            
             
             //Field<UserType, User>()
             //    .Name("DeleteUser")
@@ -385,6 +388,11 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                 .ResolveAsync(async context =>
                 {
                     var userId = context.GetArgument<int>("UserId");
+                    var user = await userRepository.GetByIdAsync(userId);
+                    if (user.Activation == false)
+                    {
+                        throw new Exception("error");
+                    }
                     var accessToken = context.GetArgument<string>("AccessToken");
                     var refreshToken = context.GetArgument<string>("RefreshToken");
                     try
@@ -396,7 +404,7 @@ namespace TimeTrackerApp.GraphQL.GraphQLQueries
                             AccessToken = authenticationServiceResponse.AccessToken,
                             RefreshToken = authenticationServiceResponse.RefreshToken
                         };
-                        var user = await userRepository.GetByIdAsync(userId);
+                      
                         await signalHub.ConnectUserWithHashPassword(user.Email, user.Password);
                         return authenticationServiceApiResponse;
                     }

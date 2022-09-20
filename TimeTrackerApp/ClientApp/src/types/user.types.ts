@@ -4,6 +4,7 @@ export type User = {
     password?: string | null,
     firstName: string,
     lastName: string,
+    activation: boolean,
     isFullTimeEmployee: boolean,
     weeklyWorkingTime: number,
     remainingVacationDays: number,

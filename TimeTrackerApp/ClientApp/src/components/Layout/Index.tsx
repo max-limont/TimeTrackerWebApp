@@ -21,8 +21,8 @@ export const Index: FC = () => {
         if(auth.state?.user){
             setLoading(false);
             if(isAuthUser==true){
-                console.log(`${auth.state?.user?.password}`);
-                connection.invoke("ConnectUserWithHashPassword", auth.state?.user?.email, auth.state?.user?.password);
+                // console.log(`${auth.state?.user?.password}`);
+                // connection.invoke("ConnectUserWithHashPassword", auth.state?.user?.email, auth.state?.user?.password);
             }
         }
     }, [auth.state]);
