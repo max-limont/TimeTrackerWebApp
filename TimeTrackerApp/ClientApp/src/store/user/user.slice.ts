@@ -1,33 +1,38 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {GetUserByIdQueryInputType, User} from "../../types/user.types";
+import {GetUserByEmailQueryInputType, GetUserByIdQueryInputType, User} from "../../types/user.types";
 
 type UserSliceStateType = {
-    users: User[],
-    user: User
+    user: User | null
 }
 
 const initialState: UserSliceStateType = {
-    users: [],
-    user: {} as User
+    user: null
 }
 
 export const userSlice = createSlice({
     name: "userSlice",
     initialState,
     reducers: {
-        setUsers: (state, action: PayloadAction<User[]>) => {
-            return {...state, users: action.payload}
-        },
         setUser: (state, action: PayloadAction<User>) => {
             return {...state, user: action.payload}
         }
     }
 })
 
-export const fetchAllUsers = createAction("FetchAllUsers")
-export const getUserById = createAction<number>("GetUserById")
-
-
-
+export const getUserById = createAction<GetUserByIdQueryInputType>("GetUserById")
+export const getUserByEmail = createAction<GetUserByEmailQueryInputType>("GetUserByEmail")
 export const {setUser} = userSlice.actions
-export const userReducer = userSlice.reducer
+
+export const parseObjectToUser = (object: any): User => {
+    return {
+        id: parseInt(object.id),
+        email: object.email ?? "",
+        firstName: object.firstName ?? "Unknown",
+        lastName: object.lastName ?? "User",
+        isFullTimeEmployee: Boolean(JSON.parse(object.isFullTimeEmployee)),
+        weeklyWorkingTime: parseInt(object.weeklyWorkingTime ?? ''),
+        remainingVacationDays: parseInt(object.remainingVacationDays ?? ''),
+        privilegesValue: parseInt(object.privilegesValue ?? ''),
+        activation: Boolean(JSON.parse(object.activation ?? true))
+    } as User
+}

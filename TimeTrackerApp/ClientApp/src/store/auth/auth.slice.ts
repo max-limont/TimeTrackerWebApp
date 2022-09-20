@@ -3,7 +3,7 @@ import {AuthLoginInputType, AuthRefreshInputType, AuthUserResponse} from "../../
 import { User } from "../../types/user.types"
 
 type AuthStateType = {
-    user: User | null,
+    user: User | null|undefined,
     isLoading: boolean,
     error?: string | null
 }
@@ -19,12 +19,10 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state: AuthStateType, action: PayloadAction<User>) => {
-            localStorage.setItem("auth", JSON.stringify(action.payload))
             return {...state, user: action.payload}
         },
         logout: (state: AuthStateType) => {
-            localStorage.removeItem("auth")
-            return {...state, user: null}
+            return {...state, user: undefined}
         },
         setLoadingState:  (state, action: PayloadAction<boolean>) => {
             return{...state, isLoading: action.payload}
@@ -32,11 +30,14 @@ export const authSlice = createSlice({
         setError: (state: AuthStateType, action: PayloadAction<string>) => {
             return {...state, error: action.payload}
         },
+        clearError: (state: AuthStateType) => {
+            return {...state, error: null}
+        }
     }
 });
 
-export const {logout, setError, setUser, setLoadingState} = authSlice.actions;
-export const authorizeUserById = createAction<number>("AuthorizeUserById")
+export const {logout, setError, clearError, setUser, setLoadingState} = authSlice.actions;
+export const authorizeUser = createAction<number>("AuthorizeUser")
 export const authLoginAction = createAction<AuthLoginInputType>("AuthLogin");
 export const authRefreshAction = createAction<AuthRefreshInputType>("AuthRefresh");
 export const authLogoutAction = createAction<number>("AuthLogout");

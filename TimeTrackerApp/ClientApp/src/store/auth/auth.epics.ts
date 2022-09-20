@@ -1,5 +1,5 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
-import {from, map, mergeMap, Observable} from "rxjs";
+import {catchError, from, map, mergeMap, Observable} from "rxjs";
 import { graphqlRequest } from "../../graphql/api";
 import {
     authLoginQuery,
@@ -7,7 +7,7 @@ import {
 } from "../../graphql/queries/auth.queries";
 import {
     authLoginAction, authLogoutAction,
-    authorizeUserById, authRefreshAction, logout,
+    authorizeUser, authRefreshAction, logout,
     setError,
     setUser
 } from "./auth.slice";
@@ -15,9 +15,12 @@ import {accessTokenKey, clearCookie, getCookie, refreshTokenKey, setCookie} from
 import {parseError} from "../../helpers/parseError";
 import {Action} from "react-epics";
 import {getUserByIdQuery} from "../../graphql/queries/user.queries";
-import {GetUserByIdQueryInputType, User} from "../../types/user.types";
+import {GetUserByIdQueryInputType} from "../../types/user.types";
 import {parseJwt} from "../../helpers/parseJwt";
 import {AuthLoginInputType, AuthLogoutInputType, AuthUserResponse} from "../../types/auth.types";
+import {parseObjectToUser} from "../user/user.slice";
+import { store} from "../store";
+import { logoutR } from "../signalr";
 
 const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginAction>>): any => {
     return action$.pipe(
@@ -31,13 +34,13 @@ const authLoginEpic: Epic = (action$: Observable<ReturnType<typeof authLoginActi
                     setCookie({key: refreshTokenKey, value: response.data.authLogin.refreshToken, lifetime: 30 * 24 * 60 * 60});
                     setCookie({key: accessTokenKey, value: response.data.authLogin.accessToken, lifetime: 2 * 60});
                     const userId = parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId);
-                    return authorizeUserById(userId)
+                    return authorizeUser(userId)
                 }
                 return setError(parseError("Wrong email or password!"))
             })
-        )),
+        ))
     )
-}
+};
 
 const authRefreshEpic: Epic = (action$: Observable<ReturnType<typeof authRefreshAction>>): any => {
     return action$.pipe(
@@ -47,9 +50,9 @@ const authRefreshEpic: Epic = (action$: Observable<ReturnType<typeof authRefresh
                 if (response?.data?.authRefresh?.accessToken && response?.data?.authRefresh?.refreshToken) {
                     setCookie({key: refreshTokenKey, value: response.data.authRefresh.refreshToken, lifetime: 30 * 24 * 60 * 60})
                     setCookie({key: accessTokenKey, value: response.data.authRefresh.accessToken, lifetime: 2 * 60})
-                    return authorizeUserById(parseInt(parseJwt<AuthUserResponse>(response.data.authRefresh.refreshToken).UserId));
+                    return authorizeUser(parseInt(parseJwt<AuthUserResponse>(response.data.authRefresh.refreshToken).UserId));
                 }
-                return authLogoutAction(parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId))
+                return authLogoutAction(getCookie(refreshTokenKey) ? parseInt(parseJwt<AuthUserResponse>(getCookie(refreshTokenKey)).UserId) : 0)
             })
         ))
     )
@@ -64,39 +67,28 @@ const authLogoutEpic: Epic = (action$: Observable<ReturnType<typeof authLogoutAc
             map(() => {
                 clearCookie(refreshTokenKey)
                 clearCookie(accessTokenKey)
+                store.dispatch(logoutR());
                 return logout()
             })
         ))
     )
-}
+};
 
-const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUserById>>): any => {
+const authSetUserEpic: Epic = (action$: Observable<ReturnType<typeof authorizeUser>>): any => {
     return action$.pipe(
-        ofType(authorizeUserById.type),
+        ofType(authorizeUser.type),
         mergeMap(action => from(graphqlRequest(getUserByIdQuery, {
             id: action.payload
         } as GetUserByIdQueryInputType)).pipe(
             map(response => {
                 if (response?.data?.getUserById) {
-                    const apiResponse = response.data.getUserById
-                    const user = {
-                        id: parseInt(apiResponse.id),
-                        email: apiResponse.email ?? "",
-                        firstName: apiResponse.firstName ?? "Unknown",
-                        lastName: apiResponse.lastName ?? "User",
-                        isFullTimeEmployee: Boolean(JSON.parse(apiResponse.isFullTimeEmployee)),
-                        weeklyWorkingTime: parseInt(apiResponse.weeklyWorkingTime ?? ''),
-                        remainingVacationDays: parseInt(apiResponse.remainingVacationDays ?? ''),
-                        privilegesValue: parseInt(apiResponse.privilegesValue ?? ''),
-                        vacationPermissionId: parseInt(apiResponse.vacationPermissionId ?? '')
-                    } as User
+                    const user = parseObjectToUser(response.data.getUserById)
                     return setUser(user)
                 }
                 return { payload: "Error", type: "AuthSetUserError"} as Action
             })
         ))
     )
-}
-
+};
 
 export const authEpics = combineEpics(authLogoutEpic, authRefreshEpic, authLoginEpic, authSetUserEpic);
