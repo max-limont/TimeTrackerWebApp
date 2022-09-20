@@ -8,6 +8,7 @@ export const getPaginatedUserList = `
             isFullTimeEmployee
             weeklyWorkingTime
             privilegesValue 
+            activation
        }
     }
 `
@@ -23,6 +24,7 @@ export const getSearchResponse = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
+            activation
        }
     }
 `

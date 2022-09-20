@@ -32,6 +32,7 @@ export const parseObjectToUser = (object: any): User => {
         isFullTimeEmployee: Boolean(JSON.parse(object.isFullTimeEmployee)),
         weeklyWorkingTime: parseInt(object.weeklyWorkingTime ?? ''),
         remainingVacationDays: parseInt(object.remainingVacationDays ?? ''),
-        privilegesValue: parseInt(object.privilegesValue ?? '')
+        privilegesValue: parseInt(object.privilegesValue ?? ''),
+        activation: Boolean(JSON.parse(object.activation ?? true))
     } as User
 }

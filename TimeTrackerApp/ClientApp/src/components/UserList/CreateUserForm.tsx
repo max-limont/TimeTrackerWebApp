@@ -17,7 +17,8 @@ const initialState: UserInputType = {
     isFullTimeEmployee: true,
     weeklyWorkingTime: 100,
     remainingVacationDays: 30,
-    privilegesValue: 0
+    privilegesValue: 0,
+    activation: true
 }
 
 const validationState: ValidationStateType = {

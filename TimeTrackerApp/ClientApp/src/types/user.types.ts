@@ -7,7 +7,8 @@ export type User = {
     isFullTimeEmployee: boolean,
     weeklyWorkingTime: number,
     remainingVacationDays: number,
-    privilegesValue: number
+    privilegesValue: number,
+    activation: boolean
 }
 
 export type UserInputType = {
@@ -20,7 +21,8 @@ export type UserInputType = {
     isFullTimeEmployee: boolean,
     weeklyWorkingTime: number,
     remainingVacationDays: number,
-    privilegesValue: number
+    privilegesValue: number,
+    activation: boolean
 }
 
 export type GetUserByIdQueryInputType = {

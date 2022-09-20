@@ -20,8 +20,7 @@ export const Index: FC = () => {
     useEffect(() => {
         if(auth.state?.user){
             setLoading(false);
-            if(isAuthUser==true){
-                console.log(`${auth.state?.user?.password}`);
+            if(isAuthUser){
                 connection.invoke("ConnectUserWithHashPassword", auth.state?.user?.email, auth.state?.user?.password);
             }
         }

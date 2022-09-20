@@ -25,15 +25,16 @@ export const TimeTrackerPanels: FC = () => {
     const records = useAppSelector(state => state.rootReducer.timeTracker.records)
     const lastWeekStatistics = useAppSelector(state => state.rootReducer.timeTracker.lastWeekStatistics)
     const timeWorkedInThisWeek = useAppSelector(state => state.rootReducer.timeTracker.currentWeekWorkingTime)
-    const timeToBeWorkedInThisWeek = (auth.state?.user?.weeklyWorkingTime ?? 0) * 60 * 1000
+    const timeToBeWorkedInThisWeek = (auth.state?.user?.weeklyWorkingTime ? 8 * 60 * 60 * 1000 / 100 * auth.state?.user?.weeklyWorkingTime : 0) * 5
     const numberFormatter = Intl.NumberFormat('uk', {minimumIntegerDigits: 2})
 
     useEffect(() => {
-        if (auth.state?.user?.id) {
+        if (auth.state?.user) {
             dispatch(updateCurrentWeekWorkingTime({userId: auth.state.user.id, monthNumber: new Date().getMonth() + 1}))
             dispatch(fetchUserLastWeekTimeTrackerStatistics({userId: auth.state.user.id}))
         }
-    }, [auth, records])
+
+    }, [records])
 
     useEffect(() => {
         if (auth.state?.user && lastWeekStatistics.length > 0) {
@@ -44,25 +45,25 @@ export const TimeTrackerPanels: FC = () => {
                     value: Math.floor(statisticsItem.totalWorkingTime / 60 / 60 / 10) / 100
                 }
                 statisticsData = [...statisticsData, statisticsDataItem]
-            })
-            setChartState({
-                ...chartState,
-                chart: {
-                    metadata: {
-                        maxValue: Math.floor(auth.state.user.weeklyWorkingTime / 60 / 5 * 100) / 100,
-                        minValue: 0,
-                        gap: 30,
-                        width: 500,
-                        height: 200,
-                        scale: {
-                            step: 2
-                        }
-                    },
-                    data: statisticsData
-                }
+                setChartState({
+                    ...chartState,
+                    chart: {
+                        metadata: {
+                            maxValue: Math.floor(timeToBeWorkedInThisWeek / 5 * 100) / 100,
+                            minValue: 0,
+                            gap: 30,
+                            width: 500,
+                            height: 200,
+                            scale: {
+                                step: 2
+                            }
+                        },
+                        data: statisticsData
+                    }
+                })
             })
         }
-    }, [auth, lastWeekStatistics])
+    }, [lastWeekStatistics])
 
     const getFormattedTime = (milliseconds: number): string => {
         const hours = numberFormatter.format(Math.floor(milliseconds / 60 / 60 / 1000))

@@ -10,6 +10,7 @@ export const getUserByEmailQuery = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
+            activation
         }
     }
 `
@@ -26,6 +27,7 @@ export const getUserByIdQuery = `
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
+            activation
         }
     }
 `
@@ -42,6 +44,7 @@ export const createUserQuery = `
             isFullTimeEmployee
             weeklyWorkingTime
             privilegesValue 
+            activation
       }
     }
 `
@@ -57,6 +60,7 @@ export const deleteUserQuery = `
             isFullTimeEmployee
             weeklyWorkingTime
             privilegesValue 
+            activation
         }
     }
 `
@@ -71,6 +75,7 @@ export const editUserQuery = `
             isFullTimeEmployee
             weeklyWorkingTime
             privilegesValue 
+            activation
       }
     }
 `

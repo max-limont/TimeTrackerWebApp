@@ -84,7 +84,7 @@ export const Statistics: FC<StatisticPropsType> = (props) => {
             window.addEventListener('resize', () => resizeChart(), false)
             resizeChart()
         }
-    }, [data, metadata])
+    }, [])
 
     return (
         <div className={'chart-wrapper flex-container flex-column'}>

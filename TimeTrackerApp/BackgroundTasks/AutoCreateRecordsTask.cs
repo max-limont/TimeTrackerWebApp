@@ -39,7 +39,7 @@ namespace TimeTrackerApp.BackgroundTasks
 					{
 						IsAutomaticallyCreated = true,
 						CreatedAt = dateTime,
-						WorkingTime = employee.WeeklyWorkingTime / 5 * 60 * 1000,
+						WorkingTime = 8 * 60 * 60 * 1000 / 100 * employee.WeeklyWorkingTime,
 						EmployeeId = employee.Id,
 					};
 

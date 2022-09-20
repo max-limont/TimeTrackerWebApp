@@ -106,7 +106,7 @@ export const UserList: FC = () => {
                     <tr className={"userList-list-title"}>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Weekly Working Time</th>
+                        <th>Working Time</th>
                         <th>Full-time/Part-time</th>
                         <th style={{width: 250}}>Actions</th>
                     </tr>

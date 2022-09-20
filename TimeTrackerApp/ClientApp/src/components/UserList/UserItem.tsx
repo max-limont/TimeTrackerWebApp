@@ -11,16 +11,9 @@ const UserItem: FC<{item: User, handler(gameId: number): void}> = ({item, handle
         <tr className="link-btn user-item">
             <td style={{cursor: "pointer"}} onClick={() => navigate("/user/" + item.id,)}>{item.firstName} {item.lastName}</td>
             <td style={{cursor: "pointer"}} onClick={() => navigate("/user/" + item.id,)}>{item.email}</td>
-            <td style={{cursor: "pointer"}} onClick={() => navigate("/user/" + item.id,)}>{item.weeklyWorkingTime} minutes</td>
+            <td style={{cursor: "pointer"}} onClick={() => navigate("/user/" + item.id,)}>{item.weeklyWorkingTime}%</td>
             <td style={{cursor: "pointer"}} onClick={() => navigate("/user/" + item.id,)}>{item.isFullTimeEmployee ? "Full-time" : "Part-time"}</td>
             <td>
-                <button className={'button yellow-button'} onClick={e => {
-                    e.preventDefault()
-                    handler(item.id!)
-                    // window.location.reload()
-                }}>Edit
-                </button>
-
                 <button className={'button red-button'} onClick={e => {
                     e.preventDefault()
                     dispatch(deleteUserAction(item.id!))

@@ -17,6 +17,7 @@ import {
 import {graphqlRequest} from "../../graphql/api";
 import {Action} from "react-epics";
 import {createUserQuery, deleteUserQuery, editUserQuery} from "../../graphql/queries/user.queries";
+import {parseObjectToUser} from "../user/user.slice";
 
 const fetchUserListPageEpic: Epic = (action$: Observable<ReturnType<typeof fetchUserListPage>>): any => {
     return action$.pipe(
@@ -87,8 +88,9 @@ const createUserEpic: Epic = (action$: Observable<ReturnType<typeof createUserAc
         ofType(createUserAction.type),
         mergeMap(action => from(graphqlRequest(createUserQuery, {userInput: action.payload})).pipe(
             map(response => {
-                if (response.data.createUser) {
-                    return insertCreatedUser(response.data.createUser)
+                console.log(response)
+                if (response?.data?.createUser) {
+                    return insertCreatedUser(parseObjectToUser(response.data.createUser))
                 }
                 return {type: 'CreateUserError', payload: 'Error'} as Action
             })
