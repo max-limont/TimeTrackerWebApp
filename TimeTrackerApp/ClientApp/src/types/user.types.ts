@@ -4,11 +4,11 @@ export type User = {
     password?: string | null,
     firstName: string,
     lastName: string,
+    activation: boolean,
     isFullTimeEmployee: boolean,
     weeklyWorkingTime: number,
     remainingVacationDays: number,
     privilegesValue: number,
-    activation: boolean
 }
 
 export type UserInputType = {
@@ -18,11 +18,11 @@ export type UserInputType = {
     passwordConfirmation: string,
     firstName: string,
     lastName: string,
+    activation: boolean,
     isFullTimeEmployee: boolean,
     weeklyWorkingTime: number,
     remainingVacationDays: number,
     privilegesValue: number,
-    activation: boolean
 }
 
 export type GetUserByIdQueryInputType = {

@@ -6,11 +6,11 @@ export const getUserByEmailQuery = `
             firstName
             lastName
             password
+            activation
             isFullTimeEmployee
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
-            activation
         }
     }
 `
@@ -22,12 +22,12 @@ export const getUserByIdQuery = `
             email
             firstName
             lastName
+            activation
             password
             isFullTimeEmployee
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
-            activation
         }
     }
 `
@@ -39,28 +39,28 @@ export const createUserQuery = `
             email
             password
             firstName
+            activation
             lastName
             password
             isFullTimeEmployee
             weeklyWorkingTime
             privilegesValue 
-            activation
       }
     }
 `
 
 export const deleteUserQuery = `
-    mutation($id: ID!){
-        deleteUser(id: $id){
+    mutation($id: ID!,$state: Boolean){
+        changeActivationState(id: $id, activationState: $state){
             id
             email
             password
             firstName
+            activation
             lastName
             isFullTimeEmployee
             weeklyWorkingTime
             privilegesValue 
-            activation
         }
     }
 `

@@ -12,7 +12,7 @@ import {
     fetchUserCount,
     fetchUserListPage, fetchUserListSearchRequest,
     setUserList,
-    setUserListCount, deleteUserAction, deleteUser, editUserAction, editUser, fetchExportData, setExportData
+    setUserListCount, changedActivationState, deleteUser, editUserAction, editUser, fetchExportData, setExportData
 } from "./userList.slice";
 import {graphqlRequest} from "../../graphql/api";
 import {Action} from "react-epics";
@@ -111,10 +111,12 @@ const editUserEpic: Epic = (action$: Observable<ReturnType<typeof editUserAction
     )
 }
 
-const deleteUserEpic: Epic = (action$: Observable<ReturnType<typeof deleteUserAction>>): any => {
+const changeActivationStateEpic: Epic = (action$: Observable<ReturnType<typeof changedActivationState>>): any => {
     return action$.pipe(
-        ofType(deleteUserAction.type),
-        mergeMap(action => from(graphqlRequest(deleteUserQuery, {id: action.payload})).pipe(
+        ofType(changedActivationState.type),
+        mergeMap(action => from(graphqlRequest(deleteUserQuery, {
+            id: action.payload.id,
+            state: action.payload.activation})).pipe(
             map(response => {
                 if (response.data.deleteUser) {
                     return deleteUser(response.data.deleteUser)
@@ -131,7 +133,7 @@ export const userListEpics = combineEpics(
     fetchUserCountEpic,
     fetchUserListSearchResponseEpic,
     createUserEpic,
-    deleteUserEpic,
+    changeActivationStateEpic,
     editUserEpic
 );
 

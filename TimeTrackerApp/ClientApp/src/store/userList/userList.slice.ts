@@ -79,6 +79,6 @@ export const fetchUserListPage = createAction<UserListPage>("fetchUserListPage")
 export const fetchExportData = createAction<UserListPage>("fetchExportData");
 export const createUserAction = createAction<User>("createUser");
 export const editUserAction = createAction<User>("editUser");
-export const deleteUserAction = createAction<number>("deleteUser");
+export const changedActivationState = createAction<User>("deleteUser");
 export const fetchUserCount = createAction("fetchUserCount");
 export const fetchUserListSearchRequest = createAction<{ request: string }>("fetchUserListSearchRequest");

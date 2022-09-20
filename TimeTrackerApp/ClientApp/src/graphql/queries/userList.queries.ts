@@ -6,9 +6,9 @@ export const getPaginatedUserList = `
             firstName
             lastName
             isFullTimeEmployee
+            activation
             weeklyWorkingTime
             privilegesValue 
-            activation
        }
     }
 `
@@ -17,14 +17,15 @@ export const getSearchResponse = `
     query ($request: String!) {
         userFetchSearchList(request: $request) {
             id
+            activation
             email
+            activation
             firstName
             lastName
             isFullTimeEmployee
             weeklyWorkingTime
             remainingVacationDays
             privilegesValue
-            activation
        }
     }
 `

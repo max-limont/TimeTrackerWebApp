@@ -68,7 +68,7 @@ export const CreateUserForm = () => {
         event.preventDefault()
         dispatch(getUserByEmail({email: user.email}))
         if (validateFormFields()) {
-            dispatch(createUserAction({...parseObjectToUser(user), password: user.password}))
+            dispatch(createUserAction({...parseObjectToUser(user), password: user.password, activation: true}))
             navigate('/user-list', {replace: true})
         }
     }
